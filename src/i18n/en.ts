@@ -21,12 +21,12 @@ export const en: SiteCopy = {
     items: [
       {
         title: 'Three views, one glance',
-        body: 'Week view for the big picture, grid view for density, today view for right now. Where the semester started and which room this class is in — no drilling down to find out.',
+        body: 'Week view for the big picture, grid view for density, today view for right now. Where the semester stands and what’s next — the answer is already on screen.',
         imgAlt: 'Week view real device screenshot',
       },
       {
         title: '348 direct connections',
-        body: 'Pick your school, sign in, the timetable comes down. When the system changes, I update the adapter — you never import a class by hand.',
+        body: 'Pick your school, sign in, the timetable comes down. When the system changes, I update the adapter — your timetable never skips a beat.',
         imgAlt: 'Academic import panel real device screenshot',
       },
       {
@@ -43,7 +43,7 @@ export const en: SiteCopy = {
   },
   schools: {
     heading: 'Where your school stands',
-    sub: 'Everything supported is grouped by province and academic system. School names don’t link anywhere — this is a support list, not a download funnel.',
+    sub: 'Everything supported is grouped by province and academic system. Search it — see if your school is in.',
     searchPlaceholder: 'Search by name or pinyin, e.g. jiaotong',
     provinceLabel: 'Province',
     typeLabel: 'Protocol',
