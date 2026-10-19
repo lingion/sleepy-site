@@ -1,0 +1,80 @@
+---
+// 布局壳 — spec §1(FOUC 守卫)/§3(app bar + footer)/§4.2(腐烂可见 meta)
+import AppBar from '../components/AppBar.astro';
+import Footer from '../components/Footer.astro';
+import '@fontsource-variable/inter/standard.css'; // latin+latin-ext 子集,Inter Variable
+import '../tokens/theme.css';
+import '../tokens/motion.css';
+import '../styles/global.css';
+import { site } from '../i18n/ui';
+import release from '../data/release.json';
+
+interface Props {
+  lang: 'zh' | 'en';
+  title: string;
+  description: string;
+  /** 当前页在双语对里的镜像路径(en 页传 '/' , zh 页传 '/en/') */
+  mirror: string;
+}
+
+const { lang, title, description, mirror } = Astro.props;
+const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
+const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
+---
+
+<!doctype html>
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={site + Astro.url.pathname} />
+    <link rel="alternate" hreflang="zh-CN" href={site + (lang === 'zh' ? '/' : mirror)} />
+    <link rel="alternate" hreflang="en" href={site + (lang === 'en' ? '/en/' : mirror)} />
+    <link rel="alternate" hreflang="x-default" href={site + '/'} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={site + Astro.url.pathname} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={lang === 'zh' ? 'en_US' : 'zh_CN'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0F0D15" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FDF8FF" media="(prefers-color-scheme: light)" />
+
+    {/* FOUC 守卫(spec §1):首帧前读 localStorage 定 data-theme,无首屏闪变。
+        is:inline = 不打包不延迟,这是唯一允许的内联脚本。 */}
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem('sleepy-theme');
+          const dark = stored === 'dark' || (!stored && matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        } catch {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{lang === 'zh' ? '跳到正文' : 'Skip to content'}</a>
+    <AppBar lang={lang} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} build={build} />
+    <script>
+      // 主题开关(lightbox 岛在 T6;此处只做 FOUC 之后的持久化 toggle)
+      const root = document.documentElement;
+      window.siteToggleTheme = () => {
+        const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try {
+          localStorage.setItem('sleepy-theme', next);
+        } catch {}
+        return next;
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+---
+// footer — spec §3⑦ inverse-surface 底 + blob#3;§2.5 GPL/QQ/sponsor 钉死
+import Blob from './Blob.astro';
+import { qqGroup, sponsorUrl, repoUrl, faqUrl, onlineTrialUrl } from '../i18n/ui';
+
+interface Props {
+  lang: 'zh' | 'en';
+  build: string;
+}
+const { lang, build } = Astro.props;
+const t =
+  lang === 'zh'
+    ? {
+        app: '应用',
+        dl: '下载 Android',
+        trial: '在线体验',
+        repo: '源码仓库',
+        community: '社区',
+        qq: `QQ 群 ${qqGroup}`,
+        faq: 'FAQ',
+        sponsor: '请我喝可乐',
+        license: 'GPL-3.0 开源',
+        noJs: '页面塌了,课表不会。',
+      }
+    : {
+        app: 'App',
+        dl: 'Download for Android',
+        trial: 'Try online',
+        repo: 'Source code',
+        community: 'Community',
+        qq: `QQ group ${qqGroup}`,
+        faq: 'FAQ',
+        sponsor: 'Buy me a cola',
+        license: 'GPL-3.0 open source',
+        noJs: 'If this page breaks, your timetable won’t.',
+      };
+---
+
+<footer class="footer">
+  <div class="footer__bg"><Blob variant={2} /></div>
+  <div class="site-col footer__inner">
+    <div class="footer__grid">
+      <section aria-labelledby="f-app">
+        <h4 class="t-title-small" id="f-app">{t.app}</h4>
+        <ul>
+          <li><a href="https://github.com/lingion/sleepy/releases/latest">{t.dl}</a></li>
+          <li><a href={onlineTrialUrl}>{t.trial}</a></li>
+          <li><a href={repoUrl}>{t.repo}</a></li>
+        </ul>
+      </section>
+      <section aria-labelledby="f-community">
+        <h4 class="t-title-small" id="f-community">{t.community}</h4>
+        <ul>
+          <li><a href={faqUrl}>{t.faq}</a></li>
+          <li><a href={sponsorUrl}>{t.sponsor}</a></li>
+          <li><a href={`${repoUrl}/issues`}>GitHub Issues</a></li>
+        </ul>
+      </section>
+    </div>
+    <p class="t-body-small footer__meta">
+      <span>Sleepy · {t.license} · lingion</span>
+      <span data-build={build}>{lang === 'zh' ? '构建' : 'Build'}: {build}</span>
+    </p>
+    <noscript><p class="t-body-small">{t.noJs}</p></noscript>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    background: var(--md-sys-color-inverse-surface);
+    color: var(--md-sys-color-inverse-on-surface);
+    overflow: hidden;
+  }
+  .footer__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0; /* 自建层叠上下文:blob 的 z-index:-1 才不会掉到 inverse-surface 底色之后 */
+  }
+  .footer__inner {
+    position: relative;
+    padding-block: calc(var(--site-unit) * 16) calc(var(--site-unit) * 8);
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 200px));
+    gap: calc(var(--site-unit) * 8);
+  }
+  .footer h4 {
+    color: var(--md-sys-color-inverse-on-surface);
+    margin-block-end: calc(var(--site-unit) * 3);
+  }
+  .footer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: calc(var(--site-unit) * 2);
+  }
+  .footer a {
+    color: var(--md-sys-color-inverse-on-surface);
+    text-decoration: none;
+    opacity: 0.85;
+  }
+  .footer a:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+  .footer__meta {
+    margin-block-start: calc(var(--site-unit) * 10);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: calc(var(--site-unit) * 2);
+    opacity: 0.7;
+  }
+</style>

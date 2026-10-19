@@ -1,0 +1,232 @@
+/* Sleepy 官网全局样式 — spec §2.2/§2.3/§2.4
+ * token 消费自 theme.css/motion.css(构建脚本生成,勿在此重复值)
+ * 红线:交互控件描边 = outline(outlineVariant-on-surface 1.67:1 < WCAG 非文本 3:1,只作分隔线) */
+
+:root {
+  /* —— shape(spec §2.2)—— */
+  --md-sys-shape-corner-xs: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-xl: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* —— M3 type scale 15 阶(spec §2.2;Inter 替 Roboto 字面量,tracking 按 M3 表)—— */
+  --md-sys-typescale-display-large: 400 57px/64px;
+  --md-sys-typescale-display-medium: 400 45px/52px;
+  --md-sys-typescale-display-small: 400 36px/44px;
+  --md-sys-typescale-headline-large: 400 32px/40px;
+  --md-sys-typescale-headline-medium: 400 28px/36px;
+  --md-sys-typescale-headline-small: 400 24px/32px;
+  --md-sys-typescale-title-large: 400 22px/28px;
+  --md-sys-typescale-title-medium: 500 16px/24px;
+  --md-sys-typescale-title-small: 500 14px/20px;
+  --md-sys-typescale-body-large: 400 16px/24px;
+  --md-sys-typescale-body-medium: 400 14px/20px;
+  --md-sys-typescale-body-small: 400 12px/16px;
+  --md-sys-typescale-label-large: 500 14px/20px;
+  --md-sys-typescale-label-medium: 500 12px/16px;
+  --md-sys-typescale-label-small: 500 11px/16px;
+
+  /* —— 栅格(spec §2.2/§2.4):4/8dp;内容列 1040;断点 600/840/1200/1600 —— */
+  --site-unit: 4px;
+  --site-content-col: 1040px;
+  --site-section-gap: 128px;
+  --site-section-gap-narrow: 80px;
+
+  /* —— 站点级用法变量 —— */
+  --site-font-latin: 'Inter Variable', Inter, sans-serif;
+  --site-font-cjk: system-ui, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', sans-serif;
+  --site-font-stack: var(--site-font-latin), var(--site-font-cjk);
+  --site-lightbox-scrim: rgba(0, 0, 0, 0.32); /* M3 dialog scrim 值,spec §2.2 */
+}
+
+@media (max-width: 840px) {
+  :root {
+    --site-section-gap: var(--site-section-gap-narrow);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font: var(--md-sys-typescale-body-large) / var(--md-sys-typescale-body-large, 1);
+  font-family: var(--site-font-stack);
+  background: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--md-sys-color-primary);
+  text-decoration-color: color-mix(in srgb, var(--md-sys-color-primary) 40%, transparent);
+}
+
+::selection {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* —— 排版工具类(15 阶显式映射,禁魔法快捷名)—— */
+.t-display-large { font: var(--md-sys-typescale-display-large); letter-spacing: -0.25px; font-family: var(--site-font-latin); }
+.t-display-medium { font: var(--md-sys-typescale-display-medium); font-family: var(--site-font-latin); }
+.t-display-small { font: var(--md-sys-typescale-display-small); font-family: var(--site-font-latin); }
+.t-headline-large { font: var(--md-sys-typescale-headline-large); }
+.t-headline-medium { font: var(--md-sys-typescale-headline-medium); }
+.t-headline-small { font: var(--md-sys-typescale-headline-small); }
+.t-title-large { font: var(--md-sys-typescale-title-large); }
+.t-title-medium { font: var(--md-sys-typescale-title-medium); letter-spacing: 0.15px; }
+.t-title-small { font: var(--md-sys-typescale-title-small); letter-spacing: 0.1px; }
+.t-body-large { font: var(--md-sys-typescale-body-large); letter-spacing: 0.5px; }
+.t-body-medium { font: var(--md-sys-typescale-body-medium); letter-spacing: 0.25px; }
+.t-body-small { font: var(--md-sys-typescale-body-small); letter-spacing: 0.4px; }
+.t-label-large { font: var(--md-sys-typescale-label-large); letter-spacing: 0.1px; }
+.t-label-medium { font: var(--md-sys-typescale-label-medium); letter-spacing: 0.5px; }
+.t-label-small { font: var(--md-sys-typescale-label-small); letter-spacing: 0.5px; }
+
+/* —— 4/8dp 间距工具类 —— */
+.gap-1 { gap: calc(var(--site-unit) * 1); }
+.gap-2 { gap: calc(var(--site-unit) * 2); }
+.gap-4 { gap: calc(var(--site-unit) * 4); }
+.gap-8 { gap: calc(var(--site-unit) * 8); }
+.pad-2 { padding: calc(var(--site-unit) * 2); }
+.pad-4 { padding: calc(var(--site-unit) * 4); }
+.pad-8 { padding: calc(var(--site-unit) * 8); }
+
+.site-col {
+  max-width: var(--site-content-col);
+  margin-inline: auto;
+  padding-inline: calc(var(--site-unit) * 4);
+}
+
+.site-section {
+  padding-block: var(--site-section-gap);
+}
+
+/* —— M3 控件基类(描边闸:outline,禁 outlineVariant)—— */
+.site-button {
+  border-radius: var(--md-sys-shape-corner-full);
+  border: none;
+  font: var(--md-sys-typescale-label-large);
+  padding: 10px 24px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--site-unit) * 2);
+}
+
+.site-button--filled {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.site-button--tonal {
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.site-button--outlined {
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-outline);
+}
+
+.site-field {
+  background: transparent;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-body-medium);
+  padding: 10px 16px;
+}
+
+.site-field:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: -1px;
+}
+
+/* M3 filter chip(spec §2.2):未选 = transparent 底 + outline 描边;已选 = secondaryContainer */
+.site-chip {
+  border: 1px solid var(--md-sys-color-outline);
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+  font: var(--md-sys-typescale-label-large);
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.site-chip[aria-pressed='true'] {
+  background: var(--md-sys-color-secondary-container);
+  border-color: transparent;
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* card = surfaceContainerLow(官方 card=elev-1 映射,spec §2.2) */
+.site-card {
+  background: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-large);
+}
+
+/* 分隔线专用(outlineVariant 只许出现在这里) */
+.site-divider {
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  inline-size: 100dvw;
+  inset-block-start: 0;
+  z-index: 1000;
+  text-align: center;
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+  text-decoration: none;
+  padding: calc(var(--site-unit) * 3) 0;
+  transform: translateY(-100%);
+}
+.skip-link:focus-visible { transform: translateY(0); }
+
+/* —— 滚动揭示(spec §2.3/§2.4:DOM 序=揭示序,60ms stagger 站点常量)—— */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasize-decelerate),
+    transform var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasize-decelerate);
+  transition-delay: calc(var(--reveal-i, 0) * var(--site-stagger));
+}
+.reveal[data-revealed='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+/* prefers-reduced-motion:揭示直出 0ms(spec §2.3) */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { transition: none; opacity: 1; transform: none; }
+  .reveal, [data-blob] { animation: none !important; }
+}

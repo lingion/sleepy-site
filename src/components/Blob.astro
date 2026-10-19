@@ -1,0 +1,43 @@
+---
+// signature motif:logo 紫渐变 blob — spec §2.4 数值定死,不留发明口
+// 固定 3 处:hero 底(#1) / 下载区上(#2) / footer 内(#3);data-blob 属性 = 机械化验收锚(spec §6 计数=3)
+// 三档预设:hue 相对种子 293.82° 偏移 0/+15/-15;渐变 stops 角 135°/90°/200°(成对锁定)
+// stops 色值 = primary 同 chroma TonalPalette.tone() 实测生成(gen 见 git 历史注释),禁手改。
+interface Props {
+  /** 0=hero(#1) · 1=download(#2) · 2=footer(#3) */
+  variant: 0 | 1 | 2;
+}
+const { variant } = Astro.props;
+---
+
+<div class="blob" data-blob={variant} data-variant={variant} aria-hidden="true"></div>
+
+<style define:vars={{ v: variant }}>
+  .blob {
+    position: absolute;
+    inset-inline: 0;
+    block-size: 50%;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(60px);
+    opacity: 0.65;
+  }
+  .blob[data-variant='0'] {
+    background:
+      radial-gradient(60% 80% at 20% 30%, #d8ceff88 0%, transparent 70%),
+      linear-gradient(135deg, #6d58cc 0%, #a18eff 45%, #bcaeff 80%, #d8ceff 100%);
+    /* hue 293.82°(种子芯簇)· stops 135°· tone 45/65/75/85 */
+  }
+  .blob[data-variant='1'] {
+    background:
+      radial-gradient(70% 60% at 80% 20%, #d1a7ff88 0%, transparent 70%),
+      linear-gradient(90deg, #8550c0 0%, #bb85f9 50%, #d1a7ff 100%);
+    /* hue +15°=308.82° · stops 90° */
+  }
+  .blob[data-variant='2'] {
+    background:
+      radial-gradient(50% 70% at 30% 80%, #a9b4ff66 0%, transparent 70%),
+      linear-gradient(200deg, #4d60d0 0%, #8596ff 55%, #ccd2ff 100%);
+    /* hue -15°=278.82° · stops 200° */
+  }
+</style>

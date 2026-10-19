@@ -1,0 +1,98 @@
+---
+// M3 tonal app bar(spec §2.2):常驻置顶;滚动态 = surface→surfaceContainer 无投影(M2 阴影已纠)
+// zh|EN 语言链 + 明暗开关(tooltip「晚课专用。」spec §2.5)
+interface Props {
+  lang: 'zh' | 'en';
+}
+const { lang } = Astro.props;
+const other = lang === 'zh' ? '/en/' : '/';
+const otherLabel = lang === 'zh' ? 'EN' : '中文';
+---
+
+<header class="appbar" id="appbar">
+  <div class="appbar__inner site-col">
+    <a class="appbar__brand t-title-medium" href={lang === 'zh' ? '/' : '/en/'}>
+      <img src="/favicon.svg" alt="" width="24" height="24" />
+      Sleepy
+    </a>
+    <nav class="appbar__actions" aria-label={lang === 'zh' ? '页面操作' : 'Page actions'}>
+      <a class="site-chip appbar__lang t-label-large" href={other}>{otherLabel}</a>
+      <button
+        class="appbar__theme"
+        type="button"
+        title={lang === 'zh' ? '晚课专用。' : 'For evening classes.'}
+        aria-label={lang === 'zh' ? '切换深浅色主题(晚课专用。)' : 'Toggle theme (for evening classes.)'}
+        data-icon-theme
+      >
+        <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-15a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm0 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1ZM3.5 5.1A1 1 0 0 1 4.9 3.5l1.4 1.5A1 1 0 1 1 4.9 6.5L3.5 5.1Zm15.2 13.9a1 1 0 0 1 1.4-1.4l1.4 1.4a1 1 0 0 1-1.4 1.5l-1.4-1.5ZM3 12a1 1 0 0 1-1 1H.9a1 1 0 1 1 0-2H2a1 1 0 0 1 1 1Zm19-1a1 1 0 0 1 1 1v.1a1 1 0 1 1-2 0V12a1 1 0 0 1 1-1ZM4.9 19.1a1 1 0 0 1-1.4-1.5L4.9 16a1 1 0 0 1 1.5 1.5l-1.5 1.5ZM19.1 4.9a1 1 0 0 1 1.4 0v.1l-1.4 1.4a1 1 0 0 1-1.5-1.4L19.1 5Z"/></svg>
+        <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.3 4.9a.4.4 0 0 0-.5-.5A8.8 8.8 0 1 0 19.6 19a.4.4 0 0 0 .1-.5A10.4 10.4 0 0 1 12.3 4.9Z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .appbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--md-sys-color-surface);
+    transition: background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
+    /* M3 tonal 滚动态无阴影(投影 = M2 遗留,已纠);边界感由色阶承担 */
+  }
+  .appbar[data-scrolled='true'] {
+    background: var(--md-sys-color-surface-container);
+  }
+  .appbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    block-size: 64px;
+  }
+  .appbar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--site-unit) * 2);
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+  }
+  .appbar__actions {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--site-unit) * 2);
+  }
+  .appbar__lang {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  .appbar__theme {
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: var(--md-sys-shape-corner-full);
+    border: none;
+    background: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .appbar__theme:hover {
+    background: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+  }
+  .icon-moon { display: none; }
+  :global([data-theme='dark']) .appbar .icon-sun { display: none; }
+  :global([data-theme='dark']) .appbar .icon-moon { display: block; }
+</style>
+
+<script>
+  // tonal 滚动态(spec §2.2:永远置顶;滚动后 surface→surfaceContainer)
+  const bar = document.getElementById('appbar');
+  if (bar) {
+    const mark = () => bar.setAttribute('data-scrolled', String(window.scrollY > 8));
+    addEventListener('scroll', mark, { passive: true });
+    mark();
+  }
+  document.querySelector('[data-icon-theme]')?.addEventListener('click', () => window.siteToggleTheme?.());
+</script>
