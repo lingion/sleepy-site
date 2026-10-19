@@ -122,10 +122,10 @@ app bar  sticky · 滚动 tonal→surfaceContainer 无阴影 · zh|EN · 明暗�
 
 ## 7. 开放项
 
-1. **CF 凭据**(`CLOUDFLARE_API_TOKEN`+`ACCOUNT_ID`,另一账号)→ 用户粘贴 → `gh secret set`。🚫Keychain。
-2. slogan 3 选 1 + microcopy 签收(§2.5)。
-3. logo SVG 重绘另立任务(首版 PNG)。
-4. 主仓 deploy-hook(§4.2)单独请示。
+1. **CF 凭据**(`CLOUDFLARE_API_TOKEN`+`ACCOUNT_ID`,另一账号)→ 用户粘贴 → `gh secret set`。🚫Keychain。【状态:待用户提供;Actions deploy gate 已落盘,凭据缺位时显式红不静默】
+2. slogan 3 选 1 + microcopy 签收(§2.5)。【状态:站点已上线 A 案「构建无壳,自由自在」,单点常量在 `src/i18n/zh.ts`,签收后一行换】
+3. logo SVG 重绘另立任务(首版 PNG)。【状态:未启动,不阻塞发布】
+4. 主仓 deploy-hook(§4.2)单独请示。【状态:未启动,不阻塞发布】
 
 ## 8. 用户原话 vs 落点
 
@@ -133,8 +133,8 @@ app bar  sticky · 滚动 tonal→surfaceContainer 无阴影 · zh|EN · 明暗�
 |---|---|---|
 | 大厂风格 | §2.4 艺术方向 + §2.2 字体定案(两轮共同最大发明点已闭合) | ✓ |
 | 最震撼简洁 | §2.4 视觉预算/宁删勿加/密度裁剪(4 卡 8 图带冲突修复) | ✓ |
-| 又有我个性 | §2.5 全部实体 + blob 数值定死 | 待 §7.2 签收 |
-| 用户感到亲近 | §2.5 叙事+样例句(验收机械化) | 待 §7.2 签收 |
+| 又有我个性 | §2.5 全部实体 + blob 数值定死 | ✓ 已实现;slogan 待 §7.2 签收 |
+| 用户感到亲近 | §2.5 叙事+样例句(验收机械化) | ✓ 已实现;slogan 待 §7.2 签收 |
 | 严格 M3+md 动画 | §2.1 官方容器阶梯纠值 / §2.2 组件映射钉死 / §2.3 官方时长表纠编造 / scrim 32% | ✓ |
 | 教务省份|协议分组 | §4.1 规则+表+100% 不变量(可执行) | ✓ |
 | 双语 | §4.1 EN 策略 + §3 | ✓ |

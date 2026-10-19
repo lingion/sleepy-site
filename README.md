@@ -28,6 +28,19 @@ npm run data         # 教务数据管线(release 快照 + schools 分组)
 
 本工作流当前**落盘未启用**:凭据未就位前 push 会红在 deploy gate(构建/测试闸照常全跑)。
 
+## 验收状态(四标准 × spec 落点)
+
+| 用户原话 | 落点 | 证据 |
+|---|---|---|
+| 大厂风格 | spec §2.4 艺术方向 + §2.2 字体定案(Inter 子集自托管 + CJK 系统栈) | 构建产物字体 preload;视觉六段目检 |
+| 最震撼简洁 | spec §2.4 视觉预算/宁删勿加 | 单页 JS 3.8KB gz(预算 15KB);blob=3 DOM 断言 |
+| 又有我个性 | spec §2.5 全部实体 + blob 数值定死 | 红线词 grep 零命中;`data-blob` 计数测试 |
+| 用户感到亲近 | spec §2.5 叙事+样例句 | 样例句逐句在产物测试 |
+| 严格 M3+动效 | §2.1 容器阶梯 / §2.3 时长表 / scrim 32% | tokens 生成器快照锁值 + CI 漂移闸 |
+| 性能/无障碍 | Lighthouse 移动四项 ≥95 | 安静机 zh perf 98 / en 97;axe 双页 contrast 100(footer inverse 色对 color-mix 修复后) |
+
+slogan 暂用 A 案「构建无壳,自由自在」(spec §7.2 签收前单点可换,`src/i18n/zh.ts`)。
+
 ## 许可
 
 GPL-3.0,与主仓 [lingion/sleepy](https://github.com/lingion/sleepy) 一致。

@@ -112,6 +112,9 @@ const t =
     flex-wrap: wrap;
     justify-content: space-between;
     gap: calc(var(--site-unit) * 2);
-    opacity: 0.7;
+    /* footer 永远走 inverse 色对(深浅主题都反相);次级文本 = inverse-on-surface
+       向背景混色 80/20 得实色。opacity 压色与 on-surface-variant(深主题浅色)
+       都被 axe 判 AA 红,已纠。 */
+    color: color-mix(in srgb, var(--md-sys-color-inverse-on-surface) 80%, var(--md-sys-color-inverse-surface));
   }
 </style>
