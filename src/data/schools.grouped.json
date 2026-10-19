@@ -1,0 +1,4317 @@
+[
+  {
+    "sortKey": "G",
+    "name": "广东东软学院",
+    "type": "nuit",
+    "aliases": [
+      "nuit"
+    ],
+    "sortKeyFull": "guangdongdongruanxueyuan",
+    "enableFetch": true,
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽第二医学院",
+    "type": "wisedu",
+    "aliases": [
+      "ahyz",
+      "安徽医科大学"
+    ],
+    "sortKeyFull": "anhuierdiyiyuan",
+    "enableFetch": true,
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "K",
+    "name": "昆明理工大学",
+    "type": "kust",
+    "aliases": [
+      "kmust",
+      "kust"
+    ],
+    "sortKeyFull": "kunmingligongdaxue",
+    "enableFetch": true,
+    "province": {
+      "code": "YN",
+      "zh": "云南",
+      "en": "Yunnan"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "上海立信会计金融学院",
+    "type": "classic_eams",
+    "aliases": [
+      "lixin"
+    ],
+    "sortKeyFull": "shanghailixinhuijijinrongxueyuan",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西北政法大学",
+    "type": "classic_eams",
+    "aliases": [
+      "nwupl"
+    ],
+    "sortKeyFull": "xibeizhengfadaxue",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽大学",
+    "type": "eams5",
+    "aliases": [
+      "ahu"
+    ],
+    "sortKeyFull": "anhuidaxue",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽工业大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "anhuigongyedaxue",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽国际商务职业学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "anhuiguojishangwuzhiyexueyuan",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽建筑大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "anhuijianzhudaxue",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽科技学院",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "anhuikejixueyuan",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽农业大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "anhuinongyedaxue",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽信息工程学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "anhuixinxigongchengxueyuan",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安徽中医药大学",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "anhuizhongyiyaodaxue",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安康学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "ankangxueyuan",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "A",
+    "name": "安阳工学院",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "anyanggongxueyuan",
+    "province": {
+      "code": "HA",
+      "zh": "河南",
+      "en": "Henan"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "保定学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "baodingxueyuan",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "宝鸡文理学院",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "baojiwenlixueyuan",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京大学",
+    "type": "pku",
+    "aliases": [
+      "pku"
+    ],
+    "sortKeyFull": "beijingdaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京工业大学耿丹学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "beijinggongyedaxuegengdanxueyuan",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京航空航天大学",
+    "type": "neu",
+    "aliases": [
+      "buaa",
+      "北航"
+    ],
+    "sortKeyFull": "beijinghangkonghangtianfazhanxueyuan",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京化工大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "beijinghuagongdaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京交通大学",
+    "type": "bjtu",
+    "aliases": [
+      "bjtu",
+      "北交大"
+    ],
+    "sortKeyFull": "beijingjiaotongdaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京理工大学",
+    "type": "wisedu",
+    "aliases": [
+      "bit"
+    ],
+    "sortKeyFull": "beijingligongdaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京林业大学",
+    "type": "qz_br",
+    "aliases": [],
+    "sortKeyFull": "beijinglinyedaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京师范大学珠海分校",
+    "type": "bnuz",
+    "aliases": [],
+    "sortKeyFull": "beijingshifandaxuezhuhaifenxiao",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京信息科技大学",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "beijingxinxikejidaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "北京中医药大学",
+    "type": "wisedu",
+    "aliases": [
+      "bucm"
+    ],
+    "sortKeyFull": "beijingzhongyiyaodaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "渤海大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "bohaidaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "B",
+    "name": "亳州学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "bozhouxueyuan",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "长春大学",
+    "type": "qz_br",
+    "aliases": [],
+    "sortKeyFull": "changchundaxue",
+    "province": {
+      "code": "JL",
+      "zh": "吉林",
+      "en": "Jilin"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "长春大学旅游学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "changchundaxuelvyouxueyuan",
+    "province": {
+      "code": "JL",
+      "zh": "吉林",
+      "en": "Jilin"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "长春科技学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "changchunkejixueyuan",
+    "province": {
+      "code": "JL",
+      "zh": "吉林",
+      "en": "Jilin"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "长沙理工大学",
+    "type": "qz_br",
+    "aliases": [],
+    "sortKeyFull": "changshaligongdaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "长沙医学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "changshayixueyuan",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "常州工程职业技术学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "changzhougongchengzhiyejishuxueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "成都大学",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "chengdudaxue",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "成都理工大学工程技术学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "chengduligongdaxuegongchengjishuxueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "重庆大学",
+    "type": "cqu",
+    "aliases": [
+      "cqu",
+      "重大"
+    ],
+    "sortKeyFull": "chongqingdaxue",
+    "province": {
+      "code": "CQ",
+      "zh": "重庆",
+      "en": "Chongqing"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "重庆交通大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "chongqingjiaotongdaxue",
+    "province": {
+      "code": "CQ",
+      "zh": "重庆",
+      "en": "Chongqing"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "重庆三峡学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "chongqingsanxiaxueyuan",
+    "province": {
+      "code": "CQ",
+      "zh": "重庆",
+      "en": "Chongqing"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "重庆医科大学",
+    "type": "urp",
+    "aliases": [],
+    "sortKeyFull": "chongqingyikedaxue",
+    "province": {
+      "code": "CQ",
+      "zh": "重庆",
+      "en": "Chongqing"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "重庆医药高等专科学校",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "chongqingyiyaogaodengzhuankexuexiao",
+    "province": {
+      "code": "CQ",
+      "zh": "重庆",
+      "en": "Chongqing"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "重庆邮电大学移通学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "chongqingyoudiandaxueyitongxueyuan",
+    "province": {
+      "code": "CQ",
+      "zh": "重庆",
+      "en": "Chongqing"
+    }
+  },
+  {
+    "sortKey": "C",
+    "name": "川北医学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "chuanbeiyixueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "大连财经学院",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "daliancaijingxueyuan",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "大连大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "daliandaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "大连工业大学艺术与信息工程学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "daliangongyedaxueyishuyuxinxigongchengxueyuan",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "大连理工大学城市学院",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "dalianligongdaxuechengshixueyuan",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "大连外国语大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "dalianwaiguoyudaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "电子科技大学",
+    "type": "classic_eams",
+    "aliases": [
+      "uestc"
+    ],
+    "sortKeyFull": "dianzikejidaxue",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "电子科技大学成都学院",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "dianzikejidaxuechengduxueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "电子科技大学中山学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "dianzikejidaxuezhongshanxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "东北财经大学",
+    "type": "urp",
+    "aliases": [],
+    "sortKeyFull": "dongbeicaijingdaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "东北大学",
+    "type": "neu",
+    "aliases": [
+      "neu"
+    ],
+    "sortKeyFull": "dongbeidaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "东北大学秦皇岛分校",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "dongbeidaxueqinhuangdaofenxiao",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "东北林业大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "dongbeilinyedaxue",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "东北石油大学",
+    "type": "hnust",
+    "aliases": [],
+    "sortKeyFull": "dongbeishiyoudaxue",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "东华大学",
+    "type": "wisedu",
+    "aliases": [
+      "dhu"
+    ],
+    "sortKeyFull": "donghuadaxue",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "D",
+    "name": "东南大学",
+    "type": "seu",
+    "aliases": [
+      "seu"
+    ],
+    "sortKeyFull": "dongnandaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "F",
+    "name": "福建工程学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "fujiangongchengxueyuan",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "F",
+    "name": "福建农林大学",
+    "type": "zf_1",
+    "aliases": [],
+    "sortKeyFull": "fujiannonglindaxue",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "F",
+    "name": "福建农林大学金山学院",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "fujiannonglindaxuejinshanxueyuan",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "F",
+    "name": "福建师范大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "fujianshifandaxue",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "F",
+    "name": "阜阳职业技术学院",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "fuyangzhiyejishuxueyuan",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "F",
+    "name": "福州外语外贸学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "fuzhouwaiyuwaimaoxueyuan",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "赣南师范大学科技学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "gannanshifandaxuekejixueyuan",
+    "province": {
+      "code": "JX",
+      "zh": "江西",
+      "en": "Jiangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "赣南医科大学",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "gannanyikedaxue",
+    "province": {
+      "code": "JX",
+      "zh": "江西",
+      "en": "Jiangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "赣南医学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "gannanyixueyuan",
+    "province": {
+      "code": "JX",
+      "zh": "江西",
+      "en": "Jiangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东财经大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangdongcaijingdaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东工贸职业技术学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangdonggongmaozhiyejishuxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东工业大学",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "guangdonggongyedaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东海洋大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "guangdonghaiyangdaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东金融学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangdongjinrongxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东科学技术职业学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "guangdongkexuejishuzhiyexueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东培正学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangdongpeizhengxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东外语外贸大学",
+    "type": "qz_with_node",
+    "aliases": [],
+    "sortKeyFull": "guangdongwaiyuwaimaodaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广东医科大学",
+    "type": "zf_new",
+    "aliases": [
+      "GDMU"
+    ],
+    "sortKeyFull": "guangdongyikedaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广西大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "guangxidaxue",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广西科技师范学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangxikejishifanxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广西民族大学相思湖学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangximinzudaxuexiangsihuxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广西民族师范学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangximinzushifanxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广西农业职业技术大学",
+    "type": "zf_new",
+    "aliases": [
+      "gxnzd"
+    ],
+    "sortKeyFull": "guangxinongyezhiyejishudaxue",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广西物流职业技术学院",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "guangxiwuliuzhiyejishuxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广州南方学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "guangzhounanfangxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广州番禺职业技术学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangzhoupanyuzhiyejishuxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广州医科大学",
+    "type": "qz",
+    "aliases": [
+      "gzhmu"
+    ],
+    "sortKeyFull": "guangzhouyikedaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广州应用科技学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "guangzhouyingyongkejixueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "广州中医药大学",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "guangzhouzhongyiyaodaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "贵阳康养职业大学（超星）",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "guiyangkangyangzhiyedaxue（chaoxing）",
+    "province": {
+      "code": "GZ",
+      "zh": "贵州",
+      "en": "Guizhou"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "贵阳人文科技学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "guiyangrenwenkejixueyuan",
+    "province": {
+      "code": "GZ",
+      "zh": "贵州",
+      "en": "Guizhou"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "贵阳幼儿师范高等专科学校",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "guiyangyouershifangaodengzhuankexuexiao",
+    "province": {
+      "code": "GZ",
+      "zh": "贵州",
+      "en": "Guizhou"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "贵州师范大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "guizhoushifandaxue",
+    "province": {
+      "code": "GZ",
+      "zh": "贵州",
+      "en": "Guizhou"
+    }
+  },
+  {
+    "sortKey": "G",
+    "name": "贵州装备制造职业学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "guizhouzhuangbeizhizaozhiyexueyuan",
+    "province": {
+      "code": "GZ",
+      "zh": "贵州",
+      "en": "Guizhou"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "哈尔滨工程大学",
+    "type": "wisedu",
+    "aliases": [
+      "hrbeu"
+    ],
+    "sortKeyFull": "haerbingongchengdaxue",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "哈尔滨商业大学",
+    "type": "zf_new",
+    "aliases": [
+      "hrbcu"
+    ],
+    "sortKeyFull": "haerbinshangyedaxue",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "哈尔滨师范大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "haerbinshifandaxue",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "哈尔滨医科大学",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "haerbinyikedaxue",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "哈尔滨音乐学院 - 研究生",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "haerbinyinyuexueyuan - yanjiusheng",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "海南大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "hainandaxue",
+    "province": {
+      "code": "HI",
+      "zh": "海南",
+      "en": "Hainan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "海南师范大学",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "hainanshifandaxue",
+    "province": {
+      "code": "HI",
+      "zh": "海南",
+      "en": "Hainan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "杭州电子科技大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "hangzhoudianzikejidaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河北大学",
+    "type": "urp",
+    "aliases": [],
+    "sortKeyFull": "hebeidaxue",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河北工程大学",
+    "type": "urp_new",
+    "aliases": [],
+    "sortKeyFull": "hebeigongchengdaxue",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河北工程技术学院",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "hebeigongchengjishuxueyuan",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河北经贸大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "hebeijingmaodaxue",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河北科技师范学院",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "hebeikejishifanxueyuan",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河北师范大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "hebeishifandaxue",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河北政法职业学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "hebeizhengfazhiyexueyuan",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河北资源环境职业技术学院",
+    "type": "qz_app",
+    "aliases": [],
+    "sortKeyFull": "hebeiziyuanhuanjingzhiyejishuxueyuan",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "合肥工业大学",
+    "type": "eams5",
+    "aliases": [
+      "hfut"
+    ],
+    "sortKeyFull": "hefeigongyedaxue",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "合肥师范学院",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "hefeishifanxueyuan",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河海大学",
+    "type": "urp",
+    "aliases": [
+      "hhu"
+    ],
+    "sortKeyFull": "hehaidaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "黑龙江护理高等专科学校",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "heilongjianghuligaodengzhuankexuexiao",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "黑龙江农业工程职业学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "heilongjiangnongyegongchengzhiyexueyuan",
+    "province": {
+      "code": "HL",
+      "zh": "黑龙江",
+      "en": "Heilongjiang"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河南财经政法大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "henancaijingzhengfadaxue",
+    "province": {
+      "code": "HA",
+      "zh": "河南",
+      "en": "Henan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "河南工程学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "henangongchengxueyuan",
+    "province": {
+      "code": "HA",
+      "zh": "河南",
+      "en": "Henan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "菏泽学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "hezexueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "贺州学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "hezhouxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华北电力大学科技学校",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "huabeidianlidaxuekejixuexiao",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华东理工大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "huadongligongdaxue",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华东政法大学",
+    "type": "classic_eams",
+    "aliases": [
+      "ecupl"
+    ],
+    "sortKeyFull": "huadongzhengfadaxue",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "淮南师范学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "huainanshifanxueyuan",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "惠州学院",
+    "type": "zf_new",
+    "aliases": [
+      "hzu"
+    ],
+    "sortKeyFull": "huizhouxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华南理工大学",
+    "type": "zf_new",
+    "aliases": [
+      "scut"
+    ],
+    "sortKeyFull": "huananligongdaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华南农业大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "huanannongyedaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华南师范大学",
+    "type": "zf_new",
+    "aliases": [
+      "scnu"
+    ],
+    "sortKeyFull": "huananshifandaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "黄山学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "huangshanxueyuan",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华侨大学",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "huaqiaodaxue",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华中农业大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "huazhongnongyedaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "华中师范大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "huazhongshifandaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖北第二师范学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "hubeidiershifanxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖北工程学院新技术学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "hubeigongchengxueyuanxinjishuxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖北工业大学",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "hubeigongyedaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖北工业职业技术学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "hubeigongyezhiyejishuxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖北师范大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "hubeishifandaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖北医药学院",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "hubeiyiyaoxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南城市学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "hunanchengshixueyuan",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南大学",
+    "type": "qz",
+    "aliases": [
+      "hnu"
+    ],
+    "sortKeyFull": "hunandaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南工程职业技术学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "hunangongchengzhiyejishuxueyuan",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南工学院",
+    "type": "qz_old",
+    "aliases": [],
+    "sortKeyFull": "hunangongxueyuan",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南工业大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "hunangongyedaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南科技大学",
+    "type": "hnust",
+    "aliases": [],
+    "sortKeyFull": "hunankejidaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南科技大学潇湘学院",
+    "type": "hnust",
+    "aliases": [],
+    "sortKeyFull": "hunankejidaxuexiaoxiangxueyuan",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南理工学院",
+    "type": "urp",
+    "aliases": [],
+    "sortKeyFull": "hunanligongxueyuan",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南理工职业技术学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "hunanligongzhiyejishuxueyuan",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南农业大学",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "hunannongyedaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南软件职业技术大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "hunanruanjianzhiyejishudaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "H",
+    "name": "湖南师范大学",
+    "type": "classic_eams",
+    "aliases": [
+      "hunnu"
+    ],
+    "sortKeyFull": "hunanshifandaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "江苏工程职业技术学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "jiangsugongchengzhiyejishuxueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "江苏海洋大学",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "jiangsuhaiyangdaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "江西农业大学南昌商学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "jiangxinongyedaxuenanchangshangxueyuan",
+    "province": {
+      "code": "JX",
+      "zh": "江西",
+      "en": "Jiangxi"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "江西中医药大学",
+    "type": "cf_new",
+    "aliases": [],
+    "sortKeyFull": "jiangxizhongyiyaodaxue",
+    "province": {
+      "code": "JX",
+      "zh": "江西",
+      "en": "Jiangxi"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "嘉兴大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "jiaxingdaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "嘉兴南湖学院",
+    "type": "zf_new",
+    "aliases": [
+      "南湖学院"
+    ],
+    "sortKeyFull": "jiaxingnanhuaxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "嘉兴学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "jiaxingxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "吉林工商学院",
+    "type": "chaoxing",
+    "aliases": [
+      "jlbtc"
+    ],
+    "sortKeyFull": "jilingongshangxueyuan",
+    "province": {
+      "code": "JL",
+      "zh": "吉林",
+      "en": "Jilin"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "吉林农业科技学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "jilinnongyekejixueyuan",
+    "province": {
+      "code": "JL",
+      "zh": "吉林",
+      "en": "Jilin"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "吉林师范大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "jilinshifandaxue",
+    "province": {
+      "code": "JL",
+      "zh": "吉林",
+      "en": "Jilin"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "吉林外国语大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "jilinwaiguoyudaxue",
+    "province": {
+      "code": "JL",
+      "zh": "吉林",
+      "en": "Jilin"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "集美大学诚毅学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "jimeidaxuechengyixueyuan",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "济南大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "jinandaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "荆楚理工学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "jingchuligongxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "锦州医科大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "jinzhouyikedaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "J",
+    "name": "吉首大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "jishoudaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "K",
+    "name": "喀什大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "kashidaxue",
+    "province": {
+      "code": "XJ",
+      "zh": "新疆",
+      "en": "Xinjiang"
+    }
+  },
+  {
+    "sortKey": "K",
+    "name": "昆明城市学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "kunmingchengshixueyuan",
+    "province": {
+      "code": "YN",
+      "zh": "云南",
+      "en": "Yunnan"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "兰州财经大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "lanzhoucaijingdaxue",
+    "province": {
+      "code": "GS",
+      "zh": "甘肃",
+      "en": "Gansu"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "兰州理工大学",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "lanzhouligongdaxue",
+    "province": {
+      "code": "GS",
+      "zh": "甘肃",
+      "en": "Gansu"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "聊城大学东昌学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "liaochengdaxuedongchangxueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "辽宁工业大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "liaoninggongyedaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "辽宁科技大学",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "liaoningkejidaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "黎明职业大学",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "limingzhiyedaxue",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "临沂大学",
+    "type": "zf_new",
+    "aliases": [
+      "lyu",
+      "lyu.edu.cn",
+      "linyidaxue"
+    ],
+    "sortKeyFull": "linyidaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "柳州工学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "liuzhougongxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "L",
+    "name": "柳州职业技术学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "liuzhouzhiyejishuxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "M",
+    "name": "茂名职业技术学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "maomingzhiyejishuxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "M",
+    "name": "闽江师范高等专科学校",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "minjiangshifangaodengzhuankexuexiao",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "M",
+    "name": "闽南师范大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "minnanshifandaxue",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "M",
+    "name": "闽西职业技术学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "minxizhiyejishuxueyuan",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南昌大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "nanchangdaxue",
+    "province": {
+      "code": "JX",
+      "zh": "江西",
+      "en": "Jiangxi"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南方医科大学",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "nanfangyikedaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南华大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "nanhuadaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京城市职业学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "nanjingchengshizhiyexueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京大学",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "nanjingdaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京工业大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "nanjinggongyedaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京航空航天大学",
+    "type": "classic_eams",
+    "aliases": [
+      "nuaa"
+    ],
+    "sortKeyFull": "nanjinghangkonghangtiandaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京机电职业技术学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "nanjingjidianzhiyejishuxueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京理工大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "nanjingligongdaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京林业大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "nanjinglinyedaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京师范大学中北学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "nanjingshifandaxuezhongbeixueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京信息工程大学",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "nanjingxinxigongchengdaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南京邮电大学通达学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "nanjingyoudiandaxuetongdaxueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南开大学",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "nankaidaxue",
+    "province": {
+      "code": "TJ",
+      "zh": "天津",
+      "en": "Tianjin"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南宁师范大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "nanningshifandaxue",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南宁学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "nanningxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南宁职业技术学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "nanningzhiyejishuxueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "南通大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "nantongdaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "内蒙古大学",
+    "type": "urp_new",
+    "aliases": [],
+    "sortKeyFull": "neimenggudaxue",
+    "province": {
+      "code": "NM",
+      "zh": "内蒙古",
+      "en": "Inner Mongolia"
+    }
+  },
+  {
+    "sortKey": "N",
+    "name": "宁波幼儿师范高等专科学校",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "ningboyouershifangaodengzhuankexuexiao",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "齐鲁工业大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "qilugongyedaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "齐鲁医药学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "qiluyiyaoxueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "青岛滨海学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "qingdaobinhaixueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "青岛黄海学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "qingdaohuanghaixueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "青岛科技大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "qingdaokejidaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "青岛理工大学",
+    "type": "zf_new",
+    "aliases": [
+      "qut"
+    ],
+    "sortKeyFull": "qingdaoligongdaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "青岛理工大学琴岛学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "qingdaoligongdaxueqindaoxueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "青岛农业大学海都学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "qingdaonongyedaxuehaidouxueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Q",
+    "name": "琼台师范学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "qiongtaishifanxueyuan",
+    "province": {
+      "code": "HI",
+      "zh": "海南",
+      "en": "Hainan"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "三江学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "sanjiangxueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "三峡大学",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "sanxiadaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "三峡大学科技学院",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "sanxiadaxuekejixueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东财经大学东方学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shandongcaijingdaxuedongfangxueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东大学（威海）",
+    "type": "qz",
+    "aliases": [
+      "sduwh"
+    ],
+    "sortKeyFull": "shandongdaxueweihai",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东第二医科大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shandongerdierkejiadaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东工商学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "shandonggongshangxueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东管理学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shandongguanlixueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东华宇工学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shandonghuayugongxueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东建筑大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "shandongjianzhudaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东科技大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "shandongkejidaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东农业大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shandongnongyedaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东青年政治学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shandongqingnianzhengzhixueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东外国语职业技术大学",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "shandongwaiguoyuzhiyejishudaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东外贸职业学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shandongwaimaozhiyexueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东外事职业大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "shandongwaishizhiyedaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山东政法大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shandongzhengfadaxue",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "上海财经大学",
+    "type": "classic_eams",
+    "aliases": [
+      "sufe"
+    ],
+    "sortKeyFull": "shanghaicaijingdaxue",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "上海大学",
+    "type": "zf_new",
+    "aliases": [
+      "shu"
+    ],
+    "sortKeyFull": "shanghaidaxue",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "上海海洋大学",
+    "type": "urp_new",
+    "aliases": [],
+    "sortKeyFull": "shanghaihaiyangdaxue",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "上海健康医学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shanghaijiankangyixueyuan",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "上海交通大学",
+    "type": "zf_new",
+    "aliases": [
+      "sjtu"
+    ],
+    "sortKeyFull": "shanghaijiaotongdaxue",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "上海外国语大学",
+    "type": "wisedu",
+    "aliases": [
+      "shisu"
+    ],
+    "sortKeyFull": "shanghaiwaiguoyudaxue",
+    "province": {
+      "code": "SH",
+      "zh": "上海",
+      "en": "Shanghai"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "商洛学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shangluoxueyuan",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山西工程技术学院",
+    "type": "urp_new",
+    "aliases": [],
+    "sortKeyFull": "shanxigongchengjishuxueyuan",
+    "province": {
+      "code": "SX",
+      "zh": "山西",
+      "en": "Shanxi"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "山西农业大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shanxinongyedaxue",
+    "province": {
+      "code": "SX",
+      "zh": "山西",
+      "en": "Shanxi"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "韶关学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "shaoguanxueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "绍兴文理学院元培学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shaoxingwenlixueyuanyuanpeixueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "沈阳城市建设学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "shenyangchengshijianshexueyuan",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "沈阳工业大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "shenyanggongyedaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "沈阳建筑大学",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "shenyangjianzhudaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "沈阳建筑大学 - 研究生",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "shenyangjianzhudaxue - yanjiusheng",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "沈阳师范大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shenyangshifandaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "深圳大学",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "shenzhendaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "石河子大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "shihezidaxue",
+    "province": {
+      "code": "XJ",
+      "zh": "新疆",
+      "en": "Xinjiang"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "石家庄学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "shijiazhuangxueyuan",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "四川城市技师学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "sichuanchengshijishixueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "四川大学",
+    "type": "scu",
+    "aliases": [
+      "scu"
+    ],
+    "sortKeyFull": "sichuandaxue",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "四川大学锦城学院",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "sichuandaxuejinchengxueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "四川电影电视学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "sichuandianyingdianshixueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "四川国际标榜职业学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "sichuanguojibiaobangzhiyexueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "四川轻化工大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "sichuanqinghuagongdaxue",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "苏州工业园区服务外包职业学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "suzhougongyeyuanqufuwuwaibaozhiyexueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "苏州科技大学",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "suzhoukejidaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "S",
+    "name": "苏州科技大学天平学院",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "suzhoukejidaxuetianpingxueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "太原工业学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "taiyuangongyexueyuan",
+    "province": {
+      "code": "SX",
+      "zh": "山西",
+      "en": "Shanxi"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "太原幼儿师范高等专科学校",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "taiyuanyouershifangaodengzhuankexuexiao",
+    "province": {
+      "code": "SX",
+      "zh": "山西",
+      "en": "Shanxi"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "台州科技职业学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "taizhoukejizhiyexueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "台州学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "taizhouxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "台州职业技术学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "taizhouzhiyejishuxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "塔里木大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "talimudaxue",
+    "province": {
+      "code": "XJ",
+      "zh": "新疆",
+      "en": "Xinjiang"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "唐山师范学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "tangshanshifanxueyuan",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "天津医科大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "tianjinyikedaxue",
+    "province": {
+      "code": "TJ",
+      "zh": "天津",
+      "en": "Tianjin"
+    }
+  },
+  {
+    "sortKey": "T",
+    "name": "天津中医药大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "tianjinzhongyiyaodaxue",
+    "province": {
+      "code": "TJ",
+      "zh": "天津",
+      "en": "Tianjin"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "潍坊学院",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "weifangxueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "潍坊职业学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "weifangzhiyexueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "渭南师范学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "weinanshifanxueyuan",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "温州商学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "wenzhoushangxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "温州医科大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "wenzhouyikedaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武昌工学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "wuchanggongxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武昌理工学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "wuchangligongxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武昌首义学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "wuchangshouyixueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉船舶职业技术学院",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "wuhanchuanbozhiyejishuxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉大学",
+    "type": "zf_new",
+    "aliases": [
+      "whu"
+    ],
+    "sortKeyFull": "wuhandaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉东湖学院",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "wuhandonghuxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉纺织大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "wuhanfangzhidaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉工程大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "wuhangongchengdaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉交通职业学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "wuhanjiaotongzhiyexueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉理工大学",
+    "type": "whut",
+    "aliases": [
+      "whut",
+      "wuhanligong"
+    ],
+    "sortKeyFull": "wuhanligongdaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉轻工大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "wuhanqinggongdaxue",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "武汉生物工程学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "wuhanshengwugongchengxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "W",
+    "name": "五邑大学",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "wuyidaxue",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "厦门大学",
+    "type": "wisedu",
+    "aliases": [
+      "xmu"
+    ],
+    "sortKeyFull": "xiamendaxue",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "厦门大学 - 研究生",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "xiamendaxue - yanjiusheng",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "厦门理工学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xiamenligongxueyuan",
+    "province": {
+      "code": "FJ",
+      "zh": "福建",
+      "en": "Fujian"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西安电子科技大学 - 研究生",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "xiandianzikejidaxue - yanjiusheng",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "湘潭大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "xiangtandaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "襄阳职业技术学院",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "xiangyangzhiyejishuxueyuan",
+    "province": {
+      "code": "HB",
+      "zh": "湖北",
+      "en": "Hubei"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西安建筑科技大学",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "xianjianzhukejidaxue",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西安科技大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xiankejidaxue",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西安理工大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xianligongdaxue",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西安培华学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xianpeihuaxueyuan",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西安外事学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xianwaishixueyuan",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西北大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xibeidaxue",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西昌学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xichangxueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西华大学",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "xihuadaxue",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西华师范大学",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "xihuashifandaxue",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西京学院",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "xijingxueyuan",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西南交通大学",
+    "type": "yethan",
+    "aliases": [
+      "swjtu",
+      "yethan"
+    ],
+    "sortKeyFull": "xinanjiaotongdaxue",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西南交通大学希望学院",
+    "type": "urp",
+    "aliases": [],
+    "sortKeyFull": "xinanjiaotongdaxuexiwangxueyuan",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西南民族大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xinanminzudaxue",
+    "province": {
+      "code": "SC",
+      "zh": "四川",
+      "en": "Sichuan"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "西南政法大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xinanzhengfadaxue",
+    "province": {
+      "code": "CQ",
+      "zh": "重庆",
+      "en": "Chongqing"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "新疆大学",
+    "type": "xju_post",
+    "status": "grad_supported",
+    "aliases": [
+      "xju",
+      "yjspy.xju.edu.cn"
+    ],
+    "sortKeyFull": "xinjiangdaxue",
+    "province": {
+      "code": "XJ",
+      "zh": "新疆",
+      "en": "Xinjiang"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "新疆师范大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "xinjiangshifandaxue",
+    "province": {
+      "code": "XJ",
+      "zh": "新疆",
+      "en": "Xinjiang"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "信阳师范大学",
+    "type": "zf_new",
+    "aliases": [
+      "信阳师院"
+    ],
+    "sortKeyFull": "xinyangshifandaxue",
+    "province": {
+      "code": "HA",
+      "zh": "河南",
+      "en": "Henan"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "徐州医科大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xuzhouyikedaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "X",
+    "name": "徐州幼儿师范高等专科学校",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "xuzhouyouershifangaodengzhuankexuexiao",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "延安大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "yanandaxue",
+    "province": {
+      "code": "SN",
+      "zh": "陕西",
+      "en": "Shaanxi"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "延边大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "yanbiandaxue",
+    "province": {
+      "code": "JL",
+      "zh": "吉林",
+      "en": "Jilin"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "燕山大学",
+    "type": "boya_pp",
+    "status": "grad_supported",
+    "aliases": [
+      "ysu",
+      "ysu.edu.cn",
+      "yanshandaxue",
+      "cer.ysu.edu.cn"
+    ],
+    "sortKeyFull": "yanshandaxue",
+    "province": {
+      "code": "HE",
+      "zh": "河北",
+      "en": "Hebei"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "烟台黄金职业学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "yantaihuangjinzhiyexueyuan",
+    "province": {
+      "code": "SD",
+      "zh": "山东",
+      "en": "Shandong"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "永州师范高等专科学校",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "yongzhoushifangaodengzhuankexuexiao",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "右江民族医学院",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "youjiangminzuyixueyuan",
+    "province": {
+      "code": "GX",
+      "zh": "广西",
+      "en": "Guangxi"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "云南财经大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "yunnancaijingdaxue",
+    "province": {
+      "code": "YN",
+      "zh": "云南",
+      "en": "Yunnan"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "云南国防工业职业技术学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "yunnanguofanggongyezhiyejishuxueyuan",
+    "province": {
+      "code": "YN",
+      "zh": "云南",
+      "en": "Yunnan"
+    }
+  },
+  {
+    "sortKey": "Y",
+    "name": "云南农业大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "yunnannongyedaxue",
+    "province": {
+      "code": "YN",
+      "zh": "云南",
+      "en": "Yunnan"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙大城市学院",
+    "type": "zf_new",
+    "aliases": [
+      "hzcu",
+      "ZUCC"
+    ],
+    "sortKeyFull": "zhedachengshixueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙大宁波理工学院",
+    "type": "zf",
+    "aliases": [
+      "nbt",
+      "宁波理工"
+    ],
+    "sortKeyFull": "zhedaningboligongxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江财经大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhejiangcaijingdaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江传媒学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhejiangchuanmeixueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江大学",
+    "type": "zju",
+    "aliases": [
+      "zju"
+    ],
+    "sortKeyFull": "zhejiangdaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江工商大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhejianggongshangdaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江工业大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhejianggongyedaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江工业大学之江学院",
+    "type": "zf",
+    "aliases": [],
+    "sortKeyFull": "zhejianggongyedaxuezhijiangxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江经贸职业技术学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhejiangjingmaozhiyejishuxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江农林大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhejiangnonglindaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江万里学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhejiangwanlixueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "浙江宇翔职业技术学院",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "zhejiangyuxiangzhiyejishuxueyuan",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "郑州大学西亚斯国际学院",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "zhengzhoudaxuexiyasiguojixueyuan",
+    "province": {
+      "code": "HA",
+      "zh": "河南",
+      "en": "Henan"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "郑州航空工业管理学院",
+    "type": "classic_eams",
+    "aliases": [],
+    "sortKeyFull": "zhengzhouhangkonggongyeguanlixueyuan",
+    "province": {
+      "code": "HA",
+      "zh": "河南",
+      "en": "Henan"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国计量大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhongguojiliangdaxue",
+    "province": {
+      "code": "ZJ",
+      "zh": "浙江",
+      "en": "Zhejiang"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国科学技术大学",
+    "type": "ustc",
+    "aliases": [
+      "ustc"
+    ],
+    "sortKeyFull": "zhongguokexuejishudaxue",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国科学技术大学 - 研究生",
+    "type": "wisedu",
+    "aliases": [],
+    "sortKeyFull": "zhongguokexuejishudaxue - yanjiusheng",
+    "province": {
+      "code": "AH",
+      "zh": "安徽",
+      "en": "Anhui"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国科学院大学",
+    "type": "ucas",
+    "aliases": [
+      "ucas",
+      "国科大"
+    ],
+    "sortKeyFull": "zhongguokexueyuandaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国矿业大学",
+    "type": "zf_new",
+    "aliases": [
+      "cumt"
+    ],
+    "sortKeyFull": "zhongguokuangyedaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国矿业大学（北京）",
+    "type": "eams5",
+    "aliases": [
+      "cumtb"
+    ],
+    "sortKeyFull": "zhongguokuangyedaxuebeijing",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国矿业大学徐海学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhongguokuangyedaxuexuhaixueyuan",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国农业大学",
+    "type": "urp_new",
+    "aliases": [
+      "cau"
+    ],
+    "sortKeyFull": "zhongguonongyedaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国人民大学",
+    "type": "qz",
+    "aliases": [
+      "ruc"
+    ],
+    "sortKeyFull": "zhongguorenmindaxue",
+    "province": {
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国药科大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "zhongguoyaokedaxue",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中国医科大学",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhongguoyikedaxue",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中南大学",
+    "type": "qz",
+    "aliases": [
+      "csu"
+    ],
+    "sortKeyFull": "zhongnandaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "中南林业科技大学",
+    "type": "qz",
+    "aliases": [],
+    "sortKeyFull": "zhongnanlinyekejidaxue",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "珠海科技学院",
+    "type": "zf_new",
+    "aliases": [],
+    "sortKeyFull": "zhuhaikejixueyuan",
+    "province": {
+      "code": "GD",
+      "zh": "广东",
+      "en": "Guangdong"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "株洲师范高等专科学校",
+    "type": "chaoxing",
+    "aliases": [],
+    "sortKeyFull": "zhuzhoushifangaodengzhuankexuexiao",
+    "province": {
+      "code": "HN",
+      "zh": "湖南",
+      "en": "Hunan"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "遵义医科大学",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "zunyiyikedaxue",
+    "province": {
+      "code": "GZ",
+      "zh": "贵州",
+      "en": "Guizhou"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "遵义医科大学医学与科技学院",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "zunyiyikedaxueyixueyukejixueyuan",
+    "province": {
+      "code": "GZ",
+      "zh": "贵州",
+      "en": "Guizhou"
+    }
+  },
+  {
+    "sortKey": "Z",
+    "name": "遵义医学院医学与科技学院",
+    "type": "cf",
+    "aliases": [],
+    "sortKeyFull": "zunyiyixueyuanyixueyukejixueyuan",
+    "province": {
+      "code": "GZ",
+      "zh": "贵州",
+      "en": "Guizhou"
+    }
+  },
+  {
+    "sortKey": "*",
+    "name": "北京邮电大学新教务（VPN）",
+    "type": "qz_with_node",
+    "aliases": [
+      "bupt"
+    ],
+    "sortKeyFull": "beijingyoudiandaxuexinjiaowu",
+    "province": {
+      "code": "OTHER",
+      "zh": "其它",
+      "en": "Other"
+    }
+  },
+  {
+    "sortKey": "*",
+    "name": "北京邮电大学新教务（WebVPN）",
+    "type": "qz_with_node",
+    "aliases": [
+      "bupt"
+    ],
+    "sortKeyFull": "beijingyoudiandaxuexinjiaowu",
+    "province": {
+      "code": "OTHER",
+      "zh": "其它",
+      "en": "Other"
+    }
+  }
+]
