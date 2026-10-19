@@ -29,6 +29,9 @@ const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={site + Astro.url.pathname} />
     <link rel="alternate" hreflang="zh-CN" href={site + (lang === 'zh' ? '/' : mirror)} />
     <link rel="alternate" hreflang="en" href={site + (lang === 'en' ? '/en/' : mirror)} />
