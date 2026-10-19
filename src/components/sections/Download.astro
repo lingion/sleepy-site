@@ -6,9 +6,13 @@ import { Image } from 'astro:assets';
 import grid from '../../assets/screenshots/02-schedule-grid.png';
 import release from '../../data/release.json';
 import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
 import { onlineTrialUrl } from '../../i18n/ui';
 
-const t = zh.download;
+interface Props {
+  copy?: SiteCopy;
+}
+const t = (Astro.props.copy ?? zh).download;
 const abiOf = (name: string) => name.replace(/^app-|-release\.apk$/g, '');
 const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 const date = release.date.slice(0, 10);
@@ -44,7 +48,7 @@ const date = release.date.slice(0, 10);
       </p>
       <div class="download__stores">
         <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>Google Play</span>
-        <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>应用商店</span>
+        <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>{t.storeBadgeCn}</span>
       </div>
       <p class="t-body-small download__trial"><a href={onlineTrialUrl}>{t.trial}</a></p>
     </div>
@@ -53,7 +57,7 @@ const date = release.date.slice(0, 10);
         src={grid}
         widths={[360, 720]}
         sizes="(max-width: 840px) 88vw, 380px"
-        alt="网格视图真机截图"
+        alt={t.deviceCaption}
         width={grid.width}
         height={grid.height}
         loading="lazy"

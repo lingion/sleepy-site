@@ -1,13 +1,25 @@
 ---
 // ③ 教务 — spec §3③:搜索 + 省份|协议 filter chip 单岛联动 · JS-off 全量分组可读
 // 数字从数据现算(§4.1 不变量);点击不跳转 = 校名是 <li> 文本非 <a>
+// T7 双语:EN 页省名/协议标签走 geo-prefix + types-en(spec §4.1);校名保中文 = 设计
 import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
+import typesEn from '../../data/types-en.json';
 import { repoUrl, faqUrl, qqGroup } from '../../i18n/ui';
 import { schools, provincesOrdered, typesOrdered, rowCount, typeCount } from '../../lib/schools-view';
 
-const t = zh.schools;
+interface Props {
+  copy?: SiteCopy;
+  /** 显示语言:zh = 协议显原始 type 键(现状);en = 拉丁化标签 + 省英文名 */
+  lang?: 'zh' | 'en';
+}
+const c = Astro.props.copy ?? zh;
+const lang = Astro.props.lang ?? 'zh';
+const t = c.schools;
+const typeLabel = (ty: string) => (lang === 'en' ? ((typesEn as Record<string, string>)[ty] ?? ty) : ty);
 const groups = provincesOrdered().map((p) => ({
   ...p,
+  label: lang === 'en' ? p.en : p.zh,
   rows: schools.filter((s) => s.province.code === p.code),
 }));
 ---
@@ -25,15 +37,15 @@ const groups = provincesOrdered().map((p) => ({
         <input class="site-field" type="search" data-role="q" placeholder={t.searchPlaceholder} autocomplete="off" />
       </label>
       <div class="schools__chipbar" role="group" aria-label={t.provinceLabel}>
-        <button type="button" class="site-chip is-active" data-province="" aria-pressed="true">全部</button>
+        <button type="button" class="site-chip is-active" data-province="" aria-pressed="true">{t.allLabel}</button>
         {groups.map((g) => (
-          <button type="button" class="site-chip" data-province={g.code} aria-pressed="false">{g.zh}</button>
+          <button type="button" class="site-chip" data-province={g.code} aria-pressed="false">{g.label}</button>
         ))}
       </div>
       <div class="schools__chipbar" role="group" aria-label={t.typeLabel}>
-        <button type="button" class="site-chip is-active" data-type="" aria-pressed="true">全部</button>
+        <button type="button" class="site-chip is-active" data-type="" aria-pressed="true">{t.allLabel}</button>
         {typesOrdered().map((ty) => (
-          <button type="button" class="site-chip" data-type={ty} aria-pressed="false">{ty}</button>
+          <button type="button" class="site-chip" data-type={ty} aria-pressed="false">{typeLabel(ty)}</button>
         ))}
       </div>
     </div>
@@ -42,13 +54,13 @@ const groups = provincesOrdered().map((p) => ({
       {groups.map((g) => (
         <section class="school-group" data-group={g.code}>
           <h3 class="t-title-small school-group__title">
-            {g.zh}
+            {g.label}
             <span class="t-label-small school-group__count">{g.rows.length}</span>
           </h3>
           <ul class="school-group__list">
             {g.rows.map((s) => (
               <li class="school-row t-body-small" data-school data-province={g.code} data-type={s.type} data-search={`${s.name}${s.sortKeyFull}`}>
-                {s.name} · {s.type}
+                {s.name} · {typeLabel(s.type)}
               </li>
             ))}
           </ul>

@@ -11,8 +11,12 @@ import img36 from '../../assets/screenshots/36-theme-dark.png';
 import imgWidget from '../../assets/screenshots/widget-weekgrid.png';
 import img20 from '../../assets/screenshots/20-import-bottomsheet.png';
 import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
 
-const t = zh.gallery;
+interface Props {
+  copy?: SiteCopy;
+}
+const t = (Astro.props.copy ?? zh).gallery;
 const shots = [img01, img02, img03, img11, img22, img36, imgWidget, img20];
 ---
 

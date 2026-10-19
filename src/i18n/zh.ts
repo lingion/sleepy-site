@@ -45,6 +45,7 @@ export const zh = {
     provinceLabel: '省份',
     typeLabel: '协议',
     statLine: (rows: number, types: number) => `${rows} 条收录 · ${types} 协议`,
+    allLabel: '全部',
     emptyState: '这所学校还没收录——',
     emptyIssue: '提个 issue',
     emptyTail: ' 或进群说一声,它很快会在。',
@@ -78,6 +79,8 @@ export const zh = {
     minSdk: 'Android 8.0 起',
     shaLink: 'sha256sums.txt',
     storeReserved: '商店上架准备中',
+    storeBadgeCn: '应用商店',
+    deviceCaption: '网格视图真机截图',
     trial: '不想装 APK?在线体验在这里。',
   },
   trust: {
@@ -91,7 +94,15 @@ export const zh = {
     licenseBody:
       '源码全公开,可以审、可以改、可以自己发。仓库里每一个 commit 都能翻。',
     communityHeading: '社区',
+    sponsorLink: '请我喝可乐',
+    qqGroupLabel: 'QQ 群',
   },
 } as const;
 
-export type SiteCopy = typeof zh;
+// 结构类型:键树 = 双语镜像闸(tsc 级),值拓宽成 string 让 en.ts 可标注
+type Wide<T> = T extends (...args: infer A) => infer R
+  ? (...a: A) => R
+  : T extends object
+    ? { -readonly [K in keyof T]: Wide<T[K]> }
+    : string;
+export type SiteCopy = Wide<typeof zh>;

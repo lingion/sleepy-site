@@ -1,0 +1,21 @@
+---
+// en 镜像页 — spec §1(hreflang 互指)/§4.1(校名保中文 + 拼音检索,文案面全 EN)
+// 结构不变量与 zh 主页同形:七段 + DOM 序 = 揭示序(§2.4/§8)
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/sections/Hero.astro';
+import Features from '../../components/sections/Features.astro';
+import Schools from '../../components/sections/Schools.astro';
+import Gallery from '../../components/sections/Gallery.astro';
+import Download from '../../components/sections/Download.astro';
+import Trust from '../../components/sections/Trust.astro';
+import { en } from '../../i18n/en';
+---
+
+<Base lang="en" title={en.meta.title} description={en.meta.description} mirror="/">
+  <Hero copy={en} />
+  <Features copy={en} />
+  <Schools copy={en} lang="en" />
+  <Gallery copy={en} />
+  <Download copy={en} />
+  <Trust copy={en} />
+</Base>

@@ -5,8 +5,14 @@ import Blob from '../Blob.astro';
 import week from '../../assets/screenshots/01-schedule-week.png';
 import { onlineTrialUrl, repoUrl } from '../../i18n/ui';
 import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
 
-const t = zh.hero;
+interface Props {
+  /** 文案注入(T7 双语镜像):缺省 = zh */
+  copy?: SiteCopy;
+}
+const c = Astro.props.copy ?? zh;
+const t = c.hero;
 ---
 
 <section class="hero site-section" id="hero" aria-labelledby="hero-title">

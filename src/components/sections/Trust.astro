@@ -1,9 +1,13 @@
 ---
 // ⑥ 信任 — spec §3⑥/§2.5:第一人称叙事逐字 + 无追踪声明 + GPL + 社区
 import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
 import { qqGroup, sponsorUrl, repoUrl, faqUrl } from '../../i18n/ui';
 
-const t = zh.trust;
+interface Props {
+  copy?: SiteCopy;
+}
+const t = (Astro.props.copy ?? zh).trust;
 ---
 
 <section class="site-section" id="trust" aria-labelledby="trust-title">
@@ -27,8 +31,8 @@ const t = zh.trust;
           <li><a href={repoUrl}>GitHub · lingion/sleepy</a></li>
           <li><a href={`${repoUrl}/issues`}>Issues</a></li>
           <li><a href={faqUrl}>FAQ</a></li>
-          <li><a href={sponsorUrl}>请我喝可乐</a></li>
-          <li>QQ 群 {qqGroup}</li>
+          <li><a href={sponsorUrl}>{t.sponsorLink}</a></li>
+          <li>{t.qqGroupLabel} {qqGroup}</li>
         </ul>
       </div>
     </div>

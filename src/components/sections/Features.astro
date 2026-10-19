@@ -6,8 +6,12 @@ import imgImport from '../../assets/screenshots/20-import-bottomsheet.png';
 import imgReminder from '../../assets/screenshots/22-reminder.png';
 import imgWidget from '../../assets/screenshots/widget-weekgrid.png';
 import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
 
-const t = zh.features;
+interface Props {
+  copy?: SiteCopy;
+}
+const t = (Astro.props.copy ?? zh).features;
 const images = [imgToday, imgImport, imgReminder, imgWidget];
 ---
 
