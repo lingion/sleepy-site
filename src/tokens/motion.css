@@ -1,0 +1,49 @@
+/* GENERATED — 勿手改。再生成: npm run tokens
+ * 时长 = M3 官方 tokens-specs 表值(spec §2.3 v3);easing 三支同表。
+ * 配对(站点约定): enter=medium4 400ms emph-decel · exit=short4 200ms emph-accel · in-place=long2 500ms emphasized
+ * 注: M3 easing/duration 体系官方标「no longer maintained」,Expressive 弹簧 Web 端不可用(§0 非目标)——可见决策。
+ */
+:root {
+  --md-sys-motion-duration-short1: 50ms;
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short3: 150ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium1: 250ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-medium3: 350ms;
+  --md-sys-motion-duration-medium4: 400ms;
+  --md-sys-motion-duration-long1: 450ms;
+  --md-sys-motion-duration-long2: 500ms;
+  --md-sys-motion-duration-long3: 550ms;
+  --md-sys-motion-duration-long4: 600ms;
+  --md-sys-motion-duration-extra-long1: 700ms;
+  --md-sys-motion-duration-extra-long2: 800ms;
+  --md-sys-motion-duration-extra-long3: 900ms;
+  --md-sys-motion-duration-extra-long4: 1000ms;
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasize-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --md-sys-motion-easing-emphasize-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --site-stagger: 60ms; /* 滚动揭示错峰,站点常量非 M3 token(spec §2.3) */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --md-sys-motion-duration-short1: 0ms;
+    --md-sys-motion-duration-short2: 0ms;
+    --md-sys-motion-duration-short3: 0ms;
+    --md-sys-motion-duration-short4: 0ms;
+    --md-sys-motion-duration-medium1: 0ms;
+    --md-sys-motion-duration-medium2: 0ms;
+    --md-sys-motion-duration-medium3: 0ms;
+    --md-sys-motion-duration-medium4: 0ms;
+    --md-sys-motion-duration-long1: 0ms;
+    --md-sys-motion-duration-long2: 0ms;
+    --md-sys-motion-duration-long3: 0ms;
+    --md-sys-motion-duration-long4: 0ms;
+    --md-sys-motion-duration-extra-long1: 0ms;
+    --md-sys-motion-duration-extra-long2: 0ms;
+    --md-sys-motion-duration-extra-long3: 0ms;
+    --md-sys-motion-duration-extra-long4: 0ms;
+    --site-stagger: 0ms;
+  }
+}
