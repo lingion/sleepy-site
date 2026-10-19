@@ -60,7 +60,7 @@ describe('覆盖率不变量:348 条 100% 可判(prefix ∪ manual)', () => {
     );
   });
   it('33 协议计数锁(spec §4.1 口径「33 协议」;源数据协议面变化 = 有意变更,须对账后更新)', () => {
-    expect(new Set(fixture.map((s) => (s as { type: string }).type)).size).toBe(33);
+    expect(new Set(fixture.map((s) => (s as unknown as { type: string }).type)).size).toBe(33);
   });
   it('manual 表键必须是真实校名且值必须是已声明省码(防手滑)', () => {
     const names = new Set(fixture.map((s) => s.name));
