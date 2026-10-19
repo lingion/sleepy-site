@@ -1,0 +1,68 @@
+# sleepy-site CI/CD — spec §4.2/计划 T8:构建 owner = Actions
+# 触发:push main + nightly(重建 = release 快照/教务数据防腐烂刷新)。
+# 落盘不启用:本仓尚无 remote;凭据就位(CF 另一账号 secrets)前 deploy 步显式失败并给指引。
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 18 * * *' # UTC 18:00 = CST 02:00,夜间刷 release/教务快照
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install (npm ci, registry 走 .npmrc 镜像)
+        run: npm ci
+
+      - name: Data pipeline (release 快照 + 教务分组,认证 API 绕匿名限流)
+        run: npm run data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tokens drift gate (生成器输出必须与仓内快照一致)
+        run: |
+          npm run tokens
+          git diff --exit-code src/tokens/ || {
+            echo '::error::src/tokens 与生成器输出漂移——本地 npm run tokens 后提交'
+            exit 1
+          }
+
+      - name: Type check + build + test (page 产物闸依赖 dist,build 先行)
+        run: |
+          npm run check
+          npm run build
+          npm test
+
+      - name: Deploy gate (凭据未就位则明确失败,不静默跳过)
+        env:
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CF_API_TOKEN" ] || [ -z "$CF_ACCOUNT_ID" ]; then
+            echo '::error::缺 secrets CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID(CF 另一账号)。设置后本 job 才会部署;构建/测试闸已全过。'
+            exit 1
+          fi
+
+      - name: Deploy to Cloudflare Pages (wrangler 锁 devDependency,禁全局最新版)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler pages deploy dist/client --project-name sleepy-site --commit-dirty=true
