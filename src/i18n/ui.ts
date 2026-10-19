@@ -2,7 +2,7 @@
 export const site = 'https://sleepy.lingion.eu.cc';
 
 export const qqGroup = '1063407652';
-export const sponsorUrl = 'https://github.com/lingion/sleepy-web/blob/main/sponsor.md';
+export const sponsorUrl = 'https://github.com/lingion/sleepy/blob/main/sponsor.md';
 export const repoUrl = 'https://github.com/lingion/sleepy';
 export const faqUrl = 'https://github.com/lingion/sleepy/blob/main/FAQ.md';
 export const onlineTrialUrl = 'https://sleepy.qdp.qzz.io';

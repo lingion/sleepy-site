@@ -129,7 +129,7 @@ describe('Footer.astro(spec §2.5)', () => {
   it('GPL + QQ 群号 + sponsor 钉死链接(值在 ui.ts,Footer 引用)', () => {
     expect(footer).toContain('GPL');
     expect(ui).toContain('1063407652');
-    expect(ui).toContain('https://github.com/lingion/sleepy-web/blob/main/sponsor.md');
+    expect(ui).toContain('https://github.com/lingion/sleepy/blob/main/sponsor.md');
     expect(footer).toContain('{qqGroup}');
     expect(footer).toContain('{sponsorUrl}');
   });
