@@ -1,0 +1,28 @@
+{
+  "tag": "v1.0.61",
+  "date": "2026-10-10T14:09:31Z",
+  "assets": [
+    {
+      "name": "app-arm64-v8a-release.apk",
+      "url": "https://github.com/lingion/sleepy/releases/download/v1.0.61/app-arm64-v8a-release.apk",
+      "size": 4658551
+    },
+    {
+      "name": "app-armeabi-v7a-release.apk",
+      "url": "https://github.com/lingion/sleepy/releases/download/v1.0.61/app-armeabi-v7a-release.apk",
+      "size": 4655859
+    },
+    {
+      "name": "app-universal-release.apk",
+      "url": "https://github.com/lingion/sleepy/releases/download/v1.0.61/app-universal-release.apk",
+      "size": 4756487
+    },
+    {
+      "name": "app-x86_64-release.apk",
+      "url": "https://github.com/lingion/sleepy/releases/download/v1.0.61/app-x86_64-release.apk",
+      "size": 4657657
+    }
+  ],
+  "sha256sumsUrl": "https://github.com/lingion/sleepy/releases/download/v1.0.61/sha256sums.txt",
+  "builtAt": "2026-10-19T09:54:13.589Z"
+}
