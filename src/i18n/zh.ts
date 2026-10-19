@@ -11,7 +11,7 @@ export const zh = {
     sub: '开源 Android 课表:三视图、教务直连、提醒与桌面组件。课表是你的,数据留在你手机里。',
     ctaDownload: '下载 Android',
     ctaTrial: '在线体验',
-    deviceCaption: '周视图 · 真机截图',
+    deviceCaption: '今日视图 · 真机截图',
   },
   features: {
     heading: '课表该有的样子',
@@ -19,7 +19,7 @@ export const zh = {
       {
         title: '三视图,一眼到底',
         body: '周视图看全局,网格视图看密度,今日视图看当下。学期从哪开始、这节课在哪个教室,不用点进去找。',
-        imgAlt: '今日视图真机截图',
+        imgAlt: '周视图真机截图',
       },
       {
         title: '348 条教务直连',

@@ -1,7 +1,7 @@
 ---
 // ② 功能 — spec §3:4 行图文交替 · card=surfaceContainerLow · 揭示 DOM 序=出现序(§8 不变量)
 import { Image } from 'astro:assets';
-import imgToday from '../../assets/screenshots/03-today.png';
+import imgWeek from '../../assets/screenshots/01-schedule-week.png';
 import imgImport from '../../assets/screenshots/20-import-bottomsheet.png';
 import imgReminder from '../../assets/screenshots/22-reminder.png';
 import imgWidget from '../../assets/screenshots/widget-weekgrid.png';
@@ -12,7 +12,7 @@ interface Props {
   copy?: SiteCopy;
 }
 const t = (Astro.props.copy ?? zh).features;
-const images = [imgToday, imgImport, imgReminder, imgWidget];
+const images = [imgWeek, imgImport, imgReminder, imgWidget];
 ---
 
 <section class="site-section" id="features" aria-labelledby="features-title">

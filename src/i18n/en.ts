@@ -14,7 +14,7 @@ export const en: SiteCopy = {
     sub: 'An open-source Android timetable: three views, direct academic-system connections, reminders and home-screen widgets. The timetable is yours — the data stays on your phone.',
     ctaDownload: 'Download for Android',
     ctaTrial: 'Try it online',
-    deviceCaption: 'Week view · real device screenshot',
+    deviceCaption: 'Today view · real device screenshot',
   },
   features: {
     heading: 'What a timetable should feel like',
@@ -22,7 +22,7 @@ export const en: SiteCopy = {
       {
         title: 'Three views, one glance',
         body: 'Week view for the big picture, grid view for density, today view for right now. Where the semester started and which room this class is in — no drilling down to find out.',
-        imgAlt: 'Today view real device screenshot',
+        imgAlt: 'Week view real device screenshot',
       },
       {
         title: '348 direct connections',

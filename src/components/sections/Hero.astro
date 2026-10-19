@@ -1,8 +1,8 @@
 ---
-// ① hero — spec §3:55/45 非对称 · Display clamp ≤2 行 · 双 CTA · 设备框 01 · blob#1
+// ① hero — spec §3:55/45 非对称 · Display clamp ≤2 行 · 双 CTA · 设备框(今日视图:首屏美感锚点,冲突能力留给 features/gallery 展示)· blob#1
 import { Image } from 'astro:assets';
 import Blob from '../Blob.astro';
-import week from '../../assets/screenshots/01-schedule-week.png';
+import today from '../../assets/screenshots/03-today.png';
 import { onlineTrialUrl, repoUrl } from '../../i18n/ui';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
@@ -28,12 +28,12 @@ const t = c.hero;
     </div>
     <div class="hero__device">
       <Image
-        src={week}
+        src={today}
         widths={[420, 840]}
         sizes="(max-width: 840px) 88vw, 440px"
         alt={t.deviceCaption}
-        width={week.width}
-        height={week.height}
+        width={today.width}
+        height={today.height}
         loading="eager"
         decoding="async"
       />
