@@ -47,6 +47,7 @@ const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
         is:inline = 不打包不延迟,这是唯一允许的内联脚本。 */}
     <script is:inline>
       (() => {
+        document.documentElement.classList.add('js');
         try {
           const stored = localStorage.getItem('sleepy-theme');
           const dark = stored === 'dark' || (!stored && matchMedia('(prefers-color-scheme: dark)').matches);
@@ -67,6 +68,21 @@ const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
     <script>
       // 主题开关(lightbox 岛在 T6;此处只做 FOUC 之后的持久化 toggle)
       const root = document.documentElement;
+      // 滚动揭示:IntersectionObserver 单例,DOM 序=揭示序(§2.4/§8 不变量)
+      {
+        const revealIO = new IntersectionObserver(
+          (entries) => {
+            for (const en of entries) {
+              if (en.isIntersecting) {
+                en.target.setAttribute('data-revealed', 'true');
+                revealIO.unobserve(en.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -10% 0px' },
+        );
+        document.querySelectorAll('.reveal').forEach((el) => revealIO.observe(el));
+      }
       window.siteToggleTheme = () => {
         const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         root.setAttribute('data-theme', next);

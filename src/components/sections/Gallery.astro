@@ -1,0 +1,205 @@
+---
+// ④ 画廊 — spec §3④:8 图网格(桌面4/平板2/手机1)→ lightbox
+// lightbox a11y 全项:scrim #000 32% · aria-modal · 焦点圈定 · Esc/←→ · 关闭归还焦点
+import { Image } from 'astro:assets';
+import img01 from '../../assets/screenshots/01-schedule-week.png';
+import img02 from '../../assets/screenshots/02-schedule-grid.png';
+import img03 from '../../assets/screenshots/03-today.png';
+import img11 from '../../assets/screenshots/11-theme.png';
+import img22 from '../../assets/screenshots/22-reminder.png';
+import img36 from '../../assets/screenshots/36-theme-dark.png';
+import imgWidget from '../../assets/screenshots/widget-weekgrid.png';
+import img20 from '../../assets/screenshots/20-import-bottomsheet.png';
+import { zh } from '../../i18n/zh';
+
+const t = zh.gallery;
+const shots = [img01, img02, img03, img11, img22, img36, imgWidget, img20];
+---
+
+<section class="site-section" id="gallery" aria-labelledby="gallery-title">
+  <div class="site-col">
+    <h2 class="t-headline-large" id="gallery-title">{t.heading}</h2>
+    <p class="t-body-medium gallery__sub">{t.sub}</p>
+    <div class="gallery__grid">
+      {
+        shots.map((s, i) => (
+          <figure class="gallery__figure" data-gallery-figure>
+            <button type="button" class="gallery__open" data-index={i} aria-label={t.captions[i]}>
+              <Image
+                src={s}
+                widths={[300, 600]}
+                sizes="(max-width: 600px) 92vw, (max-width: 840px) 45vw, 24vw"
+                alt={t.captions[i]}
+                width={s.width}
+                height={s.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+            <figcaption class="t-label-small">{t.captions[i]}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label={t.heading} hidden>
+      <div class="lightbox__scrim" data-lb-scrim></div>
+      <div class="lightbox__body">
+        <img class="lightbox__img" data-lb-img alt="" />
+        <div class="lightbox__bar">
+          <button type="button" class="lightbox__nav" data-lb-prev aria-label={t.prev}>←</button>
+          <span class="t-label-medium" data-lb-count></span>
+          <button type="button" class="lightbox__nav" data-lb-next aria-label={t.next}>→</button>
+          <button type="button" class="lightbox__nav" data-lb-close aria-label={t.close}>×</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery__sub {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 6);
+  }
+  .gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: calc(var(--site-unit) * 4);
+  }
+  @media (max-width: 840px) {
+    .gallery__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .gallery__grid { grid-template-columns: 1fr; }
+  }
+  .gallery__figure {
+    margin: 0;
+  }
+  .gallery__open {
+    display: block;
+    inline-size: 100%;
+    padding: 0;
+    border: none;
+    border-radius: var(--md-sys-shape-corner-medium);
+    background: var(--md-sys-color-surface-container-low);
+    cursor: zoom-in;
+    overflow: hidden;
+  }
+  .gallery__open img {
+    inline-size: 100%;
+    /* 视觉预算 §2.4:竖屏截图统一裁成 3/4 缩略,8 图两段收进 ~1×100vh;
+       lightbox 里仍看全图 */
+    aspect-ratio: 3 / 4;
+    block-size: auto;
+    object-fit: cover;
+    object-position: top;
+  }
+  .gallery__figure figcaption {
+    margin-block-start: calc(var(--site-unit) * 2);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+  }
+  .lightbox[hidden] { display: none; }
+  .lightbox__scrim {
+    position: absolute;
+    inset: 0;
+    background: var(--site-lightbox-scrim);
+  }
+  .lightbox__body {
+    position: relative;
+    max-width: min(1040px, 92vw);
+    display: grid;
+    gap: calc(var(--site-unit) * 3);
+    justify-items: center;
+  }
+  .lightbox__img {
+    max-inline-size: 92vw;
+    max-block-size: 76vh;
+    border-radius: var(--md-sys-shape-corner-large);
+    background: var(--md-sys-color-surface);
+  }
+  .lightbox__bar {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--site-unit) * 3);
+    color: #fff;
+  }
+  .lightbox__nav {
+    font: var(--md-sys-typescale-title-large);
+    inline-size: 44px;
+    block-size: 44px;
+    border-radius: var(--md-sys-shape-corner-full);
+    border: 1px solid var(--md-sys-color-outline);
+    background: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  // lightbox 岛(vanilla + Motion One enter/exit 配对 §2.3;焦点圈定/Esc/←→/归还 §3④)
+  import { animate } from 'motion/mini';
+
+  const sec = document.getElementById('gallery');
+  if (sec) {
+    const lb = sec.querySelector<HTMLElement>('[data-lightbox]')!;
+    const img = lb.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const count = lb.querySelector<HTMLElement>('[data-lb-count]')!;
+    const figs = [...sec.querySelectorAll<HTMLButtonElement>('.gallery__open')];
+    const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const RM = matchMedia('(prefers-reduced-motion: reduce)'); // §2.3:reduced-motion → 0ms 直出
+    let cur = 0;
+    let opener: HTMLElement | null = null;
+
+    const urls = figs.map((b) => (b.querySelector('img') as HTMLImageElement).currentSrc || (b.querySelector('img') as HTMLImageElement).src);
+
+    const show = (i: number) => {
+      cur = (i + urls.length) % urls.length;
+      img.src = urls[cur];
+      img.alt = figs[cur].getAttribute('aria-label') ?? '';
+      count.textContent = `${cur + 1} / ${urls.length}`;
+    };
+    const open = (i: number, from: HTMLElement) => {
+      opener = from;
+      show(i);
+      lb.hidden = false;
+      animate(lb, { opacity: [0, 1] }, { duration: RM.matches ? 0 : 0.4, ease: [0.05, 0.7, 0.1, 1] });
+      (lb.querySelector('[data-lb-close]') as HTMLElement).focus();
+      document.addEventListener('keydown', onKey);
+    };
+    const close = () => {
+      const done = () => {
+        lb.hidden = true;
+        opener?.focus();
+      };
+      animate(lb, { opacity: 0 }, { duration: RM.matches ? 0 : 0.2, ease: [0.3, 0, 0.8, 0.15] }).finished.then(done);
+      document.removeEventListener('keydown', onKey);
+    };
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(cur - 1);
+      else if (e.key === 'ArrowRight') show(cur + 1);
+      else if (e.key === 'Tab') {
+        // 焦点圈定
+        const items = [...lb.querySelectorAll<HTMLElement>(FOCUSABLE)];
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
+
+    figs.forEach((b) => b.addEventListener('click', () => open(Number(b.dataset.index), b)));
+    lb.querySelector('[data-lb-close]')!.addEventListener('click', close);
+    lb.querySelector('[data-lb-scrim]')!.addEventListener('click', close);
+    lb.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(cur - 1));
+    lb.querySelector('[data-lb-next]')!.addEventListener('click', () => show(cur + 1));
+  }
+</script>

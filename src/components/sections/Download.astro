@@ -1,0 +1,130 @@
+---
+// ⑤ 下载 — spec §3⑤:latest 直链 + 四 ABI 表 + sha256 外链 + blob#2
+// §4.2:tag/date 烘自 release.json(构建 owner = Actions);商店灰态 = 预留占位(§0 非目标)
+import Blob from '../Blob.astro';
+import { Image } from 'astro:assets';
+import grid from '../../assets/screenshots/02-schedule-grid.png';
+import release from '../../data/release.json';
+import { zh } from '../../i18n/zh';
+import { onlineTrialUrl } from '../../i18n/ui';
+
+const t = zh.download;
+const abiOf = (name: string) => name.replace(/^app-|-release\.apk$/g, '');
+const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+const date = release.date.slice(0, 10);
+---
+
+<section class="site-section download" id="download" aria-labelledby="download-title">
+  <Blob variant={1} />
+  <div class="site-col download__grid">
+    <div>
+      <h2 class="t-headline-large" id="download-title">{t.heading}</h2>
+      <p class="t-body-medium download__version">
+        <a href="https://github.com/lingion/sleepy/releases/latest">GitHub Releases</a> ·
+        {t.versionLine(release.tag, date)} · {t.minSdk}
+      </p>
+      <table class="download__table t-body-small">
+        <thead>
+          <tr><th>{t.abiHeading}</th><th>{t.sizeHeading}</th></tr>
+        </thead>
+        <tbody>
+          {
+            release.assets.map((a) => (
+              <tr>
+                <td><a href={a.url} rel="download">{abiOf(a.name)}</a></td>
+                <td>{mb(a.size)}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+      <p class="t-body-small download__note">{t.universalNote}</p>
+      <p class="t-body-small">
+        <a href={release.sha256sumsUrl}>{t.shaLink}</a>
+      </p>
+      <div class="download__stores">
+        <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>Google Play</span>
+        <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>应用商店</span>
+      </div>
+      <p class="t-body-small download__trial"><a href={onlineTrialUrl}>{t.trial}</a></p>
+    </div>
+    <div class="download__media">
+      <Image
+        src={grid}
+        widths={[360, 720]}
+        sizes="(max-width: 840px) 88vw, 380px"
+        alt="网格视图真机截图"
+        width={grid.width}
+        height={grid.height}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .download {
+    position: relative;
+    overflow: hidden;
+  }
+  .download__grid {
+    display: grid;
+    grid-template-columns: 55fr 45fr;
+    gap: calc(var(--site-unit) * 10);
+    align-items: center;
+  }
+  .download__version {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 5);
+  }
+  .download__table {
+    border-collapse: collapse;
+    inline-size: min(420px, 100%);
+  }
+  .download__table th,
+  .download__table td {
+    text-align: start;
+    padding-block: calc(var(--site-unit) * 2);
+    border-block-end: 1px solid var(--md-sys-color-outline-variant);
+  }
+  .download__table th {
+    color: var(--md-sys-color-on-surface-variant);
+    font-weight: 500;
+  }
+  .download__note {
+    margin-block-start: calc(var(--site-unit) * 3);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  .download__stores {
+    display: flex;
+    gap: calc(var(--site-unit) * 3);
+    margin-block-start: calc(var(--site-unit) * 5);
+  }
+  .store-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: calc(var(--site-unit) * 2) calc(var(--site-unit) * 4);
+    border-radius: var(--md-sys-shape-corner-small);
+    background: var(--md-sys-color-surface-container);
+    color: var(--md-sys-color-on-surface-variant);
+    opacity: 0.45;
+    font: var(--md-sys-typescale-label-medium);
+  }
+  .download__trial {
+    margin-block-start: calc(var(--site-unit) * 5);
+  }
+  .download__media img {
+    border-radius: var(--md-sys-shape-corner-xl);
+    inline-size: 100%;
+    /* 视觉预算 §2.4:裁顶保内容,下载段收进 ~1×100vh */
+    max-block-size: 560px;
+    object-fit: cover;
+    object-position: top;
+  }
+  @media (max-width: 840px) {
+    .download__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

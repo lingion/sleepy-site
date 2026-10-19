@@ -1,0 +1,87 @@
+---
+// ① hero — spec §3:55/45 非对称 · Display clamp ≤2 行 · 双 CTA · 设备框 01 · blob#1
+import { Image } from 'astro:assets';
+import Blob from '../Blob.astro';
+import week from '../../assets/screenshots/01-schedule-week.png';
+import { onlineTrialUrl, repoUrl } from '../../i18n/ui';
+import { zh } from '../../i18n/zh';
+
+const t = zh.hero;
+---
+
+<section class="hero site-section" id="hero" aria-labelledby="hero-title">
+  <Blob variant={0} />
+  <div class="site-col hero__grid">
+    <div class="hero__copy">
+      <h1 class="hero__slogan" id="hero-title">{t.slogan}</h1>
+      <p class="t-body-large hero__sub">{t.sub}</p>
+      <div class="hero__ctas">
+        <a class="site-button site-button--filled" href={`${repoUrl}/releases/latest`}>{t.ctaDownload}</a>
+        <a class="site-button site-button--tonal" href={onlineTrialUrl}>{t.ctaTrial}</a>
+      </div>
+    </div>
+    <div class="hero__device">
+      <Image
+        src={week}
+        widths={[420, 840]}
+        sizes="(max-width: 840px) 88vw, 440px"
+        alt={t.deviceCaption}
+        width={week.width}
+        height={week.height}
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 55fr 45fr;
+    align-items: center;
+    gap: calc(var(--site-unit) * 10);
+  }
+  .hero__slogan {
+    font-family: var(--site-font-stack);
+    font-weight: 600;
+    font-size: clamp(40px, 5.2vw, 57px);
+    line-height: 1.12;
+    letter-spacing: -0.25px;
+    color: var(--md-sys-color-on-surface);
+    margin-block-end: calc(var(--site-unit) * 5);
+  }
+  .hero__sub {
+    max-width: 46ch;
+    color: var(--md-sys-color-on-surface-variant);
+    margin-block-end: calc(var(--site-unit) * 8);
+  }
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--site-unit) * 3);
+  }
+  .hero__device {
+    border-radius: var(--md-sys-shape-corner-xl);
+    padding: calc(var(--site-unit) * 3);
+    background: var(--md-sys-color-surface-container-low);
+    box-shadow: 0 calc(var(--site-unit) * 4) calc(var(--site-unit) * 16) rgb(0 0 0 / 12%);
+  }
+  .hero__device img {
+    border-radius: calc(var(--site-unit) * 3);
+    inline-size: 100%;
+    /* 视觉预算 §2.4:hero ≤1×100vh —— 竖屏截图裁顶保内容,底部导航条可弃 */
+    max-block-size: 560px;
+    object-fit: cover;
+    object-position: top;
+  }
+  @media (max-width: 840px) {
+    .hero__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,14 +1,21 @@
 ---
+// zh 主页 — 七段(spec §3):hero/features/schools/gallery/download/trust + footer(Base 内)
+// 视觉预算:每段一件事,桌面 ≤1×100vh,宁删勿加(§2.4)
+import Base from '../layouts/Base.astro';
+import Hero from '../components/sections/Hero.astro';
+import Features from '../components/sections/Features.astro';
+import Schools from '../components/sections/Schools.astro';
+import Gallery from '../components/sections/Gallery.astro';
+import Download from '../components/sections/Download.astro';
+import Trust from '../components/sections/Trust.astro';
+import { zh } from '../i18n/zh';
 ---
 
-<html lang="zh-CN">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Sleepy</title>
-	</head>
-	<body>
-		<h1>Sleepy</h1>
-	</body>
-</html>
+<Base lang="zh" title={zh.meta.title} description={zh.meta.description} mirror="/en/">
+  <Hero />
+  <Features />
+  <Schools />
+  <Gallery />
+  <Download />
+  <Trust />
+</Base>

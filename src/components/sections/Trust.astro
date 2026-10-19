@@ -1,0 +1,74 @@
+---
+// ⑥ 信任 — spec §3⑥/§2.5:第一人称叙事逐字 + 无追踪声明 + GPL + 社区
+import { zh } from '../../i18n/zh';
+import { qqGroup, sponsorUrl, repoUrl, faqUrl } from '../../i18n/ui';
+
+const t = zh.trust;
+---
+
+<section class="site-section" id="trust" aria-labelledby="trust-title">
+  <div class="site-col">
+    <h2 class="t-headline-large" id="trust-title">{t.heading}</h2>
+    <p class="trust__story t-body-large reveal" style="--reveal-i: 0;">{t.story}</p>
+    <p class="trust__reach t-body-large reveal" style="--reveal-i: 1;">{t.reachOut}</p>
+
+    <div class="trust__grid">
+      <div class="reveal" style="--reveal-i: 2;">
+        <h3 class="t-title-medium">{t.privacyHeading}</h3>
+        <p class="t-body-medium">{t.privacyBody}</p>
+      </div>
+      <div class="reveal" style="--reveal-i: 3;">
+        <h3 class="t-title-medium">{t.licenseHeading}</h3>
+        <p class="t-body-medium">{t.licenseBody}</p>
+      </div>
+      <div class="reveal" style="--reveal-i: 4;">
+        <h3 class="t-title-medium">{t.communityHeading}</h3>
+        <ul class="trust__links t-body-medium">
+          <li><a href={repoUrl}>GitHub · lingion/sleepy</a></li>
+          <li><a href={`${repoUrl}/issues`}>Issues</a></li>
+          <li><a href={faqUrl}>FAQ</a></li>
+          <li><a href={sponsorUrl}>请我喝可乐</a></li>
+          <li>QQ 群 {qqGroup}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .trust__story {
+    font-size: clamp(20px, 2.4vw, 28px);
+    line-height: 1.5;
+    max-width: 34ch;
+    margin-block: calc(var(--site-unit) * 6) calc(var(--site-unit) * 2);
+  }
+  .trust__reach {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-block-end: calc(var(--site-unit) * 10);
+  }
+  .trust__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: calc(var(--site-unit) * 8);
+  }
+  .trust__grid h3 {
+    margin-block-end: calc(var(--site-unit) * 2);
+  }
+  .trust__grid p {
+    color: var(--md-sys-color-on-surface-variant);
+    max-width: 40ch;
+  }
+  .trust__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: calc(var(--site-unit) * 2);
+  }
+  @media (max-width: 840px) {
+    .trust__grid {
+      grid-template-columns: 1fr;
+      gap: calc(var(--site-unit) * 6);
+    }
+  }
+</style>

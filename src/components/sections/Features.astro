@@ -1,0 +1,84 @@
+---
+// ② 功能 — spec §3:4 行图文交替 · card=surfaceContainerLow · 揭示 DOM 序=出现序(§8 不变量)
+import { Image } from 'astro:assets';
+import imgToday from '../../assets/screenshots/03-today.png';
+import imgImport from '../../assets/screenshots/20-import-bottomsheet.png';
+import imgReminder from '../../assets/screenshots/22-reminder.png';
+import imgWidget from '../../assets/screenshots/widget-weekgrid.png';
+import { zh } from '../../i18n/zh';
+
+const t = zh.features;
+const images = [imgToday, imgImport, imgReminder, imgWidget];
+---
+
+<section class="site-section" id="features" aria-labelledby="features-title">
+  <div class="site-col">
+    <h2 class="t-headline-large" id="features-title">{t.heading}</h2>
+    <div class="features__stack">
+      {
+        t.items.map((item, i) => (
+          <article class="site-card feature reveal" style={`--reveal-i: ${i};`}>
+            <div class="feature__media">
+              <Image
+                src={images[i]}
+                widths={[360, 720]}
+                sizes="(max-width: 840px) 88vw, 420px"
+                alt={item.imgAlt}
+                width={images[i].width}
+                height={images[i].height}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="feature__copy">
+              <h3 class="t-title-large">{item.title}</h3>
+              <p class="t-body-medium">{item.body}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .features__stack {
+    display: grid;
+    gap: calc(var(--site-unit) * 8);
+    margin-block-start: calc(var(--site-unit) * 8);
+  }
+  .feature {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    align-items: center;
+    gap: calc(var(--site-unit) * 10);
+    padding: calc(var(--site-unit) * 6);
+  }
+  /* 交替:偶数行图右文左(CSS order,DOM 序不动 = 揭示序不变量) */
+  .feature:nth-child(even) .feature__media {
+    order: 2;
+  }
+  .feature__media img {
+    border-radius: var(--md-sys-shape-corner-medium);
+    inline-size: 100%;
+    /* 视觉预算 §2.4 宁删勿加:裁顶保首屏内容,整卡压回一屏节奏 */
+    max-block-size: 480px;
+    object-fit: cover;
+    object-position: top;
+  }
+  .feature__copy p {
+    margin-block-start: calc(var(--site-unit) * 3);
+    color: var(--md-sys-color-on-surface-variant);
+    max-width: 46ch;
+  }
+  @media (max-width: 840px) {
+    .feature,
+    .feature:nth-child(even) {
+      grid-template-columns: 1fr;
+      gap: calc(var(--site-unit) * 5);
+    }
+    .feature:nth-child(even) .feature__media {
+      order: 0;
+    }
+  }
+</style>

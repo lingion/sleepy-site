@@ -1,0 +1,191 @@
+---
+// ③ 教务 — spec §3③:搜索 + 省份|协议 filter chip 单岛联动 · JS-off 全量分组可读
+// 数字从数据现算(§4.1 不变量);点击不跳转 = 校名是 <li> 文本非 <a>
+import { zh } from '../../i18n/zh';
+import { repoUrl, faqUrl, qqGroup } from '../../i18n/ui';
+import { schools, provincesOrdered, typesOrdered, rowCount, typeCount } from '../../lib/schools-view';
+
+const t = zh.schools;
+const groups = provincesOrdered().map((p) => ({
+  ...p,
+  rows: schools.filter((s) => s.province.code === p.code),
+}));
+---
+
+<section class="site-section" id="schools" aria-labelledby="schools-title">
+  <div class="site-col">
+    <h2 class="t-headline-large" id="schools-title">{t.heading}</h2>
+    <p class="t-body-medium schools__sub">{t.sub}</p>
+
+    <p class="schools__stat site-chip" role="status">{t.statLine(rowCount, typeCount)}</p>
+
+    <div class="schools__filters" data-role="filters">
+      <label class="schools__search">
+        <span class="visually-hidden">{t.searchPlaceholder}</span>
+        <input class="site-field" type="search" data-role="q" placeholder={t.searchPlaceholder} autocomplete="off" />
+      </label>
+      <div class="schools__chipbar" role="group" aria-label={t.provinceLabel}>
+        <button type="button" class="site-chip is-active" data-province="" aria-pressed="true">全部</button>
+        {groups.map((g) => (
+          <button type="button" class="site-chip" data-province={g.code} aria-pressed="false">{g.zh}</button>
+        ))}
+      </div>
+      <div class="schools__chipbar" role="group" aria-label={t.typeLabel}>
+        <button type="button" class="site-chip is-active" data-type="" aria-pressed="true">全部</button>
+        {typesOrdered().map((ty) => (
+          <button type="button" class="site-chip" data-type={ty} aria-pressed="false">{ty}</button>
+        ))}
+      </div>
+    </div>
+
+    <div class="schools__groups" data-role="groups" tabindex="0" aria-label={t.heading}>
+      {groups.map((g) => (
+        <section class="school-group" data-group={g.code}>
+          <h3 class="t-title-small school-group__title">
+            {g.zh}
+            <span class="t-label-small school-group__count">{g.rows.length}</span>
+          </h3>
+          <ul class="school-group__list">
+            {g.rows.map((s) => (
+              <li class="school-row t-body-small" data-school data-province={g.code} data-type={s.type} data-search={`${s.name}${s.sortKeyFull}`}>
+                {s.name} · {s.type}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+
+    <p class="t-body-medium schools__empty" data-role="empty" hidden>
+      {t.emptyState}<a class="schools__empty-link" href={`${repoUrl}/issues`}>{t.emptyIssue}</a>{t.emptyTail}
+    </p>
+    <p class="t-body-small schools__foot">
+      <a href={faqUrl}>{t.faqLink}</a> · QQ {qqGroup} · <noscript>{t.jsOffNote}</noscript>
+    </p>
+  </div>
+</section>
+
+<style>
+  .schools__sub {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 5);
+    max-width: 56ch;
+  }
+  .schools__stat {
+    display: inline-block;
+    margin-block-end: calc(var(--site-unit) * 6);
+  }
+  .schools__search {
+    display: block;
+    margin-block-end: calc(var(--site-unit) * 4);
+  }
+  .schools__search input {
+    inline-size: min(420px, 100%);
+  }
+  .schools__chipbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--site-unit) * 2);
+    margin-block-end: calc(var(--site-unit) * 3);
+  }
+  .schools__chipbar[aria-label] {
+    position: relative;
+  }
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .schools__groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: calc(var(--site-unit) * 6) calc(var(--site-unit) * 8);
+    margin-block-start: calc(var(--site-unit) * 6);
+    /* 视觉预算 §2.4:348 行是台账不是版面 —— 段内滚动,整段收进 ~1×100vh;
+       全量行仍在 DOM(§5 JS-off 可读不破),tabindex=0 保键盘可滚 */
+    max-block-size: 60vh;
+    overflow-y: auto;
+    padding-inline-end: calc(var(--site-unit) * 2);
+    overscroll-behavior: contain;
+  }
+  .school-group__title {
+    color: var(--md-sys-color-primary);
+    margin-block-end: calc(var(--site-unit) * 2);
+  }
+  .school-group__count {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-inline-start: calc(var(--site-unit) * 2);
+  }
+  .school-group__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: calc(var(--site-unit) * 1);
+  }
+  .school-row {
+    color: var(--md-sys-color-on-surface-variant);
+    padding-block: calc(var(--site-unit) * 1);
+  }
+  .schools__empty {
+    margin-block-start: calc(var(--site-unit) * 6);
+  }
+  .schools__foot {
+    margin-block-start: calc(var(--site-unit) * 6);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+</style>
+
+<script>
+  // 单岛:q|province|type 三态合一 filter(§1 JS 预算 ≤15KB;无框架)
+  const sec = document.getElementById('schools');
+  if (sec) {
+    const q = sec.querySelector<HTMLInputElement>('[data-role="q"]');
+    const empty = sec.querySelector<HTMLElement>('[data-role="empty"]');
+    const rows = [...sec.querySelectorAll<HTMLElement>('[data-school]')];
+    const groups = [...sec.querySelectorAll<HTMLElement>('[data-group]')];
+    const state = { q: '', province: '', type: '' };
+
+    const norm = (s: string) => s.toLowerCase().replace(/[！-～]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0)).replace(/[　\s]/g, '');
+
+    const apply = () => {
+      const nq = norm(state.q);
+      let visible = 0;
+      for (const r of rows) {
+        const hit =
+          (nq === '' || r.dataset.search!.includes(nq)) &&
+          (state.province === '' || r.dataset.province === state.province) &&
+          (state.type === '' || r.dataset.type === state.type);
+        r.hidden = !hit;
+        if (hit) visible++;
+      }
+      for (const g of groups) {
+        g.hidden = [...g.querySelectorAll<HTMLElement>('[data-school]')].every((r) => r.hidden);
+      }
+      empty!.hidden = visible > 0;
+    };
+
+    sec.addEventListener('input', (e) => {
+      if ((e.target as HTMLElement) === q) {
+        state.q = q!.value;
+        apply();
+      }
+    });
+    sec.addEventListener('click', (e) => {
+      const chip = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-province], [data-type]');
+      if (!chip) return;
+      const key = 'province' in chip.dataset ? 'province' : 'type';
+      const bar = chip.parentElement!;
+      for (const c of bar.querySelectorAll<HTMLButtonElement>('.site-chip')) {
+        c.classList.remove('is-active');
+        c.setAttribute('aria-pressed', 'false');
+      }
+      chip.classList.add('is-active');
+      chip.setAttribute('aria-pressed', 'true');
+      state[key] = (chip.dataset.province ?? chip.dataset.type ?? '') as string;
+      apply();
+    });
+  }
+</script>

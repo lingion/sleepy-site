@@ -210,8 +210,9 @@ a {
 }
 .skip-link:focus-visible { transform: translateY(0); }
 
-/* —— 滚动揭示(spec §2.3/§2.4:DOM 序=揭示序,60ms stagger 站点常量)—— */
-.reveal {
+/* —— 滚动揭示(spec §2.3/§2.4:DOM 序=揭示序,60ms stagger 站点常量)——
+   .js 门控:FOUC 守卫脚本给 <html> 挂 .js;无 JS = 不隐藏(§5 渐进增强) */
+.js .reveal {
   opacity: 0;
   transform: translateY(16px);
   transition:
@@ -219,7 +220,7 @@ a {
     transform var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasize-decelerate);
   transition-delay: calc(var(--reveal-i, 0) * var(--site-stagger));
 }
-.reveal[data-revealed='true'] {
+.js .reveal[data-revealed='true'] {
   opacity: 1;
   transform: none;
 }
@@ -227,6 +228,6 @@ a {
 /* prefers-reduced-motion:揭示直出 0ms(spec §2.3) */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { transition: none; opacity: 1; transform: none; }
+  .js .reveal { transition: none; opacity: 1; transform: none; }
   .reveal, [data-blob] { animation: none !important; }
 }
