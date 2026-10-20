@@ -1,5 +1,7 @@
 ---
-// ⑤ 下载 — spec §3⑤:latest 直链 + 四 ABI 表 + sha256 外链 + blob#2
+// ⑤ 下载 — spec §3⑤:latest 直链 + 四 ABI 行 + sha256 外链 + blob#2
+// 2026-10-20 用户修订:裸文本链 → 下载行(架构名 + 人话注 + 大小 + 下载图标);
+//   行注(近几年的手机/模拟器…)替代「通吃」黑话;universal 行打「推荐」。
 // §4.2:tag/date 烘自 release.json(构建 owner = Actions);商店灰态 = 预留占位(§0 非目标)
 import Blob from '../Blob.astro';
 import { Image } from 'astro:assets';
@@ -16,6 +18,7 @@ const t = (Astro.props.copy ?? zh).download;
 const abiOf = (name: string) => name.replace(/^app-|-release\.apk$/g, '');
 const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 const date = release.date.slice(0, 10);
+const notes = t.abiNotes as Record<string, string>;
 ---
 
 <section class="site-section download" id="download" aria-labelledby="download-title">
@@ -27,23 +30,36 @@ const date = release.date.slice(0, 10);
         <a href="https://github.com/lingion/sleepy/releases/latest">GitHub Releases</a> ·
         {t.versionLine(release.tag, date)} · {t.minSdk}
       </p>
-      <table class="download__table t-body-small">
-        <thead>
-          <tr><th>{t.abiHeading}</th><th>{t.sizeHeading}</th></tr>
-        </thead>
-        <tbody>
-          {
-            release.assets.map((a) => (
-              <tr>
-                <td><a href={a.url} rel="download">{abiOf(a.name)}</a></td>
-                <td>{mb(a.size)}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+      <ul class="download__list">
+        {
+          release.assets.map((a) => {
+            const abi = abiOf(a.name);
+            const size = mb(a.size);
+            const isRec = abi === 'universal';
+            return (
+              <li>
+                <a class="download__row" data-rec={isRec || undefined} href={a.url} download rel="download" aria-label={t.downloadAria(abi, size)}>
+                  <span class="download__row-main">
+                    <span class="download__row-name">
+                      {abi}
+                      {isRec && <span class="download__row-badge">{t.recommended}</span>}
+                    </span>
+                    <span class="download__row-note">{notes[abi]}</span>
+                  </span>
+                  <span class="download__row-side">
+                    <span class="download__row-size">{size}</span>
+                    <svg class="download__row-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+                      <path d="M11 4h2v9.15l3.6-3.6 1.4 1.45-5.5 5.5-5.5-5.5 1.4-1.45 3.6 3.6z" fill="currentColor" /><path d="M4 18h16v2H4z" fill="currentColor" />
+                    </svg>
+                  </span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
       <p class="t-body-small download__note">{t.universalNote}</p>
-      <p class="t-body-small">
+      <p class="t-body-small download__sha">
         <a href={release.sha256sumsUrl}>{t.shaLink}</a>
       </p>
       <div class="download__stores">
@@ -80,25 +96,92 @@ const date = release.date.slice(0, 10);
   }
   .download__version {
     color: var(--md-sys-color-on-surface-variant);
-    margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 5);
+    margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 6);
   }
-  .download__table {
-    border-collapse: collapse;
-    inline-size: min(420px, 100%);
+  .download__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: calc(var(--site-unit) * 2);
+    max-inline-size: 440px;
   }
-  .download__table th,
-  .download__table td {
-    text-align: start;
-    padding-block: calc(var(--site-unit) * 2);
-    border-block-end: 1px solid var(--md-sys-color-outline-variant);
+  .download__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--site-unit) * 4);
+    padding: calc(var(--site-unit) * 3.5) calc(var(--site-unit) * 5);
+    border-radius: var(--md-sys-shape-corner-medium);
+    background: var(--md-sys-color-surface-container);
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+    transition:
+      background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+      box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
   }
-  .download__table th {
+  .download__row:hover {
+    background: var(--md-sys-color-surface-container-high);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  }
+  .download__row:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+  }
+  .download__row-main {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+  }
+  .download__row-name {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--site-unit) * 2);
+    font: var(--md-sys-typescale-title-small);
+  }
+  .download__row-badge {
+    font: var(--md-sys-typescale-label-small);
+    padding: 2px 8px;
+    border-radius: var(--md-sys-shape-corner-full);
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+  }
+  .download__row[data-rec] {
+    background: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+  .download__row[data-rec]:hover {
+    background: color-mix(in srgb, var(--md-sys-color-secondary-container) 85%, var(--md-sys-color-on-secondary-container));
+  }
+  .download__row[data-rec] .download__row-note,
+  .download__row[data-rec] .download__row-size {
+    color: inherit;
+    opacity: 0.72;
+  }
+  .download__row-note {
+    font: var(--md-sys-typescale-body-small);
     color: var(--md-sys-color-on-surface-variant);
-    font-weight: 500;
+  }
+  .download__row-side {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--site-unit) * 4);
+    flex-shrink: 0;
+  }
+  .download__row-size {
+    font: var(--md-sys-typescale-body-small);
+    color: var(--md-sys-color-on-surface-variant);
+    font-variant-numeric: tabular-nums;
+  }
+  .download__row-icon {
+    display: block;
   }
   .download__note {
     margin-block-start: calc(var(--site-unit) * 3);
     color: var(--md-sys-color-on-surface-variant);
+  }
+  .download__sha {
+    margin-block-start: calc(var(--site-unit) * 2);
   }
   .download__stores {
     display: flex;

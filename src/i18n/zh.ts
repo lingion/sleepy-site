@@ -73,9 +73,15 @@ export const zh = {
   download: {
     heading: '下载 Sleepy',
     versionLine: (tag: string, date: string) => `${tag} · ${date} 发布`,
-    abiHeading: '架构',
-    sizeHeading: '大小',
     universalNote: '不确定就选 Universal:适配全部架构。',
+    recommended: '推荐',
+    downloadAria: (abi: string, size: string) => `下载 ${abi}(${size})`,
+    abiNotes: {
+      'arm64-v8a': '近几年的手机',
+      'armeabi-v7a': '老款设备',
+      universal: '全架构通用',
+      'x86_64': '模拟器',
+    },
     minSdk: 'Android 8.0 起',
     shaLink: '校验所有文件的 sha256sums.txt',
     storeReserved: '商店上架准备中',

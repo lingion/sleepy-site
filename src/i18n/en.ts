@@ -76,9 +76,15 @@ export const en: SiteCopy = {
   download: {
     heading: 'Download Sleepy',
     versionLine: (tag: string, date: string) => `${tag} · released ${date}`,
-    abiHeading: 'Architecture',
-    sizeHeading: 'Size',
     universalNote: 'Not sure? Universal runs on every architecture.',
+    recommended: 'Recommended',
+    downloadAria: (abi: string, size: string) => `Download ${abi} (${size})`,
+    abiNotes: {
+      'arm64-v8a': 'Most phones today',
+      'armeabi-v7a': 'Older devices',
+      universal: 'All architectures',
+      'x86_64': 'Emulators',
+    },
     minSdk: 'Android 8.0 and up',
     shaLink: 'sha256sums.txt for every file',
     storeReserved: 'Store listing in the works',
