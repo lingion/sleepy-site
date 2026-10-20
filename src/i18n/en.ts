@@ -30,8 +30,8 @@ export const en: SiteCopy = {
         imgAlt: 'Academic import panel real device screenshot',
       },
       {
-        title: 'Reminders and widgets, unobtrusive',
-        body: 'Class-ahead reminders, today’s schedule, home-screen widgets. It says a word when it’s time, and stays quiet the rest of the day.',
+        title: 'Reminders and widgets, in tune',
+        body: 'Class-ahead reminders, today’s schedule, home-screen widgets. Present when it matters, quiet the rest of the day.',
         imgAlt: 'Class reminder settings screenshot',
       },
       {
@@ -51,7 +51,7 @@ export const en: SiteCopy = {
     allLabel: 'All',
     emptyState: 'This school isn’t supported yet — ',
     emptyIssue: 'open an issue',
-    emptyTail: ', or say a word in the group. It’ll be added soon.',
+    emptyTail: ', or tell me in the group — it will be added soon.',
     faqLink: 'FAQ',
     jsOffNote: 'With JavaScript disabled the full list stays readable.',
   },
@@ -78,13 +78,13 @@ export const en: SiteCopy = {
     versionLine: (tag: string, date: string) => `${tag} · released ${date}`,
     abiHeading: 'Architecture',
     sizeHeading: 'Size',
-    universalNote: 'Not sure which? Universal runs everywhere.',
+    universalNote: 'Not sure? Universal runs on every architecture.',
     minSdk: 'Android 8.0 and up',
-    shaLink: 'sha256sums.txt',
+    shaLink: 'sha256sums.txt for every file',
     storeReserved: 'Store listing in the works',
     storeBadgeCn: 'App Market',
     deviceCaption: 'Grid view real device screenshot',
-    trial: 'Don’t want an APK? Try it online here.',
+    trial: 'Rather not install? The online trial is full-featured.',
   },
   trust: {
     heading: 'Who makes this',
@@ -97,7 +97,7 @@ export const en: SiteCopy = {
     licenseBody:
       'Full source is public — audit it, change it, ship your own. Every commit in the repo is open to read.',
     communityHeading: 'Community',
-    sponsorLink: 'Buy me a cola',
+    sponsorLink: 'Sponsor Sleepy',
     qqGroupLabel: 'QQ group',
   },
 } as const;

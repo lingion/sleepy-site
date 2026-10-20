@@ -101,7 +101,7 @@
 - Create: `src/i18n/zh.ts`(全部文案常量,§2.5 样例句逐句;临时 slogan=A「构建无壳,自由自在」,单点可换)
 - Create: `src/components/SchoolsFinder.svelte`?——**否**,禁框架:原生 `<script>` 渐进增强,服务端渲染全量分组,客户端做 filter(chip=filter chip 态:未选 outline 描边,已选 secondaryContainer)
 - Gallery:8 图清单硬编码 T3/T4 产物;lightbox=vanilla+Motion One(scrim #000000 32%,aria-modal,焦点圈定/Esc/←→/归还)
-- Download:release.json 驱动四 ABI 表 + sha256 外链 +「拿不准就 Universal,通吃。」+ 商店灰态 SVG 占位
+- Download:release.json 驱动四 ABI 下载行(2026-10-20 修订:裸文本链→下载行;注脚「不确定就选 Universal:适配全部架构。」)+ sha256 外链 + 商店灰态 SVG 占位
 - 图像:`src/assets/screenshots/`(从主仓 raw 拉 8 张 commit 入仓)
 
 - [ ] Step 1: Hero(55/45、Display clamp ≤2 行、双 CTA、blob#1)+ Features 4 行(card=surfaceContainerLow,DOM 序=揭示序 IntersectionObserver 60ms stagger)

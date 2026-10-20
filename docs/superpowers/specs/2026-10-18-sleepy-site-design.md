@@ -60,8 +60,8 @@ easing:emphasized `cubic-bezier(0.2,0,0,1)` / emph-decel `(0.05,0.7,0.1,1)` / em
 ### 2.5 个性与亲近载体
 
 - **slogan 候选(3 选 1,签收项):** A 构建无壳,自由自在 / Built open. Feels free. · B 把课表还给学生 / Your timetable, back in your hands. · C 348 个校园的早八,都归我管了 / 8 a.m. classes at 348 campuses. Handled.(选 C 时数字随 §4.1 口径联动)
-- **第一人称维护者叙事块:** 「一个人写的开源课表。没有广告,没有追踪,代码全公开。适配你学校的问题,群里 @ 我。」+ QQ 群 1063407652 + **sponsor 链接钉死** `https://github.com/lingion/sleepy-web/blob/main/sponsor.md`(已核实存在;安卓 README 无此链,勿指错仓)。
-- **microcopy 契约(逐句进实现):** 搜索空态「这所学校还没收录——提个 issue 或进群说一声,它很快会在。」外链 `https://github.com/lingion/sleepy/blob/main/FAQ.md`(核实存在);下载注脚「拿不准就 Universal,通吃。」;暗色开关 tooltip「晚课专用。」;无 JS 提示「页面塌了,课表不会。」
+- **第一人称维护者叙事块:** 「一个人写的开源课表。没有广告,没有追踪,代码全公开。适配你学校的问题,群里 @ 我。」+ QQ 群 1063407652 + **sponsor 链接钉死** `https://github.com/lingion/sleepy/blob/main/sponsor.md`(2026-10-20 修订:仓 = lingion/sleepy,非 sleepy-web;赞助入口措辞 = 「赞助 Sleepy」,sponsor.md 初心 = 钱不购买功能、不欠谁,禁「请我喝可乐」式矮化)。
+- **microcopy 契约(逐句进实现;2026-10-20 用户修订:去口语化/东北味,「通吃/不吭声/说一声/喝可乐」列红线词,grep 断言零出现):** 搜索空态「这所学校还没收录——提个 issue,或者进群告诉我,很快就会补上。」外链 `https://github.com/lingion/sleepy/blob/main/FAQ.md`(核实存在);下载注脚「不确定就选 Universal:适配全部架构。」;暗色开关 tooltip「晚课专用。」;无 JS 提示「页面塌了,课表不会。」
 - **红线:** 企业腔词表(赋能/极致/匠心…零出现,grep 断言);不吹 star/下载量。
 
 ## 3. 页面结构(7 段)

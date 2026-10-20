@@ -27,8 +27,8 @@ export const zh = {
         imgAlt: '教务导入面板真机截图',
       },
       {
-        title: '提醒和组件,不抢戏',
-        body: '课前提醒、今日安排、桌面小组件。到点说一句,平时不吭声。',
+        title: '提醒和组件,恰到好处',
+        body: '课前提醒、今日安排、桌面小组件。该出现时出现,其余时间保持安静。',
         imgAlt: '课前提醒设置真机截图',
       },
       {
@@ -48,7 +48,7 @@ export const zh = {
     allLabel: '全部',
     emptyState: '这所学校还没收录——',
     emptyIssue: '提个 issue',
-    emptyTail: ' 或进群说一声,它很快会在。',
+    emptyTail: ',或者进群告诉我,很快就会补上。',
     faqLink: '常见问答',
     jsOffNote: '禁用 JavaScript 时全量清单照常可读。',
   },
@@ -75,13 +75,13 @@ export const zh = {
     versionLine: (tag: string, date: string) => `${tag} · ${date} 发布`,
     abiHeading: '架构',
     sizeHeading: '大小',
-    universalNote: '拿不准就 Universal,通吃。',
+    universalNote: '不确定就选 Universal:适配全部架构。',
     minSdk: 'Android 8.0 起',
-    shaLink: 'sha256sums.txt',
+    shaLink: '校验所有文件的 sha256sums.txt',
     storeReserved: '商店上架准备中',
     storeBadgeCn: '应用商店',
     deviceCaption: '网格视图真机截图',
-    trial: '不想装 APK?在线体验在这里。',
+    trial: '不想安装 APK?在线体验功能完整。',
   },
   trust: {
     heading: '谁在做这个',
@@ -94,7 +94,7 @@ export const zh = {
     licenseBody:
       '源码全公开,可以审、可以改、可以自己发。仓库里每一个 commit 都能翻。',
     communityHeading: '社区',
-    sponsorLink: '请我喝可乐',
+    sponsorLink: '赞助 Sleepy',
     qqGroupLabel: 'QQ 群',
   },
 } as const;
