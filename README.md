@@ -26,7 +26,7 @@ npm run data         # 教务数据管线(release 快照 + schools 分组)
 2. CF Pages 建项目 `sleepy-site`(Production branch = main;构建命令留空,产物由 Actions 直传)。
 3. 域名绑定:CF 后台该 Pages 项目 → Custom domains → 加 `sleepy.lingion.eu.cc`。若 DNS 在另一 CF 账号,手动建 CNAME 记录 → `<project>.pages.dev`(隧道证书 CF 自动签发)。站点 `astro.config.mjs` 的 `site` 与 `src/i18n/ui.ts` 的 canonical 已按此域写死,换域两处同改。
 
-本工作流当前**落盘未启用**:凭据未就位前 push 会红在 deploy gate(构建/测试闸照常全跑)。
+工作流已启用(2026-10-21):secrets 已配置,push main 即自动构建并部署到 `sleepy.lingion.eu.cc`。
 
 ## 验收状态(四标准 × spec 落点)
 
