@@ -1,0 +1,60 @@
+---
+// 主题感知截图 —— 浅色浏览器显示浅色截图,深色浏览器显示深色截图。
+// data-theme 由 Base.astro 首帧前脚本设定(FOUC 守卫),这里纯 CSS 切换,零 JS、零闪变。
+// 两张图都是真机截图,深色那张对读屏器隐藏(alt=""),避免同一内容重复朗读。
+import { Image, type ImageMetadata } from 'astro:assets';
+
+interface Props {
+  light: ImageMetadata;
+  dark: ImageMetadata;
+  /** 朗读文本(浅色图承载;深色图 aria-hidden) */
+  alt: string;
+  widths?: number[];
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+const { light, dark, alt, widths = [420, 840], sizes, loading = 'lazy', class: className } = Astro.props;
+---
+
+<span class:list={['shot', className]}>
+  <Image
+    class="shot__i shot__light"
+    src={light}
+    widths={widths}
+    sizes={sizes}
+    alt={alt}
+    width={light.width}
+    height={light.height}
+    loading={loading}
+    decoding="async"
+  />
+  <Image
+    class="shot__i shot__dark"
+    src={dark}
+    widths={widths}
+    sizes={sizes}
+    alt=""
+    aria-hidden="true"
+    width={dark.width}
+    height={dark.height}
+    loading={loading}
+    decoding="async"
+  />
+</span>
+
+<style>
+  /* contents:让两张图在布局上等同于直接子节点,消费方的 `容器 img` 选择器照常命中 */
+  .shot {
+    display: contents;
+  }
+  .shot__dark {
+    display: none;
+  }
+  :global([data-theme='dark']) .shot__light {
+    display: none;
+  }
+  :global([data-theme='dark']) .shot__dark {
+    display: block;
+  }
+</style>

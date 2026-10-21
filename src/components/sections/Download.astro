@@ -4,8 +4,9 @@
 //   行注(近几年的手机/模拟器…)替代「通吃」黑话;universal 行打「推荐」。
 // §4.2:tag/date 烘自 release.json(构建 owner = Actions);商店灰态 = 预留占位(§0 非目标)
 import Blob from '../Blob.astro';
-import { Image } from 'astro:assets';
-import grid from '../../assets/screenshots/02-schedule-grid.png';
+import Shot from '../Shot.astro';
+import gridLight from '../../assets/screenshots/02-grid-light.png';
+import gridDark from '../../assets/screenshots/02-grid-dark.png';
 import release from '../../data/release.json';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
@@ -69,15 +70,13 @@ const notes = t.abiNotes as Record<string, string>;
       <p class="t-body-small download__trial"><a href={onlineTrialUrl}>{t.trial}</a></p>
     </div>
     <div class="download__media">
-      <Image
-        src={grid}
+      <Shot
+        light={gridLight}
+        dark={gridDark}
         widths={[360, 720]}
         sizes="(max-width: 840px) 88vw, 380px"
         alt={t.deviceCaption}
-        width={grid.width}
-        height={grid.height}
         loading="lazy"
-        decoding="async"
       />
     </div>
   </div>

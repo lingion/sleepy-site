@@ -1,10 +1,14 @@
 ---
 // ② 功能 — spec §3:4 行图文交替 · card=surfaceContainerLow · 揭示 DOM 序=出现序(§8 不变量)
-import { Image } from 'astro:assets';
-import imgWeek from '../../assets/screenshots/01-schedule-week.png';
-import imgImport from '../../assets/screenshots/20-import-bottomsheet.png';
-import imgReminder from '../../assets/screenshots/22-reminder.png';
-import imgWidget from '../../assets/screenshots/widget-weekgrid.png';
+import Shot from '../Shot.astro';
+import weekL from '../../assets/screenshots/01-week-light.png';
+import weekD from '../../assets/screenshots/01-week-dark.png';
+import importL from '../../assets/screenshots/20-import-light.png';
+import importD from '../../assets/screenshots/20-import-dark.png';
+import reminderL from '../../assets/screenshots/22-reminder-light.png';
+import reminderD from '../../assets/screenshots/22-reminder-dark.png';
+import widgetL from '../../assets/screenshots/30-widgets-light.png';
+import widgetD from '../../assets/screenshots/30-widgets-dark.png';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
 
@@ -12,7 +16,12 @@ interface Props {
   copy?: SiteCopy;
 }
 const t = (Astro.props.copy ?? zh).features;
-const images = [imgWeek, imgImport, imgReminder, imgWidget];
+const pairs = [
+  { light: weekL, dark: weekD },
+  { light: importL, dark: importD },
+  { light: reminderL, dark: reminderD },
+  { light: widgetL, dark: widgetD },
+];
 ---
 
 <section class="site-section" id="features" aria-labelledby="features-title">
@@ -23,15 +32,13 @@ const images = [imgWeek, imgImport, imgReminder, imgWidget];
         t.items.map((item, i) => (
           <article class="site-card feature reveal" style={`--reveal-i: ${i};`}>
             <div class="feature__media">
-              <Image
-                src={images[i]}
+              <Shot
+                light={pairs[i].light}
+                dark={pairs[i].dark}
                 widths={[360, 720]}
                 sizes="(max-width: 840px) 88vw, 420px"
                 alt={item.imgAlt}
-                width={images[i].width}
-                height={images[i].height}
                 loading="lazy"
-                decoding="async"
               />
             </div>
             <div class="feature__copy">

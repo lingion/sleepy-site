@@ -1,15 +1,36 @@
 ---
-// ④ 画廊 — spec §3④:8 图网格(桌面4/平板2/手机1)→ lightbox
+// ④ 画廊 — spec §3④:图网格(桌面4/平板2/手机1)→ lightbox
+// 2026-10-21 用户修订:页面展示尽量多 + 小组件展示尽量多 + 浏览器主题感知(浅色浏览器=浅色截图,反之深色)
 // lightbox a11y 全项:scrim #000 32% · aria-modal · 焦点圈定 · Esc/←→ · 关闭归还焦点
-import { Image } from 'astro:assets';
-import img01 from '../../assets/screenshots/01-schedule-week.png';
-import img02 from '../../assets/screenshots/02-schedule-grid.png';
-import img03 from '../../assets/screenshots/03-today.png';
-import img11 from '../../assets/screenshots/11-theme.png';
-import img22 from '../../assets/screenshots/22-reminder.png';
-import img36 from '../../assets/screenshots/36-theme-dark.png';
-import imgWidget from '../../assets/screenshots/widget-weekgrid.png';
-import img20 from '../../assets/screenshots/20-import-bottomsheet.png';
+import Shot from '../Shot.astro';
+import weekL from '../../assets/screenshots/01-week-light.png';
+import weekD from '../../assets/screenshots/01-week-dark.png';
+import gridL from '../../assets/screenshots/02-grid-light.png';
+import gridD from '../../assets/screenshots/02-grid-dark.png';
+import todayL from '../../assets/screenshots/03-today-light.png';
+import todayD from '../../assets/screenshots/03-today-dark.png';
+import manageL from '../../assets/screenshots/04-manage-light.png';
+import manageD from '../../assets/screenshots/04-manage-dark.png';
+import mineL from '../../assets/screenshots/05-mine-light.png';
+import mineD from '../../assets/screenshots/05-mine-dark.png';
+import themeL from '../../assets/screenshots/11-theme-light.png';
+import themeD from '../../assets/screenshots/11-theme-dark.png';
+import importL from '../../assets/screenshots/20-import-light.png';
+import importD from '../../assets/screenshots/20-import-dark.png';
+import reminderL from '../../assets/screenshots/22-reminder-light.png';
+import reminderD from '../../assets/screenshots/22-reminder-dark.png';
+import homeL from '../../assets/screenshots/30-widgets-light.png';
+import homeD from '../../assets/screenshots/30-widgets-dark.png';
+import wTodayL from '../../assets/screenshots/widget-today-light.png';
+import wTodayD from '../../assets/screenshots/widget-today-dark.png';
+import wTwoL from '../../assets/screenshots/widget-twodays-light.png';
+import wTwoD from '../../assets/screenshots/widget-twodays-dark.png';
+import wGridL from '../../assets/screenshots/widget-weekgrid-light.png';
+import wGridD from '../../assets/screenshots/widget-weekgrid-dark.png';
+import wListL from '../../assets/screenshots/widget-weeklist-light.png';
+import wListD from '../../assets/screenshots/widget-weeklist-dark.png';
+import wViewL from '../../assets/screenshots/widget-weekview-light.png';
+import wViewD from '../../assets/screenshots/widget-weekview-dark.png';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
 
@@ -17,7 +38,23 @@ interface Props {
   copy?: SiteCopy;
 }
 const t = (Astro.props.copy ?? zh).gallery;
-const shots = [img01, img02, img03, img11, img22, img36, imgWidget, img20];
+// phone = 竖屏整页(3/4 裁顶缩略); widget = 桌面组件裁剪(contain 保完整)
+const shots = [
+  { light: weekL, dark: weekD, kind: 'phone' },
+  { light: gridL, dark: gridD, kind: 'phone' },
+  { light: todayL, dark: todayD, kind: 'phone' },
+  { light: manageL, dark: manageD, kind: 'phone' },
+  { light: themeL, dark: themeD, kind: 'phone' },
+  { light: reminderL, dark: reminderD, kind: 'phone' },
+  { light: importL, dark: importD, kind: 'phone' },
+  { light: mineL, dark: mineD, kind: 'phone' },
+  { light: homeL, dark: homeD, kind: 'phone' },
+  { light: wGridL, dark: wGridD, kind: 'widget' },
+  { light: wViewL, dark: wViewD, kind: 'widget' },
+  { light: wTodayL, dark: wTodayD, kind: 'widget' },
+  { light: wTwoL, dark: wTwoD, kind: 'widget' },
+  { light: wListL, dark: wListD, kind: 'widget' },
+];
 ---
 
 <section class="site-section" id="gallery" aria-labelledby="gallery-title">
@@ -27,17 +64,15 @@ const shots = [img01, img02, img03, img11, img22, img36, imgWidget, img20];
     <div class="gallery__grid">
       {
         shots.map((s, i) => (
-          <figure class="gallery__figure" data-gallery-figure>
+          <figure class:list={['gallery__figure', s.kind === 'widget' && 'gallery__figure--widget']} data-gallery-figure>
             <button type="button" class="gallery__open" data-index={i} aria-label={t.captions[i]}>
-              <Image
-                src={s}
+              <Shot
+                light={s.light}
+                dark={s.dark}
                 widths={[300, 600]}
                 sizes="(max-width: 600px) 92vw, (max-width: 840px) 45vw, 24vw"
                 alt={t.captions[i]}
-                width={s.width}
-                height={s.height}
                 loading="lazy"
-                decoding="async"
               />
             </button>
             <figcaption class="t-label-small">{t.captions[i]}</figcaption>
@@ -90,14 +125,20 @@ const shots = [img01, img02, img03, img11, img22, img36, imgWidget, img20];
     cursor: zoom-in;
     overflow: hidden;
   }
-  .gallery__open img {
+  /* Shot 子组件渲染的 img 不带本组件 scope → 选择器必须 :global */
+  :global(#gallery .gallery__open img) {
     inline-size: 100%;
-    /* 视觉预算 §2.4:竖屏截图统一裁成 3/4 缩略,8 图两段收进 ~1×100vh;
+    /* 视觉预算 §2.4:竖屏截图统一裁成 3/4 缩略,收进两段屏内;
        lightbox 里仍看全图 */
     aspect-ratio: 3 / 4;
     block-size: auto;
     object-fit: cover;
     object-position: top;
+  }
+  /* 小组件裁剪:contain 保组件完整,四角留白即组件外的桌面 */
+  :global(#gallery .gallery__figure--widget .gallery__open img) {
+    object-fit: contain;
+    padding: calc(var(--site-unit) * 2);
   }
   .gallery__figure figcaption {
     margin-block-start: calc(var(--site-unit) * 2);
@@ -149,6 +190,7 @@ const shots = [img01, img02, img03, img11, img22, img36, imgWidget, img20];
 
 <script>
   // lightbox 岛(vanilla + Motion One enter/exit 配对 §2.3;焦点圈定/Esc/←→/归还 §3④)
+  // 主题感知:每张缩略含浅/深两版,取当前可见版;灯箱开着时切主题 → MutationObserver 换图。
   import { animate } from 'motion/mini';
 
   const sec = document.getElementById('gallery');
@@ -159,16 +201,22 @@ const shots = [img01, img02, img03, img11, img22, img36, imgWidget, img20];
     const figs = [...sec.querySelectorAll<HTMLButtonElement>('.gallery__open')];
     const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
     const RM = matchMedia('(prefers-reduced-motion: reduce)'); // §2.3:reduced-motion → 0ms 直出
+    const root = document.documentElement;
     let cur = 0;
     let opener: HTMLElement | null = null;
 
-    const urls = figs.map((b) => (b.querySelector('img') as HTMLImageElement).currentSrc || (b.querySelector('img') as HTMLImageElement).src);
+    const srcOf = (i: number) => {
+      const want = root.getAttribute('data-theme') === 'dark' ? 'shot__dark' : 'shot__light';
+      const el = figs[i].querySelector<HTMLImageElement>(`img.${want}`)
+        ?? figs[i].querySelector<HTMLImageElement>('img')!;
+      return el.currentSrc || el.src;
+    };
 
     const show = (i: number) => {
-      cur = (i + urls.length) % urls.length;
-      img.src = urls[cur];
+      cur = (i + figs.length) % figs.length;
+      img.src = srcOf(cur);
       img.alt = figs[cur].getAttribute('aria-label') ?? '';
-      count.textContent = `${cur + 1} / ${urls.length}`;
+      count.textContent = `${cur + 1} / ${figs.length}`;
     };
     const open = (i: number, from: HTMLElement) => {
       opener = from;
@@ -205,5 +253,9 @@ const shots = [img01, img02, img03, img11, img22, img36, imgWidget, img20];
     lb.querySelector('[data-lb-scrim]')!.addEventListener('click', close);
     lb.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(cur - 1));
     lb.querySelector('[data-lb-next]')!.addEventListener('click', () => show(cur + 1));
+
+    new MutationObserver(() => {
+      if (!lb.hidden) show(cur);
+    }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
   }
 </script>

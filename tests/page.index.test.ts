@@ -114,10 +114,16 @@ describe('下载段(spec §3⑤/§4.2)', () => {
 });
 
 describe('画廊段(spec §3④)', () => {
-  it('8 图网格 + lightbox 岛骨架(aria-modal 容器预置)', () => {
+  it('14 图网格(页面 9 + 组件 5) + lightbox 岛骨架(aria-modal 容器预置)', () => {
     const figs = doc.querySelectorAll('#gallery [data-gallery-figure]');
-    expect(figs.length).toBe(8);
+    expect(figs.length).toBe(14);
     expect(doc.querySelector('#gallery [data-lightbox]')).not.toBeNull();
+  });
+  it('主题感知:每个缩略含浅/深两版截图', () => {
+    const lights = doc.querySelectorAll('#gallery .shot__light');
+    const darks = doc.querySelectorAll('#gallery .shot__dark');
+    expect(lights.length).toBe(14);
+    expect(darks.length).toBe(14);
   });
 });
 
