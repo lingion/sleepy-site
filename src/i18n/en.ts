@@ -37,7 +37,7 @@ export const en: SiteCopy = {
       {
         title: 'Local-first, worry-free upgrades',
         body: 'Your timetable lives on your phone and passes through no server. Export, import, migrate — all your own files.',
-        imgAlt: 'Home-screen widgets overview screenshot',
+        imgAlt: 'Week-grid home-screen widget screenshot',
       },
     ],
   },
@@ -57,7 +57,7 @@ export const en: SiteCopy = {
   },
   gallery: {
     heading: 'Real screenshots, no mockups',
-    sub: '14 shipped screenshots: 9 app screens + 5 home-screen widgets. Tap to see them full size.',
+    sub: '13 shipped screenshots: 8 app screens + 5 home-screen widgets. Tap to see them full size.',
     captions: [
       'Week view',
       'Grid view',
@@ -67,7 +67,6 @@ export const en: SiteCopy = {
       'Class reminder',
       'Import preview',
       'Settings (Mine)',
-      'Widgets overview',
       'Widget · week grid',
       'Widget · week view',
       'Widget · today',
