@@ -18,10 +18,16 @@ export const en: SiteCopy = {
   },
   features: {
     heading: 'What a timetable should feel like',
+    views: {
+      groupLabel: 'View switcher',
+      peek: 'Switch to this view',
+      captionSuffix: ' view screenshot',
+      panes: { week: 'Week', grid: 'Grid', today: 'Today' },
+    },
     items: [
       {
         title: 'Three views, one glance',
-        body: 'Week view for the big picture, grid view for density, today view for right now. Where the semester stands and what’s next — the answer is already on screen.',
+        body: 'Grid view is the main view for most people: one time grid, and a glance tells you where each class sits and how dense the week is. Week view groups by day for the big picture, today view shows only right now — tap a faded thumbnail at either side to swap views in place.',
         imgAlt: 'Week view app screenshot',
       },
       {

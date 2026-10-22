@@ -1,8 +1,18 @@
 ---
 // ② 功能 — spec §3:4 行图文交替 · card=surfaceContainerLow · 揭示 DOM 序=出现序(§8 不变量)
+// 2026-10-22 用户修订:
+//   · 「三视图一眼到底」= 同一页面真能看到三张图:第一行改为三视图切换器 ——
+//     周视图在前,网格/今日在背后左右两侧做渐变淡出缩略,点背后小图即切到前景。
+//   · 宣传重点重排:绝大多数人用网格视图 → 正文以网格视图为主。
+//   · 第四行图从「组件墙」(用户点名:没人把一整面摆满组件,一页也放不下)
+//     换成周网格组件单图,正常桌面比例。
 import Shot from '../Shot.astro';
 import weekL from '../../assets/screenshots/01-week-light.png';
 import weekD from '../../assets/screenshots/01-week-dark.png';
+import gridL from '../../assets/screenshots/02-grid-light.png';
+import gridD from '../../assets/screenshots/02-grid-dark.png';
+import todayL from '../../assets/screenshots/03-today-light.png';
+import todayD from '../../assets/screenshots/03-today-dark.png';
 import importL from '../../assets/screenshots/20-import-light.png';
 import importD from '../../assets/screenshots/20-import-dark.png';
 import reminderL from '../../assets/screenshots/22-reminder-light.png';
@@ -16,11 +26,16 @@ interface Props {
   copy?: SiteCopy;
 }
 const t = (Astro.props.copy ?? zh).features;
-const pairs = [
-  { light: weekL, dark: weekD },
-  { light: importL, dark: importD },
-  { light: reminderL, dark: reminderD },
-  { light: wGridL, dark: wGridD },
+const panes = [
+  { key: 'week', light: weekL, dark: weekD },
+  { key: 'grid', light: gridL, dark: gridD },
+  { key: 'today', light: todayL, dark: todayD },
+] as const;
+// rows 2–4:图文行(第一行固定为切换器)
+const rows = [
+  { light: importL, dark: importD, kind: 'phone' },
+  { light: reminderL, dark: reminderD, kind: 'phone' },
+  { light: wGridL, dark: wGridD, kind: 'widget' },
 ];
 ---
 
@@ -28,22 +43,65 @@ const pairs = [
   <div class="site-col">
     <h2 class="t-headline-large" id="features-title">{t.heading}</h2>
     <div class="features__stack">
+      <article class="site-card feature reveal" style="--reveal-i: 0;">
+        <div class="feature__media">
+          <div class="views" data-views data-view="week">
+            {
+              panes.map((p) => (
+                <figure class:list={['views__pane', `views__pane--${p.key}`]} data-pane={p.key}>
+                  <Shot
+                    light={p.light}
+                    dark={p.dark}
+                    widths={[360, 720]}
+                    sizes="(max-width: 840px) 80vw, 320px"
+                    alt={`${t.views.panes[p.key]}${t.views.captionSuffix}`}
+                    loading="lazy"
+                  />
+                </figure>
+              ))
+            }
+            <button type="button" class="views__peek views__peek--left" data-side="left" aria-label={t.views.peek}><span class="views__peek-hint" aria-hidden="true"></span></button>
+            <button type="button" class="views__peek views__peek--right" data-side="right" aria-label={t.views.peek}><span class="views__peek-hint" aria-hidden="true"></span></button>
+            <div class="views__dots" role="radiogroup" aria-label={t.views.groupLabel}>
+              {
+                panes.map((p, k) => (
+                  <button
+                    type="button"
+                    role="radio"
+                    class="views__dot"
+                    data-goto={p.key}
+                    tabindex={k === 0 ? 0 : -1}
+                    aria-checked={k === 0 ? 'true' : 'false'}
+                  >
+                    {t.views.panes[p.key]}
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+        <div class="feature__copy">
+          <h3 class="t-title-large">{t.items[0].title}</h3>
+          <p class="t-body-medium">{t.items[0].body}</p>
+        </div>
+      </article>
       {
-        t.items.map((item, i) => (
-          <article class="site-card feature reveal" style={`--reveal-i: ${i};`}>
+        rows.map((r, i) => (
+          <article class="site-card feature reveal" style={`--reveal-i: ${i + 1};`}>
             <div class="feature__media">
               <Shot
-                light={pairs[i].light}
-                dark={pairs[i].dark}
+                light={r.light}
+                dark={r.dark}
                 widths={[360, 720]}
                 sizes="(max-width: 840px) 88vw, 420px"
-                alt={item.imgAlt}
+                alt={t.items[i + 1].imgAlt}
+                class={r.kind === 'widget' ? 'feature__shot--widget' : undefined}
                 loading="lazy"
               />
             </div>
             <div class="feature__copy">
-              <h3 class="t-title-large">{item.title}</h3>
-              <p class="t-body-medium">{item.body}</p>
+              <h3 class="t-title-large">{t.items[i + 1].title}</h3>
+              <p class="t-body-medium">{t.items[i + 1].body}</p>
             </div>
           </article>
         ))
@@ -77,11 +135,164 @@ const pairs = [
     object-fit: cover;
     object-position: top;
   }
+  /* 桌面组件单图:contain 保组件完整,不裁 */
+  :global(#features .feature__shot--widget img) {
+    object-fit: contain;
+    padding: calc(var(--site-unit) * 2);
+  }
   .feature__copy p {
     margin-block-start: calc(var(--site-unit) * 3);
     color: var(--md-sys-color-on-surface-variant);
     max-width: 46ch;
   }
+
+  /* —— 三视图切换器 —— 纯 CSS 状态机:data-view 决定前后关系,JS 只翻属性 */
+  .views {
+    position: relative;
+    isolation: isolate;
+    block-size: 480px;
+    overflow: clip;
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+  .views__pane {
+    margin: 0;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      transform 300ms cubic-bezier(0.23, 1, 0.32, 1),
+      opacity 300ms cubic-bezier(0.23, 1, 0.32, 1),
+      filter 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .views__pane img {
+    /* 前景缩到 69% 容器宽,给两侧背后缩略让出 ~56px 可见条 */
+    inline-size: 69%;
+    max-inline-size: 248px;
+    max-block-size: 480px;
+    border-radius: var(--md-sys-shape-corner-medium);
+    object-fit: cover;
+    object-position: top;
+  }
+  /* 前景:当前视图 */
+  .views[data-view='week'] .views__pane--week,
+  .views[data-view='grid'] .views__pane--grid,
+  .views[data-view='today'] .views__pane--today {
+    z-index: 3;
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    filter: none;
+  }
+  /* 右侧后方 = 环序下一个:右缘渐隐(靠近前景的一侧淡出) */
+  .views[data-view='week'] .views__pane--grid,
+  .views[data-view='grid'] .views__pane--today,
+  .views[data-view='today'] .views__pane--week {
+    z-index: 2;
+    transform: translateX(62%) scale(0.8);
+    opacity: 0.6;
+    filter: blur(1.5px);
+    mask-image: linear-gradient(90deg, transparent, #000 68%);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 68%);
+  }
+  /* 左侧后方 = 环序上一个:左缘渐隐 */
+  .views[data-view='week'] .views__pane--today,
+  .views[data-view='grid'] .views__pane--week,
+  .views[data-view='today'] .views__pane--grid {
+    z-index: 1;
+    transform: translateX(-62%) scale(0.8);
+    opacity: 0.45;
+    filter: blur(1.5px);
+    mask-image: linear-gradient(90deg, #000 32%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, #000 32%, transparent);
+  }
+  /* 背后缩略的可点热区(整条侧带,点击即把那张切上来) */
+  .views__peek {
+    position: absolute;
+    inset-block: 0;
+    inline-size: 22%;
+    z-index: 4;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+  .views__peek--left { inset-inline-start: 0; }
+  .views__peek--right { inset-inline-end: 0; }
+  .views__peek:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: -2px;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .views__peek:hover .views__peek-hint { opacity: 1; }
+  }
+  .views__peek-hint {
+    position: absolute;
+    inset-block-start: 50%;
+    inline-size: 28px;
+    block-size: 28px;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1);
+    border-radius: var(--md-sys-shape-corner-full);
+    background: color-mix(in srgb, var(--md-sys-color-surface) 78%, transparent);
+  }
+  .views__peek--left .views__peek-hint { inset-inline-start: 8px; }
+  .views__peek--left .views__peek-hint::before,
+  .views__peek--right .views__peek-hint::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: 9px;
+    block-size: 9px;
+    border-inline-start: 2px solid var(--md-sys-color-on-surface-variant);
+    border-block-end: 2px solid var(--md-sys-color-on-surface-variant);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .views__peek--right .views__peek-hint::before {
+    transform: translate(-50%, -50%) rotate(-135deg);
+  }
+  /* 底部视图名胶囊:状态指示 + 直达(不依赖背后热区) */
+  .views__dots {
+    position: absolute;
+    inset-inline-start: 50%;
+    inset-block-end: calc(var(--site-unit) * 3);
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    gap: var(--site-unit);
+    padding: var(--site-unit);
+    border-radius: var(--md-sys-shape-corner-full);
+    background: color-mix(in srgb, var(--md-sys-color-surface) 70%, transparent);
+    backdrop-filter: blur(6px);
+  }
+  .views__dot {
+    border: 0;
+    cursor: pointer;
+    padding: calc(var(--site-unit) * 1.5) calc(var(--site-unit) * 3);
+    border-radius: var(--md-sys-shape-corner-full);
+    background: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    font: var(--md-sys-typescale-label-medium);
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .views__dot[aria-checked='true'] {
+    background: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+  .views__dot:focus-visible {
+    outline: 2px solid var(--md-sys-color-primary);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .views__pane,
+    .views__peek-hint,
+    .views__dot {
+      transition-duration: 0s;
+    }
+  }
+
   @media (max-width: 840px) {
     .feature,
     .feature:nth-child(even) {
@@ -91,5 +302,49 @@ const pairs = [
     .feature:nth-child(even) .feature__media {
       order: 0;
     }
+    .views {
+      block-size: min(72vw, 460px);
+    }
+    .views__pane img {
+      max-block-size: min(72vw, 460px);
+    }
   }
 </style>
+
+<script>
+  // 三视图切换器:翻 data-view 属性(CSS 状态机),radiogroup 方向键漫游(§a11y)
+  // reduced-motion 由 CSS 0s 兜底;JS-off 时静态=周视图前景,网格/今日在两侧可见可点(提交后无 JS 不切,但能全看到)
+  const root = document.querySelector<HTMLElement>('#features [data-views]');
+  if (root) {
+    const ORDER = ['week', 'grid', 'today'] as const;
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-goto]')];
+    const peeks = [...root.querySelectorAll<HTMLButtonElement>('[data-side]')];
+    const names = ORDER.map((k) => dots.find((d) => d.dataset.goto === k)?.textContent?.trim() ?? k);
+    let cur = 0;
+    const set = (n: number, focus = false) => {
+      cur = (n + ORDER.length) % ORDER.length;
+      root.dataset.view = ORDER[cur];
+      dots.forEach((d, k) => {
+        d.setAttribute('aria-checked', String(k === cur));
+        d.tabIndex = k === cur ? 0 : -1;
+      });
+      // 侧边热区的朗读对象 = 那一侧当前藏着的视图
+      const right = (cur + 1) % ORDER.length;
+      const left = (cur + ORDER.length - 1) % ORDER.length;
+      peeks.forEach((b) => {
+        const idx = b.dataset.side === 'right' ? right : left;
+        b.setAttribute('aria-label', names[idx]);
+      });
+      if (focus) dots[cur].focus();
+    };
+    dots.forEach((d, k) => d.addEventListener('click', () => set(k)));
+    peeks.forEach((b) => b.addEventListener('click', () => set(cur + (b.dataset.side === 'right' ? 1 : -1))));
+    root.addEventListener('keydown', (e) => {
+      const from = dots.indexOf(document.activeElement as HTMLButtonElement);
+      if (from < 0) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); set(from + 1, true); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); set(from - 1, true); }
+    });
+    set(0);
+  }
+</script>
