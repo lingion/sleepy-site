@@ -127,7 +127,8 @@ const rows = [
   .feature:nth-child(even) .feature__media {
     order: 2;
   }
-  .feature__media img {
+  /* Shot 子组件渲染的 img 不带本组件 scope → 选择器必须 :global(Gallery 同法) */
+  :global(#features .feature__media img) {
     border-radius: var(--md-sys-shape-corner-medium);
     inline-size: 100%;
     /* 视觉预算 §2.4 宁删勿加:裁顶保首屏内容,整卡压回一屏节奏 */
@@ -166,7 +167,7 @@ const rows = [
       opacity 300ms cubic-bezier(0.23, 1, 0.32, 1),
       filter 300ms cubic-bezier(0.23, 1, 0.32, 1);
   }
-  .views__pane img {
+  :global(#features .views__pane img) {
     /* 前景缩到 69% 容器宽,给两侧背后缩略让出 ~56px 可见条 */
     inline-size: 69%;
     max-inline-size: 248px;
@@ -306,7 +307,7 @@ const rows = [
     .views {
       block-size: min(72vw, 460px);
     }
-    .views__pane img {
+    :global(#features .views__pane img) {
       max-block-size: min(72vw, 460px);
     }
   }

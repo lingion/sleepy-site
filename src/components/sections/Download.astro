@@ -200,7 +200,8 @@ const notes = t.abiNotes as Record<string, string>;
   .download__trial {
     margin-block-start: calc(var(--site-unit) * 5);
   }
-  .download__media img {
+  /* Shot 子组件渲染的 img 不带本组件 scope → :global(Gallery 同法) */
+  :global(#download .download__media img) {
     border-radius: var(--md-sys-shape-corner-xl);
     inline-size: 100%;
     /* 视觉预算 §2.4:裁顶保内容,下载段收进 ~1×100vh */
