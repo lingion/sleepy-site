@@ -48,7 +48,7 @@ export const zh = {
     allLabel: '全部',
     emptyState: '这所学校还没收录——',
     emptyIssue: '提个 issue',
-    emptyTail: ',或者进群告诉我,很快就会补上。',
+    emptyTail: ',很快就会补上;不方便开 issue 的话,群里留言也行。',
     faqLink: '常见问答',
     jsOffNote: '禁用 JavaScript 时全量清单照常可读。',
   },
@@ -98,7 +98,7 @@ export const zh = {
   trust: {
     heading: '谁在做这个',
     story: '一个人写的开源课表。没有广告,没有追踪,代码全公开。',
-    reachOut: '适配你学校的问题,群里 @ 我。',
+    reachOut: '适配你学校的问题,开 issue 优先,群里 @ 我也行。',
     privacyHeading: '隐私是架构问题',
     privacyBody:
       '没有 Firebase,没有 Sentry,没有广告 SDK。课表数据只存在你手机,备份文件你自己保管。',

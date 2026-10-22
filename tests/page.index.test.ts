@@ -55,11 +55,11 @@ describe('文案验收(spec §2.5 样例句逐句 + 红线)', () => {
   const stripped = text.replace(/\s+/g, '');
   it('microcopy 契约逐句进产物', () => {
     expect(stripped).toContain('这所学校还没收录');
-    expect(stripped).toContain('提个issue,或者进群告诉我,很快就会补上。');
+    expect(stripped).toContain('提个issue,很快就会补上;不方便开issue的话,群里留言也行。');
     expect(stripped).toContain('不确定就选Universal:适配全部架构。');
     expect(stripped).toContain('页面塌了,课表不会。');
     expect(stripped).toContain('一个人写的开源课表。没有广告,没有追踪,代码全公开。');
-    expect(stripped).toContain('适配你学校的问题,群里@我。');
+    expect(stripped).toContain('适配你学校的问题,开issue优先,群里@我也行。');
   });
   it('口语/自贬红线零出现(2026-10-20 用户修订:通吃/不吭声/说一声/喝可乐)', () => {
     for (const w of ['通吃', '不吭声', '说一声', '请我喝可乐', 'Buy me a cola']) {

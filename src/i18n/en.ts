@@ -51,7 +51,7 @@ export const en: SiteCopy = {
     allLabel: 'All',
     emptyState: 'This school isn’t supported yet — ',
     emptyIssue: 'open an issue',
-    emptyTail: ', or tell me in the group — it will be added soon.',
+    emptyTail: ' — it will be added soon. If filing an issue is inconvenient, a message in the group works too.',
     faqLink: 'FAQ',
     jsOffNote: 'With JavaScript disabled the full list stays readable.',
   },
@@ -101,7 +101,7 @@ export const en: SiteCopy = {
   trust: {
     heading: 'Who makes this',
     story: 'An open-source timetable built by one person. No ads, no tracking, all code public.',
-    reachOut: 'Adapter issue at your school? @ me in the group.',
+    reachOut: 'Adapter issue at your school? Open an issue first — or @ me in the group.',
     privacyHeading: 'Privacy is an architecture question',
     privacyBody:
       'No Firebase, no Sentry, no ad SDK. Timetable data stays on your phone only; you keep the backup files yourself.',
