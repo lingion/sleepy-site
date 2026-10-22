@@ -72,7 +72,7 @@ const groups = provincesOrdered().map((p) => ({
       {t.emptyState}<a class="schools__empty-link" href={`${repoUrl}/issues`}>{t.emptyIssue}</a>{t.emptyTail}
     </p>
     <p class="t-body-small schools__foot">
-      <a href={faqUrl}>{t.faqLink}</a> · QQ {qqGroup} · <noscript>{t.jsOffNote}</noscript>
+      <a href={`${repoUrl}/issues`}>{t.emptyIssue}</a> · <a href={faqUrl}>{t.faqLink}</a> · QQ {qqGroup} · <noscript>{t.jsOffNote}</noscript>
     </p>
   </div>
 </section>

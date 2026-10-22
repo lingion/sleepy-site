@@ -76,7 +76,8 @@ const t = c.hero;
     background: var(--md-sys-color-surface-container-low);
     box-shadow: 0 calc(var(--site-unit) * 4) calc(var(--site-unit) * 16) rgb(0 0 0 / 12%);
   }
-  .hero__device img {
+  /* Shot 子组件渲染的 img 不带本组件 scope → :global(Gallery 同法) */
+  :global(#hero .hero__device img) {
     border-radius: calc(var(--site-unit) * 3);
     inline-size: 100%;
     /* 视觉预算 §2.4:hero ≤1×100vh —— 竖屏截图裁顶保内容,底部导航条可弃 */

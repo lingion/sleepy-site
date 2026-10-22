@@ -15,10 +15,16 @@ export const zh = {
   },
   features: {
     heading: '课表该有的样子',
+    views: {
+      groupLabel: '视图切换',
+      peek: '切换到这个视图',
+      captionSuffix: '视图截图',
+      panes: { week: '周', grid: '网格', today: '今日' },
+    },
     items: [
       {
         title: '三视图,一眼到底',
-        body: '周视图看全局,网格视图看密度,今日视图看当下。学期走到哪、下节课在哪,抬头就有答案。',
+        body: '网格视图是大多数人的主视图:一屏时间网格,课在什么位置、有多密,扫一眼就有答案。周视图按天归组看全局,今日视图只看当下——点两侧渐隐的缩略图,三个视图当场换着看。',
         imgAlt: '周视图应用截图',
       },
       {
@@ -34,7 +40,7 @@ export const zh = {
       {
         title: '本地优先,换机不慌',
         body: '课表存在你手机里,不经过任何服务器。导出、导入、迁移,都是你自己的文件。',
-        imgAlt: '桌面小组件总览应用截图',
+        imgAlt: '桌面周网格小组件截图',
       },
     ],
   },
@@ -48,13 +54,13 @@ export const zh = {
     allLabel: '全部',
     emptyState: '这所学校还没收录——',
     emptyIssue: '提个 issue',
-    emptyTail: ',或者进群告诉我,很快就会补上。',
+    emptyTail: ',很快就会补上;不方便开 issue 的话,群里留言也行。',
     faqLink: '常见问答',
     jsOffNote: '禁用 JavaScript 时全量清单照常可读。',
   },
   gallery: {
     heading: '真实截图,无渲染图',
-    sub: '14 张定稿截图,页面 9 张 + 桌面组件 5 张,点开看大图。',
+    sub: '13 张定稿截图,页面 8 张 + 桌面组件 5 张,点开看大图。',
     captions: [
       '周视图',
       '网格视图',
@@ -64,7 +70,6 @@ export const zh = {
       '课前提醒',
       '导入预览',
       '我的',
-      '桌面组件总览',
       '组件 · 周网格',
       '组件 · 周视图',
       '组件 · 今日课程',
@@ -98,7 +103,7 @@ export const zh = {
   trust: {
     heading: '谁在做这个',
     story: '一个人写的开源课表。没有广告,没有追踪,代码全公开。',
-    reachOut: '适配你学校的问题,群里 @ 我。',
+    reachOut: '适配你学校的问题,开 issue 优先,群里 @ 我也行。',
     privacyHeading: '隐私是架构问题',
     privacyBody:
       '没有 Firebase,没有 Sentry,没有广告 SDK。课表数据只存在你手机,备份文件你自己保管。',

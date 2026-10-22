@@ -18,10 +18,16 @@ export const en: SiteCopy = {
   },
   features: {
     heading: 'What a timetable should feel like',
+    views: {
+      groupLabel: 'View switcher',
+      peek: 'Switch to this view',
+      captionSuffix: ' view screenshot',
+      panes: { week: 'Week', grid: 'Grid', today: 'Today' },
+    },
     items: [
       {
         title: 'Three views, one glance',
-        body: 'Week view for the big picture, grid view for density, today view for right now. Where the semester stands and what’s next — the answer is already on screen.',
+        body: 'Grid view is the main view for most people: one time grid, and a glance tells you where each class sits and how dense the week is. Week view groups by day for the big picture, today view shows only right now — tap a faded thumbnail at either side to swap views in place.',
         imgAlt: 'Week view app screenshot',
       },
       {
@@ -37,7 +43,7 @@ export const en: SiteCopy = {
       {
         title: 'Local-first, worry-free upgrades',
         body: 'Your timetable lives on your phone and passes through no server. Export, import, migrate — all your own files.',
-        imgAlt: 'Home-screen widgets overview screenshot',
+        imgAlt: 'Week-grid home-screen widget screenshot',
       },
     ],
   },
@@ -51,13 +57,13 @@ export const en: SiteCopy = {
     allLabel: 'All',
     emptyState: 'This school isn’t supported yet — ',
     emptyIssue: 'open an issue',
-    emptyTail: ', or tell me in the group — it will be added soon.',
+    emptyTail: ' — it will be added soon. If filing an issue is inconvenient, a message in the group works too.',
     faqLink: 'FAQ',
     jsOffNote: 'With JavaScript disabled the full list stays readable.',
   },
   gallery: {
     heading: 'Real screenshots, no mockups',
-    sub: '14 shipped screenshots: 9 app screens + 5 home-screen widgets. Tap to see them full size.',
+    sub: '13 shipped screenshots: 8 app screens + 5 home-screen widgets. Tap to see them full size.',
     captions: [
       'Week view',
       'Grid view',
@@ -67,7 +73,6 @@ export const en: SiteCopy = {
       'Class reminder',
       'Import preview',
       'Settings (Mine)',
-      'Widgets overview',
       'Widget · week grid',
       'Widget · week view',
       'Widget · today',
@@ -101,7 +106,7 @@ export const en: SiteCopy = {
   trust: {
     heading: 'Who makes this',
     story: 'An open-source timetable built by one person. No ads, no tracking, all code public.',
-    reachOut: 'Adapter issue at your school? @ me in the group.',
+    reachOut: 'Adapter issue at your school? Open an issue first — or @ me in the group.',
     privacyHeading: 'Privacy is an architecture question',
     privacyBody:
       'No Firebase, no Sentry, no ad SDK. Timetable data stays on your phone only; you keep the backup files yourself.',
