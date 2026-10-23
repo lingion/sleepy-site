@@ -1,7 +1,7 @@
 ---
 // v4 AppBar(spec §4):三段式 = 品牌标 / 4 枚锚点文字链(Text 档,≤840px 隐藏)/ [下载]Filled S + 语言 + 主题
 // 滚动态 surface→surface-container tonal 升起(仅 background-color 150ms,无投影);高 64px
-// 互隐 IO(hero 在视口→hide)归 T6;此处落 data-appbar-cta markup(缺省 show)。
+// 互隐 IO(T6,spec §11-6):hero 在视口 → appbar CTA hide;离开 → show。缺省 show = JS-off 必显。
 // 锚点串走 appbar.anchors 键树(zh/en 同形,禁 ternary 硬编码);label 走 aria-label 键。
 import { zh } from '../i18n/zh';
 import type { SiteCopy } from '../i18n/zh';
@@ -50,7 +50,7 @@ const anchors = [
       }
     </nav>
     <nav class="appbar__actions" aria-label={lang === 'zh' ? '页面操作' : 'Page actions'}>
-      <a class="site-button site-button--filled appbar__cta t-label-large" href="https://github.com/lingion/sleepy/releases/latest" data-appbar-cta>{c.appbar.ctaDownload}</a>
+      <a class="site-button site-button--filled appbar__cta t-label-large" href="https://github.com/lingion/sleepy/releases/latest" data-appbar-cta="show">{c.appbar.ctaDownload}</a>
       <a class="site-chip appbar__lang t-label-large" href={other}>{otherLabel}</a>
       <button
         class="appbar__theme"
@@ -122,6 +122,16 @@ const anchors = [
     /* Filled S 紧凑档(spec §4):高度压至 36,字号 label-large */
     padding: 6px 16px;
     text-decoration: none;
+    /* 互隐过渡(T6):visibility 两态 + opacity 150ms(reduce 档 token 归零自动瞬切);
+       禁 display:none —— 锚点/操作组横向布局会跳动 */
+    transition:
+      opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
+      visibility var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
+  }
+  /* hero 在视口内 → 钮隐(spec §11-6 任意视口至多一枚 Filled);缺省 show 可见 */
+  .appbar__cta[data-appbar-cta='hide'] {
+    opacity: 0;
+    visibility: hidden;
   }
   .appbar__lang {
     text-decoration: none;
@@ -160,4 +170,13 @@ const anchors = [
     mark();
   }
   document.querySelector('[data-icon-theme]')?.addEventListener('click', () => window.siteToggleTheme?.());
+  // CTA 互隐(T6,spec §11-6):hero 在视口 → 钮 hide;离开 → show。
+  // #hero 缺失(无 hero 页/构建异动)或旧内核无 IO → 保持缺省 show,不崩。
+  const cta = document.querySelector<HTMLElement>('[data-appbar-cta]');
+  const hero = document.getElementById('hero');
+  if (cta && hero && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => {
+      cta.dataset.appbarCta = e.isIntersecting ? 'hide' : 'show';
+    }).observe(hero);
+  }
 </script>

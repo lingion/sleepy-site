@@ -104,6 +104,15 @@ describe('AppBar 锚点 + 常驻钮(spec §4)', () => {
     expect(cta).not.toBeNull();
     expect(cta?.getAttribute('class')).toContain('site-button--filled');
   });
+  it('CTA 互隐闸(§11-6):markup 缺省 show + 源码 IO 引用 #hero 与 appbar-cta', () => {
+    const src = readFileSync(new URL('../src/components/AppBar.astro', import.meta.url), 'utf8');
+    // 缺省态:JS-off 钮必显,Astro 静态 markup 写死 show
+    expect(src).toContain('data-appbar-cta="show"');
+    // 互隐逻辑落点:IO 观察 #hero,回调写 appbarCta/appbar-cta
+    expect(src).toContain('IntersectionObserver');
+    expect(src).toMatch(/getElementById\(['"]hero['"]\)/);
+    expect(src).toMatch(/appbarCta|appbar-cta/);
+  });
 });
 
 describe('M2 三视图 + MD3 Segmented Button(spec §4 M2)', () => {
