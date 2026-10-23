@@ -1,0 +1,79 @@
+{
+  "principles": [
+    "字号阶梯按『角色』而非大小:采用 MD3 的 Display/Headline/Title/Body/Label 五族(如 Display-L 57px / Headline-L 32px / Title-M 16px / Body-L 16px),层级差要大到一眼可辨;相邻级差 ≥1.33 倍或直接用规范级差,禁 16/18/20 渐进。来源: https://m3.material.io/styles",
+    "强调靠『拉大差距』不靠加粗堆叠(Refactoring UI: Size isn't everything / De-emphasize to emphasize):Display 级保持 400 常规字重,靠尺寸与留白差建立主次;次要信息降字号降对比(on-surface-variant),而非处处 700。来源: https://refactoringui.com/the-book",
+    "留白从宽开始、间距消灭歧义(Start with too much white space / Avoid ambiguous spacing):段间 macro 留白 96–160px 决定呼吸节奏,组件内 micro 间距 4/8/12 表达分组;全站间距取 8dp 体系,禁止出现两个不可区分的近似值。",
+    "克制用色 = tonal 系统而非彩色堆砌:深度靠 surface-container-lowest→highest 五级同色相面表达,主色只出现在交互锚点(<10% 面积);底色用微暖 surface(如 #FEF7FF)、墨色用 on-surface(#1D1B20),避开纯黑纯白;灰要带色相(Greys don't have to be grey)。",
+    "elevation 有明确阶梯且稀缺使用:MD3 elevation 0–5 对应固定双层影参数(如 L1: 0 1px 2px 30% + 0 1px 3px 15%),阴影仅在浮于复杂背景时用;静态卡分 filled(无影)/outlined/elevated 三档按信息层级分配,全站最多一处 elevated 主角。",
+    "圆角表达组件类型不表达装饰:按钮/胶囊 full、卡片 medium 12、输入与菜单 small 8、对话框 extra-large 28;嵌套元素圆角小于父容器;禁止全站单一 16px 大圆角。来源: https://m3.material.io/styles",
+    "产品图呈现用『屏幕本体』不用厚设备框:App 截图自身即手机界面,裁掉状态栏以下无效外边距,圆角裁切贴合应用内卡片圆角,单层薄 outline(1px outline-variant)+ 远距离双层投影制造悬浮;多屏层叠重叠(Overlap elements to create layers)表达功能丰富,光线方向全站统一(Emulate a light source)。",
+    "裁切规则只裁无效区:周视图网格、小组件文字、提醒内容等主体信息完整保留;需要适配比例时等比缩放或裁空白/装饰区,禁居中硬裁掉信息;这与硬约束 1/3/4 直接对应。",
+    "数字细节:一切统计数字、课表节次、版本号用 font-variant-numeric: lining-nums tabular-nums,数字列对齐不跳动;ID/十六进制串加 slashed-zero 区分 0/O。来源: https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-numeric",
+    "hover/focus 纪律(Web Interface Guidelines):交互态对比度必须高于静止态;链接 hover 用 text-decoration-thickness+underline-offset 微调而非变色爆炸;transition 只显式列 transform/opacity/color 等属性、禁 transition:all、时长 150–200ms;:focus-visible ring 永不裸删 outline。来源: https://github.com/vercel-labs/web-interface-guidelines",
+    "动效取 MD3 transition 规范:入屏 emphasized-decelerate 400ms、出屏 emphasized-accelerate 200ms、屏内 emphasized 500ms(cubic-bezier(0.2,0,0,1) 系);滚动视差只做小位移 transform;prefers-reduced-motion 下装饰动效全部停用,信息动效降级为透明度。",
+    "版面节奏 = 每段结构身份不同:六段各配一种布局原型(全出血/7:5 非对称/编辑式中单栏/错落画廊/tone 反转容器/安静 trust),相邻两段禁止同构;对齐从视觉均衡出发而非机械等分栅格(Grids are overrated)。"
+  ],
+  "patterns": [
+    {
+      "example": "对照:把 Features 从 6 张同卡改为『1 张周视图大画面 + 5 条编号清单』,Trust 段改 outlined 无边影容器,Download 段用 primary-container tonal 底色反转。",
+      "name": "AI 模板脸①:紫色渐变/极光 blob/玻璃拟态",
+      "what": "默认 indigo→violet 渐变背景、radial glow、frosted-glass 卡片、blob 装饰。替代:从品牌种子色生成 MD3 tonal palette,色彩只做 surface 层级 + 单一点缀色;若必须渐变,限超低 alpha 的同色相 tonal 过渡。",
+      "why": "这是 2023–2026 模型批量出图的默认审美指纹,访客 0.5 秒识别『非人手设计』,与『优雅』传达直接相抵。"
+    },
+    {
+      "example": "MD3 规范里 Card 本就有 filled/outlined/elevated 三档,现状站只用一档=浪费系统。",
+      "name": "AI 模板脸②:全站统一大圆角 + 每卡同投影",
+      "what": "所有卡片 16–24px 圆角 + 同款 elevation 阴影。替代:圆角按组件角色走 shape token(full/12/8/28),阴影按层级三档分配且 elevated 全页稀缺(≤1 处),默认面用 filled 无影。",
+      "why": "圆角与阴影是 MD 的『层级语言』;均匀化等于把所有元素读成同级,层级消失,模板感暴露。"
+    },
+    {
+      "example": "同时满足硬约束 1(第一张图=周视图):截图右移放大,文字左对齐,主 CTA 单个。",
+      "name": "AI 模板脸③:满屏居中三行式 hero",
+      "what": "居中 eyebrow 小字 + 居中三行大标题 + 居中副标 + 双按钮并排。替代:左对齐文字栈 + 右侧真实 UI 截图作视觉主体,CTA 一主一次拉开重量差。",
+      "why": "居中对称给不出阅读起点与主次,信息动线为零;真实 UI 截图才是转化下载的主角。"
+    },
+    {
+      "example": "全站只用 16/18/20px;替代:Display-S 36 以上开场 + Body-M 14 辅助,跨度 4 倍以上。",
+      "name": "AI 模板脸④:单一字体小层级(Inter  everywhere)",
+      "what": "一套字体、±2px 的字号差走完全站。替代:完整 15 级 typescale,大标题与大正文尺寸强对比;数字与密集小字用对应 tracking token。",
+      "why": "『建立明确的 type scale』是 Refactoring UI 第一条排版军规;层级差小到需要读内容才能分辨,等于没有层级。"
+    },
+    {
+      "example": "Trust/Download 段各换一种容器语言(outlined 面 vs primary-container tonal 面)形成节奏。",
+      "name": "AI 模板脸⑤:等权重卡片墙(4×2 图标+标题+描述)",
+      "what": "Features/Trust 用 N 张完全同构的图标卡。替代:挑 1–2 个卖点做 hero 卡(带截图),其余降为行式列表或编号编辑式段落;卡片数量与权重必须有主次。",
+      "why": "均质网格无记忆点,且这正是用户点名的『六段同质左文右图』的病根之一。"
+    },
+    {
+      "example": "对应硬约束 2:『348 校教务直连,数据全部留存本机』一句陈述完,不再补『无需上传?』式自问。",
+      "name": "AI 模板脸⑥:设问/反问/正反重复文案",
+      "what": "『担心隐私?我们绝不上传。』类填充句式,一段里同一意思正反说两遍。替代:官方书面语,每个意思正面陈述恰好一次;禁问句。",
+      "why": "设问句是 AI 文案最高频指纹;既显得不自信又稀释信息密度。"
+    },
+    {
+      "example": "Gallery 六枚小组件图:屏幕本体、圆角裁掉状态栏外无效区、统一 1px outline + L2 远影、两张周视图与扁条列表错落叠压。",
+      "name": "产品图反模式:厚设备框/硬裁丢主体/无光源逻辑",
+      "what": "粗边框+刘海+圆角壳三件套 mockup 浪费画面;或 object-fit:cover 居中硬裁把课表网格切成残段。替代:屏幕本体 + 只裁空白/装饰区 + 层叠两三层体现功能密度 + 全站阴影方向一致。",
+      "why": "截图的说服力来自可读的真实内容;设备框和碎裁都把注意力从 UI 本身移开,直接削弱下载动机。"
+    },
+    {
+      "example": "学校数 348、下载数、节次列统一 tabular-nums;hover 位移仅 translateY(-2px) 150ms。",
+      "name": "细节品质:数字抖动与 hover 失控",
+      "what": "比例字宽导致数字列参差、计数器跳动;hover 整卡爆起大阴影或颜色突变。替代:tabular-nums 锁数字宽;hover 只做一级 elevation 变化,transform/opacity/color 白名单 + 明确时长。",
+      "why": "MDN 与 Web Interface Guidelines 都把这两条列为『专业与否』分水岭——高级感恰恰住在不跳动、不爆炸的细节里。"
+    },
+    {
+      "example": "hero 截图入屏:emphasized-decelerate 400ms + 24px 位移;reduced-motion 下仅淡入。",
+      "name": "动效反模式:弹跳过载与 reduced-motion 裸奔",
+      "what": "bounce 入场、全站同时滚动视差、动画不可打断。替代:按 MD3 时长阶梯选档(入 400/出 200/留 500),emphasized 曲线,只用 transform/opacity 合成层属性,滚动触发一次即停。",
+      "why": "spring/emphasized 的物理感是 MD 语言的核心体验;乱 bounce 既廉价又违反『优雅』定调,且不可打断的动画是可用性缺陷。"
+    },
+    {
+      "example": "现状 global.css 已引 --md-sys-shape-corner-* token,只需把『装饰性统一圆角』换成『按角色的圆角』即可去模板感。",
+      "name": "模板感根源诊断:有 token 无体系",
+      "what": "仓库里 M3 token 只当 CSS 变量用,页面结构仍是通用 landing 模板。替代:结构、间距、elevation、motion 全部按 token 语义分配,让『MD 语言』体现在版面建筑层而非仅颜色层。",
+      "why": "约束 5 要求 Material 贯穿全页;token 只覆盖皮肤,不覆盖骨骼——这正是用户觉得『像模板』的技术原因。"
+    }
+  ],
+  "summary": "高级感=可辨识的层级(强对比字号阶梯+稀缺 elevation)+有节奏的密度(8dp 间距消灭歧义、macro 留白分段呼吸)+克制的 tonal 用色+真实 UI 截图本体呈现(屏幕代替设备框、只裁无效区)+细节纪律(tabular-nums、hover 白名单过渡、emphasized 动效曲线)。AI 模板脸六件套:紫渐变玻璃态、统一大圆角同投影、满屏居中三行 hero、小层级字体、设问文案、等权卡片墙——全部有 MD3/Refactoring UI 规范化的替代路径。"
+}

@@ -1,0 +1,87 @@
+{
+  "summary": "调研结论:MD3 用于营销官网的正确姿势是「借 token 与容器语言,不借 App 交互骨架」。层级用 surface container 五阶色阶(而非阴影)建立分区;节奏用 shape 阶梯 + 8dp 间距 + container 明度差制造六段异构;CTA 用官方五档按钮强调梯度映射(Filled→Tonal→Outlined→Text),下载按钮 = Filled/tonal XL pill + 吸顶栏常驻,禁用经典 FAB(移动应用专属,@material/web 的 md-fab href 变体也救不了语义错位)。Expressive 的形变/弹簧物理 Web 端官方未实现,用 CSS 对 corner-radius/容器色阶过渡做近似。动态取色在静态站退化为「种子色离线构建」——站点现有 scripts/gen-tokens.mjs(seed #9B87FE, material-color-utilities)已是标准答案,勿引入运行时取色。明暗双主题靠整套 --md-sys-* 在 [data-theme=dark] 翻转、容器单调性跨主题保持、只用 on-X 配对色;站点 theme.css 已合规。Google 自家产品页(notebook.google)印证:首屏大产品截图 hero、feature 截图当 hero 素材、card 横排社会证明、隐私横幅、FAQ 手风琴、无 FAB——与 MD token 语言天然兼容。排版按官方 Brand/Plain 双字体角色保留 Inter+CJK 栈;1600px 内容列 ≤1040 行宽。本地 token 底子(global.css 15 阶/shape/栅格 1040/红线 outline≠outline-variant)全部可直接继承,缺口在容器色阶尚未真正当分区系统用、按钮五档未成体系、Expressive 容器语言缺失。",
+  "principles": [
+    "官网 = MD 语言的『展示面』而非『应用面』:token、容器、shape、字体、运动规格全盘继承;App 交互骨架(导航栏/抽屉/对话框/FAB/底 sheet)一律不搬",
+    "层级用面不用线:分区靠 surface/surface-container 五阶色阶差与嵌套,分隔线只是辅助;阴影只给真正悬浮于内容之上的元素",
+    "一个页面只允许一个 Filled 级主 CTA,其余动作按 Tonal→Elevated→Outlined→Text 降档——按钮档级即页面语义层级",
+    "文案不重复,视觉可重复:同一 container 角色的复用是系统设计性,六段同质是页面建筑失败——节奏由布局结构产生,不由换色产生",
+    "静态站动态取色 = 构建期取色:种子色(material-color-utilities)一次生成 light/dark 双 scheme 落 CSS 变量,运行时零取色逻辑",
+    "明暗双主题 = 同一份 token 名、两套值:配对(on-X)关系与容器单调性在两个主题中同构,禁止任何只在一个主题成立的硬编码",
+    "Expressive 在 Web 用近似而非照搬:形变与弹簧物理官方 Web 未实现,用 CSS radius 过渡 + 容器色阶过渡表达 MD 手感,reduced-motion 时全部归零",
+    "组件即内容:产品截图/小组件卡按 M3 卡片容器语言(frameless、radius token、outline-variant 边、tonal 底)呈现,让『官网长得像 App』成为设计感来源"
+  ],
+  "patterns": [
+    {
+      "name": "Surface 色阶作页面分区",
+      "what": "body 用 --md-sys-color-surface;section 交替使用 surface / surface-container-low / surface-container,卡片用 surface-container-lowest(亮主题纯白)浮于其上;嵌套层级 = container 档位递增",
+      "why": "M3 用 tonal 面取代阴影作深度线索,5 档容器专为『多层布局的视觉层级与嵌套深度』设计——这正是六段同质页最缺的分区语言;色阶差天然柔和,不会出现硬分割线的模板感",
+      "example": "Hero 落在 surface,Features 落 surface-container-low,Gallery 落 surface(截图卡片 container-lowest 跳出),Download 落 primary-container 色阶做强调带"
+    },
+    {
+      "name": "按钮五档强调梯度映射 CTA",
+      "what": "官方强调序 Filled > Filled Tonal > Elevated > Outlined > Text。下载主按钮 = Filled XL(64px 高, spec 尺寸 XS–XL),GitHub/次要 = Tonal,文内链接 = Text 按钮样式;Elevated 档专用于彩色/深色容器上的按钮(官方定位:tonal 融入背景时的替代)",
+      "why": "五档是 M3 原生语义,不需要发明新组件就能给营销页建立动作层级;pill(shape=full)+label-large 500 字重即『很 MD』的 CTA 观感",
+      "example": "Hero: [Filled XL 立即下载] [Tonal L 查看功能];AppBar: 常驻 Filled S 下载"
+    },
+    {
+      "name": "FAB 与移动骨架禁入营销页",
+      "what": "经典 FAB、navigation bar/drawer/rail、bottom sheet、dialog、tabs、snackbar 均不上营销站;md-fab 虽有 href 变体,但『悬浮主操作』语义在内容型网页不成立",
+      "why": "这些组件在 M3 规范中都是 app-shell 角色;@material/web v2.5 甚至把 card 和导航全家放在 labs 未 stable——Google 自己就没给网页形态定稿。下载 CTA 的正确 MD 替代 = 吸顶 AppBar 常驻 Filled 按钮 + Hero XL 按钮 + 页尾重复",
+      "example": "反例: 右下悬浮 FAB『下载』(像把安卓桌面搬上网页);正例: 滚动时 AppBar 升起(elevation-2 态 + 容器色阶加深),下载按钮常驻其上"
+    },
+    {
+      "name": "动态取色的静态站降级:构建期 seed→双 scheme",
+      "what": "维持站点现有管线:scripts/gen-tokens.mjs 用 @material/material-color-utilities 从种子 #9B87FE 离线生成 :root 与 [data-theme=dark] 两套 --md-sys-color-*,构建期落 CSS 变量;不引运行时主题引擎",
+      "why": "Web 没有壁纸取色 API(官方规范明示无对应物);营销站需要的是可预测的视觉与零 JS 首屏,构建期取色已同时满足『动态取色血统』与 SSR/静态托管",
+      "example": "站点现状即为该 pattern 的实现,后续只需扩 token 覆盖面(如补 primary-fixed 若需要跨主题恒定的品牌色带)"
+    },
+    {
+      "name": "明暗同构:配对规则+容器单调性+inverse 工具",
+      "what": "①只用 on-X 配对色(primary 上必 on-primary,container-* 上 on-surface/on-surface-variant);②容器阶 light=由亮渐白(98→100)、dark=由暗渐亮(6→22),单调性镜像翻转仍成立;③高对比内容带用 inverse-surface/inverse-on-surface;④surface-dim/bright 做『恒暗底/恒亮面板』类装饰",
+      "why": "配对与单调性是 M3 对比度保证的两条腿,违背任何一条 dark 主题即崩;站点 theme.css 两套值已合规,规范价值在于锁死后续实现不越界",
+      "example": "Trust 段用 inverse-surface 深底 + inverse-primary 强调色文字,形成双主题下的『深色信任带』节奏"
+    },
+    {
+      "name": "Typescale 网页化:角色直映射+Brand/Plain 双字体",
+      "what": "Hero 标题=display-large(57/64, 视口用 clamp 只缩 display/headline 系),段标题=headline-medium/small,卡题=title-medium,正文=body-large,按钮/徽标=label-large;官方 Brand/Plain 角色:站点已用 Inter 替 Brand+Plain 且 CJK 系统栈兜底——符合规范",
+      "why": "15 阶角色制比自由字号天然有层级;sp→rem 换算 1:1;Expressive 的 emphasized 变体(加粗镜像)正好用于『重点功能名/数字』强调,替代不正规的 ad-hoc bold",
+      "example": "站点 global.css 的 .t-display-large 等 15 个工具类已落地,新页面建筑继续按角色消费、禁魔法快捷名"
+    },
+    {
+      "name": "Shape 阶梯造节奏",
+      "what": "按钮/pill=full;内容卡=medium 12;hero 设备框/大容器=large 16;特色大面板(如 348 校数字卡、隐私横幅)=extra-large 28;Expressive 扩展档 large-increased 20 / extra-large-increased 32 / extra-extra-large 48 用于想突出的『容器明星块』",
+      "why": "营销页的节奏感来自圆角档位的对比(药丸按钮嵌在大圆角面板里),而非阴影;extra-* 档是 Expressive 更新提供的官方大圆角,用它们做 hero 容器即『真 M3』而非『M2 皮』",
+      "example": "Gallery 的 weekgrid 竖卡(高×2)用 extra-large 28 容器,小组件今日卡用 medium——形状差异直接传达内容差异"
+    },
+    {
+      "name": "Web 端 Expressive 近似:radius 过渡+容器过渡",
+      "what": "官方明示 M3 Expressive 未实现于 Web(形变/弹簧物理是 Compose 专属)。网页近似:①CSS transition border-radius(hover 卡 medium→large);②容器色阶过渡(section 交界处用渐变或斜切衔接两级 container);③motion token 用 legacy easing 表(emphasized cubic-bezier(0.2,0,0,1) / decelerate (0.05,0.7,0.1,1)),入场 400ms、页内位移 500ms",
+      "why": "不假装弹簧,但保留 MD 手感;emphasized 曲线『起步快、落位稳』,是营销滚动动画最 MD 的单一特征;reduced-motion 全部归零后层级靠色阶/形状仍成立",
+      "example": "卡片 hover:elevation-1→2 的 shadow 加深 + radius 升档 + translateY(-2px),500ms emphasized 内完成"
+    },
+    {
+      "name": "8dp 节奏 + 1040 内容列 + 断点",
+      "what": "间距/内边距全部取 8 的倍数(M3 8dp spacing system, I/O 2026 重申);内容最大宽 840–1040dp(M3 大窗口行宽规范,站点已选 1040/600/840/1200/1600 断点)",
+      "why": "M3 反模式明确点名『宽屏拉满文字行不可读』;8dp 网格让『轻便』感有数学依据;行宽上限把 1600px 大屏读感钉在舒适区",
+      "example": "站点 --site-unit:4px 的 4/8 双单位 + .site-col max-width 1040px 已合规,新布局沿用"
+    },
+    {
+      "name": "截图即容器:组件语言展示 App UI",
+      "what": "产品截图/小组件装进 M3 卡容器:frameless 或 outline-variant 1px 边、radius token、surface-container-lowest 底、elevation 只给悬浮在截图上的标注 chip;禁用装饰性投影堆叠",
+      "why": "『很有设计感的软件』最直接的传达是官网的容器语言和 App 的容器语言同一套——访客大脑里两者自动合并;Google 自家 notebook.google 全页即用产品截图作 hero 与 feature 素材、card 横排社会证明,零自造装饰",
+      "example": "教务直连截图改裁为完整周视图入 extra-large 容器,标注『348 校直连』用 md-assist-chip 语言的 pill 浮于卡缘"
+    },
+    {
+      "name": "描边红线:outline 与 outline-variant 分工",
+      "what": "交互控件边框=outline(满足非文本 3:1);纯分隔线/卡片装饰边=outline-variant;禁 outline 当 divider、禁 variant 当可交互边界",
+      "why": "M3 官方角色定义如此;站点 global.css 注释已把这条列为红线(outlineVariant 对比 1.67:1 不达 WCAG),新方案必须继承",
+      "example": "AppBar 滚动态分隔线用 outline-variant;语言/主题切换器边框用 outline"
+    },
+    {
+      "name": "Fixed 色作跨主题恒定带(谨慎)",
+      "what": "primary-fixed / primary-fixed-dim 等 fixed 角色在 light/dark 下不变——可用于品牌横幅带、页尾色带想要跨主题恒定时;但官方警告对比风险,fixed 上文字配 on-primary-fixed-variant 并逐主题验证",
+      "why": "M3 扩展角色集中唯一适合营销『恒带』的工具;普通 container 色两主题翻转会切碎色带,造成双主题页面节奏不一致",
+      "example": "Trust 段色带若要求两主题同为浅紫底,用 primary-fixed 而非 primary-container"
+    }
+  ]
+}

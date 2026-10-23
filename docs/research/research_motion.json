@@ -1,0 +1,79 @@
+{
+  "summary": "落地页动效克制的根法:频率闸门把全页唯一\"重动效\"额度给首屏一次性编排(≤1.2s),正文六段共用同一套\"揭示语法\"(translateY 16px + opacity,400ms emph-decel,60ms stagger,IntersectionObserver 触发一次即 unobserve);用户在读的数据/文字不为风格移动。数值全部复用站点已有 M3 token(enter 400ms / exit 200ms / in-place 500ms),reduced-motion 降为纯 opacity 短渐变而非归零,性能上只动 transform/opacity、图片容器固定 aspect-ratio 保 CLS=0,hero LCP 元素不被入场动画延迟绘制。",
+  "principles": [
+    "频率闸门定档:落地页访客属「稀有/首次」档,允许动效;但同页内 tens+/day 重复看到的元素(导航、正文文字)必须移除或 drastically reduce——动效预算全页只花一次,给首屏编排",
+    "每个动画必须能用一个词命名目的(feedback/spatial/state/prevent-jarring/explanation/delight),命名不出=不做;delight 仅允许在首次档;「看起来酷」在高频元素上=停手信号",
+    "功能闸门:用户正在阅读或操作的数据(课表截图内容、文字段落)不为风格移动;装饰性动效(视差、鼠标跟随)只允许挂在外壳/设备边框层,不挂内容层",
+    "一次性编排优于散点小动效:首屏一段编排(总 ≤1.2s,元素间错开 80–120ms),正文每段一个统一 reveal;禁止逐元素花式入场散布全页——那是炫技的形态学定义",
+    "easing 决策序固定:入场/出场用 ease-out 系(禁 ease-in 于 UI),屏内移动/变形用 ease-in-out,hover/颜色用 ease,匀速滚动条用 linear;内置 CSS 关键字太弱,必须用强自定义曲线",
+    "UI 动画 <300ms 铁律,marketing 入场是唯一例外区(400–600ms 合法);超过即「拖沓」而非「优雅」",
+    "入场用较长 decelerate 曲线、出场用较短 accelerate 曲线(站点约定 enter 400ms / exit 200ms / in-place 500ms),非对称时间让系统显得「响应快、结束干脆」",
+    "禁 scale(0) 与凭空出现:一切入场从 scale(0.9–0.97)+opacity:0 起步,位移优先百分比 translate(相对元素自身尺寸)",
+    "reveal 触发即永久:IntersectionObserver 命中后 unobserve(现站已实现),滚动往复重放=界面与读者打架,是最典型的模板感炫技",
+    "stagger 30–80ms/项(站点取 60ms),段内 ≤6 项;stagger 纯装饰,播放期间不阻塞交互",
+    "reduced-motion=更少更柔、非归零:保留助理解的纯 opacity 过渡(约 200ms ease),删除全部位移/缩放/视差/marquee/循环;FOUC 的 .js 门控保留(无 JS=内容直出不隐藏)",
+    "只动 transform/opacity(clip-path 是受准的第四属性);任何 reveal 不得改变盒尺寸→CLS=0;截图容器预设 aspect-ratio 空位;首屏 LCP 候选(大截图)直接绘制或 ≤100ms fade,入场位移让给文字/装饰层"
+  ],
+  "patterns": [
+    {
+      "name": "频率闸门五档表",
+      "what": "100+次/日(键盘、命令面板)=永不动画;数十次/日(hover、列表导航)=移除或极弱化;偶尔(modal/drawer/toast)=标准动画;稀有/首次(onboarding、营销首屏)=可加 delight。键盘触发的动作是无条件排除项。",
+      "why": "动效成本随曝光次数复利,高频元素上的动画累积成「慢和脱节」;Raycast 无任何开关动画,对日用百次的东西是正确决策。",
+      "example": "落地页判定:首屏=首次档→给编排预算;AppBar 语言切换=数十/日档→仅 150ms 颜色过渡,无位移。"
+    },
+    {
+      "name": "首屏一次性编排(sequenced entrance)",
+      "what": "标题逐行 translateY(24px)→0 + opacity,500–600ms cubic-bezier(0.05,0.7,0.1,1);设备截图晚文字 80–120ms 进,scale(0.97→1)+opacity 同曲线;全段总时长 ≤1.2s,首元素延迟 ≤100ms;纯 CSS animation/@starting-style 实现(off-main-thread,加载繁忙时不丢帧)。",
+      "why": "首屏被每个访客只看一次,是全站唯一有 delight 预算的位置;用 CSS animation 而非 JS 是因为入场发生在主线程最忙时,rAF 会掉帧,CSS 动画在合成线程跑。",
+      "example": "@keyframes rise { from { opacity:0; transform:translateY(24px) } } .hero-title { animation: rise 500ms cubic-bezier(0.05,0.7,0.1,1) both } .hero-shot { animation-delay: 120ms }"
+    },
+    {
+      "name": "段级统一 reveal(正文六段的唯一动效语法)",
+      "what": "opacity:0 + translateY(16px) → 1/0,400ms(medium4)cubic-bezier(0.05,0.7,0.1,1),段内子项 stagger 60ms(--site-stagger),IntersectionObserver rootMargin 底部 -10%(命中即 unobserve,一次为限),.js 类门控隐藏。",
+      "why": "同一条曲线同一位移贯穿全页=结构语言,消灭「每段一块同质板却各自动各的」的模板感;触发一次不重放,滚动回看时内容静止可读。",
+      "example": "现站 /Users/lingion_k/sleepy-site/src/styles/global.css L215-222 + Base.astro L74-88 已实现该模式,重构沿用数值即可,勿 fork 平行曲线。"
+    },
+    {
+      "name": "clip-path 遮罩揭示(重武器,全站 ≤1 次)",
+      "what": "clip-path: inset(0 0 100% 0) → inset(0 0 0 0),600ms cubic-bezier(0.77,0,0.175,1),用于一个重点截图(如周视图首图)的自下而上显影。",
+      "why": "遮罩式揭示比位移淡入更有「显影」质感,适合当全站标志性动效;但它是营销面专用,功能 UI 禁用——频率闸门+目的(解释)双过才配用。",
+      "example": "RECIPES.md §Scroll reveal 原样: .reveal{clip-path:inset(0 0 100% 0);transition:clip-path 600ms var(--ease-in-out)} .reveal[data-visible]{clip-path:inset(0 0 0 0)}"
+    },
+    {
+      "name": "微交互三件套(press/hover/focus)",
+      "what": "press: transform scale(0.97) 160ms ease-out;hover 抬升: translateY(-2~-4px)+阴影,200ms;颜色/背景变化 150ms ease。hover 位移包在 @media (hover:hover) and (pointer:fine) 内。",
+      "why": "这是全站唯一允许「散布」的动效——它们回答系统是否听到操作,属 feedback 目的且极短;触屏不 gate 会在点按时触发假 hover。",
+      "example": "@media (hover:hover) and (pointer:fine){.card:hover{transform:translateY(-3px)}} .btn:active{transform:scale(0.97);transition:transform 160ms cubic-bezier(0.23,1,0.32,1)}"
+    },
+    {
+      "name": "reduced-motion 降级(200ms 纯 opacity)",
+      "what": "@media (prefers-reduced-motion:reduce) 下:duration token 归零机制保留(现站已做),reveal 保留 opacity 200ms ease 淡入,删除 translateY/scale/clip-path/marquee/视差;scroll-behavior:auto;禁用一刀切 animation:none !important(会毁依赖 animationend 的逻辑);JS 侧 matchMedia 挂 listener 热响应。",
+      "why": "Kowalski 标准:reduced-motion 是「更少更柔」不是「零」——保留助理解的过渡;web.dev 权威页明确去装饰性 movement、保住反馈功能,并警告 !important 一刀切的副作用。",
+      "example": "@media (prefers-reduced-motion:reduce){.js .reveal{transition:opacity 200ms ease;transform:none;opacity:1}} — 比现站的全 0ms 直出高一档。"
+    },
+    {
+      "name": "LCP 保护规则(首屏最大元素禁延迟)",
+      "what": "若 hero 周视图截图是 LCP 候选,它不参与 opacity 入场(直接绘制或 ≤100ms fade);入场位移只给标题/按钮/装饰层;图片容器写死 aspect-ratio 预留高度。",
+      "why": "opacity 从 0 起动画会把 LCP 时间推到动画结束;aspect-ratio 空位防截图加载时布局跳动(CLS)——这两条直接决定动效方案能否过性能审查。",
+      "example": ".hero-shot{opacity:1} 不参与 entrance;外层 <div style=\"aspect-ratio:9/19.5\"> 占位。"
+    },
+    {
+      "name": "spring 使用条件(默认不用)",
+      "what": "仅当动效是可被用户中途反转的手势或「活体」装饰时用 spring:{duration:0.5s, bounce:0.2}(bounce 严格 0.1–0.3);普通 UI 一律 cubic-bezier 时长体系,禁弹跳过场。",
+      "why": "spring 带速度可中断,keyframes 只会从 0 重启;但 UI 里出现弹跳=玩具感,是「炫技」最常见的败笔。",
+      "example": "落地页若无拖拽交互,整页可以 0 个 spring——这是克制版的默认答案。"
+    },
+    {
+      "name": "性能四令",
+      "what": "①只 animate transform/opacity(+clip-path);②预设动效走 CSS animation/WAAPI(off-main-thread),滚动切换才用 JS+transition;③transform 直接写在元素上,禁经父级 CSS 变量驱动子元素(全子树重算样式);④IO 回调 passive、命中即 unobserve,禁裸 scroll listener 做 reveal。",
+      "why": "height/width/margin/top/left 触发 layout+paint+composite 全链;静态站滚动 reveal 的唯一帧率风险就是主线程驱动与样式重算扩散。",
+      "example": "element.style.transform=`translateY(${d}px)` ✓ | element.style.setProperty('--y',d) 让子元素 transform:translateY(var(--y)) ✗"
+    },
+    {
+      "name": "禁动清单(硬闸)",
+      "what": "文字/数据内容随滚动持续位移(scroll-linked 视差只许装饰层、幅度 ≤8px);同一元素滚动往复重放入场;语言切换/主题切换做花哨转场(只 150ms 颜色过渡);循环 marquee 在 reduced-motion 下不停;>300ms 的任何非营销动画;ease-in 入场;scale(0) 出现;transform:all 类 transition:all。",
+      "why": "STANDARDS.md 的 automatic-block 列表逐条对应「界面与读者打架」和「响应迟钝」两种翻车形态,重构评审即按此清单自动否决。",
+      "example": "现站 [data-blob] 背景循环动效属装饰层,保留但须在 reduce 下 animation:none 停掉(global.css L232 已如此)。"
+    }
+  ]
+}
