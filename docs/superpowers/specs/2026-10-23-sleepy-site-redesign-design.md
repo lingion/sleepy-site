@@ -54,7 +54,7 @@ sticky 置顶;三段式:品牌标(左)/锚点文字链 功能·学校·组件·�
 非对称 split 55/45。左=display-large 标题(clamp 36→57px,字重 400)+≤15 词副题(body-large,行宽≤46ch)+CTA 组:[下载 Android] Filled XL(全页唯一实心)+[在线体验] **Text 档** [裁决:P1 明令 Text 拉开重量差,P2 剖面画 Tonal — 取 P1]。右=01-week 周视图截图(C1):屏幕本体无设备框,预处理裁状态栏+导航键后按自然比例 contain 完整显示,容器写死 aspect-ratio 防 CLS,**直接绘制零动效**(LCP 保护,§6-3)。带底佐证 ribbon:**348 校教务直连 · GPL-3.0 开源 · 数据留存本机** — 不对称排版(大数字 348 用 display-small + tabular-nums 领头,两短语跟随),非等距三点分隔 [goals-minor:去 SaaS 模板腔]。桌面段高内容驱动(图列 38-42%,删「80vh」硬数 [feasibility]);手机 375px:文字+CTA+ribbon 在上,周视图**上半部预览裁切**入首屏、下沿自然出血,完整图留给 M2 面板 [裁决:保 C1 移动落地,弃 P1「50vh+截图下置」=首图被推出首屏违 C1;**[待你批 R2]**]。全页唯一渐变只许在此带内、同色相超低 alpha。
 
 ### M2 三视图总览(OVERVIEW,10-12%,surface-container-low 全宽带)
-Stripe showcase 面板行 [ia-flow]:三块宽窄不一面板(网格视图最宽——用户定调绝大多数人用网格;大 tile 注视时间 2.6×)。**[裁决:面板并排为唯一呈现,切换器降级为「点面板即切换前景放大」的交互,不再同时声称两 UI 互斥形态 — goals-major#5①]** 复用现有 data-view CSS 状态机+radiogroup 键盘漫游(已实现),脚本选择器解耦为全局 `[data-views]` [feasibility]。每面板 26px 轻量小标题,一面板一主张。段标题 headline-medium 左置。
+Stripe showcase 面板行 [ia-flow]:三块宽窄不一面板(网格视图最宽——用户定调绝大多数人用网格;大 tile 注视时间 2.6×)。**[裁决:面板并排为唯一呈现,切换器降级为「点面板即切换前景放大」的交互,不再同时声称两 UI 互斥形态 — goals-major#5①]** 复用现有 data-view CSS 状态机+radiogroup 键盘漫游(已实现,2026-10-23 增补),脚本选择器解耦为全局 `[data-views]` [feasibility]。**选择器视觉升级为 MD3 Segmented Button(M3 签名控件,2026-10-23 用户增补):描边药丸组 1px outline、段间发丝 outline-variant、选中段 secondary-container + check 图标 + on-secondary-container 字;radiogroup 语义不变,仅 dots 外观重铸。**每面板 26px 轻量小标题,一面板一主张。段标题 headline-medium 左置。
 
 ### M3 教务直连(DEEP DIVE 1,surface 底)
 编辑式 split 文左图右。截图=20-import 预处理裁无效区后 contain 完整显示(C3),图列约 420px 宽、行高随图,文字列垂直居中。卡缘浮 assist-chip 标注「348 校直连」。文案一主张:选校登录即得课表、改版由维护者跟进(书面语)。显影动效=**遮罩块等效方案**(同底色 div translateY(100%→0) 纯 transform,合成线程)替代 clip-path 主线程重绘 [裁决:feasibility-major#5 — clip-path 600ms 对 ~2MP 图中端安卓掉帧;若实施实测帧率过关可换回 clip-path,不进默认]。全站唯一一次。
@@ -233,7 +233,7 @@ reduced-motion: 位移/缩放/显影停, opacity 200ms 保留
 
 ## 12. 高级感细节清单(交付前逐条 diff)
 
-□ 全页仅 1 处 elevated(M5) □ 阴影光源一致(y 正 x 0) □ 数字全 tabular-nums □ 圆角按角色(钮 full/卡 12/容器 28) □ 彩色面积<10% □ 渐变仅 hero □ 每视口恰 1 枚 Filled(AppBar 常驻+首尾 XL) □ 段距 128/80/48 三档 □ 正文≤46ch/列 1040 □ 相邻段原型不同构 □ 截图只裁无效区 □ 无装饰分隔线(dark 发丝线为节奏工具,非分隔用途) □ hover 白名单属性 150-200ms □ :focus-visible 不裸删 outline □ reveal 一次即 unobserve □ hero LCP 零位移+aspect-ratio 预置 □ reduced-motion=更少更柔(位移/缩放/视差/循环全停,opacity 200ms 保留) □ hover 包 (hover:hover)闸 □ outline/outline-variant 不越界 □ 文案零问句/零正反重复/零口语 □ zh/en 键树+句式同形 □ 键盘触发零动画 □ 全站零 @keyframes 循环(仅 hero 一次性 animation)
+□ 全页仅 1 处 elevated(M5) □ **所有可点控件(钮/chip/段钮/图标钮/链接 hover 区)hover/focus 叠 state layer(on-color 8% 遮罩,M3 交互指纹;触屏按压 10%)** □ 阴影光源一致(y 正 x 0) □ 数字全 tabular-nums □ 圆角按角色(钮 full/卡 12/容器 28) □ 彩色面积<10% □ 渐变仅 hero □ 每视口恰 1 枚 Filled(AppBar 常驻+首尾 XL;AppBar 钮与 hero 钮互隐实现) □ 段距 128/80/48 三档 □ 正文≤46ch/列 1040 □ 相邻段原型不同构 □ 截图只裁无效区 □ 无装饰分隔线(dark 发丝线为节奏工具,非分隔用途) □ hover 白名单属性 150-200ms □ :focus-visible 不裸删 outline □ reveal 一次即 unobserve □ hero LCP 零位移+aspect-ratio 预置 □ reduced-motion=更少更柔(位移/缩放/视差/循环全停,opacity 200ms 保留) □ hover 包 (hover:hover)闸 □ outline/outline-variant 不越界 □ 文案零问句/零正反重复/零口语 □ zh/en 键树+句式同形 □ 键盘触发零动画 □ 全站零 @keyframes 循环(仅 hero 一次性 animation)
 
 ## 13. 三项裁决已批准(全部外置)
 

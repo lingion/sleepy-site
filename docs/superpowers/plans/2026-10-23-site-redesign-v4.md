@@ -142,6 +142,7 @@ main.querySelectorAll(':scope > section') → 依序 id 匹配且各带 data-pro
 // C1 不变量: [...doc.querySelectorAll('#hero img')][0] 不是第一——取全文档 img 文档序第一个 src 含 '01-week'
 // ribbon: #hero 文本含 '348' 且含 'GPL-3.0'
 // AppBar: #appbar a[href="#views"] 等 4 锚点存在;#appbar [data-appbar-cta] 存在
+// Segmented button: #views [role="radiogroup"] 内 3 段 role="radio";[aria-checked='true'] 恰一;外框规则引用 outline(非 variant)
 // 文案: 新 pin 句(§7 对照表改后句)逐句 contain; 旧 pin 6 句全 not.toContain; 问号正则 body textContent 零命中
 // slogan: 含 '构建无壳,自由自在'(保留)
 // 348/33: statLine 口径改 '348 条收录 · 33 协议'(从派生值断言,与 schools.length/typeCount 联动)
@@ -152,7 +153,7 @@ main.querySelectorAll(':scope > section') → 依序 id 匹配且各带 data-pro
 
 - [ ] **Step 2:** `npx vitest run tests/` → 新契约 FAIL,旧文案 pin 也红(预期:此步只确认测试可运行且精确命中上述断言名)
 - [ ] **Step 3:** 实现 Hero(M1):display-large 400 字重 spec §5.1 值、55/45、01-week Shot(priority)、ribbon 不对称(348 display-small tabular 领头)、CTA Filled XL+Text、删除 hero__device 的 `max-block-size:560px object-fit:cover` 段(C3:完整显示,aspect-ratio 容器=1080/1988)
-- [ ] **Step 4:** 实现 Views(M2):band container-low、面板行 grid `2.1fr 1fr 1fr` 桌面(网格面板最宽;用户定调),面板=filled 卡 container-lowest、标题 26px=t 系(用 t-headline-small 24 或 t-title-large 22——取 title-large,§5.1 卡题),切换器从 Features 整体迁入(脚本选择器 `document.querySelectorAll('[data-views]')`)、reveal 0..2
+- [ ] **Step 4:** 实现 Views(M2):band container-low、面板行 grid `2.1fr 1fr 1fr` 桌面(网格面板最宽;用户定调),面板=filled 卡 container-lowest、标题 26px=t 系(用 t-headline-small 24 或 t-title-large 22——取 title-large,§5.1 卡题),切换器从 Features 整体迁入(脚本选择器 `document.querySelectorAll('[data-views]')`)、reveal 0..2。**dots 重铸为 MD3 Segmented Button(2026-10-23 用户增补)**:`.views__dots` 外框 1px `--md-sys-color-outline` + `--md-sys-shape-corner-full`;段间 1px `outline-variant` 发丝;选中段(现值本就是 secondary-container,保留底)加 `::before` check SVG 图标(aria-hidden,`[aria-checked='true']` 显示)与 on-secondary-container 字;`role="radiogroup"`/方向键漫游/`transition-duration` 引 token(原 0s 硬编码随迁删除——T2 Step 4 联动)。a11y 语义零变更。
 - [ ] **Step 5:** 实现 Connect(M3):split 文左图右、20-import 裁后图 contain+chip「348 校直连」、遮罩块显影 `<span class="connect__mask" aria-hidden>`(DOM 绝对定位同底色,`[data-revealed]` IO 驱动 translateY(100%→0) 600ms cubic-bezier(0.77,0,0.175,1);reduce 下 transform:none 直接可见)、reveal
 - [ ] **Step 6:** 实现 Schools(M4):岛卡 `--md-sys-shape-corner-xl`、outlined field+双排 chip(保留)、`@media (max-width:840px){ .schools__list{max-block-size:none;overflow-y:visible} }`(取消嵌套滚动)、statLine 键已在 Task 4
 - [ ] **Step 7:** 实现 Reminders(M5):桌面 grid `220px 1fr`——左列 `.reminders__strip`(压缩叙事条:reminder 缩略+一行,`position:sticky;top:80px;max-block-size:40vh`),右列=22-reminder 完整图+三 beat+组件墙;组件墙=weekgrid 竖卡(唯一 `site-card--elevated`)+today/twodays/weeklist 扁条叠放(全部自然比例 contain,零裁拉,§5.4);≤840px 取消 sticky+墙转横向 snap 滚动(`scroll-snap-type:x mandatory`,竖卡 max-block-size 280px)
@@ -160,7 +161,7 @@ main.querySelectorAll(':scope > section') → 依序 id 匹配且各带 data-pro
 - [ ] **Step 9:** Trust(M7):单栏叙事+隐私主卡(filled 宽)+GPL/社区行式列表;Download(M8):primary-container 带+`site-button--elevated`(global.css 新增该类:primary-container 底上 surface 底+elevation-1 影,on-surface 字)+ABI 行保留+右侧 02-grid 完整图;Footer:删 Blob variant=2(改 surface-container 深档底)、AppBar 加锚点+`data-appbar-cta` 钮(互隐逻辑 `#hero` IO:hero 在视口→hide)
 - [ ] **Step 10:** `index.astro`/`en/index.astro` 重写段序 import;删 Features.astro
 - [ ] **Step 11:** `npm run build && npm run test` → 全绿(含 Task 4 文案、i18n-parity、en 镜像新契约)
-- [ ] **Step 12: 目检门:** dev 站起 `npm run dev`,chrome-devtools 在 1440/840/375 × light/dark 六剖面截 #hero/#views/#connect/#reminders/#gallery/#download:检查 C1 首图、裁后图完整、band 恒暗、组件墙比例、en 溢出。不合格回改,不 commit
+- [ ] **Step 12: 目检门:** dev 站起 `npm run dev`,chrome-devtools 在 1440/840/375 × light/dark 六剖面截 #hero/#views/#connect/#reminders/#gallery/#download:检查 C1 首图、裁后图完整、band 恒暗、组件墙比例、en 溢出、**segmented button 观感(描边+选中 check+发丝段线)**。不合格回改,不 commit
 - [ ] **Step 13: Commit(大,登记型可放宽 600 行闸):** `feat(site): 八段异构动线重排(Trust 前置/Download 居末/换幕恒暗带/组件墙新比例)` + Task 4 文案文件同 commit。body=根因段(同质板→原型轮换)+逐段一行;verify 行=build/test 真实数+六剖面目检通过
 
 ## Task 6: CTA 互隐实现(Review Focus #2)
@@ -178,8 +179,8 @@ main.querySelectorAll(':scope > section') → 依序 id 匹配且各带 data-pro
 - Modify: `src/styles/global.css`、`src/tokens/global.a11y.test.ts`
 
 - [ ] **Step 1:** 增契约断言(先红):`tabular-nums` 工具类存在 + Hero ribbon/schools statLine/download version 行源码含它;`(hover: hover)` 包裹 hover 位移;`box-shadow` 值 x 分量恒 0;`:focus-visible` 保留
-- [ ] **Step 2:** 落地:`.tnum{font-variant-numeric:lining-nums tabular-nums}`,逐组件消费;hover 闸;统一阴影常量
-- [ ] **Step 3:** 全绿 → commit `feat(tokens): tabular-nums/hover 闸/光源统一 三项细节闸`
+- [ ] **Step 2:** 落地:`.tnum{font-variant-numeric:lining-nums tabular-nums}`,逐组件消费;hover 闸;统一阴影常量。**State layer 补(2026-10-23 用户增补,M3 交互指纹)**:global.css 新基类——`.site-button/.site-chip/.site-field/.views__dot/.appbar__theme/:focus-visible a` hover/active 时 `background-color: color-mix(in srgb, currentColor 8%, transparent)`(active 10%,桌面 hover 包 `(hover:hover)` 闸,触屏按压态由 `:active` 接管);无 ripple(禁 JS 监听与 @material/web 依赖,plan 级定案;state layer 为 M3 官方 Web 等效反馈)。断言:控件 hover 规则引用 currentColor 混色,禁裸 background 色变。
+- [ ] **Step 3:** 全绿 → commit `feat(tokens): tabular-nums/hover 闸/光源统一/state layer 四项细节闸`
 
 ## Task 8: 动效编排落地(spec §6 表逐行,与段组件同树)
 
