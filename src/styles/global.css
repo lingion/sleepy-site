@@ -33,6 +33,7 @@
   --site-content-col: 1040px;
   --site-section-gap: 128px;
   --site-section-gap-narrow: 80px;
+  --site-section-gap-small: 48px;
 
   /* —— 站点级用法变量 —— */
   --site-font-latin: 'Inter Variable', Inter, sans-serif;
@@ -47,12 +48,23 @@
   }
 }
 
+@media (max-width: 600px) {
+  :root {
+    --site-section-gap: var(--site-section-gap-small);
+  }
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* 锚点落点防 sticky AppBar 盖段标题(v4 spec §4:栏高 64 + 16 呼吸) */
+section[id] {
+  scroll-margin-top: 80px;
 }
 
 body {
@@ -225,9 +237,12 @@ a {
   transform: none;
 }
 
-/* prefers-reduced-motion:揭示直出 0ms(spec §2.3) */
+/* prefers-reduced-motion:更少更柔非归零(v4 spec §6)——
+   位移归零、循环停,reveal 保留 opacity 200ms 淡入(200ms 写死:
+   motion.css 的 reduce 档把 --md-sys-motion-duration-* 全归零,
+   此处不能引 token,否则淡入被闸死)。opacity 终值由 data-revealed 控制 */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .reveal { transition: none; opacity: 1; transform: none; }
+  .js .reveal { transition: opacity 200ms ease; transform: none; }
   .reveal, [data-blob] { animation: none !important; }
 }

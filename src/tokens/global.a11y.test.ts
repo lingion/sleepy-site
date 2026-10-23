@@ -53,13 +53,32 @@ describe('global.css 设计契约(spec §2.2)', () => {
     expect(globalCss).toContain('HarmonyOS Sans SC');
     expect(globalCss).toContain('Microsoft YaHei');
   });
-  it('reduced-motion 揭示动画 0ms 直出(spec §2.3)', () => {
-    expect(globalCss).toMatch(/prefers-reduced-motion/);
+  it('reduced-motion reveal 升档:opacity 200ms 淡入 + 位移归零(v4 spec §6,旧 §2.3「0ms 直出」契约随 v4 废弃)', () => {
+    const reduceBlock = globalCss.match(/@media \(prefers-reduced-motion: reduce\)\s*\{[\s\S]*?\n\}/);
+    expect(reduceBlock, 'global.css 须有 reduce 块').not.toBeNull();
+    expect(reduceBlock[0]).toMatch(/transition:\s*opacity 200ms ease/);
+    expect(reduceBlock[0]).toMatch(/transform:\s*none/);
+    // 旧「直出 opacity:1」必须绝迹:opacity 交由 data-revealed 控制
+    expect(reduceBlock[0]).not.toMatch(/\.js \.reveal\s*\{[^}]*opacity:\s*1\s*[;}]/);
+    expect(globalCss).toMatch(/\.js \.reveal\[data-revealed='true'\]\s*\{[^}]*opacity:\s*1/);
   });
   it('内容列 1040dp + section 间距 128/80(spec §2.2/§2.4)', () => {
     expect(globalCss).toContain('--site-content-col: 1040px');
     expect(globalCss).toContain('--site-section-gap: 128px');
     expect(globalCss).toContain('80px');
+  });
+  it('段距三档 128/80/48 + ≤600px 档切 gap-small(v4 spec §5.2/§9)', () => {
+    expect(globalCss).toContain('--site-section-gap-narrow: 80px');
+    expect(globalCss).toMatch(/--site-section-gap-small:\s*48px/);
+    const narrow = globalCss.match(/@media \(max-width: 600px\)\s*\{\s*:root\s*\{[^}]*--site-section-gap:\s*var\(--site-section-gap-small\)/);
+    expect(narrow, '≤600px 档必须切换 --site-section-gap 至 gap-small').not.toBeNull();
+    // 档位次序:600 块在 840 块之后(级联后置才准 ≤600 覆盖 ≤840)
+    expect(globalCss.indexOf('@media (max-width: 600px)')).toBeGreaterThan(
+      globalCss.indexOf('@media (max-width: 840px)')
+    );
+  });
+  it('锚点落点避 sticky AppBar:section[id]{scroll-margin-top:80px}(v4 spec §4)', () => {
+    expect(globalCss).toMatch(/section\[id\]\s*\{[^}]*scroll-margin-top:\s*80px/);
   });
   it('红线词零出现(赋能/极致/匠心,spec §2.5)', () => {
     for (const word of ['赋能', '极致', '匠心']) {

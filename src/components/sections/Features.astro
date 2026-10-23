@@ -163,9 +163,9 @@ const rows = [
     align-items: center;
     justify-content: center;
     transition:
-      transform 300ms cubic-bezier(0.23, 1, 0.32, 1),
-      opacity 300ms cubic-bezier(0.23, 1, 0.32, 1),
-      filter 300ms cubic-bezier(0.23, 1, 0.32, 1);
+      transform var(--md-sys-motion-duration-medium2) cubic-bezier(0.23, 1, 0.32, 1),
+      opacity var(--md-sys-motion-duration-medium2) cubic-bezier(0.23, 1, 0.32, 1),
+      filter var(--md-sys-motion-duration-medium2) cubic-bezier(0.23, 1, 0.32, 1);
   }
   :global(#features .views__pane img) {
     /* 前景缩到 69% 容器宽,给两侧背后缩略让出 ~56px 可见条 */
@@ -234,7 +234,7 @@ const rows = [
     block-size: 28px;
     transform: translateY(-50%);
     opacity: 0;
-    transition: opacity 150ms cubic-bezier(0.23, 1, 0.32, 1);
+    transition: opacity var(--md-sys-motion-duration-short3) cubic-bezier(0.23, 1, 0.32, 1);
     border-radius: var(--md-sys-shape-corner-full);
     background: color-mix(in srgb, var(--md-sys-color-surface) 78%, transparent);
   }
@@ -277,7 +277,9 @@ const rows = [
     background: transparent;
     color: var(--md-sys-color-on-surface-variant);
     font: var(--md-sys-typescale-label-medium);
-    transition: background 150ms ease, color 150ms ease;
+    transition:
+      background var(--md-sys-motion-duration-short3) ease,
+      color var(--md-sys-motion-duration-short3) ease;
   }
   .views__dot[aria-checked='true'] {
     background: var(--md-sys-color-secondary-container);
@@ -287,13 +289,8 @@ const rows = [
     outline: 2px solid var(--md-sys-color-primary);
     outline-offset: 2px;
   }
-  @media (prefers-reduced-motion: reduce) {
-    .views__pane,
-    .views__peek-hint,
-    .views__dot {
-      transition-duration: 0s;
-    }
-  }
+  /* 时序统一取 motion token;prefers-reduced-motion 下 motion.css
+     将 --md-sys-motion-duration-* 全档归零,切换即时完成、位移状态保留 */
 
   @media (max-width: 840px) {
     .feature,
@@ -315,7 +312,7 @@ const rows = [
 
 <script>
   // 三视图切换器:翻 data-view 属性(CSS 状态机),radiogroup 方向键漫游(§a11y)
-  // reduced-motion 由 CSS 0s 兜底;JS-off 时静态=周视图前景,网格/今日在两侧可见可点(提交后无 JS 不切,但能全看到)
+  // reduced-motion 由 motion token 归零兜底;JS-off 时静态=周视图前景,网格/今日在两侧可见可点(提交后无 JS 不切,但能全看到)
   const root = document.querySelector<HTMLElement>('#features [data-views]');
   if (root) {
     const ORDER = ['week', 'grid', 'today'] as const;
