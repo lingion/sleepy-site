@@ -1,5 +1,5 @@
 ---
-// 布局壳 — spec §1(FOUC 守卫)/§3(app bar + footer)/§4.2(腐烂可见 meta)
+// 布局壳 — spec §1(FOUC 守卫)/§3(app bar + footer)/§4.2(腐烂可见 meta)/T3(LCP preload)
 import AppBar from '../components/AppBar.astro';
 import Footer from '../components/Footer.astro';
 import '@fontsource-variable/inter/standard.css'; // latin+latin-ext 子集,Inter Variable
@@ -8,6 +8,20 @@ import '../tokens/motion.css';
 import '../styles/global.css';
 import { site } from '../i18n/ui';
 import release from '../data/release.json';
+import { getImage } from 'astro:assets';
+import heroShotLight from '../assets/screenshots/03-today-light.png';
+
+// LCP preload(T3):hero 前景图的参数必须与 Hero.astro 的 <Shot> 完全一致
+// (同 widths/sizes/width/height → 同 transform hash → preload 命中浏览器缓存,零重复请求)。
+const HERO_WIDTHS = [420, 840];
+const HERO_SIZES = '(max-width: 840px) 88vw, 440px';
+const heroImg = await getImage({
+  src: heroShotLight,
+  widths: HERO_WIDTHS,
+  sizes: HERO_SIZES,
+  width: heroShotLight.width,
+  height: heroShotLight.height,
+});
 
 interface Props {
   lang: 'zh' | 'en';
@@ -45,6 +59,16 @@ const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#0F0D15" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#FDF8FF" media="(prefers-color-scheme: light)" />
+
+    {/* LCP preload(T3):hero 前景图最早发现。imagesrcset+imagesizes 与 img 一致,
+        浏览器按 srcset 选档预载,命中同一 transform hash 的缓存条目,零重复下载。 */}
+    <link
+      rel="preload"
+      as="image"
+      href={heroImg.src}
+      imagesrcset={heroImg.srcSet.attribute}
+      imagesizes={HERO_SIZES}
+    />
 
     {/* FOUC 守卫(spec §1):首帧前读 localStorage 定 data-theme,无首屏闪变。
         is:inline = 不打包不延迟,这是唯一允许的内联脚本。 */}

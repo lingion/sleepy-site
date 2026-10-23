@@ -14,8 +14,23 @@ interface Props {
   sizes?: string;
   loading?: 'lazy' | 'eager';
   class?: string;
+  /**
+   * LCP 前景标记(T3):true → light 版 fetchpriority="high" + loading="eager",
+   * 隐藏的 dark 版反向降载 fetchpriority="low" + loading="lazy"(防浏览器预取占带宽)。
+   * 缺省 false = 两版沿用 loading,行为不变。全站只允许一处 true(hero 前景)。
+   */
+  priority?: boolean;
 }
-const { light, dark, alt, widths = [420, 840], sizes, loading = 'lazy', class: className } = Astro.props;
+const {
+  light,
+  dark,
+  alt,
+  widths = [420, 840],
+  sizes,
+  loading = 'lazy',
+  class: className,
+  priority = false,
+} = Astro.props;
 ---
 
 <span class:list={['shot', className]}>
@@ -27,7 +42,8 @@ const { light, dark, alt, widths = [420, 840], sizes, loading = 'lazy', class: c
     alt={alt}
     width={light.width}
     height={light.height}
-    loading={loading}
+    loading={priority ? 'eager' : loading}
+    fetchpriority={priority ? 'high' : undefined}
     decoding="async"
   />
   <Image
@@ -39,7 +55,8 @@ const { light, dark, alt, widths = [420, 840], sizes, loading = 'lazy', class: c
     aria-hidden="true"
     width={dark.width}
     height={dark.height}
-    loading={loading}
+    loading={priority ? 'lazy' : loading}
+    fetchpriority={priority ? 'low' : undefined}
     decoding="async"
   />
 </span>

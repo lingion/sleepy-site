@@ -127,6 +127,34 @@ describe('画廊段(spec §3④)', () => {
   });
 });
 
+describe('LCP 链路(spec §性能:hero 唯一高优先级 + preload)', () => {
+  it('全站恰一 img[fetchpriority="high"](仅 hero 前景 light 版)', () => {
+    const highs = doc.querySelectorAll('img[fetchpriority="high"]');
+    expect(highs.length).toBe(1);
+  });
+  it('hero 高优先图 eager + 带 srcset(响应式预载不误伤)', () => {
+    const high = doc.querySelector('img[fetchpriority="high"]');
+    expect(high?.getAttribute('loading')).toBe('eager');
+    expect(high?.getAttribute('srcset'), 'srcset 非空').toBeTruthy();
+  });
+  it('hero 隐藏版(aria-hidden dark)降载:low + lazy', () => {
+    const dark = doc.querySelector('#hero img[aria-hidden="true"]');
+    expect(dark?.getAttribute('fetchpriority')).toBe('low');
+    expect(dark?.getAttribute('loading')).toBe('lazy');
+  });
+  it('head 预载 hero 最优档(link rel=preload as=image + imagesrcset)', () => {
+    const preload = doc.querySelector('head link[rel="preload"][as="image"]');
+    expect(preload).not.toBeNull();
+    expect(preload?.getAttribute('imagesrcset'), 'imagesrcset').toBeTruthy();
+    expect(preload?.getAttribute('href'), 'href').toBeTruthy();
+  });
+  it('零入场位移:hero 高优先图带 width/height 固有尺寸占位', () => {
+    const high = doc.querySelector('img[fetchpriority="high"]');
+    expect(Number(high?.getAttribute('width'))).toBeGreaterThan(0);
+    expect(Number(high?.getAttribute('height'))).toBeGreaterThan(0);
+  });
+});
+
 describe('a11y/SEO 基线', () => {
   it('h1 唯一 = slogan;lang=zh-CN', () => {
     expect(doc.querySelectorAll('h1').length).toBe(1);
