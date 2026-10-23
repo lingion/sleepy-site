@@ -1,0 +1,108 @@
+---
+// M3 教务直连(v4 spec §4:编辑式 split 文左图右;DEEP DIVE 1,surface 底)
+// C3:20-import 裁后图 contain 完整显示,禁 cover;卡缘 assist-chip「348 校直连」(派生 §15)。
+// 显影 = 全站唯一重武器(§6-6):同底色遮罩块(合成线程 transform 替代 clip-path 主线程重绘),
+// 复用全局 reveal 的 IO(Base 给 .reveal 打 data-revealed → 遮罩 translateY(0→100%) 下落离场,图像自上而下显影);
+// reduced-motion 下遮罩直接移除(内容直显);JS-off(.js 缺)同样不遮(C6 全成立)。
+import Shot from '../Shot.astro';
+import importL from '../../assets/screenshots/20-import-light.png';
+import importD from '../../assets/screenshots/20-import-dark.png';
+import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
+import { rowCount } from '../../lib/schools-view';
+
+interface Props {
+  copy?: SiteCopy;
+}
+const c = Astro.props.copy ?? zh;
+const t = c.connect;
+---
+
+<section class="site-section" id="connect" data-prototype="edit-split" aria-labelledby="connect-title">
+  <div class="site-col connect__grid">
+    <div class="connect__copy reveal" style="--reveal-i: 0;">
+      <h2 class="t-headline-large" id="connect-title">{t.heading}</h2>
+      <p class="t-body-large connect__body">{t.body}</p>
+    </div>
+    <figure class="connect__figure reveal" style="--reveal-i: 1;">
+      <div class="connect__frame">
+        <Shot
+          light={importL}
+          dark={importD}
+          widths={[360, 720]}
+          sizes="(max-width: 840px) 86vw, 400px"
+          alt={t.imageAlt}
+          loading="lazy"
+        />
+        <span class="connect__mask" aria-hidden="true"></span>
+      </div>
+      <figcaption class="connect__chip site-chip">{t.chipLabel(rowCount)}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .connect__grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    align-items: center;
+    gap: calc(var(--site-unit) * 10);
+  }
+  .connect__copy h2 {
+    margin-block-end: calc(var(--site-unit) * 4);
+  }
+  .connect__body {
+    max-width: 46ch;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  .connect__figure {
+    margin: 0;
+  }
+  .connect__frame {
+    position: relative;
+    overflow: clip;
+    border-radius: var(--md-sys-shape-corner-xl);
+    padding: calc(var(--site-unit) * 3);
+    background: var(--md-sys-color-surface-container-low);
+    border: 1px solid var(--md-sys-color-outline-variant);
+  }
+  /* Shot 子组件渲染的 img 不带本组件 scope → :global(Hero 同法) */
+  :global(#connect .connect__frame img) {
+    border-radius: calc(var(--site-unit) * 3);
+    inline-size: 100%;
+    block-size: auto;
+    object-fit: contain;
+  }
+  /* 遮罩块:同 frame 底色,初始覆盖图像;data-revealed 触发下落离场(纯 transform,合成线程) */
+  .connect__mask {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: var(--md-sys-color-surface-container-low);
+    transform: translateY(0);
+    transition: transform 600ms cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  .connect__figure[data-revealed='true'] .connect__mask {
+    transform: translateY(100%);
+  }
+  /* 无 JS / reduced-motion = 不演遮罩,内容直显(C6) */
+  :global(html:not(.js)) .connect__mask {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .connect__mask {
+      display: none;
+    }
+  }
+  .connect__chip {
+    margin-block-start: calc(var(--site-unit) * 4);
+    display: inline-flex;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  @media (max-width: 840px) {
+    /* §9:图上(整幅)文下 */
+    .connect__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -20,6 +20,11 @@ interface Props {
    * 缺省 false = 两版沿用 loading,行为不变。全站只允许一处 true(hero 前景)。
    */
   priority?: boolean;
+  /**
+   * 变体锁定(T5/M6 换幕带):band 深底上「深底配浅 UI 恒成立」→ 带内截图强制取 light 版,
+   * 不随主题翻转。两版仍渲染(.shot__dark 保留在 DOM),仅 CSS 层定显示。
+   */
+  forceVariant?: 'light' | 'dark';
 }
 const {
   light,
@@ -30,10 +35,12 @@ const {
   loading = 'lazy',
   class: className,
   priority = false,
+  forceVariant,
 } = Astro.props;
+const forceClass = forceVariant ? `shot--force-${forceVariant}` : undefined;
 ---
 
-<span class:list={['shot', className]}>
+<span class:list={['shot', className, forceClass]}>
   <Image
     class="shot__i shot__light"
     src={light}
@@ -73,6 +80,16 @@ const {
     display: none;
   }
   :global([data-theme='dark']) .shot__dark {
+    display: block;
+  }
+  /* T5/M6 带内强制变体(spec §4 M6:深底配浅 UI 恒成立,forceVariant 不随主题翻转)。
+     规则置于主题翻转之后:同 specificity 源码序胜出,更高阶选择器直接压过 */
+  .shot--force-light .shot__dark,
+  :global([data-theme='dark']) .shot--force-light .shot__dark {
+    display: none;
+  }
+  .shot--force-light .shot__light,
+  :global([data-theme='dark']) .shot--force-light .shot__light {
     display: block;
   }
 </style>

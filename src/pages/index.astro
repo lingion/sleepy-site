@@ -1,21 +1,26 @@
 ---
-// zh 主页 — 七段(spec §3):hero/features/schools/gallery/download/trust + footer(Base 内)
-// 视觉预算:每段一件事,桌面 ≤1×100vh,宁删勿加(§2.4)
+// zh 主页 — v4 八段异构动线(spec §4):Hero → Views → Connect → Schools → Reminders → Gallery → Trust → Download
+// 原型轮换(治同质):split → showcase → edit-split → tool-island → pinned → full-bleed-band → narration → tonal-band
+// DOM 序 = 揭示序不变量(§17.2);Footer 在 Base 内。
 import Base from '../layouts/Base.astro';
 import Hero from '../components/sections/Hero.astro';
-import Features from '../components/sections/Features.astro';
+import Views from '../components/sections/Views.astro';
+import Connect from '../components/sections/Connect.astro';
 import Schools from '../components/sections/Schools.astro';
+import Reminders from '../components/sections/Reminders.astro';
 import Gallery from '../components/sections/Gallery.astro';
-import Download from '../components/sections/Download.astro';
 import Trust from '../components/sections/Trust.astro';
+import Download from '../components/sections/Download.astro';
 import { zh } from '../i18n/zh';
 ---
 
 <Base lang="zh" title={zh.meta.title} description={zh.meta.description} mirror="/en/">
   <Hero />
-  <Features />
+  <Views />
+  <Connect />
   <Schools />
+  <Reminders />
   <Gallery />
-  <Download />
   <Trust />
+  <Download />
 </Base>

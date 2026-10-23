@@ -11,22 +11,24 @@
   --md-sys-shape-corner-xl: 28px;
   --md-sys-shape-corner-full: 9999px;
 
-  /* —— M3 type scale 15 阶(spec §2.2;Inter 替 Roboto 字面量,tracking 按 M3 表)—— */
-  --md-sys-typescale-display-large: 400 57px/64px;
-  --md-sys-typescale-display-medium: 400 45px/52px;
-  --md-sys-typescale-display-small: 400 36px/44px;
-  --md-sys-typescale-headline-large: 400 32px/40px;
-  --md-sys-typescale-headline-medium: 400 28px/36px;
-  --md-sys-typescale-headline-small: 400 24px/32px;
-  --md-sys-typescale-title-large: 400 22px/28px;
-  --md-sys-typescale-title-medium: 500 16px/24px;
-  --md-sys-typescale-title-small: 500 14px/20px;
-  --md-sys-typescale-body-large: 400 16px/24px;
-  --md-sys-typescale-body-medium: 400 14px/20px;
-  --md-sys-typescale-body-small: 400 12px/16px;
-  --md-sys-typescale-label-large: 500 14px/20px;
-  --md-sys-typescale-label-medium: 500 12px/16px;
-  --md-sys-typescale-label-small: 500 11px/16px;
+  /* —— M3 type scale 15 阶(spec §2.2;Inter 替 Roboto 字面量,tracking 按 M3 表)——
+     token 必含 family:消费方全部走 `font: var(--token)` 简写,shorthand 缺 family 整条声明无效
+     (v4 视觉闸发现的静默失效:15 阶字号/字重从未生效,一律回退浏览器默认)—— */
+  --md-sys-typescale-display-large: 400 57px/64px var(--site-font-stack);
+  --md-sys-typescale-display-medium: 400 45px/52px var(--site-font-stack);
+  --md-sys-typescale-display-small: 400 36px/44px var(--site-font-stack);
+  --md-sys-typescale-headline-large: 400 32px/40px var(--site-font-stack);
+  --md-sys-typescale-headline-medium: 400 28px/36px var(--site-font-stack);
+  --md-sys-typescale-headline-small: 400 24px/32px var(--site-font-stack);
+  --md-sys-typescale-title-large: 400 22px/28px var(--site-font-stack);
+  --md-sys-typescale-title-medium: 500 16px/24px var(--site-font-stack);
+  --md-sys-typescale-title-small: 500 14px/20px var(--site-font-stack);
+  --md-sys-typescale-body-large: 400 16px/24px var(--site-font-stack);
+  --md-sys-typescale-body-medium: 400 14px/20px var(--site-font-stack);
+  --md-sys-typescale-body-small: 400 12px/16px var(--site-font-stack);
+  --md-sys-typescale-label-large: 500 14px/20px var(--site-font-stack);
+  --md-sys-typescale-label-medium: 500 12px/16px var(--site-font-stack);
+  --md-sys-typescale-label-small: 500 11px/16px var(--site-font-stack);
 
   /* —— 栅格(spec §2.2/§2.4):4/8dp;内容列 1040;断点 600/840/1200/1600 —— */
   --site-unit: 4px;
@@ -34,6 +36,11 @@
   --site-section-gap: 128px;
   --site-section-gap-narrow: 80px;
   --site-section-gap-small: 48px;
+
+  /* —— 换幕带(v4 spec §11-11/§17.1):恒取 light 主题 inverse 实值,不随主题翻转;
+     消费点 = #gallery.band(Task 5),无其他消费者即红(禁无主变量) —— */
+  --site-band-bg: #313033;
+  --site-band-fg: #F4EFF4;
 
   /* —— 站点级用法变量 —— */
   --site-font-latin: 'Inter Variable', Inter, sans-serif;
@@ -69,8 +76,7 @@ section[id] {
 
 body {
   margin: 0;
-  font: var(--md-sys-typescale-body-large) / var(--md-sys-typescale-body-large, 1);
-  font-family: var(--site-font-stack);
+  font: var(--md-sys-typescale-body-large);
   background: var(--md-sys-color-background);
   color: var(--md-sys-color-on-background);
   -webkit-font-smoothing: antialiased;
@@ -161,6 +167,25 @@ a {
   border: 1px solid var(--md-sys-color-outline);
 }
 
+/* Text 按钮(v4 §4 M1:hero 副 CTA 用 Text 拉开与 Filled 的重量差) */
+.site-button--text {
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  border: none;
+  padding-inline: calc(var(--site-unit) * 4);
+}
+
+/* Elevated 按钮(v4 §4 M8:primary-container 彩色带上的官方替代档 = surface 底 + elevation-1,
+   禁 tonal 叠 tonal;光源正上方 y 恒正 x 恒 0,§5.3) */
+.site-button--elevated {
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  border: none;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 30%),
+    0 2px 6px 2px rgb(0 0 0 / 15%);
+}
+
 .site-field {
   background: transparent;
   border: 1px solid var(--md-sys-color-outline);
@@ -196,6 +221,14 @@ a {
 .site-card {
   background: var(--md-sys-color-surface-container-low);
   border-radius: var(--md-sys-shape-corner-large);
+}
+
+/* 全页唯一 elevated 卡(v4 §11-2:M5 周网格主角卡;其余卡禁再引此类) */
+.site-card--elevated {
+  background: var(--md-sys-color-surface-container-low);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 30%),
+    0 2px 6px 2px rgb(0 0 0 / 15%);
 }
 
 /* 分隔线专用(outlineVariant 只许出现在这里) */

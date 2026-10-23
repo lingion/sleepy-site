@@ -1,0 +1,290 @@
+---
+// M5 提醒与组件(v4 spec §4:DEEP DIVE 2 + 生态,surface 底,pinned 双列)
+// §11-16「矮列钉高列」:左列 = 压缩叙事条(sticky top:80 高 ≤40vh,reminder 缩略 + 一行主张),
+// 右列滚动流首 = 22-reminder 裁后完整图 + 三 beat + 组件墙。
+// 组件墙(C4 已验收资产,自然比例零裁拉):weekgrid 竖卡 = 全站唯一 .site-card--elevated(§11-2);
+// today/twodays/weeklist 825×343 扁条叠放(§5.4 桌面排布模拟)。
+// ≤840px:取消 sticky,图上文下;组件墙转横向 snap 滚动(竖卡 max-block-size 280px 封顶)。
+import Shot from '../Shot.astro';
+import reminderL from '../../assets/screenshots/22-reminder-light.png';
+import reminderD from '../../assets/screenshots/22-reminder-dark.png';
+import wGridL from '../../assets/screenshots/widget-weekgrid-light.png';
+import wGridD from '../../assets/screenshots/widget-weekgrid-dark.png';
+import wTodayL from '../../assets/screenshots/widget-today-light.png';
+import wTodayD from '../../assets/screenshots/widget-today-dark.png';
+import wTwoL from '../../assets/screenshots/widget-twodays-light.png';
+import wTwoD from '../../assets/screenshots/widget-twodays-dark.png';
+import wListL from '../../assets/screenshots/widget-weeklist-light.png';
+import wListD from '../../assets/screenshots/widget-weeklist-dark.png';
+import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
+
+interface Props {
+  copy?: SiteCopy;
+}
+const c = Astro.props.copy ?? zh;
+const t = c.reminders;
+// 扁条三件:资产自然比例 825×343
+const strips = [
+  { key: 'today', label: t.widgets.todayLabel, light: wTodayL, dark: wTodayD },
+  { key: 'twodays', label: t.widgets.twodaysLabel, light: wTwoL, dark: wTwoD },
+  { key: 'weeklist', label: t.widgets.listLabel, light: wListL, dark: wListD },
+] as const;
+---
+
+<section class="site-section" id="reminders" data-prototype="pinned" aria-labelledby="reminders-title">
+  <div class="site-col reminders__grid">
+    <aside class="reminders__strip reveal" style="--reveal-i: 0;" aria-hidden="false">
+      <span class="reminders__strip-thumb">
+        <Shot
+          light={reminderL}
+          dark={reminderD}
+          widths={[160, 320]}
+          sizes="(max-width: 840px) 120px, 160px"
+          alt={t.imageAlt}
+          loading="lazy"
+        />
+      </span>
+      <p class="t-body-medium reminders__strip-lead">{t.stripLead}</p>
+    </aside>
+
+    <div class="reminders__flow" data-reveal-group="m5-flow">
+      <figure class="reminders__figure reveal" data-beat-head style="--reveal-i: 0;">
+        <span class="reminders__figure-frame">
+          <Shot
+            light={reminderL}
+            dark={reminderD}
+            widths={[360, 720]}
+            sizes="(max-width: 840px) 86vw, 440px"
+            alt={t.imageAlt}
+            loading="lazy"
+          />
+        </span>
+      </figure>
+
+      <h2 class="t-headline-large reminders__heading reveal" id="reminders-title" style="--reveal-i: 1;">{t.heading}</h2>
+
+      <ol class="reminders__beats" data-reveal-group="m5-beats">
+        {
+          t.beats.map((b, i) => (
+            <li class="reminders__beat reveal" data-beat style={`--reveal-i: ${i};`} data-i={i}>
+              <h3 class="t-title-medium">{b.title}</h3>
+              <p class="t-body-medium">{b.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <h3 class="t-headline-medium reminders__widgets-title reveal" style="--reveal-i: 2;">{t.widgets.heading}</h3>
+      <div class="reminders__wall" data-reveal-group="m5-wall">
+        <figure class="site-card site-card--elevated reminders__card reminders__card--grid reveal" data-widget="weekgrid" style="--reveal-i: 0;">
+          <span class="reminders__card-frame">
+            <Shot
+              light={wGridL}
+              dark={wGridD}
+              widths={[320, 640]}
+              sizes="(max-width: 840px) 60vw, 280px"
+              alt={t.widgets.gridLabel}
+              loading="lazy"
+            />
+          </span>
+          <figcaption class="t-body-small reminders__card-cap">{t.widgets.gridLabel}</figcaption>
+        </figure>
+        <div class="reminders__stack">
+          {
+            strips.map((s, i) => (
+              <figure class="reminders__card reminders__card--strip reveal" data-widget={s.key} style={`--reveal-i: ${i + 1};`}>
+                <span class="reminders__card-frame">
+                  <Shot
+                    light={s.light}
+                    dark={s.dark}
+                    widths={[420, 840]}
+                    sizes="(max-width: 840px) 82vw, 420px"
+                    alt={s.label}
+                    loading="lazy"
+                  />
+                </span>
+                <figcaption class="t-body-small reminders__card-cap">{s.label}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reminders__grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: calc(var(--site-unit) * 10);
+    align-items: start;
+  }
+  /* 压缩叙事条(§11-16:矮列钉高列;sticky 高 ≤40vh 必钉得住) */
+  .reminders__strip {
+    position: sticky;
+    top: 80px;
+    max-block-size: 40vh;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--site-unit) * 3);
+    padding-block-start: calc(var(--site-unit) * 2);
+  }
+  .reminders__strip-thumb {
+    display: block;
+    block-size: 160px;
+    border-radius: var(--md-sys-shape-corner-large);
+    background: var(--md-sys-color-surface-container-low);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    padding: calc(var(--site-unit) * 2);
+    overflow: clip;
+  }
+  /* Shot img 不带本组件 scope → :global */
+  :global(#reminders .reminders__strip-thumb img) {
+    block-size: 100%;
+    inline-size: auto;
+    object-fit: contain;
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+  .reminders__strip-lead {
+    color: var(--md-sys-color-on-surface-variant);
+    max-width: 46ch;
+  }
+  .reminders__flow {
+    display: grid;
+    gap: calc(var(--site-unit) * 8);
+  }
+  /* 右列流首:22-reminder 裁后完整图(C3:禁 cover) */
+  .reminders__figure {
+    margin: 0;
+  }
+  .reminders__figure-frame {
+    display: inline-flex;
+    border-radius: var(--md-sys-shape-corner-xl);
+    background: var(--md-sys-color-surface-container-low);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    padding: calc(var(--site-unit) * 3);
+  }
+  :global(#reminders .reminders__figure-frame img) {
+    block-size: min(72vh, 720px);
+    inline-size: auto;
+    max-inline-size: 100%;
+    object-fit: contain;
+    border-radius: calc(var(--site-unit) * 3);
+  }
+  .reminders__heading {
+    max-inline-size: 24ch;
+  }
+  .reminders__beats {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: calc(var(--site-unit) * 6);
+    max-inline-size: 46ch;
+  }
+  .reminders__beat h3 {
+    color: var(--md-sys-color-on-surface);
+    margin-block-end: calc(var(--site-unit) * 1);
+  }
+  .reminders__beat p {
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  .reminders__widgets-title {
+    margin-block-start: calc(var(--site-unit) * 4);
+  }
+
+  /* 组件墙(§4 M5:竖卡 + 扁条叠放;自然比例 contain,零裁拉) */
+  .reminders__wall {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: calc(var(--site-unit) * 6);
+    align-items: start;
+  }
+  .reminders__card {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--site-unit) * 2);
+  }
+  /* weekgrid 竖卡:825×1375 自然比;全页唯一 elevated 在此卡(.site-card--elevated) */
+  .reminders__card--grid {
+    padding: calc(var(--site-unit) * 4);
+    border-radius: var(--md-sys-shape-corner-large);
+    max-inline-size: 300px;
+  }
+  :global(#reminders .reminders__card--grid img) {
+    inline-size: 100%;
+    block-size: auto;
+    object-fit: contain;
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+  /* 扁条叠放:825×343 三条,模拟桌面排布 */
+  .reminders__stack {
+    display: grid;
+    gap: calc(var(--site-unit) * 4);
+    align-content: center;
+  }
+  .reminders__card--strip {
+    padding: calc(var(--site-unit) * 3);
+    background: var(--md-sys-color-surface-container-low);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-large);
+  }
+  :global(#reminders .reminders__card--strip img) {
+    inline-size: 100%;
+    block-size: auto;
+    object-fit: contain;
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+  .reminders__card-cap {
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* ≤840px:取消 sticky + 墙转横向 snap(竖卡 280 封顶);禁嵌套纵滚,禁纵向劫持 */
+  @media (max-width: 840px) {
+    .reminders__grid {
+      grid-template-columns: 1fr;
+      gap: calc(var(--site-unit) * 6);
+    }
+    .reminders__strip {
+      position: static;
+      max-block-size: none;
+      flex-direction: row;
+      align-items: center;
+    }
+    .reminders__strip-thumb {
+      flex-shrink: 0;
+    }
+    .reminders__wall {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: calc(var(--site-unit) * 4);
+      padding-block-end: calc(var(--site-unit) * 4);
+      overscroll-behavior-x: contain;
+    }
+    .reminders__card {
+      scroll-snap-align: start;
+      flex-shrink: 0;
+    }
+    .reminders__card--grid {
+      max-block-size: 280px;
+      max-inline-size: none;
+    }
+    :global(#reminders .reminders__card--grid img) {
+      block-size: auto;
+      max-block-size: calc(280px - var(--site-unit) * 12);
+      inline-size: auto;
+    }
+    .reminders__stack {
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--site-unit) * 4);
+    }
+    .reminders__card--strip {
+      inline-size: min(82vw, 420px);
+    }
+  }
+</style>

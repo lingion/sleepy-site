@@ -1,12 +1,17 @@
 ---
-// ① hero — spec §3:55/45 非对称 · Display clamp ≤2 行 · 双 CTA · 设备框(今日视图:首屏美感锚点,冲突能力留给 features/gallery 展示)· blob#1
+// M1 Hero(v4 spec §4/§5.1/§6-1~3):非对称 split 55/45 · display-large 400 字重 · Filled XL + Text 双 CTA
+// C1:右列 = 01-week 周视图完整图(文档序第一张 img);屏幕本体无设备框,裁后自然比例 contain,
+//     容器 aspect-ratio 钉死防 CLS,直绘零动效(LCP)。R2 批准:≤840px 整图下置首屏外(DOM 末位)。
+// ribbon 不对称:派生大数字 display-small + tabular-nums 领头,两事实跟随(§15:348 与 M4 同源派生)。
+// blob 全站唯一一处(§13 R1):仅此 variant 0。
 import Blob from '../Blob.astro';
 import Shot from '../Shot.astro';
-import todayLight from '../../assets/screenshots/03-today-light.png';
-import todayDark from '../../assets/screenshots/03-today-dark.png';
+import weekLight from '../../assets/screenshots/01-week-light.png';
+import weekDark from '../../assets/screenshots/01-week-dark.png';
 import { onlineTrialUrl, repoUrl } from '../../i18n/ui';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
+import { rowCount } from '../../lib/schools-view';
 
 interface Props {
   /** 文案注入(T7 双语镜像):缺省 = zh */
@@ -16,21 +21,29 @@ const c = Astro.props.copy ?? zh;
 const t = c.hero;
 ---
 
-<section class="hero site-section" id="hero" aria-labelledby="hero-title">
+<section class="hero site-section" id="hero" data-prototype="split" aria-labelledby="hero-title">
   <Blob variant={0} />
   <div class="site-col hero__grid">
     <div class="hero__copy">
       <h1 class="hero__slogan" id="hero-title">{t.slogan}</h1>
       <p class="t-body-large hero__sub">{t.sub}</p>
       <div class="hero__ctas">
-        <a class="site-button site-button--filled" href={`${repoUrl}/releases/latest`}>{t.ctaDownload}</a>
-        <a class="site-button site-button--tonal" href={onlineTrialUrl}>{t.ctaTrial}</a>
+        <a class="site-button site-button--filled hero__cta-xl" href={`${repoUrl}/releases/latest`}>{t.ctaDownload}</a>
+        <a class="site-button site-button--text" href={onlineTrialUrl}>{t.ctaTrial}</a>
       </div>
+      <p class="hero__ribbon">
+        <span class="hero__ribbon-num t-display-small">{rowCount}</span>
+        <span class="hero__ribbon-unit">{t.ribbon.schools}</span>
+        <span class="hero__ribbon-sep" aria-hidden="true">·</span>
+        <span class="hero__ribbon-fact">{t.ribbon.license}</span>
+        <span class="hero__ribbon-sep" aria-hidden="true">·</span>
+        <span class="hero__ribbon-fact">{t.ribbon.privacy}</span>
+      </p>
     </div>
     <div class="hero__device">
       <Shot
-        light={todayLight}
-        dark={todayDark}
+        light={weekLight}
+        dark={weekDark}
         widths={[420, 840]}
         sizes="(max-width: 840px) 88vw, 440px"
         alt={t.deviceCaption}
@@ -45,6 +58,8 @@ const t = c.hero;
   .hero {
     position: relative;
     overflow: hidden;
+    padding-block-start: 120px; /* §5.2:hero 首段上 120 下 96 */
+    padding-block-end: 96px;
   }
   .hero__grid {
     display: grid;
@@ -52,43 +67,105 @@ const t = c.hero;
     align-items: center;
     gap: calc(var(--site-unit) * 10);
   }
+  /* §5.1 display-large:57/64 字重 400,clamp 36→57,tracking -0.25px;
+     高级感靠尺寸差与留白,禁 600+(§5.1) */
   .hero__slogan {
     font-family: var(--site-font-stack);
-    font-weight: 600;
-    font-size: clamp(40px, 5.2vw, 57px);
-    line-height: 1.12;
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 57px);
+    line-height: 64px;
     letter-spacing: -0.25px;
     color: var(--md-sys-color-on-surface);
-    margin-block-end: calc(var(--site-unit) * 5);
+    margin-block-end: calc(var(--site-unit) * 4);
+    animation: hero-enter 500ms var(--md-sys-motion-easing-emphasize-decelerate) both;
   }
   .hero__sub {
     max-width: 46ch;
     color: var(--md-sys-color-on-surface-variant);
     margin-block-end: calc(var(--site-unit) * 8);
+    animation: hero-enter 500ms var(--md-sys-motion-easing-emphasize-decelerate) 100ms both;
   }
   .hero__ctas {
     display: flex;
     flex-wrap: wrap;
     gap: calc(var(--site-unit) * 3);
+    margin-block-end: calc(var(--site-unit) * 8);
+    animation: hero-enter 500ms var(--md-sys-motion-easing-emphasize-decelerate) 200ms both;
   }
+  /* Filled XL(全页唯一实心之一):加大字号与内距 */
+  .hero__cta-xl {
+    font-size: 16px;
+    padding: 14px 32px;
+  }
+  /* ribbon 不对称佐证条:大数字领头(tabular 不跳)+ 单位 + 两事实(§4 M1) */
+  .hero__ribbon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: calc(var(--site-unit) * 2);
+    color: var(--md-sys-color-on-surface-variant);
+    animation: hero-enter 500ms var(--md-sys-motion-easing-emphasize-decelerate) 200ms both;
+  }
+  .hero__ribbon-num {
+    color: var(--md-sys-color-on-surface);
+    font-variant-numeric: lining-nums tabular-nums;
+    letter-spacing: -0.25px;
+  }
+  .hero__ribbon-unit {
+    font: var(--md-sys-typescale-title-medium);
+    margin-inline-end: calc(var(--site-unit) * 3);
+  }
+  .hero__ribbon-sep {
+    color: var(--md-sys-color-outline);
+  }
+  .hero__ribbon-fact {
+    font: var(--md-sys-typescale-body-medium);
+  }
+  /* 屏幕本体(C3/§5.4):无设备框;1px 描边 + 容器底跳出,无影(§11-2 elevated 唯一归 M5);
+     容器按裁后资产自然比例钉死(1080×2048),完整显示零裁拉 */
   .hero__device {
     border-radius: var(--md-sys-shape-corner-xl);
     padding: calc(var(--site-unit) * 3);
     background: var(--md-sys-color-surface-container-low);
-    box-shadow: 0 calc(var(--site-unit) * 4) calc(var(--site-unit) * 16) rgb(0 0 0 / 12%);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    aspect-ratio: 1080 / 2048;
   }
   /* Shot 子组件渲染的 img 不带本组件 scope → :global(Gallery 同法) */
   :global(#hero .hero__device img) {
     border-radius: calc(var(--site-unit) * 3);
     inline-size: 100%;
-    /* 视觉预算 §2.4:hero ≤1×100vh —— 竖屏截图裁顶保内容,底部导航条可弃 */
-    max-block-size: 560px;
-    object-fit: cover;
-    object-position: top;
+    block-size: 100%;
+    object-fit: contain;
+  }
+  /* §6-1~2:hero 一次性入场编排(唯一 @keyframes;禁循环);图列直绘零动效 */
+  @keyframes hero-enter {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__slogan,
+    .hero__sub,
+    .hero__ctas,
+    .hero__ribbon {
+      animation: none;
+    }
   }
   @media (max-width: 840px) {
+    .hero {
+      padding-block-start: calc(var(--site-unit) * 10);
+      padding-block-end: calc(var(--site-unit) * 10);
+    }
+    /* R2 批准:整图下置首屏外 —— DOM 末位 = ≤840px 自然落文字/CTA/ribbon 之下 */
     .hero__grid {
       grid-template-columns: 1fr;
+    }
+    .hero__device {
+      aspect-ratio: auto;
+      max-inline-size: 420px;
+      margin-inline: auto;
+    }
+    :global(#hero .hero__device img) {
+      block-size: auto;
     }
   }
 </style>

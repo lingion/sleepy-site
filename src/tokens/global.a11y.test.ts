@@ -43,6 +43,15 @@ describe('global.css 设计契约(spec §2.2)', () => {
       expect(globalCss).toContain(`--md-sys-typescale-${t}`);
     }
   });
+  it('15 阶 token 值必含 family(font 简写缺 family 整条声明静默无效,v4 视觉闸教训)', () => {
+    const decls = globalCss.match(/--md-sys-typescale-[a-z-]+:[^;]+;/g) ?? [];
+    expect(decls.length).toBe(15);
+    for (const d of decls) {
+      expect(d, `token 缺 family → font: var() 消费方全部回退默认字体: ${d}`).toMatch(/var\(--site-font-stack\)/);
+    }
+    // 消费方禁再写「font: var(--token) / 数字」这类非法简写
+    expect(globalCss).not.toMatch(/font:\s*var\(--md-sys-typescale-[a-z-]+\)\s*\//);
+  });
   it('shape 六档 xs4/sm8/md12/lg16/xl28 + full9999', () => {
     expect(globalCss).toMatch(/--md-sys-shape-corner-small:\s*8px/);
     expect(globalCss).toMatch(/--md-sys-shape-corner-medium:\s*12px/);
@@ -79,6 +88,15 @@ describe('global.css 设计契约(spec §2.2)', () => {
   });
   it('锚点落点避 sticky AppBar:section[id]{scroll-margin-top:80px}(v4 spec §4)', () => {
     expect(globalCss).toMatch(/section\[id\]\s*\{[^}]*scroll-margin-top:\s*80px/);
+  });
+  it('换幕带变量 --site-band-bg/-fg 有唯一消费点(Gallery band,v4 §11-11:禁无主变量)', async () => {
+    expect(globalCss).toMatch(/--site-band-bg:\s*#313033/);
+    expect(globalCss).toMatch(/--site-band-fg:\s*#F4EFF4/);
+    const gallery = read('../components/sections/Gallery.astro');
+    expect(gallery).toContain('background: var(--site-band-bg)');
+    expect(gallery).toContain('color: var(--site-band-fg)');
+    const footerSrc = footer;
+    expect(footerSrc, 'Footer 不引 band 变量(surface-container 档)').not.toContain('--site-band');
   });
   it('红线词零出现(赋能/极致/匠心,spec §2.5)', () => {
     for (const word of ['赋能', '极致', '匠心']) {
@@ -140,13 +158,16 @@ describe('Blob.astro 三档定值(spec §2.4,数值定死)', () => {
   });
 });
 
-describe('Footer.astro(spec §2.5)', () => {
-  it('inverse-surface 底 + blob#3', () => {
-    expect(footer).toContain('--md-sys-color-inverse-surface');
-    expect(footer).toMatch(/variant=\{2\}|variant=2/);
+describe('Footer.astro(v4 §4/§13 R1 再基线)', () => {
+  it('surface-container 深档底 + 零 blob(§13 R1:3→1 只留 hero;发丝顶边 = outline-variant)', () => {
+    expect(footer).toContain('--md-sys-color-surface-container');
+    expect(footer).not.toContain('Blob');
+    expect(footer).not.toMatch(/variant=\{2\}|variant=2/);
   });
-  it('GPL + QQ 群号 + sponsor 钉死链接(值在 ui.ts,Footer 引用)', () => {
-    expect(footer).toContain('GPL');
+  it('GPL + QQ 群号 + sponsor 钉死链接(值在 ui.ts / footer 键树,spec §2.5 保留项)', async () => {
+    const { zh: zhCopy } = await import('../i18n/zh');
+    expect(footer).toContain('{t.license}');
+    expect(zhCopy.footer.license).toContain('GPL');
     expect(ui).toContain('1063407652');
     expect(ui).toContain('https://github.com/lingion/sleepy/blob/main/sponsor.md');
     expect(footer).toContain('{qqGroup}');

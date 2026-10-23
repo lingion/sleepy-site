@@ -1,12 +1,25 @@
 ---
-// M3 tonal app bar(spec §2.2):常驻置顶;滚动态 = surface→surfaceContainer 无投影(M2 阴影已纠)
-// zh|EN 语言链 + 明暗开关(tooltip「晚课专用。」spec §2.5)
+// v4 AppBar(spec §4):三段式 = 品牌标 / 4 枚锚点文字链(Text 档,≤840px 隐藏)/ [下载]Filled S + 语言 + 主题
+// 滚动态 surface→surface-container tonal 升起(仅 background-color 150ms,无投影);高 64px
+// 互隐 IO(hero 在视口→hide)归 T6;此处落 data-appbar-cta markup(缺省 show)。
+// 锚点串走 appbar.anchors 键树(zh/en 同形,禁 ternary 硬编码);label 走 aria-label 键。
+import { zh } from '../i18n/zh';
+import type { SiteCopy } from '../i18n/zh';
+
 interface Props {
   lang: 'zh' | 'en';
+  copy?: SiteCopy;
 }
 const { lang } = Astro.props;
+const c = Astro.props.copy ?? zh;
 const other = lang === 'zh' ? '/en/' : '/';
 const otherLabel = lang === 'zh' ? 'EN' : '中文';
+const anchors = [
+  { href: '#views', label: c.appbar.anchors.views },
+  { href: '#schools', label: c.appbar.anchors.schools },
+  { href: '#reminders', label: c.appbar.anchors.reminders },
+  { href: '#trust', label: c.appbar.anchors.trust },
+];
 ---
 
 <header class="appbar" id="appbar">
@@ -29,7 +42,15 @@ const otherLabel = lang === 'zh' ? 'EN' : '中文';
       </svg>
       Sleepy
     </a>
+    <nav class="appbar__anchors" aria-label={c.appbar.navLabel}>
+      {
+        anchors.map((a) => (
+          <a class="appbar__anchor" href={a.href}>{a.label}</a>
+        ))
+      }
+    </nav>
     <nav class="appbar__actions" aria-label={lang === 'zh' ? '页面操作' : 'Page actions'}>
+      <a class="site-button site-button--filled appbar__cta t-label-large" href="https://github.com/lingion/sleepy/releases/latest" data-appbar-cta>{c.appbar.ctaDownload}</a>
       <a class="site-chip appbar__lang t-label-large" href={other}>{otherLabel}</a>
       <button
         class="appbar__theme"
@@ -61,6 +82,7 @@ const otherLabel = lang === 'zh' ? 'EN' : '中文';
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: calc(var(--site-unit) * 4);
     block-size: 64px;
   }
   .appbar__brand {
@@ -69,11 +91,37 @@ const otherLabel = lang === 'zh' ? 'EN' : '中文';
     gap: calc(var(--site-unit) * 2);
     color: var(--md-sys-color-on-surface);
     text-decoration: none;
+    flex-shrink: 0;
+  }
+  /* 锚点组(spec §4:Text 档文字链;≤840px 隐藏) */
+  .appbar__anchors {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--site-unit) * 5);
+    margin-inline-start: auto;
+  }
+  .appbar__anchor {
+    font: var(--md-sys-typescale-label-large);
+    color: var(--md-sys-color-on-surface-variant);
+    text-decoration: none;
+    padding-block: calc(var(--site-unit) * 2);
+    transition: color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .appbar__anchor:hover {
+      color: var(--md-sys-color-on-surface);
+    }
   }
   .appbar__actions {
     display: flex;
     align-items: center;
     gap: calc(var(--site-unit) * 2);
+    flex-shrink: 0;
+  }
+  .appbar__cta {
+    /* Filled S 紧凑档(spec §4):高度压至 36,字号 label-large */
+    padding: 6px 16px;
+    text-decoration: none;
   }
   .appbar__lang {
     text-decoration: none;
@@ -98,6 +146,9 @@ const otherLabel = lang === 'zh' ? 'EN' : '中文';
   .icon-moon { display: none; }
   :global([data-theme='dark']) .appbar .icon-sun { display: none; }
   :global([data-theme='dark']) .appbar .icon-moon { display: block; }
+  @media (max-width: 840px) {
+    .appbar__anchors { display: none; }
+  }
 </style>
 
 <script>

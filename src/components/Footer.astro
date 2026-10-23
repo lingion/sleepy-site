@@ -1,43 +1,22 @@
 ---
-// footer — spec §3⑦ inverse-surface 底 + blob#3;§2.5 GPL/QQ/sponsor 钉死
-import Blob from './Blob.astro';
+// footer — v4 spec §4:保留结构;blob#3 删(§13 R1 3→1);surface-container 深档底 + 发丝 outline-variant 顶边;
+// 文案走 copy.footer(zh/en 同形键树,禁内联 ternary 硬编码——泄漏闸只 walk zh.ts)。
+// 明暗两主题一律走 surface-container token 档(不锁 inverse-surface:dark 下 inverse 是浅灰,
+// 与「深档底」语义相反;§17.1 dark 节奏)。
 import { qqGroup, sponsorUrl, repoUrl, faqUrl, onlineTrialUrl } from '../i18n/ui';
+import { zh } from '../i18n/zh';
+import type { SiteCopy } from '../i18n/zh';
 
 interface Props {
   lang: 'zh' | 'en';
   build: string;
+  copy?: SiteCopy;
 }
 const { lang, build } = Astro.props;
-const t =
-  lang === 'zh'
-    ? {
-        app: '应用',
-        dl: '下载 Android',
-        trial: '在线体验',
-        repo: '源码仓库',
-        community: '社区',
-        qq: `QQ 群 ${qqGroup}`,
-        faq: 'FAQ',
-        sponsor: '赞助 Sleepy',
-        license: 'GPL-3.0 开源',
-        noJs: '页面塌了,课表不会。',
-      }
-    : {
-        app: 'App',
-        dl: 'Download for Android',
-        trial: 'Try online',
-        repo: 'Source code',
-        community: 'Community',
-        qq: `QQ group ${qqGroup}`,
-        faq: 'FAQ',
-        sponsor: 'Sponsor Sleepy',
-        license: 'GPL-3.0 open source',
-        noJs: 'If this page breaks, your timetable won’t.',
-      };
+const t = (Astro.props.copy ?? zh).footer;
 ---
 
 <footer class="footer">
-  <div class="footer__bg"><Blob variant={2} /></div>
   <div class="site-col footer__inner">
     <div class="footer__grid">
       <section aria-labelledby="f-app">
@@ -54,13 +33,13 @@ const t =
           <li><a href={faqUrl}>{t.faq}</a></li>
           <li><a href={sponsorUrl}>{t.sponsor}</a></li>
           <li><a href={`${repoUrl}/issues`}>GitHub Issues</a></li>
-          <li>{t.qq}</li>
+          <li>{t.qq} {qqGroup}</li>
         </ul>
       </section>
     </div>
     <p class="t-body-small footer__meta">
       <span>Sleepy · {t.license} · lingion</span>
-      <span data-build={build}>{lang === 'zh' ? '构建' : 'Build'}: {build}</span>
+      <span><a href="#hero">{t.backToTop}</a> · <span data-build={build}>{t.build}: {build}</span></span>
     </p>
     <noscript><p class="t-body-small">{t.noJs}</p></noscript>
   </div>
@@ -68,27 +47,20 @@ const t =
 
 <style>
   .footer {
-    position: relative;
-    background: var(--md-sys-color-inverse-surface);
-    color: var(--md-sys-color-inverse-on-surface);
-    overflow: hidden;
-  }
-  .footer__bg {
-    position: absolute;
-    inset: 0;
-    z-index: 0; /* 自建层叠上下文:blob 的 z-index:-1 才不会掉到 inverse-surface 底色之后 */
+    background: var(--md-sys-color-surface-container);
+    color: var(--md-sys-color-on-surface);
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
   }
   .footer__inner {
-    position: relative;
     padding-block: calc(var(--site-unit) * 16) calc(var(--site-unit) * 8);
   }
   .footer__grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 200px));
+    grid-template-columns: repeat(3, minmax(0, 200px));
     gap: calc(var(--site-unit) * 8);
   }
   .footer h4 {
-    color: var(--md-sys-color-inverse-on-surface);
+    color: var(--md-sys-color-on-surface);
     margin-block-end: calc(var(--site-unit) * 3);
   }
   .footer ul {
@@ -99,12 +71,11 @@ const t =
     gap: calc(var(--site-unit) * 2);
   }
   .footer a {
-    color: var(--md-sys-color-inverse-on-surface);
+    color: var(--md-sys-color-on-surface-variant);
     text-decoration: none;
-    opacity: 0.85;
   }
   .footer a:hover {
-    opacity: 1;
+    color: var(--md-sys-color-on-surface);
     text-decoration: underline;
   }
   .footer__meta {
@@ -113,9 +84,8 @@ const t =
     flex-wrap: wrap;
     justify-content: space-between;
     gap: calc(var(--site-unit) * 2);
-    /* footer 永远走 inverse 色对(深浅主题都反相);次级文本 = inverse-on-surface
-       向背景混色 80/20 得实色。opacity 压色与 on-surface-variant(深主题浅色)
-       都被 axe 判 AA 红,已纠。 */
-    color: color-mix(in srgb, var(--md-sys-color-inverse-on-surface) 80%, var(--md-sys-color-inverse-surface));
+    /* 次级文本 = on-surface-variant 实色档(WCAG 闸:禁 opacity 压色) */
+    color: var(--md-sys-color-on-surface-variant);
+    font-variant-numeric: lining-nums tabular-nums;
   }
 </style>

@@ -23,9 +23,9 @@ describe('en/zh 键树同形(组件 props 全覆盖)', () => {
   it('zh.ts 每个键在 en.ts 存在且反向亦然', () => {
     expect(keyTree(en).sort()).toEqual(keyTree(zh).sort());
   });
-  it('数组长度一致(captions/items 逐项对齐)', () => {
+  it('数组长度一致(captions/beats 逐项对齐)', () => {
     expect(en.gallery.captions.length).toBe(zh.gallery.captions.length);
-    expect(en.features.items.length).toBe(zh.features.items.length);
+    expect(en.reminders.beats.length).toBe(zh.reminders.beats.length);
   });
 });
 

@@ -1,0 +1,331 @@
+---
+// M2 三视图总览(v4 spec §4:showcase 面板行,stripe 式宽窄不一 · 一面板一主张)
+// 面板并排为唯一呈现;切换器 = 面板下方 MD3 Segmented Button(dots 重铸,2026-10-23 用户增补)
+// 状态机从 Features 整体迁入:data-views CSS 属性 + .views__peek + radiogroup 键盘漫游;
+// 脚本选择器解耦为全局 [data-views](§4 M2 接口);a11y 语义零变更。
+// 面板题 = title-large 22(§5.1 卡题档,brief Step 4 裁决取此档)。
+import Shot from '../Shot.astro';
+import weekL from '../../assets/screenshots/01-week-light.png';
+import weekD from '../../assets/screenshots/01-week-dark.png';
+import gridL from '../../assets/screenshots/02-grid-light.png';
+import gridD from '../../assets/screenshots/02-grid-dark.png';
+import todayL from '../../assets/screenshots/03-today-light.png';
+import todayD from '../../assets/screenshots/03-today-dark.png';
+import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
+
+interface Props {
+  copy?: SiteCopy;
+}
+const t = (Astro.props.copy ?? zh).views;
+// 环序 = grid→week→today;网格列最宽(用户定调:绝大多数人用网格,§4 M2)
+const panes = [
+  { key: 'grid', light: gridL, dark: gridD },
+  { key: 'week', light: weekL, dark: weekD },
+  { key: 'today', light: todayL, dark: todayD },
+] as const;
+---
+
+<section class="views-band site-section" id="views" data-prototype="showcase" aria-labelledby="views-title">
+  <div class="site-col">
+    <h2 class="t-headline-large views__heading" id="views-title">{t.heading}</h2>
+
+    <div class="views" data-views data-view="grid">
+      <div class="views__panels">
+        {
+          panes.map((p, i) => (
+            <figure class:list={['views__pane', 'reveal', `views__pane--${p.key}`]} data-pane={p.key} style={`--reveal-i: ${i};`}>
+              <span class="views__stage">
+                <Shot
+                  light={p.light}
+                  dark={p.dark}
+                  widths={[360, 720]}
+                  sizes="(max-width: 840px) 86vw, (max-width: 1100px) 40vw, 30vw"
+                  alt={`${t.panes[p.key].title}${t.captionSuffix}`}
+                  loading="lazy"
+                  class={`views__shot--${p.key}`}
+                />
+              </span>
+              <span class="views__pane-copy">
+                <span class="t-title-large views__pane-title">{t.panes[p.key].title}</span>
+                <span class="t-body-medium views__pane-lead">{t.panes[p.key].lead}</span>
+              </span>
+            </figure>
+          ))
+        }
+      </div>
+
+      <div class="views__controls">
+        <button type="button" class="views__peek views__peek--left" data-side="left" aria-label={t.peek}>
+          <span class="views__peek-hint" aria-hidden="true"></span>
+        </button>
+        <div class="views__dots" role="radiogroup" aria-label={t.groupLabel}>
+          {
+            panes.map((p, k) => (
+              <button
+                type="button"
+                role="radio"
+                class="views__dot"
+                data-goto={p.key}
+                tabindex={k === 0 ? 0 : -1}
+                aria-checked={k === 0 ? 'true' : 'false'}
+              >
+                <span class="views__dot-label">{t.panes[p.key].label}</span>
+              </button>
+            ))
+          }
+        </div>
+        <button type="button" class="views__peek views__peek--right" data-side="right" aria-label={t.peek}>
+          <span class="views__peek-hint" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 全宽 container-low 带(§5.3 分区色阶);dark 带底由 theme token 翻转 */
+  .views-band {
+    background: var(--md-sys-color-surface-container-low);
+  }
+  .views__heading {
+    margin-block-end: calc(var(--site-unit) * 8);
+  }
+
+  /* —— 面板行:2.1fr 1fr 1fr(网格最宽,用户定调)—— */
+  .views__panels {
+    display: grid;
+    grid-template-columns: 2.1fr 1fr 1fr;
+    gap: calc(var(--site-unit) * 4);
+    align-items: stretch;
+  }
+  /* 面板 = filled 卡 container-lowest(§4 M2),跳出带底一档 */
+  .views__pane {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--site-unit) * 4);
+    padding: calc(var(--site-unit) * 4);
+    border-radius: var(--md-sys-shape-corner-large);
+    background: var(--md-sys-color-surface-container-lowest);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    cursor: pointer;
+    transition:
+      background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
+      border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
+      opacity var(--md-sys-motion-duration-medium2) cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .views__pane-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--site-unit);
+  }
+  .views__pane-title {
+    color: var(--md-sys-color-on-surface);
+  }
+  .views__pane-lead {
+    color: var(--md-sys-color-on-surface-variant);
+    max-width: 46ch;
+  }
+  .views__stage {
+    display: block;
+    flex: 1;
+    min-block-size: 0;
+  }
+
+  /* —— data-view 状态机(迁移自 Features,§4 M2:复用现有状态机)——
+     当前视图面板 = 前景:实底 + outline 描边;其余面板退为背景(低对比)。
+     outline(3:1)= 当前态边界(§5.3:交互边用 outline,装饰边才 outline-variant) */
+  .views[data-view='grid'] .views__pane--grid,
+  .views[data-view='week'] .views__pane--week,
+  .views[data-view='today'] .views__pane--today {
+    border-color: var(--md-sys-color-outline);
+  }
+  .views[data-view='grid'] .views__pane--week,
+  .views[data-view='grid'] .views__pane--today,
+  .views[data-view='week'] .views__pane--grid,
+  .views[data-view='week'] .views__pane--today,
+  .views[data-view='today'] .views__pane--grid,
+  .views[data-view='today'] .views__pane--week {
+    opacity: 0.55;
+    background: var(--md-sys-color-surface-container);
+  }
+
+  /* Shot 子组件渲染的 img 不带本组件 scope → :global(Hero 同法);
+     裁后自然比例完整显示禁裁拉(§5.4/C3):stage 只定高度预算,img 按自身宽高比 contain,
+     网格/今日(1080×2340)与周(1080×2048)比例差由留白消化,不用 cover */
+  :global(#views .views__stage) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: clamp(360px, 44vh, 560px);
+    min-block-size: 0;
+  }
+  :global(#views .views__stage img) {
+    inline-size: auto;
+    block-size: 100%;
+    max-inline-size: 100%;
+    object-fit: contain;
+    border-radius: var(--md-sys-shape-corner-medium);
+  }
+
+  /* —— 控件行:peek · segmented button · peek —— */
+  .views__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--site-unit) * 4);
+    margin-block-start: calc(var(--site-unit) * 6);
+  }
+  .views__peek {
+    position: relative;
+    inline-size: 40px;
+    block-size: 40px;
+    border: 1px solid var(--md-sys-color-outline);
+    background: transparent;
+    cursor: pointer;
+    border-radius: var(--md-sys-shape-corner-full);
+    color: var(--md-sys-color-on-surface-variant);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .views__peek:focus-visible {
+    outline: 2px solid var(--md-sys-color-outline);
+    outline-offset: 2px;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .views__peek:hover {
+      background: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+    }
+  }
+  .views__peek-hint {
+    position: relative;
+    inline-size: 10px;
+    block-size: 10px;
+  }
+  .views__peek--left .views__peek-hint,
+  .views__peek--right .views__peek-hint {
+    border-inline-start: 2px solid currentColor;
+    border-block-end: 2px solid currentColor;
+    transform: rotate(45deg);
+  }
+  .views__peek--right .views__peek-hint {
+    transform: rotate(-135deg);
+  }
+
+  /* —— Segmented Button(MD3 签名控件,2026-10-23 用户增补):
+     外框 1px outline(禁 outline-variant——非文本对比 3:1,测试闸)+ corner-full;
+     段间 1px outline-variant 发丝(装饰分隔,允许);
+     选中段 secondary-container 底 + ::before check(on-secondary-container 字)——
+     选中是「状态」非「交互边」,底色即对比,不受 outline 闸约束 —— */
+  .views__dots {
+    display: inline-flex;
+    border: 1px solid var(--md-sys-color-outline);
+    border-radius: var(--md-sys-shape-corner-full);
+    overflow: hidden;
+    background: transparent;
+  }
+  .views__dot {
+    position: relative;
+    border: 0;
+    cursor: pointer;
+    padding: calc(var(--site-unit) * 2) calc(var(--site-unit) * 5);
+    background: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    font: var(--md-sys-typescale-label-large);
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--site-unit) * 1.5);
+    transition:
+      background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+      color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
+  }
+  /* 段间发丝:相邻段左缘 outline-variant(装饰分隔线,§5.3 红线允许档) */
+  .views__dot + .views__dot::after {
+    content: '';
+    position: absolute;
+    inset-block: 25%;
+    inset-inline-start: 0;
+    inline-size: 1px;
+    background: var(--md-sys-color-outline-variant);
+  }
+  .views__dot[aria-checked='true'] {
+    background: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+  /* 选中段 check 图标(装饰层,aria-hidden;段名文字仍在,读屏无重复朗读) */
+  .views__dot[aria-checked='true']::before {
+    content: '';
+    inline-size: 15px;
+    block-size: 15px;
+    background: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+  .views__dot:focus-visible {
+    outline: 2px solid var(--md-sys-color-outline);
+    outline-offset: -3px;
+  }
+  /* 时序统一取 motion token;prefers-reduced-motion 下 motion.css
+     将 --md-sys-motion-duration-* 全档归零,切换即时完成(旧 0s 硬编码已随迁删除) */
+
+  @media (max-width: 840px) {
+    /* 手机:三面板纵堆、网格首(DOM 序即视觉序,§4 M2 ≤840 剖面) */
+    .views__panels {
+      grid-template-columns: 1fr;
+    }
+    :global(#views .views__stage) {
+      block-size: min(60vh, 480px);
+    }
+    :global(#views .views__stage img) {
+      block-size: 100%;
+      object-fit: contain;
+    }
+  }
+</style>
+
+<script>
+  // 三视图切换器(迁移自 Features):翻 data-view 属性(CSS 状态机),radiogroup 方向键漫游
+  // 选择器解耦为全局 [data-views](§4 M2 接口);reduced-motion 由 motion token 归零兜底;
+  // JS-off 静态 = grid 前景(默认态),三面板并排全可见(无 JS 也能读三张图)
+  for (const root of document.querySelectorAll<HTMLElement>('[data-views]')) {
+    const ORDER = ['grid', 'week', 'today'] as const;
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-goto]')];
+    const peeks = [...root.querySelectorAll<HTMLButtonElement>('[data-side]')];
+    const panes = [...root.querySelectorAll<HTMLElement>('[data-pane]')];
+    const names = ORDER.map((k) => dots.find((d) => d.dataset.goto === k)?.textContent?.trim() ?? k);
+    let cur = 0;
+    const set = (n: number, focus = false) => {
+      cur = (n + ORDER.length) % ORDER.length;
+      root.dataset.view = ORDER[cur];
+      dots.forEach((d, k) => {
+        d.setAttribute('aria-checked', String(k === cur));
+        d.tabIndex = k === cur ? 0 : -1;
+      });
+      // 侧边钮的朗读对象 = 那一侧环序方向将切入的视图
+      const right = (cur + 1) % ORDER.length;
+      const left = (cur + ORDER.length - 1) % ORDER.length;
+      peeks.forEach((b) => {
+        const idx = b.dataset.side === 'right' ? right : left;
+        b.setAttribute('aria-label', names[idx]);
+      });
+      if (focus) dots[cur].focus();
+    };
+    dots.forEach((d, k) => d.addEventListener('click', () => set(k)));
+    // 点面板即切换前景放大(§4 M2 裁决:切换器降级为面板内交互)
+    panes.forEach((p, k) => p.addEventListener('click', () => set(k)));
+    peeks.forEach((b) => b.addEventListener('click', () => set(cur + (b.dataset.side === 'right' ? 1 : -1))));
+    root.addEventListener('keydown', (e) => {
+      const from = dots.indexOf(document.activeElement as HTMLButtonElement);
+      if (from < 0) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); set(from + 1, true); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); set(from - 1, true); }
+    });
+    set(0);
+  }
+</script>

@@ -24,8 +24,9 @@ const groups = provincesOrdered().map((p) => ({
 }));
 ---
 
-<section class="site-section" id="schools" aria-labelledby="schools-title">
+<section class="site-section" id="schools" data-prototype="tool-island" aria-labelledby="schools-title">
   <div class="site-col">
+    <div class="schools__island reveal" style="--reveal-i: 0;">
     <h2 class="t-headline-large" id="schools-title">{t.heading}</h2>
     <p class="t-body-medium schools__sub">{t.sub}</p>
 
@@ -74,10 +75,17 @@ const groups = provincesOrdered().map((p) => ({
     <p class="t-body-small schools__foot">
       <a href={`${repoUrl}/issues`}>{t.emptyIssue}</a> · <a href={faqUrl}>{t.faqLink}</a> · QQ {qqGroup} · <noscript>{t.jsOffNote}</noscript>
     </p>
+    </div>
   </div>
 </section>
 
 <style>
+  /* 工具岛(v4 §4 M4:surface-container 岛卡,radius-xl 28;容器/全宽交替的「容器」拍) */
+  .schools__island {
+    background: var(--md-sys-color-surface-container);
+    border-radius: var(--md-sys-shape-corner-xl);
+    padding: calc(var(--site-unit) * 8);
+  }
   .schools__sub {
     color: var(--md-sys-color-on-surface-variant);
     margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 5);
@@ -86,6 +94,7 @@ const groups = provincesOrdered().map((p) => ({
   .schools__stat {
     display: inline-block;
     margin-block-end: calc(var(--site-unit) * 6);
+    font-variant-numeric: lining-nums tabular-nums;
   }
   .schools__search {
     display: block;
@@ -115,12 +124,21 @@ const groups = provincesOrdered().map((p) => ({
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: calc(var(--site-unit) * 6) calc(var(--site-unit) * 8);
     margin-block-start: calc(var(--site-unit) * 6);
-    /* 视觉预算 §2.4:348 行是台账不是版面 —— 段内滚动,整段收进 ~1×100vh;
-       全量行仍在 DOM(§5 JS-off 可读不破),tabindex=0 保键盘可滚 */
+    /* 视觉预算(旧 §2.4 保留项):桌面段内滚动,整段收进 ~1×100vh;
+       全量行仍在 DOM(§5 JS-off 可读不破),tabindex=0 保键盘可滚。
+       v4 §4 M4:≤840px 取消嵌套滚动(触屏嵌套滚动劫持整页)→ 见下方媒体档 */
     max-block-size: 60vh;
     overflow-y: auto;
     padding-inline-end: calc(var(--site-unit) * 2);
     overscroll-behavior: contain;
+  }
+  @media (max-width: 840px) {
+    /* v4 C6:≤840px 禁嵌套滚动,全量直出 */
+    .schools__groups {
+      max-block-size: none;
+      overflow-y: visible;
+      overscroll-behavior: auto;
+    }
   }
   .school-group__title {
     color: var(--md-sys-color-primary);

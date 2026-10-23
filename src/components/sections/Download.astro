@@ -1,16 +1,16 @@
 ---
-// ⑤ 下载 — spec §3⑤:latest 直链 + 四 ABI 行 + sha256 外链 + blob#2
-// 2026-10-20 用户修订:裸文本链 → 下载行(架构名 + 人话注 + 大小 + 下载图标);
-//   行注(近几年的手机/模拟器…)替代「通吃」黑话;universal 行打「推荐」。
-// §4.2:tag/date 烘自 release.json(构建 owner = Actions);商店灰态 = 预留占位(§0 非目标)
-import Blob from '../Blob.astro';
+// M8 下载(v4 spec §4:CONVERSION 8-10%,primary-container tonal 带 · 全页唯一彩色大面,收拢论证)
+// §13 R1:原 blob#2 渐变删除(R1 3→1 裁决),带底改 primary-container 平涂(§10 注:Download 带平涂)。
+// 主按钮 = Elevated 档(§11-6:彩色容器上禁 tonal 叠 tonal → surface 底 + elevation-1)。
+// 左=版本行(tag·日期·minSdk,tabular)+ABI 下载行(universal 推荐)+sha256/商店占位/在线体验 Text 链;
+// 右=02-grid 裁后完整图(§5.4 contain 零裁拉)。全部转化元素普通 DOM(可爬/可键盘/可触摸)。
 import Shot from '../Shot.astro';
 import gridLight from '../../assets/screenshots/02-grid-light.png';
 import gridDark from '../../assets/screenshots/02-grid-dark.png';
 import release from '../../data/release.json';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
-import { onlineTrialUrl } from '../../i18n/ui';
+import { onlineTrialUrl, repoUrl } from '../../i18n/ui';
 
 interface Props {
   copy?: SiteCopy;
@@ -22,24 +22,26 @@ const date = release.date.slice(0, 10);
 const notes = t.abiNotes as Record<string, string>;
 ---
 
-<section class="site-section download" id="download" aria-labelledby="download-title">
-  <Blob variant={1} />
+<section class="site-section download--tonal" id="download" data-prototype="tonal-band" aria-labelledby="download-title">
   <div class="site-col download__grid">
-    <div>
+    <div class="download__main">
       <h2 class="t-headline-large" id="download-title">{t.heading}</h2>
       <p class="t-body-medium download__version">
         <a href="https://github.com/lingion/sleepy/releases/latest">GitHub Releases</a> ·
         {t.versionLine(release.tag, date)} · {t.minSdk}
       </p>
-      <ul class="download__list">
+      <p class="download__cta">
+        <a class="site-button site-button--elevated download__cta-xl" href={`${repoUrl}/releases/latest`}>{t.cta}</a>
+      </p>
+      <ul class="download__list" data-reveal-group="m8-rows">
         {
-          release.assets.map((a) => {
+          release.assets.map((a, i) => {
             const abi = abiOf(a.name);
             const size = mb(a.size);
             const isRec = abi === 'universal';
             return (
               <li>
-                <a class="download__row" data-rec={isRec || undefined} href={a.url} download rel="download" aria-label={t.downloadAria(abi, size)}>
+                <a class="download__row reveal" data-rec={isRec || undefined} style={`--reveal-i: ${i};`} href={a.url} download rel="download" aria-label={t.downloadAria(abi, size)}>
                   <span class="download__row-main">
                     <span class="download__row-name">
                       {abi}
@@ -69,23 +71,32 @@ const notes = t.abiNotes as Record<string, string>;
       </div>
       <p class="t-body-small download__trial"><a href={onlineTrialUrl}>{t.trial}</a></p>
     </div>
-    <div class="download__media">
-      <Shot
-        light={gridLight}
-        dark={gridDark}
-        widths={[360, 720]}
-        sizes="(max-width: 840px) 88vw, 380px"
-        alt={t.deviceCaption}
-        loading="lazy"
-      />
+    <div class="download__media reveal" style="--reveal-i: 0;">
+      <div class="download__frame">
+        <Shot
+          light={gridLight}
+          dark={gridDark}
+          widths={[360, 720]}
+          sizes="(max-width: 840px) 86vw, 400px"
+          alt={t.deviceCaption}
+          loading="lazy"
+        />
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .download {
-    position: relative;
-    overflow: hidden;
+  /* tonal 转化带:primary-container 平涂(全站唯一彩色大面,面积仍守 §5.3「彩色<10%」——
+     带是容器档不是主色档);对比一律 on-primary-container 配对(§11-10 配对红线) */
+  .download--tonal {
+    background: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    /* dark 节奏补丁(§17.1):发丝顶边拉相邻档步长 */
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  }
+  .download--tonal h2 {
+    color: var(--md-sys-color-on-primary-container);
   }
   .download__grid {
     display: grid;
@@ -93,9 +104,26 @@ const notes = t.abiNotes as Record<string, string>;
     gap: calc(var(--site-unit) * 10);
     align-items: center;
   }
+  .download__main {
+    display: grid;
+    gap: 0;
+  }
   .download__version {
-    color: var(--md-sys-color-on-surface-variant);
-    margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 6);
+    color: var(--md-sys-color-on-primary-container);
+    margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 4);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .download__version a {
+    color: inherit;
+  }
+  /* 主 CTA:Filled XL 之外全页第二枚 XL 级主按钮 = Elevated 档(§4 M8) */
+  .download__cta {
+    margin-block-end: calc(var(--site-unit) * 6);
+  }
+  .download__cta-xl {
+    font-size: 16px;
+    padding: 14px 32px;
+    text-decoration: none;
   }
   .download__list {
     list-style: none;
@@ -105,6 +133,7 @@ const notes = t.abiNotes as Record<string, string>;
     gap: calc(var(--site-unit) * 2);
     max-inline-size: 440px;
   }
+  /* ABI 行:容器档上的浮层行(§4 M8 保留行式);文字 on-primary-container 配对 */
   .download__row {
     display: flex;
     align-items: center;
@@ -112,19 +141,19 @@ const notes = t.abiNotes as Record<string, string>;
     gap: calc(var(--site-unit) * 4);
     padding: calc(var(--site-unit) * 3.5) calc(var(--site-unit) * 5);
     border-radius: var(--md-sys-shape-corner-medium);
-    background: var(--md-sys-color-surface-container);
-    color: var(--md-sys-color-on-surface);
+    background: color-mix(in srgb, var(--md-sys-color-surface) 55%, var(--md-sys-color-primary-container));
+    color: var(--md-sys-color-on-primary-container);
     text-decoration: none;
     transition:
-      background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
-      box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
+      background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
   }
-  .download__row:hover {
-    background: var(--md-sys-color-surface-container-high);
-    box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  @media (hover: hover) and (pointer: fine) {
+    .download__row:hover {
+      background: color-mix(in srgb, var(--md-sys-color-surface) 75%, var(--md-sys-color-primary-container));
+    }
   }
   .download__row:focus-visible {
-    outline: 2px solid var(--md-sys-color-primary);
+    outline: 2px solid var(--md-sys-color-on-primary-container);
     outline-offset: 2px;
   }
   .download__row-main {
@@ -146,20 +175,14 @@ const notes = t.abiNotes as Record<string, string>;
     color: var(--md-sys-color-on-primary);
   }
   .download__row[data-rec] {
-    background: var(--md-sys-color-secondary-container);
-    color: var(--md-sys-color-on-secondary-container);
+    background: color-mix(in srgb, var(--md-sys-color-surface) 78%, var(--md-sys-color-primary-container));
   }
   .download__row[data-rec]:hover {
-    background: color-mix(in srgb, var(--md-sys-color-secondary-container) 85%, var(--md-sys-color-on-secondary-container));
-  }
-  .download__row[data-rec] .download__row-note,
-  .download__row[data-rec] .download__row-size {
-    color: inherit;
-    opacity: 0.72;
+    background: color-mix(in srgb, var(--md-sys-color-surface) 90%, var(--md-sys-color-primary-container));
   }
   .download__row-note {
     font: var(--md-sys-typescale-body-small);
-    color: var(--md-sys-color-on-surface-variant);
+    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 78%, var(--md-sys-color-primary-container));
   }
   .download__row-side {
     display: inline-flex;
@@ -169,15 +192,15 @@ const notes = t.abiNotes as Record<string, string>;
   }
   .download__row-size {
     font: var(--md-sys-typescale-body-small);
-    color: var(--md-sys-color-on-surface-variant);
-    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 78%, var(--md-sys-color-primary-container));
+    font-variant-numeric: lining-nums tabular-nums;
   }
   .download__row-icon {
     display: block;
   }
   .download__note {
     margin-block-start: calc(var(--site-unit) * 3);
-    color: var(--md-sys-color-on-surface-variant);
+    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 82%, var(--md-sys-color-primary-container));
   }
   .download__sha {
     margin-block-start: calc(var(--site-unit) * 2);
@@ -192,26 +215,45 @@ const notes = t.abiNotes as Record<string, string>;
     align-items: center;
     padding: calc(var(--site-unit) * 2) calc(var(--site-unit) * 4);
     border-radius: var(--md-sys-shape-corner-small);
-    background: var(--md-sys-color-surface-container);
-    color: var(--md-sys-color-on-surface-variant);
-    opacity: 0.45;
+    border: 1px solid color-mix(in srgb, var(--md-sys-color-on-primary-container) 30%, transparent);
+    background: transparent;
+    color: var(--md-sys-color-on-primary-container);
+    opacity: 0.55;
     font: var(--md-sys-typescale-label-medium);
   }
   .download__trial {
     margin-block-start: calc(var(--site-unit) * 5);
   }
-  /* Shot 子组件渲染的 img 不带本组件 scope → :global(Gallery 同法) */
-  :global(#download .download__media img) {
+  .download__trial a {
+    color: var(--md-sys-color-on-primary-container);
+  }
+  /* Shot img 不带本组件 scope → :global */
+  .download__media {
+    margin: 0;
+  }
+  .download__frame {
     border-radius: var(--md-sys-shape-corner-xl);
+    background: var(--md-sys-color-surface);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    padding: calc(var(--site-unit) * 3);
+  }
+  :global(#download .download__frame img) {
+    border-radius: calc(var(--site-unit) * 3);
     inline-size: 100%;
-    /* 视觉预算 §2.4:裁顶保内容,下载段收进 ~1×100vh */
-    max-block-size: 560px;
-    object-fit: cover;
-    object-position: top;
+    block-size: auto;
+    object-fit: contain; /* C3/§5.4:完整显示,禁 cover */
   }
   @media (max-width: 840px) {
+    /* §9 M8 手机:钮 edge-to-edge,截图置底(单列堆叠,DOM 文上图下) */
     .download__grid {
       grid-template-columns: 1fr;
+    }
+    .download__cta-xl {
+      inline-size: 100%;
+      justify-content: center;
+    }
+    .download__list {
+      max-inline-size: none;
     }
   }
 </style>

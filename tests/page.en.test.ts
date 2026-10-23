@@ -2,13 +2,13 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
 import { zh } from '../src/i18n/zh';
+import { en } from '../src/i18n/en';
 import schools from '../src/data/schools.grouped.json';
 import { matchSchool } from '../src/lib/search';
 import { site } from '../src/i18n/ui';
 
-// T7 EN 镜像产物闸:dist/client/en/index.html 由 npm run build 产出。
-// 校名保中文是设计(spec §4.1),所以「无中文泄漏」= zh.ts 叶子文案零出现,
-// 而不是整页无汉字。
+// v4 EN 镜像产物闸(§7 R5 同形 + §14 再基线):dist/client/en/index.html。
+// 校名保中文是设计(spec §4.1),所以「无中文泄漏」= zh.ts 叶子文案零出现,而不是整页无汉字。
 
 const HTML = (() => {
   try {
@@ -34,22 +34,40 @@ describe('/en/ hreflang 互指(spec §1)', () => {
   });
 });
 
-describe('/en/ 结构镜像', () => {
-  it('六段 + footer 依序齐备,DOM 序不变量同 zh', () => {
-    for (const id of ['hero', 'features', 'schools', 'gallery', 'download', 'trust']) {
-      expect(doc.getElementById(id), `section #${id}`).not.toBeNull();
-    }
-    const cards = [...doc.querySelectorAll('#features .reveal')];
-    expect(cards.map((c) => c.getAttribute('style'))).toEqual([
-      '--reveal-i: 0;', '--reveal-i: 1;', '--reveal-i: 2;', '--reveal-i: 3;',
-    ]);
+describe('/en/ 结构镜像(v4 八段)', () => {
+  const ids = ['hero', 'views', 'connect', 'schools', 'reminders', 'gallery', 'trust', 'download'];
+  const PROTO: Record<string, string> = {
+    hero: 'split', views: 'showcase', connect: 'edit-split', schools: 'tool-island',
+    reminders: 'pinned', gallery: 'full-bleed-band', trust: 'narration', download: 'tonal-band',
+  };
+  it('八段依序 + data-prototype 同 zh 页', () => {
+    const secs = [...doc.querySelectorAll('main > section')];
+    expect(secs.map((s) => s.id)).toEqual(ids);
+    for (const s of secs) expect(s.getAttribute('data-prototype'), `#${s.id}`).toBe(PROTO[s.id]);
   });
-  it('blob 计数 = 3', () => {
-    expect(doc.querySelectorAll('[data-blob]').length).toBe(3);
+  it('blob 恰一 = hero', () => {
+    const blobs = [...doc.querySelectorAll('[data-blob]')];
+    expect(blobs.length).toBe(1);
+    expect(blobs[0].getAttribute('data-blob')).toBe('0');
+  });
+  it('C1 首图 = 01-week(与 zh 同构)', () => {
+    expect([...doc.querySelectorAll('img')][0].getAttribute('src')).toContain('01-week');
+  });
+  it('LCP:high=1 / low=1 / preload=1 且 preload href = 高优先图 src(T3)', () => {
+    expect(doc.querySelectorAll('img[fetchpriority="high"]').length).toBe(1);
+    expect(doc.querySelectorAll('img[fetchpriority="low"]').length).toBe(1);
+    const preload = doc.querySelector('head link[rel="preload"][as="image"]');
+    expect(preload).not.toBeNull();
+    expect(preload?.getAttribute('href')).toBe(doc.querySelector('img[fetchpriority="high"]')?.getAttribute('src'));
+  });
+  it('AppBar 4 锚点 + data-appbar-cta', () => {
+    for (const h of ['#views', '#schools', '#reminders', '#trust']) {
+      expect(doc.querySelector(`#appbar a[href="${h}"]`), h).not.toBeNull();
+    }
+    expect(doc.querySelector('#appbar [data-appbar-cta]')).not.toBeNull();
   });
   it('语言链指向 zh 主页', () => {
-    const lang = doc.querySelector('.appbar__lang');
-    expect(lang?.getAttribute('href')).toBe('/');
+    expect(doc.querySelector('.appbar__lang')?.getAttribute('href')).toBe('/');
   });
 });
 
@@ -66,6 +84,21 @@ describe('/en/ 无 zh 文案泄漏(组件 props 全覆盖)', () => {
   });
   it('校名中文保留(设计,非泄漏):EN 页仍列真实校名', () => {
     expect(HTML.includes(schools[0].name)).toBe(true);
+  });
+  it('EN 页 en.ts 关键串在场(组件 copy=en 全覆盖反证)', () => {
+    // 可见文本 = 剔除 script/style 体(内联脚本的 ?. / ?? 会污染问句闸)
+    const clone = doc.body!.cloneNode(true) as DocumentFragment;
+    for (const n of clone.querySelectorAll('script, style')) n.remove();
+    const text = (clone.textContent ?? '').replace(/\s+/g, ' ');
+    expect(text).toContain('Build without shells. Roam without limits.'); // slogan 豁免对
+    expect(text).toContain(en.download.trial);
+    expect(text).toContain(en.gallery.heading);
+    expect(text).toContain(en.schools.heading);
+  });
+  it('EN 页零问号(R2 双语同规)', () => {
+    const clone = doc.body!.cloneNode(true) as DocumentFragment;
+    for (const n of clone.querySelectorAll('script, style')) n.remove();
+    expect(clone.textContent ?? '').not.toMatch(/[?？]/);
   });
 });
 

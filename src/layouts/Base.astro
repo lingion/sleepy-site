@@ -7,11 +7,14 @@ import '../tokens/theme.css';
 import '../tokens/motion.css';
 import '../styles/global.css';
 import { site } from '../i18n/ui';
+import { zh } from '../i18n/zh';
+import { en } from '../i18n/en';
 import release from '../data/release.json';
 import { getImage } from 'astro:assets';
-import heroShotLight from '../assets/screenshots/03-today-light.png';
+import heroShotLight from '../assets/screenshots/01-week-light.png';
 
-// LCP preload(T3):hero 前景图的参数必须与 Hero.astro 的 <Shot> 完全一致
+// LCP preload(T3/T5):hero 前景图 = 01-week 周视图(C1 首图不变量)。
+// 参数必须与 Hero.astro 的 <Shot> 完全一致
 // (同 widths/sizes/width/height → 同 transform hash → preload 命中浏览器缓存,零重复请求)。
 const HERO_WIDTHS = [420, 840];
 const HERO_SIZES = '(max-width: 840px) 88vw, 440px';
@@ -32,6 +35,7 @@ interface Props {
 }
 
 const { lang, title, description, mirror } = Astro.props;
+const copy = lang === 'zh' ? zh : en;
 const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
 const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
 ---
@@ -87,11 +91,11 @@ const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
   </head>
   <body>
     <a class="skip-link" href="#main">{lang === 'zh' ? '跳到正文' : 'Skip to content'}</a>
-    <AppBar lang={lang} />
+    <AppBar lang={lang} copy={copy} />
     <main id="main">
       <slot />
     </main>
-    <Footer lang={lang} build={build} />
+    <Footer lang={lang} build={build} copy={copy} />
     <script>
       // 主题开关(lightbox 岛在 T6;此处只做 FOUC 之后的持久化 toggle)
       const root = document.documentElement;

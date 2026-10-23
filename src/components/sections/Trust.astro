@@ -1,5 +1,7 @@
 ---
-// ⑥ 信任 — spec §3⑥/§2.5:第一人称叙事逐字 + 无追踪声明 + GPL + 社区
+// M7 信任(v4 spec §4:TRUST 10-15%,surface 底,安静编辑式单栏叙事)
+// 「1 主 2 次」非等权排(§11:三等卡=图标网格模板脸变体,废弃):隐私=filled 宽主卡带机制陈述,
+// 开源/社区 = 行式列表,1px outline-variant 发丝边、零投影。行宽 ≤34ch。
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
 import { qqGroup, sponsorUrl, repoUrl, faqUrl } from '../../i18n/ui';
@@ -10,57 +12,101 @@ interface Props {
 const t = (Astro.props.copy ?? zh).trust;
 ---
 
-<section class="site-section" id="trust" aria-labelledby="trust-title">
-  <div class="site-col">
-    <h2 class="t-headline-large" id="trust-title">{t.heading}</h2>
-    <p class="trust__story t-body-large reveal" style="--reveal-i: 0;">{t.story}</p>
-    <p class="trust__reach t-body-large reveal" style="--reveal-i: 1;">{t.reachOut}</p>
+<section class="site-section" id="trust" data-prototype="narration" aria-labelledby="trust-title">
+  <div class="site-col trust__col">
+    <h2 class="t-headline-large trust__heading reveal" id="trust-title" style="--reveal-i: 0;">{t.heading}</h2>
+    <p class="trust__story t-body-large reveal" style="--reveal-i: 1;">{t.story}</p>
+    <p class="trust__reach t-body-medium reveal" style="--reveal-i: 2;">{t.reachOut}</p>
 
-    <div class="trust__grid">
-      <div class="reveal" style="--reveal-i: 2;">
-        <h3 class="t-title-medium">{t.privacyHeading}</h3>
+    <div class="trust__layout">
+      {/* 主卡:隐私=架构,一句机制陈述(§7 R3);注释走 JSX 语法 = 不进产物(EN 泄漏闸只查产物 HTML) */}
+      <div class="trust__main site-card reveal" style="--reveal-i: 3;">
+        <h3 class="t-title-large">{t.privacyHeading}</h3>
         <p class="t-body-medium">{t.privacyBody}</p>
       </div>
-      <div class="reveal" style="--reveal-i: 3;">
-        <h3 class="t-title-medium">{t.licenseHeading}</h3>
-        <p class="t-body-medium">{t.licenseBody}</p>
-      </div>
-      <div class="reveal" style="--reveal-i: 4;">
-        <h3 class="t-title-medium">{t.communityHeading}</h3>
-        <ul class="trust__links t-body-medium">
-          <li><a href={repoUrl}>GitHub · lingion/sleepy</a></li>
-          <li><a href={`${repoUrl}/issues`}>Issues</a></li>
-          <li><a href={faqUrl}>FAQ</a></li>
-          <li><a href={sponsorUrl}>{t.sponsorLink}</a></li>
-          <li>{t.qqGroupLabel} {qqGroup}</li>
-        </ul>
-      </div>
+      {/* 次行:开源/降为行式列表(§4 M7「1 主 2 次」非等权) */}
+      <ul class="trust__rows" data-reveal-group="m7-rows">
+        <li class="trust__row reveal" style="--reveal-i: 0;">
+          <h4 class="t-title-medium">{t.licenseHeading}</h4>
+          <p class="t-body-medium">{t.licenseBody}</p>
+          <a class="trust__row-link t-label-large" href={repoUrl}>GitHub · lingion/sleepy</a>
+        </li>
+        <li class="trust__row reveal" style="--reveal-i: 1;">
+          <h4 class="t-title-medium">{t.communityHeading}</h4>
+          <ul class="trust__links t-body-medium">
+            <li><a href={`${repoUrl}/issues`}>Issues</a></li>
+            <li><a href={faqUrl}>FAQ</a></li>
+            <li><a href={sponsorUrl}>{t.sponsorLink}</a></li>
+            <li>{t.qqGroupLabel} {qqGroup}</li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
 </section>
 
 <style>
+  .trust__col {
+    max-inline-size: 720px; /* 单栏叙事,行宽闸在段落级 ≤34ch */
+  }
+  .trust__heading {
+    margin-block-end: calc(var(--site-unit) * 6);
+  }
   .trust__story {
     font-size: clamp(20px, 2.4vw, 28px);
     line-height: 1.5;
     max-width: 34ch;
-    margin-block: calc(var(--site-unit) * 6) calc(var(--site-unit) * 2);
+    margin-block-end: calc(var(--site-unit) * 4);
   }
   .trust__reach {
     color: var(--md-sys-color-on-surface-variant);
+    max-width: 46ch;
     margin-block-end: calc(var(--site-unit) * 10);
   }
-  .trust__grid {
+  .trust__layout {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: calc(var(--site-unit) * 8);
+    gap: calc(var(--site-unit) * 6);
   }
-  .trust__grid h3 {
-    margin-block-end: calc(var(--site-unit) * 2);
+  /* 主卡 filled 宽(§4 M7:隐私主卡);卡三档=默认 filled,§5.3 */
+  .trust__main {
+    background: var(--md-sys-color-surface-container);
+    border-radius: var(--md-sys-shape-corner-large);
+    padding: calc(var(--site-unit) * 6);
+    display: grid;
+    gap: calc(var(--site-unit) * 2);
   }
-  .trust__grid p {
+  .trust__main h3 {
+    color: var(--md-sys-color-on-surface);
+  }
+  .trust__main p {
     color: var(--md-sys-color-on-surface-variant);
-    max-width: 40ch;
+    max-width: 46ch;
+  }
+  /* 次行:行式列表,1px outline-variant 发丝边、零投影(§4 M7) */
+  .trust__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: calc(var(--site-unit) * 4);
+  }
+  .trust__row {
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-large);
+    padding: calc(var(--site-unit) * 5);
+    display: grid;
+    gap: calc(var(--site-unit) * 2);
+  }
+  .trust__row h4 {
+    color: var(--md-sys-color-on-surface);
+  }
+  .trust__row p {
+    color: var(--md-sys-color-on-surface-variant);
+    max-width: 46ch;
+  }
+  .trust__row-link {
+    color: var(--md-sys-color-primary);
+    text-decoration: none;
   }
   .trust__links {
     list-style: none;
@@ -68,11 +114,6 @@ const t = (Astro.props.copy ?? zh).trust;
     padding: 0;
     display: grid;
     gap: calc(var(--site-unit) * 2);
-  }
-  @media (max-width: 840px) {
-    .trust__grid {
-      grid-template-columns: 1fr;
-      gap: calc(var(--site-unit) * 6);
-    }
+    color: var(--md-sys-color-on-surface-variant);
   }
 </style>
