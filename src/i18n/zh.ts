@@ -1,5 +1,5 @@
 // zh 文案单点 — v4 spec §7 五规则:R1 一意思正面说一次 / R2 禁一切问句 / R3 否定枚举改机制陈述 / R4 去口语 / R5 与 en 同形镜像。
-// slogan「构建无壳,自由自在」逐字保留(§13 R3 品牌豁免,en 值 = 批准对「Build without shells. Roam without limits.」)。
+// slogan「构建无壳,自由自在」逐字保留(§13 R3 品牌豁免已批;en 保留 §7.2 前现值「Built open. Feels free.」,签收前单点可换)。
 // 数字纪律(§15):348/33 一律构建期派生传入(statLine/chipLabel/ribbon 计数),i18n 内禁手写。
 // 泄漏闸(page.en.test walk zh 含汉字叶子 ⊄ EN 页):短叶子避真实校名子串 → AppBar 锚点用「教务直连/学校名录」而非裸「教务/学校」。
 export const zh = {

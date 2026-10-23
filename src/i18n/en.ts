@@ -1,17 +1,17 @@
 // en 文案单点(v4 spec §7 R5):键树与 zh.ts 严格同形 —— i18n-parity 测试闸。
-// slogan = 品牌豁免对(§13 R3),保留现值逐字不动。
+// slogan 暂用 A 案英译「Built open. Feels free.」(§7.2 签收前单点可换;zh 逐字保留已批 §13 R3,en 换值未批)。
 // 策略:校名保中文 + 拼音检索,EN 页翻译「文案面」不翻译「数据面」。
 // 数字纪律同 zh:348/33 由构建期派生传入,禁手写。
 import type { SiteCopy } from './zh';
 
 export const en: SiteCopy = {
   meta: {
-    title: 'Sleepy — open-source timetable. Build without shells. Roam without limits.',
+    title: 'Sleepy — open-source timetable, built free',
     description:
       '348 direct academic-system connections. Data stays on the device; source fully open. An open-source Android timetable maintained by one person.',
   },
   hero: {
-    slogan: 'Build without shells. Roam without limits.',
+    slogan: 'Built open. Feels free.',
     sub: 'An open-source Android timetable: three views, direct academic-system connections, home-screen widgets. Timetable data lives only on this device and passes through no server.',
     ctaDownload: 'Download for Android',
     ctaTrial: 'Try it online',

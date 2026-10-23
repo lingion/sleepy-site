@@ -90,7 +90,7 @@ describe('/en/ 无 zh 文案泄漏(组件 props 全覆盖)', () => {
     const clone = doc.body!.cloneNode(true) as DocumentFragment;
     for (const n of clone.querySelectorAll('script, style')) n.remove();
     const text = (clone.textContent ?? '').replace(/\s+/g, ' ');
-    expect(text).toContain('Build without shells. Roam without limits.'); // slogan 豁免对
+    expect(text).toContain(en.hero.slogan); // slogan A 案现值(en.ts 单点,§7.2 签收前可换)
     expect(text).toContain(en.download.trial);
     expect(text).toContain(en.gallery.heading);
     expect(text).toContain(en.schools.heading);
