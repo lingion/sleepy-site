@@ -60,7 +60,7 @@ Stripe showcase 面板行 [ia-flow]:三块宽窄不一面板(网格视图最宽�
 编辑式 split 文左图右。截图=20-import 预处理裁无效区后 contain 完整显示(C3),图列约 420px 宽、行高随图,文字列垂直居中。卡缘浮 assist-chip 标注「348 校直连」。文案一主张:选校登录即得课表、改版由维护者跟进(书面语)。显影动效=**遮罩块等效方案**(同底色 div translateY(100%→0) 纯 transform,合成线程)替代 clip-path 主线程重绘 [裁决:feasibility-major#5 — clip-path 600ms 对 ~2MP 图中端安卓掉帧;若实施实测帧率过关可换回 clip-path,不进默认]。全站唯一一次。
 
 ### M4 学校名录(PROOF 工具岛,surface-container 岛卡)
-容器/全宽交替的「容器」拍。圆角用现有 **extra-large 28**(不引入 32 档,§11-7)[裁决:goals-minor token 越权]。保留现有交互:outlined text-field 搜索+省份/协议双排 filter chip+分组列表。**段内滚动改 60vh→桌面保留、≤840px 取消嵌套滚动改全量直出**(触屏嵌套滚动劫持整页)[goals-minor#12]。statLine 大字前置:**「348 条收录 · 34 种协议」** [裁决:站点数据 schools.grouped.json 实测 34 协议键,「8 协议族」是 App 仓分组概念,站方无映射 — goals-major#2]。JS-off 全量可读、空态指 issue 继承。动线最强转化瞬间=访客亲手搜到自己学校。
+容器/全宽交替的「容器」拍。圆角用现有 **extra-large 28**(不引入 32 档,§11-7)[裁决:goals-minor token 越权]。保留现有交互:outlined text-field 搜索+省份/协议双排 filter chip+分组列表。**段内滚动改 60vh→桌面保留、≤840px 取消嵌套滚动改全量直出**(触屏嵌套滚动劫持整页)[goals-minor#12]。statLine 大字前置:**「348 条收录 · 33 种协议」**(2026-10-23 实测 schools.grouped.json=348 校/33 协议键;数字一律构建期从数据派生禁手写,「8 协议族」是 App 仓概念站方无映射 — goals-major#2 修正)。JS-off 全量可读、空态指 issue 继承。动线最强转化瞬间=访客亲手搜到自己学校。
 
 ### M5 提醒与组件(DEEP DIVE 2 + 生态,surface 底)
 pinned 双列桌面:左列=22-reminder 预处理后完整显示+position:sticky;**[裁决:改「矮列钉高列」— sticky 元素高度必须 ≤ 视口内容区,裁后 reminder(约 663-833px 高)钉不住,故左列改 sticky 的压缩叙事条(提醒截图缩略+一行主张),完整图在右列滚动流首 — goals-major#5②]** 右列滚动:课前提醒/今日摘要/明日预告三 beat + 尾部组件墙。组件墙(C4 已解决):**已验收新资产直接作图** — weekgrid 825×1375 竖卡(全页唯一 elevated 主角卡 [裁决:elevated 归 hero 还是 M5 — 取 P1 给 M5 主角卡;hero 截图靠 1px 描边+背景带跳出即可,§5.3])、today/twoday/weeklist 825×343 扁条×3 叠放模拟桌面排布、weekview 825×550 可入 M6 长廊。≤840px:取消 sticky,图上文下;组件墙改横向 snap 滚动,竖卡定高 280px 封顶。
