@@ -41,7 +41,7 @@ Footer(全站,瘦身): 下载(/download) · 学校(/schools) · 问答(/faq) · 
 
 ### 2.2 主页 `/`
 - 段序:Hero → Views → Connect → **[新] Schools 入口卡** → Reminders(墙补第 5 种组件) → Gallery → Trust → **[瘦] Download 出口段**。
-- Schools 入口卡(surface-container-low,非岛):左=「348 所高校 · 33 种教务协议,按省份与协议检索」(两数一律派生自 schools-view 的 rowCount/typeCount,禁手写——v4 计数闸同规则) + 两个数字(tnum);右=一枚搜索框样式的**入口按钮**(点击跳 /schools/ 并聚焦真搜索框;样式像搜索框但非 input,防误导);"你学校在哪一档"式设问禁(沿用 v4 文案 R 规则)。禁内嵌筛选交互。
+- Schools 入口卡(surface-container-low,非岛):左=「348 所高校 · 33 种教务协议,按省份与协议检索」(两数一律派生自 schools-view 的 rowCount/typeCount,禁手写——v4 计数闸同规则) + 两个数字(tnum);右=一枚搜索框样式的**入口按钮**(样式像搜索框但非 input,防误导;href=`/schools/?focus=s`——审计 I2 裁决:「点击跳 /schools/ 并聚焦真搜索框」由 /schools/ 岛读 `focus=s` 参数显式聚焦承接,与 §2.3「autofocus 默认关」不冲突:聚焦来自用户点击而非页面自动弹出);"你学校在哪一档"式设问禁(沿用 v4 文案 R 规则)。禁内嵌筛选交互。
 - Download 出口段(primary-container tonal 带不变):主按钮 [下载 Android] → **直接指向 release.json 的 universal APK**(主推) + 次行 Text 链「其他架构与校验 →」(/download/)+ 版本行 tag·日期(tnum)。原 ABI 行列表、sha 链、商店占位、体验链全部移出主页。
 - 主页 scroll 高度从 8 段缩到 ~6.5 段(台账 348 行离页,省最大块)。
 
@@ -87,7 +87,7 @@ Footer(全站,瘦身): 下载(/download) · 学校(/schools) · 问答(/faq) · 
 ### 2.5 FAQ `/faq/`
 ```
 │ 页头: 常见问答 + 一行(「回答只覆盖当前发布物能核实的事实」+ 更新日期)        │
-│ 左栏(桌面 sticky): 9 节目录,滚动高亮当前节 IO; 右栏: 问答正文               │
+│ 左栏(桌面 sticky): 8 节目录(实测 9 节剔除「相关链接」后 8),滚动高亮当前节 IO; 右栏: 问答正文 │
 │ 手机: TOC 横滑胶囊条(复用新 chip 形状)粘在页头下,点条目即滚至锚点           │
 │ 每问: <details>?—— 否。全展开直排(可搜索可分享,答案短,#锚点 每问一个)       │
 │ 代码块: 编译/测试两段保留 <pre>(等宽,横滚)                                  │
@@ -191,14 +191,26 @@ v4 spec 已立法「旧契约的删除是有意的,禁先改实现后补测试�
 
 | 既有断言 | 处置 | 去向 |
 |---|---|---|
-| page.index.test.ts:36-43 八段 ids 数组 + PROTOTYPE 表 | 改写 | 七段依序(hero/views/connect/schoolCard/reminders/gallery/trust/download)+ 新入口卡原型 `entry-card`;同文件加「#schools 段绝迹」负闸 |
+| page.index.test.ts:36-43 八段 ids 数组 + PROTOTYPE 表 | 改写 | 八段依序(hero/views/connect/schoolCard/reminders/gallery/trust/download——v4 八段删 schools 换 schoolCard,净数仍 8,审计 I3:勿按「七段」写长度断言)+ 新入口卡原型 `entry-card`;同文件加「#schools 段绝迹」负闸 |
 | page.index.test.ts:96-101 AppBar 4 锚点 `#views/#schools/#reminders/#trust` | 改写 | 新锚点集 `/#views · /schools/ · /faq/ · /#reminders` 四 href 精确断言(信任移 Footer;顺带修 F2) |
 | page.index.test.ts:171-173 文案 pin「全部收录按省份…」+「收录与检索」(主页 body) | 迁移 | 两串随文案迁 tests/page.schools.test.ts(/schools/ 页头);主页 body 改 pin 入口卡新文案 §4 句 |
+| page.index.test.ts:170 「在线体验提供完整功能,无需安装。」(download.trial,主页 body pin) | 迁移 | → page.download.test.ts(Task 5 在线体验卡文案 pin 同串);Task 7 主页瘦身段移除 trial 链后主页必红,随段迁 |
 | page.index.test.ts:223-243 M4 整块(348 行/statLine/校名非链接/connect chip 派生) | 迁移拆分 | 348 行 + 非链接 + details 折叠 → page.schools.test.ts;statLine 派生串改 pin「{rowCount} 所高校 · {typeCount} 种教务协议」(入口卡与工具页各一次);connect chip 断言留主页测试(段未动) |
 | page.index.test.ts:276-283 M8(4 ABI URL+sha+store 占位+releases/latest) | 迁移拆分 | 全部 → page.download.test.ts;主页测试改写为「恰一下载出口=universal APK URL,其余 ABI URL 绝迹于主页 HTML」负闸 |
 | page.index.test.ts:284-290 elevated/tonal/Filled=2 | 改写 | 主页 Filled 计数重算:AppBar S(hero 相交时显)+ hero XL = 仍 2(瘦身段主钮改链 universal,**Elevated 档**,不破 §11-6);新增断言「download 段零 Filled」 |
 | page.index.test.ts:293 'Android 8.0' | 迁移 | → page.download.test.ts(minSdk 文案随段迁) |
-| page.en.test.ts:44-62 同构八段 + :63-67 AppBar 4 锚点 | 同步改写 | 与 zh 侧同批同 commit(en 镜像页测试同迁) |
+| page.en.test.ts:44-62 同构八段 + :63-67 AppBar 4 锚点 | 同步改写 | 与 zh 侧同批同 commit(en 镜像页测试同迁;新锚点集 en href 四枚 `/en/#views · /en/schools/ · /en/faq/ · /en/#reminders`) |
+| page.en.test.ts:69-71 `.appbar__lang` href=`/` | 保留 | 语言链多页化后两主页 mirror 值不变(en 主页 mirror=`/`),用例作回归守卫,Task 2 须仍绿 |
+| page.index.test.ts:104-127 CTA 互隐闸(show-pin :110 + IO 机制锁 + 方向锁 + 占位锁) | 改写 | :110 字面 `data-appbar-cta="show"` 随缺省态 prop 化失效 → 三元正则 `hasHero ? 'show' : 'hide'` 方向锁;IO 引用 #hero、`isIntersecting ? 'hide' : 'show'` 方向锁、hide 态 visibility:hidden 且禁 display:none 的占位锁三条原样保留(Task 2 同 commit) |
+| page.index.test.ts:199-201 「FAQ 外链钉死」FAQ.md URL | 改写 | ui.ts `faqUrl` 站内化与之一体:断言改站内 `href="/faq/"`(Task 2 同 commit;消费方 Trust.astro:38 与 Footer:33 随 ui.ts 自动生效,两文件零引用改动) |
+| page.index.test.ts:65-67 `img[fetchpriority]` high/low 各恰一 | 保留 | 计数闸作用于主页:Hero 段未动(全站 priority Shot 唯一消费方),改造后两主页仍恰一/恰一;新四页零 hero → 不设此闸;非主页「零 hero preload」由 dist.seo 用例覆盖 |
+| page.en.test.ts:84-86 校名中文保留(schools[0].name 在 EN 页) | 迁移 | → page.schools.test.ts(真实校名保留策略随台账迁 /en/schools/;主页 EN 页删段后此串绝迹,Task 7 同 commit) |
+| page.en.test.ts:88-96 en.ts 关键串 pin(en.schools.heading/en.download.trial 等) | 迁移拆分 | heading+sub → page.schools.test.ts(EN 页头);trial → page.download.test.ts(在线体验文案随段迁 EN);hero.slogan/gallery/trust 留主页测试(Task 7 同 commit) |
+| src/tokens/global.a11y.test.ts:216-228 Footer describe 源码 pin(`{t.license}`/`{qqGroup}`/`{sponsorUrl}` + ui 源 `1063407652`/`sponsor.md`) | 改写 | Footer 瘦身同 commit(Task 2):license pin 保留;`{qqGroup}`/`{sponsorUrl}` 源码正 pin 翻为「Footer 源不含二者引用」负 pin;ui.ts 键 pin 全部保留(qqGroup/sponsorUrl 键不删,仍由 Trust.astro 消费) |
+| 主页 footer 键组 `t.app/t.dl/t.trial/t.repo/t.community/t.qq/t.faq/t.sponsor` 八键 | 保留键清引用 | Task 2 Footer 瘦身即零消费方;删键需 zh/en 双文件同 commit 且无收益,键留、引用清(Task 2 同 commit 不删键) |
 | page.index.test.ts:188-190 问号正则 body 零命中 | 保留 | 主页仍适用;新页测试同闸挂 schools/download/404,/faq 豁免(§4 范围条款) |
+| src/tokens/global.a11y.test.ts:239 `read('../components/sections/Schools.astro')` + :246 `.schools__stat` markup 含 tnum | 迁移 | Task 7 删 Schools.astro 后 read 即抛 → 同 commit 改读 `src/components/pages/SchoolsTool.astro`,token 名换 `.schools__stat`(新页沿用)断言 tnum 仍在 markup;主页入口卡 tnum 断言 → page.index 的 schoolCard(§2.2 两数字 tnum) |
+| src/tokens/global.a11y.test.ts:323-329 `read('../components/sections/Download.astro')` 两条 `.download__row:active` color-mix 正则 | 迁移 | 行样式随 Task 5 迁 DownloadPanel → 同 commit 改读 `src/components/pages/DownloadPanel.astro` 断言两正则(Task 7 主页 Download 段瘦身为单出口,`:active` 行 blend 绝迹于主页组件——I11 定死迁移路线,无分支可选) |
+| page.index.test.ts:258-262 M5 组件墙四件 `[data-widget=weekgrid/today/twodays/weeklist]` | 改写 | 五件断言加 `weekview`(§3-1 第 5 卡);**去向 = Task 9 同 commit**(§10 前言「逐条给去向」自身要求,审计致命一之 7 补行) |
 
 新增页测试文件(≥25 条,与 §0 验收呼应):page.schools.test.ts / page.download.test.ts / page.faq.test.ts / page.404.test.ts / dist.seo.test.ts(hreflang 矩阵+OG 8 枚+JSON-LD+robots/RSS 产物+preload 开关)。
