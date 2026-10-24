@@ -40,7 +40,7 @@
 
 ```
 新建:
-  src/pages/schools.astro          /schools/ 路由(zh)
+  src/pages/schools.astro          /schools/ 路由(zh;Astro 默认 directory 格式 → dist/client/schools/index.html)
   src/pages/en/schools.astro       en 镜像(同构薄壳,注入 copy=en)
   src/pages/download.astro         /download/ 路由
   src/pages/en/download.astro
@@ -52,10 +52,11 @@
   src/components/pages/SchoolsTool.astro      /schools/ 工具主体(列表+岛脚本;zh/en 共用,props 注入文案)
   src/components/pages/DownloadPanel.astro    /download/ 出口主体(props 注入文案)
   src/components/pages/FaqBody.astro          FAQ 正文渲染器(消费 faq.json)
-  scripts/build-faq.mjs            FAQ.md → src/data/faq.json 解析器
-  scripts/faq-en.md                en 译文(与 FAQ.md 同节同问数,人工维护)
+  scripts/fetch-faq.mjs            在线拉主仓 FAQ.md → 回写 fixtures/FAQ.md 快照(fetch-schools.mjs 同法,手动刷新用)
+  scripts/build-faq.mjs            离线解析器:fixtures/FAQ.md + scripts/faq-en.md → src/data/faq.json(条数闸)
+  scripts/faq-en.md                en 译文(与 FAQ.md 同节同问数,人工维护,仓内唯一真值)
+  fixtures/FAQ.md                  FAQ.md 仓内快照(种子=主仓现值提交;离线构建唯一读取源)
   src/data/faq.json                构建产物(节/问/答 zh+en,入库)
-  scripts/assert-release.mjs       本地构建新鲜度警告守卫
   public/robots.txt                静态分发文件
   public/og/{home,schools,download,faq}-{zh,en}.png   8 枚 OG 图(作者工具产出)
   tools/make-og.mjs                OG 图离线渲染脚本(Chrome headless,非构建路径)
@@ -78,7 +79,7 @@
   src/components/sections/Reminders.astro  墙补第 5 卡(weekview)
   src/styles/global.css            .site-chip 升档 + color-scheme + .entry-card + content-visibility
   astro.config.mjs                 sitemap i18n 配置
-  package.json                     依赖 @astrojs/rss;data 脚本链加 build-faq + assert-release
+  package.json                     依赖 @astrojs/rss;data 脚本链追加 build-faq(assert-release 已废除,见 Task 5 裁决)
   tests/page.index.test.ts         §10 再基线逐条处置
   tests/page.en.test.ts            §10 同批处置
 ```
@@ -211,15 +212,15 @@ git commit -m "feat(layout): Base 多页化(hreflang 语义对/OG 参数/preload
 
 ---
 
-## Task 3: FAQ 数据管线(build-faq.mjs + faq-en.md + faq.json + 数量闸)
+## Task 3: FAQ 数据管线(fetch-faq + build-faq + faq-en.md + faq.json + 数量闸)
 
 **Files:**
-- Create: `scripts/build-faq.mjs`、`scripts/faq-en.md`、`fixtures/FAQ.md`(仓内快照)、`src/data/faq.json`
+- Create: `scripts/fetch-faq.mjs`、`scripts/build-faq.mjs`、`scripts/faq-en.md`、`fixtures/FAQ.md`(仓内快照,种子=主仓现值提交)、`src/data/faq.json`
 - Modify: `package.json`(`"data"` 追加 `&& node scripts/build-faq.mjs`)
-- Test: `tests/build-faq.test.mjs`(vitest 已覆盖 scripts 级测试,fetch-release.test.mjs 同法)
+- Test: `scripts/build-faq.test.mjs`(vitest include 覆盖 `scripts/**/*.test.mjs`,fetch-release.test.mjs 同法;tests/ 下的 .mjs 不在 include 内,禁放)
 
 **Interfaces:**
-- Consumes: **FAQ.md 取数沿 fetch-schools.mjs 既有模式**(CI 没有主仓,禁读绝对本地路径):`RAW_URL = https://raw.githubusercontent.com/lingion/sleepy/main/FAQ.md`,fetch 失败 → 回落 `fixtures/FAQ.md` 仓内快照警告继续(:7-19 同构)。9 节 34 问,两枚 ```sh 代码块,顶层单 `#` 与 `>` 引言跳过。en 真值 = 仓内 `scripts/faq-en.md`(人工维护,不存在跨仓拉取)。
+- Consumes: 职责分工照搬 fetch-schools/build-schools 先例(fetch-schools.mjs:7-24 回写快照、build-schools.mjs:3 只读快照离线构建)。**build-faq.mjs 纯离线** = 读 `fixtures/FAQ.md` + `scripts/faq-en.md` → 产 `src/data/faq.json`,CI/本地行为确定;**fetch-faq.mjs 手动刷新** = `RAW_URL = https://raw.githubusercontent.com/lingion/sleepy/main/FAQ.md`,成功回写快照(行数报告),失败 exit 0 警告保留旧快照(spec §5 内容类陈旧可接受)。9 节 34 问(实测现值:「相关链接」节 0 问;两枚 ```sh 代码块同落「开发、测试与贡献」节),顶层单 `#` 与 `>` 引言跳过。en 真值 = 仓内 `scripts/faq-en.md`(人工维护,不存在跨仓拉取)。
 - Produces:
 
 ```ts
@@ -239,7 +240,7 @@ export function blocksToHtml(blocks: FaqBlock[]): string; // FaqBody 消费
 - [ ] **Step 1: 写失败的解析测试**
 
 ```ts
-// FAQ_SNAPSHOT = fixtures/FAQ.md(仓内快照;build-faq 在线取 latest、失败回落快照,测试直接读快照保确定性)
+// FAQ_SNAPSHOT = fixtures/FAQ.md(仓内快照;build-faq 只读快照,测试同读保确定性)
 it('FAQ.md 解析 = 9 节剔除相关链接后 8 节 · 34 问 · 代码块 2 枚', () => {
   const secs = parseFaq(readFileSync(FAQ_SNAPSHOT, 'utf8'));
   const items = secs.flatMap(s => s.items);
@@ -252,7 +253,7 @@ it('zh/en 问数不一致即抛(build-faq 数量闸)', () => {
 });
 ```
 
-Run: `npx vitest run tests/build-faq.test.mjs` → Expected: FAIL
+Run: `npx vitest run scripts/build-faq.test.mjs` → Expected: FAIL
 
 - [ ] **Step 2: 实现 build-faq.mjs**
 
@@ -260,13 +261,13 @@ Run: `npx vitest run tests/build-faq.test.mjs` → Expected: FAIL
 
 - [ ] **Step 3: 跑管线 + 全绿**
 
-Run: `node scripts/build-faq.mjs && npx vitest run tests/build-faq.test.mjs`
+Run: `node scripts/build-faq.mjs && npx vitest run scripts/build-faq.test.mjs`
 Expected: faq.json 生成、测试绿(34 问、配对校验过)
 
 - [ ] **Step 4: Commit(脚本+译文+产物同提,产物入库保离线构建)**
 
 ```bash
-git add scripts/build-faq.mjs scripts/faq-en.md fixtures/FAQ.md src/data/faq.json package.json tests/build-faq.test.mjs
+git add scripts/build-faq.mjs scripts/faq-en.md scripts/build-faq.test.mjs fixtures/FAQ.md src/data/faq.json package.json
 git commit -m "feat(faq): FAQ.md 快照管线(build-faq+en 译文+条数闸)"
 ```
 
@@ -275,11 +276,12 @@ git commit -m "feat(faq): FAQ.md 快照管线(build-faq+en 译文+条数闸)"
 ## Task 4: /schools/ 学校查找页(SchoolsTool 组件 + 原生岛 URL 态 + details 折叠 + content-visibility)
 
 **Files:**
-- Create: `src/lib/schools-island.ts`、`src/components/pages/SchoolsTool.astro`、`src/pages/schools.astro`、`src/pages/en/schools.astro`、`tests/page.schools.test.ts`
-- Test: `tests/page.schools.test.ts`、`src/lib/schools-island.test.ts`(岛纯函数单测)
+- Create: `src/lib/schools-island.ts`、`src/lib/schools-island.test.ts`、`src/components/pages/SchoolsTool.astro`、`src/pages/schools/index.astro`、`src/pages/en/schools/index.astro`、`tests/page.schools.test.ts`
+- Modify: `src/lib/schools-view.ts`(SchoolRow + `aliases: string[]`)、`src/lib/search.ts`(SearchableSchool + `aliases?`、matchSchool 命中含 alias)、`src/lib/search.test.ts`(lixin 用例)
 
 **Interfaces:**
 - Consumes: `search.ts` 的 `normalize(s: string): string` / `matchSchool(q, school): boolean`;`schools-view.ts` 的 `schools/provincesOrdered()/typesOrdered()/rowCount`;Task 1 `zh.schoolsPage`;Task 2 Base props(`path:'/schools/'`, `mirror:'/en/schools/'`, `preloadHero:false`)
+- **aliases 对齐裁决(本轮核实)**:`SchoolRow` 现类型无 `aliases` 而原始 JSON 348 行全有该字段(59 行非空,如「上海立信会计金融学院」= lixin——其 sortKeyFull 不含该串,纳入检索是真增益)。本任务:① `schools-view.ts` 的 `SchoolRow` 增 `aliases: string[]`(必填,JSON 全覆盖);② `search.ts` 的 `SearchableSchool` 增可选 `aliases?: string[]`,`matchSchool` 命中条件加 alias 子串;③ `search.test.ts` 补一条「lixin 命中上海立信」用例(同 commit)。DOM 契约与岛过滤统一以 normalize(name+aliases+sortKeyFull) 为检索面。
 - Produces:
   - `src/lib/schools-island.ts`:`parseUrlState(search: string): { q: string; province: string; type: string; expandAll: boolean }`、`writeUrlState(s): string`(空值不写参)、`filterRows(rows, s): SchoolRow[]`(内部用 normalize/matchSchool,删 norm 副本)——岛脚本 import,单测可灌
   - SchoolsTool.astro Props:`{ copy: typeof zh.schoolsPage, lang }`;DOM 契约:`[data-school]` 行带 `data-province`/`data-type`/`data-search`(normalize(name+aliases+sortKeyFull)),组容器 `<details data-group>` summary 文本「{省份} · {n}」,计数行 `role="status"`,搜索 label 隐藏文本,桌面 `max-block-size:70vh` 段内滚动 + 组 `content-visibility:auto; contain-intrinsic-size:auto 40px`(≤840px 折叠启用)
