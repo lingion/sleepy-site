@@ -149,6 +149,13 @@ describe('M2 三视图 + MD3 Segmented Button(spec §4 M2)', () => {
     expect(dots).toContain('var(--md-sys-color-outline)');
     expect(dots).not.toContain('outline-variant');
   });
+  it('dark 节奏补丁(spec §17.1/T10 剖面实抓缺陷):带底 container-high 拉步长 + 段界发丝顶边', () => {
+    const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');
+    const darkBand = src.match(/:global\(\[data-theme='dark'\]\)\s*\.views-band\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(darkBand, 'dark .views-band 规则存在').not.toBe('');
+    expect(darkBand).toContain('var(--md-sys-color-surface-container-high)');
+    expect(darkBand).toContain('border-block-start: 1px solid var(--md-sys-color-outline-variant)');
+  });
 });
 
 describe('文案 v4 新契约(spec §7 R1-R5 + C2)', () => {
