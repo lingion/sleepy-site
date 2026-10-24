@@ -23,6 +23,15 @@ describe('en/zh 键树同形(组件 props 全覆盖)', () => {
   it('zh.ts 每个键在 en.ts 存在且反向亦然', () => {
     expect(keyTree(en).sort()).toEqual(keyTree(zh).sort());
   });
+  it('v5 四组新键 zh/en 同形(键树闸)+ 锚点新值', () => {
+    for (const g of ['homeSchoolCard', 'schoolsPage', 'downloadPage', 'faqPage'] as const) {
+      expect(zh[g], `zh.${g}`).toBeDefined();
+      expect(en[g], `en.${g}`).toBeDefined();
+      expect(Object.keys(zh[g]).sort()).toEqual(Object.keys(en[g] as object).sort());
+    }
+    expect(zh.appbar.anchors.schools).toBe('学校名录');
+    expect(zh.appbar.anchors.faq).toBe('常见问答');
+  });
   it('数组长度一致(captions/beats 逐项对齐)', () => {
     expect(en.gallery.captions.length).toBe(zh.gallery.captions.length);
     expect(en.reminders.beats.length).toBe(zh.reminders.beats.length);
