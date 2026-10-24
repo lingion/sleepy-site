@@ -38,7 +38,9 @@
   --site-section-gap-small: 48px;
 
   /* —— 换幕带(v4 spec §11-11/§17.1):恒取 light 主题 inverse 实值,不随主题翻转;
-     消费点 = #gallery.band(Task 5),无其他消费者即红(禁无主变量) —— */
+     消费点 = #gallery.band(Task 5),无其他消费者即红(禁无主变量)。
+     C5 口径:全站新增硬编码色值仅此两枚——恒定带底的语义即「不随主题翻转」,
+     无法用 --md-sys-* token 表达;Blob/AppBar SVG 存量色值未触碰 —— */
   --site-band-bg: #313033;
   --site-band-fg: #F4EFF4;
 
