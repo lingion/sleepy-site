@@ -1,0 +1,19 @@
+---
+// en /faq/ — zh 页镜像(spec §1 hreflang 互指);en 译文随 FAQ.md 同节序同问序(build-faq 条数闸)
+import Base from '../../layouts/Base.astro';
+import FaqBody from '../../components/pages/FaqBody.astro';
+import { site } from '../../i18n/ui';
+import { en } from '../../i18n/en';
+---
+
+<Base
+  lang="en"
+  title={`${en.faqPage.heading} · Sleepy`}
+  description={en.faqPage.sub}
+  path="/en/faq/"
+  mirror="/faq/"
+  ogImage={`${site}/og/faq-en.png`}
+  ogImageAlt={en.faqPage.heading}
+>
+  <FaqBody copy={en.faqPage} lang="en" />
+</Base>
