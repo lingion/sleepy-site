@@ -1,0 +1,197 @@
+---
+// v5 /faq/ 页主体 — plan Task 6 / spec §2.4
+// 快照渲染器:src/data/faq.json(build-faq 管线产物,Task 3)→ HTML;set:html 面 = blocksToHtml 纯函数,
+// 文本全转义后输出(唯一内容源=仓内快照,无运行时注入面)。
+// 禁问句豁免面(终审 I10):FAQ 问句合法 = article 单元整体;框架文本(article 外)保持零「？」(global.a11y 同闸适用面)。
+// 「相关链接」节在 build 管线已按「无问空节剔除」规则消失(非点名),产物 8 节 = 页脚 8 锚。
+// TOC = 桌面 sticky 左栏 + 手机横滑 chip 条(复用现 .site-chip,升档统一 Task 9);高亮 = 原生 IntersectionObserver,color 150ms(spec §5)。
+// 尾卡「内容更新于」直读 faq.json.updatedAt(spec R4 腐烂可见化:横幅日期即快照声明,重跑 data 才会变)。
+import faq from '../../data/faq.json';
+import { qqGroup, repoUrl } from '../../i18n/ui';
+import type { SiteCopy } from '../../i18n/zh';
+
+interface Props {
+  copy: SiteCopy['faqPage'];
+  lang: 'zh' | 'en';
+}
+const { copy: t, lang } = Astro.props;
+
+type Inline = { t: 'text'; v: string } | { t: 'code'; v: string } | { t: 'link'; href: string; inline?: Inline[] };
+type Block =
+  | { type: 'paragraph'; inline: Inline[] }
+  | { type: 'list'; ordered: boolean; items: Inline[][] }
+  | { type: 'pre'; lang?: string; text: string };
+
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+function inlineToHtml(parts: Inline[] | undefined): string {
+  return (parts ?? [])
+    .map((i) => {
+      if (i.t === 'code') return `<code>${esc(i.v)}</code>`;
+      if (i.t === 'link') {
+        const href = esc(i.href);
+        const rel = /^(https?:)?\/\//.test(i.href) ? ' rel="noopener noreferrer" target="_blank"' : '';
+        return `<a href="${href}"${rel}>${inlineToHtml(i.inline)}</a>`;
+      }
+      return esc(i.v);
+    })
+    .join('');
+}
+
+function blockToHtml(b: Block): string {
+  if (b.type === 'pre') return `<pre translate="no" class="faq__pre"><code>${esc(b.text)}</code></pre>`;
+  if (b.type === 'list') {
+    const tag = b.ordered ? 'ol' : 'ul';
+    return `<${tag} class="faq__list">${b.items.map((li) => `<li>${inlineToHtml(li)}</li>`).join('')}</${tag}>`;
+  }
+  return `<p class="faq__p">${inlineToHtml(b.inline)}</p>`;
+}
+
+const secAnchor = (i: number) => `sec-${i + 1}`;
+// faq.json 的 import 推断把 type/t 放宽为 string,在边界 cast 成本文件类型(结构由 build-faq 闸锁)
+const rendered = faq.sections.map((s, i) => ({
+  id: secAnchor(i),
+  name: s[lang],
+  items: s.items.map((it) => ({ id: it.id, q: it.q[lang], body: (it.a[lang] as Block[]).map(blockToHtml).join('') })),
+}));
+const zhUI = lang === 'zh';
+---
+
+<div class="faq-page" data-prototype="tool-quiet">
+  <div class="site-col faq-page__grid">
+    <nav class="faq__toc" aria-label={t.tocLabel} data-role="toc">
+      <p class="t-label-large faq__toc-title">{t.tocLabel}</p>
+      <ul class="faq__toc-list">
+        {
+          rendered.map((s) => (
+            <li>
+              <a class="site-chip faq__toc-link" data-toc-link href={`#${s.id}`}>
+                {s.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="faq__body">
+      <header class="faq__head">
+        <h1 class="t-headline-large">{t.heading}</h1>
+        <p class="t-body-medium faq__sub">{t.sub}</p>
+      </header>
+
+      {
+        rendered.map((s) => (
+          <section class="faq__section" data-faq-section data-section={s.name} id={s.id}>
+            <h2 class="t-title-large faq__section-title">{s.name}</h2>
+            {s.items.map((it) => (
+              <article class="faq__item" data-faq-item id={it.id}>
+                <h3 class="t-title-medium faq__q">{it.q}</h3>
+                <div class="faq__a" set:html={it.body} />
+              </article>
+            ))}
+          </section>
+        ))
+      }
+
+      <footer class="faq__tail" aria-label={t.tailTitle}>
+        <p class="t-body-medium faq__tail-title">{t.tailTitle}</p>
+        <p class="t-body-small faq__tail-links">
+          <a href={`${repoUrl}/issues`} rel="noopener noreferrer" target="_blank">{t.tailIssues}</a>
+          {' · '}
+          <a href={`${repoUrl}/discussions`} rel="noopener noreferrer" target="_blank">{t.tailDiscussions}</a>
+          {' · '}
+          {zhUI ? 'QQ 群' : 'QQ group'} {qqGroup}
+        </p>
+        <p class="t-body-small faq__updated tnum">
+          {t.updatedPrefix} {faq.updatedAt}
+        </p>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<style>
+  .faq-page { padding-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 14); }
+  .faq-page__grid { display: grid; gap: calc(var(--site-unit) * 8); align-items: start; }
+  .faq__head { display: grid; gap: calc(var(--site-unit) * 2); margin-block-end: calc(var(--site-unit) * 6); }
+  .faq__sub { color: var(--md-sys-color-on-surface-variant); }
+  .faq__section { margin-block-end: calc(var(--site-unit) * 10); scroll-margin-block-start: calc(var(--site-unit) * 10); }
+  .faq__section-title { margin-block-end: calc(var(--site-unit) * 3); }
+  .faq__item {
+    margin-block-end: calc(var(--site-unit) * 6);
+    scroll-margin-block-start: calc(var(--site-unit) * 10);
+  }
+  .faq__q { margin-block-end: calc(var(--site-unit) * 2); }
+  .faq__a :is(p, ul, ol) { margin-block: 0 calc(var(--site-unit) * 2); }
+  .faq__a { display: grid; gap: calc(var(--site-unit) * 2); color: var(--md-sys-color-on-surface-variant); }
+  .faq__a a { color: var(--md-sys-color-primary); }
+  .faq__pre {
+    margin: 0;
+    padding: calc(var(--site-unit) * 3) calc(var(--site-unit) * 4);
+    border-radius: var(--md-sys-shape-corner-small);
+    background: var(--md-sys-color-surface-container);
+    color: var(--md-sys-color-on-surface);
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .faq__list { padding-inline-start: 1.4em; }
+  .faq__tail {
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+    padding-block-start: calc(var(--site-unit) * 6);
+    display: grid;
+    gap: calc(var(--site-unit) * 2);
+  }
+  .faq__tail-links a { color: var(--md-sys-color-primary); }
+  .faq__updated { color: var(--md-sys-color-on-surface-variant); }
+
+  /* 手机(默认):TOC = 横滑 chip 条 */
+  .faq__toc { min-inline-size: 0; }
+  .faq__toc-title { margin-block-end: calc(var(--site-unit) * 2); }
+  .faq__toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: calc(var(--site-unit) * 2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-block-end: 4px;
+  }
+  .faq__toc-list::-webkit-scrollbar { display: none; }
+  .faq__toc-link { text-decoration: none; white-space: nowrap; }
+  .faq__toc-link[data-active] {
+    background: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-secondary-container);
+  }
+
+  /* 桌面:TOC sticky 左栏(spec §2.4) */
+  @media (min-width: 900px) {
+    .faq-page__grid { grid-template-columns: 232px minmax(0, 1fr); }
+    .faq__toc { position: sticky; top: calc(var(--site-unit) * 10); }
+    .faq__toc-list { display: grid; gap: calc(var(--site-unit) * 1); overflow: visible; }
+    .faq__toc-link { display: block; text-align: start; }
+  }
+</style>
+
+<script>
+  // TOC 高亮 = 原生 IntersectionObserver,只切 data-active 属性;色彩过渡 150ms(spec §5 工具页唯一动效)
+  const tocLinks = [...document.querySelectorAll<HTMLElement>('[data-toc-link]')];
+  const sections = [...document.querySelectorAll<HTMLElement>('[data-faq-section]')];
+  if (tocLinks.length && sections.length && 'IntersectionObserver' in window) {
+    const byId = new Map(tocLinks.map((a) => [a.getAttribute('href')!.slice(1), a]));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          for (const a of tocLinks) a.removeAttribute('data-active');
+          byId.get(e.target.id)?.setAttribute('data-active', '');
+        }
+      },
+      { rootMargin: '-10% 0px -70% 0px', threshold: 0 }
+    );
+    for (const s of sections) io.observe(s);
+  }
+</script>
