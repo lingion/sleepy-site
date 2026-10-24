@@ -152,6 +152,13 @@ const notes = t.abiNotes as Record<string, string>;
       background: color-mix(in srgb, var(--md-sys-color-surface) 75%, var(--md-sys-color-primary-container));
     }
   }
+  /* state layer active blend(评审 Important-1):全局 a:active (0,1,1) 会替掉
+     本行 scoped 底 (0,1,0)→按压冲底。blend 入行底 token(与 base 逐字同),
+     (0,2,0) 稳压通用档;后置平特异性盖过上方 :hover 档(桌面按压 = 按底 +
+     10% 叠色),触屏按压无 hover 同样命中。禁 @media 包裹:触屏接管。 */
+  .download__row:active {
+    background: color-mix(in srgb, currentColor 10%, color-mix(in srgb, var(--md-sys-color-surface) 55%, var(--md-sys-color-primary-container)));
+  }
   .download__row:focus-visible {
     outline: 2px solid var(--md-sys-color-on-primary-container);
     outline-offset: 2px;
@@ -179,6 +186,11 @@ const notes = t.abiNotes as Record<string, string>;
   }
   .download__row[data-rec]:hover {
     background: color-mix(in srgb, var(--md-sys-color-surface) 90%, var(--md-sys-color-primary-container));
+  }
+  /* 推荐行按压 blend:底 token 不同(78% 档),须各自混入自身底,
+     否则后置 :active (0,2,0) 会把 blend 落回 55% 底 → 按压瞬间跳色 */
+  .download__row[data-rec]:active {
+    background: color-mix(in srgb, currentColor 10%, color-mix(in srgb, var(--md-sys-color-surface) 78%, var(--md-sys-color-primary-container)));
   }
   .download__row-note {
     font: var(--md-sys-typescale-body-small);

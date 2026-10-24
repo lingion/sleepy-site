@@ -239,6 +239,39 @@ describe('Task 7 视觉细节闸(v4 §12 代码可闸项)', () => {
     }
   });
   it(':focus-visible 全局 2px primary 描边保留(state layer 不吞焦点闸)', () => {
-    expect(globalCss).toMatch(/:focus-visible\s*\{\s*outline:\s*2px solid var\(--md-sys-color-primary\)/);
+    // 锚定顶层裸 :focus-visible 块(评审 Important-2:旧未锚子串会被
+    // .site-field:focus-visible 顶过 = 全局环删了也绿的假绿闸)。
+    // m 标志下 ^\s*: 行首(吞缩进)后必须紧跟冒号 → 只有无前缀的
+    // :focus-visible 选择器可满足;字段变体行首是「.」,结构上不可能顶替。
+    const ring = /^\s*:focus-visible\s*\{/m.exec(globalCss);
+    expect(ring, 'global.css 须保留顶层 :focus-visible 全局焦点环(全站不裸删 outline)').not.toBeNull();
+    if (ring) {
+      const body = globalCss.slice(ring.index + ring[0].length, globalCss.indexOf('}', ring.index));
+      expect(body).toMatch(/outline:\s*2px solid var\(--md-sys-color-primary\)/);
+      // offset 双条件:全局环 2px,字段变体 -1px —— 块体切片 + offset 不可互替
+      expect(body).toMatch(/outline-offset:\s*2px/);
+    }
+  });
+  it('具底 blend 防冲闸:变体/带底链接状态色混入原底,禁通用 transparent 档替底', () => {
+    // 评审 carried minor + Important-1:通用 a:hover/a:active (0,1,1) 的
+    // transparent 混色会替掉具底控件/带底链接的 scoped/类底 → 按压冲底。
+    // 防线 = blend 规则混入各控件原 token 底;删任一 blend 即红。
+    expect(globalCss).toMatch(
+      /\.site-button--filled:is\(:hover, :active\)\s*\{[^}]*color-mix\(in srgb, currentColor 8%, var\(--md-sys-color-primary\)\)/
+    );
+    expect(globalCss).toMatch(
+      /\.skip-link:is\(:hover, :active\)\s*\{[^}]*color-mix\(in srgb, currentColor 8%, var\(--md-sys-color-secondary-container\)\)/
+    );
+    expect(globalCss).toMatch(
+      /\.skip-link:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, var\(--md-sys-color-secondary-container\)\)/
+    );
+    // scoped 侧(Download.astro):行 :active blend 混入行底 token(base 55% / data-rec 78%)
+    const downloadSrc = read('../components/sections/Download.astro');
+    expect(downloadSrc).toMatch(
+      /\.download__row:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, color-mix\(in srgb, var\(--md-sys-color-surface\) 55%, var\(--md-sys-color-primary-container\)\)\)/
+    );
+    expect(downloadSrc).toMatch(
+      /\.download__row\[data-rec\]:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, color-mix\(in srgb, var\(--md-sys-color-surface\) 78%/
+    );
   });
 });

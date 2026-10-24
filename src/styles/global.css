@@ -302,6 +302,15 @@ a:active {
 .views__dot[aria-checked='true']:active {
   background-color: color-mix(in srgb, currentColor 10%, var(--md-sys-color-secondary-container));
 }
+/* 带底链接 blend(评审 Important-1):.skip-link 是 <a>,通用 a:hover/a:active
+   (0,1,1) 压过 .skip-link 底 (0,1,0) → 悬停/按压把 secondary-container 洗成
+   近透明。同具底变体配方混入原 token 底,(0,2,0) 稳压通用档 */
+.skip-link:is(:hover, :active) {
+  background-color: color-mix(in srgb, currentColor 8%, var(--md-sys-color-secondary-container));
+}
+.skip-link:active {
+  background-color: color-mix(in srgb, currentColor 10%, var(--md-sys-color-secondary-container));
+}
 
 .skip-link {
   position: absolute;
