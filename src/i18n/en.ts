@@ -148,6 +148,7 @@ export const en: SiteCopy = {
     heading: 'Catalog and search',
     sub: 'The directory is grouped by province and academic protocol, searchable by school name or pinyin.',
     searchLabel: 'School name search',
+    placeholder: 'Type a school name or pinyin, e.g. jiaotong…',
     provinceLabel: 'Province',
     typeLabel: 'Protocol',
     expandAll: 'Expand all',

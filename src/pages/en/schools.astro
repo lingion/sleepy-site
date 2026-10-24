@@ -1,0 +1,19 @@
+---
+// en /schools/ — zh 页镜像(spec §1 hreflang 互指);校名保中文 = 设计(spec §4.1 EN 策略)
+import Base from '../../layouts/Base.astro';
+import SchoolsTool from '../../components/pages/SchoolsTool.astro';
+import { site } from '../../i18n/ui';
+import { en } from '../../i18n/en';
+---
+
+<Base
+  lang="en"
+  title={`${en.schoolsPage.heading} · Sleepy`}
+  description={en.schoolsPage.sub}
+  path="/en/schools/"
+  mirror="/schools/"
+  ogImage={`${site}/og/schools-en.png`}
+  ogImageAlt={en.schoolsPage.heading}
+>
+  <SchoolsTool copy={en.schoolsPage} lang="en" />
+</Base>

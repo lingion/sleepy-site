@@ -1,0 +1,306 @@
+---
+// v5 /schools/ 学校查找页主体 — plan Task 4 / spec §2.3
+// 台账从主页 #schools 段离页:348 行全量静态渲染(SEO 完整、JS-off 可读),岛只管 URL 态 ⇄ 过滤
+// 类名裁决(终审 I10):schools__* 前缀沿用,scoped CSS 自持,global.css 零新类
+import typesEn from '../../data/types-en.json';
+import { repoUrl } from '../../i18n/ui';
+import type { SiteCopy } from '../../i18n/zh';
+import { searchFace } from '../../lib/search';
+import {
+  catalogUpdatedAt,
+  provincesOrdered,
+  rowCount,
+  schools,
+  typesOrdered,
+} from '../../lib/schools-view';
+
+interface Props {
+  copy: SiteCopy['schoolsPage'];
+  lang: 'zh' | 'en';
+}
+const { copy: t, lang } = Astro.props;
+const typeLabel = (ty: string) => (lang === 'en' ? ((typesEn as Record<string, string>)[ty] ?? ty) : ty);
+const groups = provincesOrdered().map((p) => ({
+  ...p,
+  label: lang === 'en' ? p.en : p.zh,
+  rows: schools.filter((s) => s.province.code === p.code),
+}));
+const adaptationUrl = `${repoUrl}/issues/new?template=school_adaptation.yml`;
+const shown0 = t.countShown.replace('{shown}', String(rowCount)).replace('{total}', String(rowCount));
+---
+
+<section class="schools-page" data-prototype="tool-island">
+  <div class="site-col">
+    <header class="schools__head">
+      <h1 class="t-headline-large">{t.heading}</h1>
+      <p class="t-body-medium schools__sub">{t.sub}</p>
+    </header>
+
+    <div class="schools__island reveal" style="--reveal-i: 0;">
+      <p class="schools__stat site-chip tnum" role="status" data-shown-tpl={t.countShown}>{shown0}</p>
+
+      <div class="schools__toolbar">
+        <label class="schools__search">
+          <span class="visually-hidden">{t.searchLabel}</span>
+          <input
+            class="site-field"
+            type="search"
+            data-role="q"
+            placeholder={t.placeholder}
+            autocomplete="off"
+          />
+        </label>
+        <div class="schools__foldbtns">
+          <button type="button" class="site-button site-button--text" data-role="expand">{t.expandAll}</button>
+          <button type="button" class="site-button site-button--text" data-role="collapse" hidden>{t.collapseAll}</button>
+        </div>
+      </div>
+
+      <div class="schools__chipbar" role="group" aria-label={t.provinceAria}>
+        <button type="button" class="site-chip" data-province="" aria-pressed="true">{lang === 'en' ? 'All' : '全部'}</button>
+        {groups.map((g) => (
+          <button type="button" class="site-chip" data-province={g.code} aria-pressed="false">{g.label}</button>
+        ))}
+      </div>
+      <div class="schools__chipbar" role="group" aria-label={t.typeAria}>
+        <button type="button" class="site-chip" data-type="" aria-pressed="true">{lang === 'en' ? 'All' : '全部'}</button>
+        {typesOrdered().map((ty) => (
+          <button type="button" class="site-chip" data-type={ty} aria-pressed="false">{typeLabel(ty)}</button>
+        ))}
+      </div>
+
+      <div class="schools__groups" data-role="groups" tabindex="0" aria-label={t.heading}>
+        {groups.map((g) => (
+          <details class="schools__group" data-group={g.code}>
+            <summary class="t-title-small schools__summary">
+              {g.label} <span class="t-label-small schools__count">{g.rows.length}</span>
+            </summary>
+            <ul class="schools__list">
+              {g.rows.map((s) => (
+                <li
+                  class="schools__row t-body-small"
+                  data-school
+                  data-province={g.code}
+                  data-type={s.type}
+                  data-search={searchFace(s)}
+                >
+                  {s.name} · {typeLabel(s.type)}
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </div>
+
+      <p class="t-body-medium schools__empty" data-role="empty" hidden>
+        {t.emptyTitle}{' '}
+        <a href={adaptationUrl}>{t.emptyCta}</a>
+      </p>
+
+      <p class="t-body-small schools__foot">
+        {t.footUpdated} {catalogUpdatedAt} · {t.footNote} · <a href={adaptationUrl}>{t.emptyCta}</a>
+        <noscript> · {lang === 'en' ? 'The full list stays readable with JavaScript off.' : '禁用 JavaScript 时全量清单照常可读。'}</noscript>
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // 单岛 ≤6KB(spec §2.3):URL 态初始化、input/chip 重过滤、focus=s 一次性聚焦、展开/收起不写 URL、popstate 回退
+  import { applyInitialState, parseUrlState } from '../../lib/schools-island';
+
+  const page = document.querySelector<HTMLElement>('.schools-page');
+  if (page) {
+    const input = page.querySelector<HTMLInputElement>('input[data-role="q"]')!;
+    const expand = page.querySelector<HTMLButtonElement>('button[data-role="expand"]')!;
+    const collapse = page.querySelector<HTMLButtonElement>('button[data-role="collapse"]')!;
+    const details = [...page.querySelectorAll<HTMLDetailsElement>('details[data-group]')];
+    const chips = [...page.querySelectorAll<HTMLButtonElement>('.site-chip[data-province], .site-chip[data-type]')];
+
+    const setParam = (name: string, value: string): string => {
+      const search = new URLSearchParams(location.search);
+      if (value) search.set(name, value);
+      else search.delete(name);
+      const s = search.toString();
+      return s ? `?${s}` : '';
+    };
+    const refresh = (search: string, push: boolean) => {
+      applyInitialState(document, search);
+      history[push ? 'pushState' : 'replaceState'](null, '', `${location.pathname}${search}`);
+    };
+
+    // 首屏:focus=s 先于 apply 消费(主页入口卡落地,终审 I2)—— 剥参后 URL 只剩可分享四态
+    const initial = new URLSearchParams(location.search);
+    if (initial.get('focus') === 's') {
+      initial.delete('focus');
+      input.focus();
+      history.replaceState(null, '', `${location.pathname}${initial.toString() ? `?${initial}` : ''}`);
+    }
+    applyInitialState(document, location.search);
+    // 深链首屏 chip 按压态同步(aria-pressed 是唯一样式/状态源,禁 .is-active)
+    const st = parseUrlState(location.search);
+    for (const c of chips) {
+      const key = 'province' in c.dataset ? 'province' : 'type';
+      c.setAttribute('aria-pressed', String(c.dataset[key] === st[key]));
+    }
+
+    // 桌面(>840px)全组直铺;≤840px 保持默认折叠(手机一行一组)
+    if (matchMedia('(min-width: 841px)').matches) {
+      for (const d of details) d.open = true;
+      expand.hidden = true;
+      collapse.hidden = false;
+    }
+
+    input.addEventListener('input', () => refresh(setParam('q', input.value.trim()), false)); // q 逐字 replaceState,不入历史噪音
+    page.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const chip = target.closest<HTMLButtonElement>('.site-chip[data-province], .site-chip[data-type]');
+      if (chip) {
+        const key = 'province' in chip.dataset ? 'province' : 'type';
+        const bar = chip.parentElement!;
+        for (const c of bar.querySelectorAll<HTMLButtonElement>('.site-chip')) {
+          c.setAttribute('aria-pressed', String(c === chip));
+        }
+        refresh(setParam(key === 'province' ? 'p' : 't', chip.dataset[key] ?? ''), true);
+        if (key === 'province' && chip.dataset.province) {
+          const g = details.find((d) => d.dataset.group === chip.dataset.province);
+          if (g) {
+            g.open = true;
+            g.scrollIntoView({ block: 'nearest' });
+          }
+        }
+        return;
+      }
+      if (target.closest('button[data-role="expand"]')) {
+        for (const d of details) d.open = true;
+        expand.hidden = true;
+        collapse.hidden = false;
+      } else if (target.closest('button[data-role="collapse"]')) {
+        for (const d of details) d.open = false;
+        collapse.hidden = true;
+        expand.hidden = false;
+      }
+    });
+    window.addEventListener('popstate', () => {
+      applyInitialState(document, location.search);
+      const s = parseUrlState(location.search);
+      for (const c of chips) {
+        const key = 'province' in c.dataset ? 'province' : 'type';
+        c.setAttribute('aria-pressed', String(c.dataset[key] === s[key]));
+      }
+    });
+  }
+</script>
+
+<style>
+  /* 工具岛布局沿用 v4 §4 M4 岛卡;类名 schools__* 承接 global.a11y 闸(§10) */
+  .schools__head {
+    margin-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 6);
+  }
+  .schools__sub {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-block-start: calc(var(--site-unit) * 2);
+    max-width: 56ch;
+  }
+  .schools__island {
+    background: var(--md-sys-color-surface-container);
+    border-radius: var(--md-sys-shape-corner-xl);
+    padding: calc(var(--site-unit) * 8);
+  }
+  .schools__stat {
+    display: inline-block;
+    margin-block-end: calc(var(--site-unit) * 6);
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .schools__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--site-unit) * 3);
+    margin-block-end: calc(var(--site-unit) * 4);
+  }
+  .schools__search {
+    display: block;
+  }
+  .schools__search input {
+    inline-size: min(420px, 100%);
+  }
+  .schools__chipbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--site-unit) * 2);
+    margin-block-end: calc(var(--site-unit) * 3);
+  }
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .schools__groups {
+    margin-block-start: calc(var(--site-unit) * 6);
+    display: grid;
+    gap: calc(var(--site-unit) * 2);
+    /* 桌面段内滚动(spec §2.3:70vh,≤840px 取消嵌套滚动——触屏嵌套劫持整页) */
+  }
+  @media (min-width: 841px) {
+    .schools__groups {
+      max-block-size: 70vh;
+      overflow-y: auto;
+      padding-inline-end: calc(var(--site-unit) * 2);
+      overscroll-behavior: contain;
+    }
+  }
+  .schools__group {
+    /* 大列表渲染闸(Web Interface Guidelines 合规通道):零 JS、JS-off 无损、SEO 完整 */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 40px;
+  }
+  .schools__summary {
+    color: var(--md-sys-color-primary);
+    cursor: pointer;
+    touch-action: manipulation;
+    padding-block: calc(var(--site-unit) * 1.5);
+    position: sticky;
+    inset-block-start: 0;
+    background: var(--md-sys-color-surface-container);
+    list-style: none;
+  }
+  .schools__summary::-webkit-details-marker {
+    display: none;
+  }
+  .schools__summary::before {
+    content: '▸ ';
+  }
+  .schools__group[open] > .schools__summary::before {
+    content: '▾ ';
+  }
+  .schools__count {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-inline-start: calc(var(--site-unit) * 2);
+  }
+  .schools__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: calc(var(--site-unit) * 1);
+    padding-block: calc(var(--site-unit) * 1) calc(var(--site-unit) * 3);
+  }
+  .schools__row {
+    color: var(--md-sys-color-on-surface-variant);
+    padding-block: calc(var(--site-unit) * 0.5);
+  }
+  .schools__empty {
+    margin-block-start: calc(var(--site-unit) * 6);
+  }
+  .schools__foot {
+    margin-block-start: calc(var(--site-unit) * 6);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  .schools__foldbtns .site-button--text {
+    touch-action: manipulation;
+  }
+</style>
