@@ -25,20 +25,26 @@ const anchors = [
 <header class="appbar" id="appbar">
   <div class="appbar__inner site-col">
     <a class="appbar__brand t-title-medium" href={lang === 'zh' ? '/' : '/en/'}>
-      <!-- 品牌标内联(与 /favicon.svg 同源几何):避免位形随主题反相,深浅底都稳 -->
-      <svg width="24" height="24" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="brand-lg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#D8D3FF"/>
-            <stop offset="1" stop-color="#9C87FE"/>
-          </linearGradient>
-        </defs>
-        <rect x="4" y="4" width="112" height="112" rx="26" fill="url(#brand-lg)"/>
-        <path d="M29.9 35.1 L54.1 25.4 L106.8 25.4 L106.8 103.5 L29.9 103.5 Z" fill="#fff"/>
-        <rect x="43.9" y="46.3" width="20.6" height="16.1" rx="5" fill="#D3CDFF"/>
-        <rect x="71" y="46.3" width="20.7" height="16.1" rx="5" fill="#D3CDFF"/>
-        <rect x="43.9" y="67.6" width="20.6" height="15.1" rx="5" fill="#D3CDFF"/>
-        <rect x="71" y="67.6" width="20.7" height="15.1" rx="5" fill="#947FFF"/>
+      <!-- 品牌标 = /favicon.svg 胶囊 logo 忠实转写(几何/色值逐字照抄源文件,禁反相禁改底;白底方块深浅主题均稳) -->
+      <svg width="24" height="24" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+        <rect width="512" height="512" rx="115" fill="#FFFFFF"/>
+        <rect x="63" y="117" width="36" height="118" rx="18" fill="#9176DF"/>
+        <rect x="63" y="335" width="36" height="60" rx="18" fill="#9176DF"/>
+        <rect x="121" y="82" width="36" height="198" rx="18" fill="#9176DF"/>
+        <rect x="121" y="346" width="36" height="72" rx="18" fill="#9176DF"/>
+        <rect x="180" y="59" width="35" height="95" rx="17" fill="#9176DF"/>
+        <rect x="180" y="220" width="35" height="118" rx="17" fill="#9176DF"/>
+        <rect x="180" y="404" width="35" height="49" rx="17" fill="#9176DF"/>
+        <rect x="238" y="48" width="36" height="95" rx="18" fill="#9176DF"/>
+        <rect x="238" y="208" width="36" height="96" rx="18" fill="#9176DF"/>
+        <rect x="238" y="369" width="36" height="95" rx="18" fill="#9176DF"/>
+        <rect x="297" y="59" width="35" height="49" rx="17" fill="#9176DF"/>
+        <rect x="297" y="174" width="35" height="118" rx="17" fill="#9176DF"/>
+        <rect x="297" y="358" width="35" height="95" rx="17" fill="#9176DF"/>
+        <rect x="355" y="94" width="35" height="72" rx="17" fill="#C2C4D0"/>
+        <rect x="414" y="117" width="35" height="60" rx="17" fill="#C2C4D0"/>
+        <rect x="414" y="277" width="35" height="118" rx="17" fill="#C2C4D0"/>
+        <rect x="355" y="232" width="35" height="197" rx="17" fill="#C2C4D0"/>
       </svg>
       Sleepy
     </a>
