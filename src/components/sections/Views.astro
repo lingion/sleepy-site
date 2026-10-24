@@ -88,6 +88,13 @@ const panes = [
   .views-band {
     background: var(--md-sys-color-surface-container-low);
   }
+  /* dark 节奏补丁(§17.1 [goals-major#7],T10 剖面实抓:dark 下 M2↔M1/M3
+     ΔL≈0.2 近不可见):带底改 container-high 拉大步长 + 段界 1px outline-variant
+     发丝顶边(装饰边,与 Download/Gallery 同口径);light 下两值原样不动 */
+  :global([data-theme='dark']) .views-band {
+    background: var(--md-sys-color-surface-container-high);
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  }
   .views__heading {
     margin-block-end: calc(var(--site-unit) * 8);
   }
