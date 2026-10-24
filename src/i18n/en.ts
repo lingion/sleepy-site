@@ -1,83 +1,83 @@
-// en 文案单点(spec §4.1):键树与 zh.ts 严格同形 —— i18n-parity 测试闸。
-// 策略:校名保中文 + 拼音检索,EN 页翻译的是「文案面」,不是数据面。
-// slogan 暂用 A 案英译(§7.2 签收前单点可换)。
+// en 文案单点(v4 spec §7 R5):键树与 zh.ts 严格同形 —— i18n-parity 测试闸。
+// slogan 暂用 A 案英译「Built open. Feels free.」(§7.2 签收前单点可换;zh 逐字保留已批 §13 R3,en 换值未批)。
+// 策略:校名保中文 + 拼音检索,EN 页翻译「文案面」不翻译「数据面」。
+// 数字纪律同 zh:348/33 由构建期派生传入,禁手写。
 import type { SiteCopy } from './zh';
 
 export const en: SiteCopy = {
   meta: {
     title: 'Sleepy — open-source timetable, built free',
     description:
-      'An open-source Android timetable built by one person. 348 direct academic-system connections. No ads, no tracking, all code public.',
+      '348 direct academic-system connections. Data stays on the device; source fully open. An open-source Android timetable maintained by one person.',
   },
   hero: {
     slogan: 'Built open. Feels free.',
-    sub: 'An open-source Android timetable: three views, direct academic-system connections, reminders and home-screen widgets. The timetable is yours — the data stays on your phone.',
+    sub: 'An open-source Android timetable: three views, direct academic-system connections, home-screen widgets. Timetable data lives only on this device and passes through no server.',
     ctaDownload: 'Download for Android',
     ctaTrial: 'Try it online',
-    deviceCaption: 'Today view · app screenshot',
+    deviceCaption: 'Week view app screenshot',
+    ribbon: { schools: 'direct academic connections', license: 'GPL-3.0 open source', privacy: 'Data stays on device' },
   },
-  features: {
-    heading: 'What a timetable should feel like',
-    views: {
-      groupLabel: 'View switcher',
-      peek: 'Switch to this view',
-      captionSuffix: ' view screenshot',
-      panes: { week: 'Week', grid: 'Grid', today: 'Today' },
+  views: {
+    heading: 'Three views, each in its place',
+    panes: {
+      grid: { label: 'Grid', title: 'Grid view', lead: 'One time grid — class positions and the day’s density read in a single field of view.' },
+      week: { label: 'Week', title: 'Week view', lead: 'Grouped by day and spread across the week, so gaps and conflicts show up immediately.' },
+      today: { label: 'Today', title: 'Today view', lead: 'Only today’s classes; what remains after this moment reads in one screen.' },
     },
-    items: [
-      {
-        title: 'Three views, one glance',
-        body: 'Grid view is the main view for most people: one time grid, and a glance tells you where each class sits and how dense the week is. Week view groups by day for the big picture, today view shows only right now — tap a faded thumbnail at either side to swap views in place.',
-        imgAlt: 'Week view app screenshot',
-      },
-      {
-        title: '348 direct connections',
-        body: 'Pick your school, sign in, the timetable comes down. When the system changes, I update the adapter — your timetable never skips a beat.',
-        imgAlt: 'Academic import panel app screenshot',
-      },
-      {
-        title: 'Reminders and widgets, in tune',
-        body: 'Class-ahead reminders, today’s schedule, home-screen widgets. Present when it matters, quiet the rest of the day.',
-        imgAlt: 'Class reminder settings screenshot',
-      },
-      {
-        title: 'Local-first, worry-free upgrades',
-        body: 'Your timetable lives on your phone and passes through no server. Export, import, migrate — all your own files.',
-        imgAlt: 'Week-grid home-screen widget screenshot',
-      },
-    ],
+    peek: 'Switch to this view',
+    groupLabel: 'View switcher',
+    captionSuffix: ' view screenshot',
+  },
+  connect: {
+    heading: 'Direct academic connections',
+    body: 'Pick your school, sign in, and the timetable is written straight to this device. When a system changes, the maintainer updates the adapter and the sync path stays available.',
+    imageAlt: 'Academic import panel app screenshot',
+    chipLabel: (rows: number) => `${rows} schools connected`,
   },
   schools: {
-    heading: 'Where your school stands',
-    sub: 'Everything supported is grouped by province and academic system. Search it — see if your school is in.',
-    searchPlaceholder: 'Search by name or pinyin, e.g. jiaotong',
+    heading: 'Catalog and search',
+    sub: 'All entries are grouped by province and academic protocol, searchable by school name or pinyin.',
+    searchPlaceholder: 'Type a school name or pinyin, e.g. jiaotong',
     provinceLabel: 'Province',
     typeLabel: 'Protocol',
     statLine: (rows: number, types: number) => `${rows} entries · ${types} protocols`,
     allLabel: 'All',
-    emptyState: 'This school isn’t supported yet — ',
+    emptyState: 'This school isn’t listed yet, ',
     emptyIssue: 'open an issue',
-    emptyTail: ' — it will be added soon. If filing an issue is inconvenient, a message in the group works too.',
+    emptyTail: ' to put it in the supplement queue; when that is inconvenient, a group message gets the same follow-up.',
     faqLink: 'FAQ',
     jsOffNote: 'With JavaScript disabled the full list stays readable.',
   },
+  reminders: {
+    heading: 'Reminders and widgets',
+    stripLead: 'Reminders run on the on-device timetable and appear only at the moments that call for them.',
+    imageAlt: 'Class reminder settings screenshot',
+    beats: [
+      { title: 'Class-ahead reminder', body: 'Notifications arrive on time before class; the lead time follows your own schedule.' },
+      { title: 'Daily summary', body: 'Each day opens with every class laid out at once, with no need to page through screens.' },
+      { title: 'Next-day preview', body: 'Tomorrow’s classes are summarized in the evening, so the next day can be settled the night before.' },
+    ],
+    widgets: {
+      heading: 'Home-screen widgets',
+      gridLabel: 'Week-grid widget',
+      listLabel: 'Week-list widget',
+      todayLabel: 'Today widget',
+      twodaysLabel: 'Next-two-days widget',
+    },
+  },
   gallery: {
-    heading: 'Real screenshots, no mockups',
-    sub: '13 shipped screenshots: 8 app screens + 5 home-screen widgets. Tap to see them full size.',
+    heading: 'Every shot is a real screenshot',
+    sub: 'Each image comes from the shipped app. Tap any one to view it full size.',
     captions: [
-      'Week view',
       'Grid view',
+      'Week view',
       'Today view',
       'Table manager',
       'Appearance & theme',
-      'Class reminder',
-      'Import preview',
       'Settings (Mine)',
-      'Widget · week grid',
+      'Class reminder',
       'Widget · week view',
-      'Widget · today',
-      'Widget · next two days',
-      'Widget · week list',
     ],
     close: 'Close',
     prev: 'Previous',
@@ -86,8 +86,9 @@ export const en: SiteCopy = {
   },
   download: {
     heading: 'Download Sleepy',
+    cta: 'Download for Android',
     versionLine: (tag: string, date: string) => `${tag} · released ${date}`,
-    universalNote: 'Not sure? Universal runs on every architecture.',
+    universalNote: 'The Universal package fits every architecture; choose it when the device type is unknown.',
     recommended: 'Recommended',
     downloadAria: (abi: string, size: string) => `Download ${abi} (${size})`,
     abiNotes: {
@@ -101,20 +102,42 @@ export const en: SiteCopy = {
     storeReserved: 'Store listing in the works',
     storeBadgeCn: 'App Market',
     deviceCaption: 'Grid view app screenshot',
-    trial: 'Rather not install? The online trial is full-featured.',
+    trial: 'The online trial provides full functionality without installation.',
   },
   trust: {
     heading: 'Who makes this',
-    story: 'An open-source timetable built by one person. No ads, no tracking, all code public.',
-    reachOut: 'Adapter issue at your school? Open an issue first — or @ me in the group.',
+    story: 'Sleepy is designed and maintained by one person: features are built local-first, the source is fully public, and auditing or self-publishing is welcome.',
+    reachOut: 'For adapter issues, file a GitHub issue first; when that is inconvenient, a group message gets the same follow-up.',
     privacyHeading: 'Privacy is an architecture question',
-    privacyBody:
-      'No Firebase, no Sentry, no ad SDK. Timetable data stays on your phone only; you keep the backup files yourself.',
+    privacyBody: 'Timetable data lives only on this device and passes through no server; backup and migration files stay in your own hands.',
     licenseHeading: 'GPL-3.0',
-    licenseBody:
-      'Full source is public — audit it, change it, ship your own. Every commit in the repo is open to read.',
+    licenseBody: 'The source is fully public — audit it, change it, ship your own build; every commit in the repository is readable.',
     communityHeading: 'Community',
     sponsorLink: 'Sponsor Sleepy',
     qqGroupLabel: 'QQ group',
+  },
+  appbar: {
+    anchors: {
+      views: 'Features',
+      schools: 'Directory',
+      reminders: 'Widgets',
+      trust: 'Trust',
+    },
+    ctaDownload: 'Download',
+    navLabel: 'Section navigation',
+  },
+  footer: {
+    app: 'App',
+    dl: 'Download for Android',
+    trial: 'Try online',
+    repo: 'Source code',
+    community: 'Community',
+    qq: 'QQ group',
+    faq: 'FAQ',
+    sponsor: 'Sponsor Sleepy',
+    license: 'GPL-3.0 open source',
+    build: 'Build',
+    backToTop: 'Back to top',
+    noJs: 'With JavaScript disabled the full list stays readable.',
   },
 } as const;

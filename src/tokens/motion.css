@@ -24,6 +24,7 @@
   --md-sys-motion-easing-emphasize-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
   --md-sys-motion-easing-emphasize-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
   --site-stagger: 60ms; /* 滚动揭示错峰,站点常量非 M3 token(spec §2.3) */
+  --site-motion-standard: cubic-bezier(0.23, 1, 0.32, 1); /* §6-5 切换/§6-8 press 标准缓动(M3 表外定值,v4 编排表逐行) */
 }
 
 @media (prefers-reduced-motion: reduce) {

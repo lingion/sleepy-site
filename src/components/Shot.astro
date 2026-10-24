@@ -14,11 +14,33 @@ interface Props {
   sizes?: string;
   loading?: 'lazy' | 'eager';
   class?: string;
+  /**
+   * LCP 前景标记(T3):true → light 版 fetchpriority="high" + loading="eager",
+   * 隐藏的 dark 版反向降载 fetchpriority="low" + loading="lazy"(防浏览器预取占带宽)。
+   * 缺省 false = 两版沿用 loading,行为不变。全站只允许一处 true(hero 前景)。
+   */
+  priority?: boolean;
+  /**
+   * 变体锁定(T5/M6 换幕带):band 深底上「深底配浅 UI 恒成立」→ 带内截图强制取 light 版,
+   * 不随主题翻转。两版仍渲染(.shot__dark 保留在 DOM),仅 CSS 层定显示。
+   */
+  forceVariant?: 'light' | 'dark';
 }
-const { light, dark, alt, widths = [420, 840], sizes, loading = 'lazy', class: className } = Astro.props;
+const {
+  light,
+  dark,
+  alt,
+  widths = [420, 840],
+  sizes,
+  loading = 'lazy',
+  class: className,
+  priority = false,
+  forceVariant,
+} = Astro.props;
+const forceClass = forceVariant ? `shot--force-${forceVariant}` : undefined;
 ---
 
-<span class:list={['shot', className]}>
+<span class:list={['shot', className, forceClass]}>
   <Image
     class="shot__i shot__light"
     src={light}
@@ -27,7 +49,8 @@ const { light, dark, alt, widths = [420, 840], sizes, loading = 'lazy', class: c
     alt={alt}
     width={light.width}
     height={light.height}
-    loading={loading}
+    loading={priority ? 'eager' : loading}
+    fetchpriority={priority ? 'high' : undefined}
     decoding="async"
   />
   <Image
@@ -39,7 +62,8 @@ const { light, dark, alt, widths = [420, 840], sizes, loading = 'lazy', class: c
     aria-hidden="true"
     width={dark.width}
     height={dark.height}
-    loading={loading}
+    loading={priority ? 'lazy' : loading}
+    fetchpriority={priority ? 'low' : undefined}
     decoding="async"
   />
 </span>
@@ -56,6 +80,16 @@ const { light, dark, alt, widths = [420, 840], sizes, loading = 'lazy', class: c
     display: none;
   }
   :global([data-theme='dark']) .shot__dark {
+    display: block;
+  }
+  /* T5/M6 带内强制变体(spec §4 M6:深底配浅 UI 恒成立,forceVariant 不随主题翻转)。
+     规则置于主题翻转之后:同 specificity 源码序胜出,更高阶选择器直接压过 */
+  .shot--force-light .shot__dark,
+  :global([data-theme='dark']) .shot--force-light .shot__dark {
+    display: none;
+  }
+  .shot--force-light .shot__light,
+  :global([data-theme='dark']) .shot--force-light .shot__light {
     display: block;
   }
 </style>

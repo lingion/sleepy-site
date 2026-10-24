@@ -1,80 +1,84 @@
-// zh 文案单点(spec §2.5/§3)。slogan = 临时 A(§7.2 签收前单点可换)。
-// 样例句逐句钉死,任何改写 = 测试红(global 文案闸)。
+// zh 文案单点 — v4 spec §7 五规则:R1 一意思正面说一次 / R2 禁一切问句 / R3 否定枚举改机制陈述 / R4 去口语 / R5 与 en 同形镜像。
+// slogan「构建无壳,自由自在」逐字保留(§13 R3 品牌豁免已批;en 保留 §7.2 前现值「Built open. Feels free.」,签收前单点可换)。
+// 数字纪律(§15):348/33 一律构建期派生传入(statLine/chipLabel/ribbon 计数),i18n 内禁手写。
+// 泄漏闸(page.en.test walk zh 含汉字叶子 ⊄ EN 页):短叶子避真实校名子串 → AppBar 锚点用「教务直连/学校名录」而非裸「教务/学校」。
 export const zh = {
   meta: {
     title: 'Sleepy — 开源课表,构建无壳,自由自在',
     description:
-      '一个人写的开源 Android 课表。348 条教务直连,没有广告,没有追踪,代码全公开。',
+      '348 条教务直连,数据仅存本机,源码完整公开。一个人维护的开源 Android 课表。',
   },
   hero: {
     slogan: '构建无壳,自由自在',
-    sub: '开源 Android 课表:三视图、教务直连、提醒与桌面组件。课表是你的,数据留在你手机里。',
+    sub: '开源 Android 课表:三视图、教务直连、桌面组件。课表数据仅存于本机,不经任何服务器。',
     ctaDownload: '下载 Android',
     ctaTrial: '在线体验',
-    deviceCaption: '今日视图 · 应用截图',
+    deviceCaption: '周视图应用截图',
+    // ribbon = 不对称佐证条:派生大数字领头 + 单位短语,两事实跟随
+    ribbon: { schools: '条教务直连', license: 'GPL-3.0 开源', privacy: '数据留存本机' },
   },
-  features: {
-    heading: '课表该有的样子',
-    views: {
-      groupLabel: '视图切换',
-      peek: '切换到这个视图',
-      captionSuffix: '视图截图',
-      panes: { week: '周', grid: '网格', today: '今日' },
+  views: {
+    heading: '三视图,各得其所',
+    // 一面板一主张(§4 M2):label=切换段名 title=面板题 lead=主张句
+    panes: {
+      grid: { label: '网格', title: '网格视图', lead: '一屏时间网格,课程位置与当日密度在同一视野内完成判读。' },
+      week: { label: '周', title: '周视图', lead: '按天归组横向铺开,整周的空档与冲突一目了然。' },
+      today: { label: '今日', title: '今日视图', lead: '只呈现当天课节,此刻之后的安排一屏读完。' },
     },
-    items: [
-      {
-        title: '三视图,一眼到底',
-        body: '网格视图是大多数人的主视图:一屏时间网格,课在什么位置、有多密,扫一眼就有答案。周视图按天归组看全局,今日视图只看当下——点两侧渐隐的缩略图,三个视图当场换着看。',
-        imgAlt: '周视图应用截图',
-      },
-      {
-        title: '348 条教务直连',
-        body: '选学校、登录,课表就下来了。教务系统改版,适配我来更新,课表不断档。',
-        imgAlt: '教务导入面板应用截图',
-      },
-      {
-        title: '提醒和组件,恰到好处',
-        body: '课前提醒、今日安排、桌面小组件。该出现时出现,其余时间保持安静。',
-        imgAlt: '课前提醒设置应用截图',
-      },
-      {
-        title: '本地优先,换机不慌',
-        body: '课表存在你手机里,不经过任何服务器。导出、导入、迁移,都是你自己的文件。',
-        imgAlt: '桌面周网格小组件截图',
-      },
-    ],
+    peek: '切换到这个视图',
+    groupLabel: '视图切换',
+    captionSuffix: '视图截图',
+  },
+  connect: {
+    heading: '教务直连',
+    body: '选定学校登录,课表直接写入本机。教务系统改版,由维护者跟进适配,同步链路持续可用。',
+    imageAlt: '教务导入应用截图',
+    // 派生数字 chip(§4 M3:卡缘 assist-chip「348 校直连」)
+    chipLabel: (rows: number) => `${rows} 校直连`,
   },
   schools: {
-    heading: '你学校在哪一档',
-    sub: '全部收录按省份和教务系统分组。搜一下,你的学校在不在。',
-    searchPlaceholder: '搜校名或拼音,比如 jiaotong',
+    heading: '收录与检索',
+    sub: '全部收录按省份与教务协议分组,支持校名或拼音检索。',
+    searchPlaceholder: '输入校名或拼音,如 jiaotong',
     provinceLabel: '省份',
     typeLabel: '协议',
     statLine: (rows: number, types: number) => `${rows} 条收录 · ${types} 协议`,
     allLabel: '全部',
-    emptyState: '这所学校还没收录——',
-    emptyIssue: '提个 issue',
-    emptyTail: ',很快就会补上;不方便开 issue 的话,群里留言也行。',
+    emptyState: '这所学校尚未收录,',
+    emptyIssue: '提交 issue',
+    emptyTail: '即可进入补充队列;不便提交时,群内留言同样会被跟进。',
     faqLink: '常见问答',
     jsOffNote: '禁用 JavaScript 时全量清单照常可读。',
   },
+  reminders: {
+    heading: '提醒与组件',
+    stripLead: '提醒由本机课表驱动,只在需要出现的时间点出现。',
+    imageAlt: '课前提醒应用截图',
+    beats: [
+      { title: '课前提醒', body: '上课前按时发出通知,提前量按个人作息设定。' },
+      { title: '今日摘要', body: '每日开始给出当天课节全貌,无需逐屏查看。' },
+      { title: '明日预告', body: '晚间汇总次日课程,当天的晚间即可确定第二天的安排。' },
+    ],
+    widgets: {
+      heading: '桌面组件',
+      gridLabel: '周网格组件',
+      listLabel: '周列表组件',
+      todayLabel: '今日组件',
+      twodaysLabel: '未来两天组件',
+    },
+  },
   gallery: {
-    heading: '真实截图,无渲染图',
-    sub: '13 张定稿截图,页面 8 张 + 桌面组件 5 张,点开看大图。',
+    heading: '全部为真机截图',
+    sub: '每一张都来自线上版本,未用渲染图。点按任意一张查看大图。',
     captions: [
-      '周视图',
       '网格视图',
+      '周视图',
       '今日视图',
       '课表管理',
       '外观与主题',
-      '课前提醒',
-      '导入预览',
       '我的',
-      '组件 · 周网格',
+      '课前提醒',
       '组件 · 周视图',
-      '组件 · 今日课程',
-      '组件 · 未来两天',
-      '组件 · 周列表',
     ],
     close: '关闭',
     prev: '上一张',
@@ -83,8 +87,9 @@ export const zh = {
   },
   download: {
     heading: '下载 Sleepy',
+    cta: '下载 Android',
     versionLine: (tag: string, date: string) => `${tag} · ${date} 发布`,
-    universalNote: '不确定就选 Universal:适配全部架构。',
+    universalNote: 'Universal 包适配全部架构,不确定设备时优先选择它。',
     recommended: '推荐',
     downloadAria: (abi: string, size: string) => `下载 ${abi}(${size})`,
     abiNotes: {
@@ -98,28 +103,56 @@ export const zh = {
     storeReserved: '商店上架准备中',
     storeBadgeCn: '应用商店',
     deviceCaption: '网格视图应用截图',
-    trial: '不想安装 APK?在线体验功能完整。',
+    trial: '在线体验提供完整功能,无需安装。',
   },
   trust: {
     heading: '谁在做这个',
-    story: '一个人写的开源课表。没有广告,没有追踪,代码全公开。',
-    reachOut: '适配你学校的问题,开 issue 优先,群里 @ 我也行。',
+    story: 'Sleepy 由一个人设计与维护:功能以本地优先为前提实现,代码完整公开,接受审计与自行分发。',
+    reachOut: '适配问题优先通过 GitHub issue 反馈;不便提交时,群内留言同样会被跟进。',
     privacyHeading: '隐私是架构问题',
-    privacyBody:
-      '没有 Firebase,没有 Sentry,没有广告 SDK。课表数据只存在你手机,备份文件你自己保管。',
+    privacyBody: '课表数据仅存于本机,不经任何服务器;备份与迁移文件由你自己保管。',
     licenseHeading: 'GPL-3.0',
-    licenseBody:
-      '源码全公开,可以审、可以改、可以自己发。仓库里每一个 commit 都能翻。',
+    licenseBody: '源码完整公开,可以审查、修改、自行发布;仓库中每一个 commit 均可查阅。',
     communityHeading: '社区',
     sponsorLink: '赞助 Sleepy',
     qqGroupLabel: 'QQ 群',
   },
+  appbar: {
+    // 锚点 = 段入口(spec §4 四枚:功能·学校·组件·信任);「学校名录」为避校名子串泄漏的 4 字形式(§15 泄漏闸)
+    anchors: {
+      views: '功能',
+      schools: '学校名录',
+      reminders: '组件',
+      trust: '信任',
+    },
+    ctaDownload: '下载',
+    navLabel: '区块导航',
+  },
+  footer: {
+    // app 用 'App'(纯拉丁):中文 '应用' 撞真实校名「广州应用科技学院」子串 = EN 泄漏闸红(§15)
+    app: 'App',
+    dl: '下载 Android',
+    trial: '在线体验',
+    repo: '源码仓库',
+    community: '社区',
+    qq: 'QQ 群',
+    faq: '常见问答',
+    sponsor: '赞助 Sleepy',
+    license: 'GPL-3.0 开源',
+    build: '构建',
+    backToTop: '回到顶部',
+    noJs: '禁用 JavaScript 时全量清单照常可读。',
+  },
 } as const;
 
 // 结构类型:键树 = 双语镜像闸(tsc 级),值拓宽成 string 让 en.ts 可标注
+// 数组走 readonly:zh 的 as const 元组 → readonly 数组可直接赋值给 SiteCopy(Base 传 copy 用);
+// en 的新鲜字面量(可变数组)→ readonly 目标同样可赋(可变→只读合法)
 type Wide<T> = T extends (...args: infer A) => infer R
   ? (...a: A) => R
-  : T extends object
-    ? { -readonly [K in keyof T]: Wide<T[K]> }
-    : string;
+  : T extends readonly (infer E)[]
+    ? readonly Wide<E>[]
+    : T extends object
+      ? { -readonly [K in keyof T]: Wide<T[K]> }
+      : string;
 export type SiteCopy = Wide<typeof zh>;

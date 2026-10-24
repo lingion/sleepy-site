@@ -1,0 +1,21 @@
+# 大陆备用入口(account 2): Astro 官网部署到 sleepy.lingion.qzz.io
+#   2026-10-23 起该域名为官网入口; 原网页版备用内容 = ~/sleepy-web/dist
+#   (网页版回滚: cd ~/sleepy-web/site2 && 按其头注释命令重部署即夺回域名)
+# 手动重部署:
+#   cd ~/sleepy-site && npm run build(需清代理 env,见下)
+#   CLOUDFLARE_API_TOKEN=$(sed -n 2p ~/.cloudflare-token-2 | tr -d ' \t\r') \
+#     CLOUDFLARE_ACCOUNT_ID=3e38e1e3956db0d4a8fcb14a3e514559 \
+#     ~/proxy/node_modules/.bin/wrangler deploy --config worker/wrangler.toml
+# Worker custom_domain 不校验 Host · is-a.bot 等 CNAME 链直达无需平台侧绑定
+name = "sleepy-web-site-2"
+compatibility_date = "2026-09-01"
+
+routes = [
+  { pattern = "sleepy.lingion.qzz.io", custom_domain = true },
+]
+
+[assets]
+directory = "../dist/client"
+
+[observability]
+enabled = true

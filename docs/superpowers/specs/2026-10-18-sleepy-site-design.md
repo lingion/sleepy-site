@@ -1,5 +1,7 @@
 # Sleepy 官网设计(spec v3 · 终稿)
 
+> ⚠️ 2026-10-23 被 docs/superpowers/specs/2026-10-23-sleepy-site-redesign-design.md 取代(结构/裁切/reduced-motion 三节废弃)
+
 日期:2026-10-18 · 状态:两轮对抗审查修复完毕,批准实施
 仓库:`lingion/sleepy-site`(GPL-3.0)· 部署:Cloudflare Pages → `sleepy.lingion.eu.cc`
 

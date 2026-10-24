@@ -11,28 +11,38 @@
   --md-sys-shape-corner-xl: 28px;
   --md-sys-shape-corner-full: 9999px;
 
-  /* —— M3 type scale 15 阶(spec §2.2;Inter 替 Roboto 字面量,tracking 按 M3 表)—— */
-  --md-sys-typescale-display-large: 400 57px/64px;
-  --md-sys-typescale-display-medium: 400 45px/52px;
-  --md-sys-typescale-display-small: 400 36px/44px;
-  --md-sys-typescale-headline-large: 400 32px/40px;
-  --md-sys-typescale-headline-medium: 400 28px/36px;
-  --md-sys-typescale-headline-small: 400 24px/32px;
-  --md-sys-typescale-title-large: 400 22px/28px;
-  --md-sys-typescale-title-medium: 500 16px/24px;
-  --md-sys-typescale-title-small: 500 14px/20px;
-  --md-sys-typescale-body-large: 400 16px/24px;
-  --md-sys-typescale-body-medium: 400 14px/20px;
-  --md-sys-typescale-body-small: 400 12px/16px;
-  --md-sys-typescale-label-large: 500 14px/20px;
-  --md-sys-typescale-label-medium: 500 12px/16px;
-  --md-sys-typescale-label-small: 500 11px/16px;
+  /* —— M3 type scale 15 阶(spec §2.2;Inter 替 Roboto 字面量,tracking 按 M3 表)——
+     token 必含 family:消费方全部走 `font: var(--token)` 简写,shorthand 缺 family 整条声明无效
+     (v4 视觉闸发现的静默失效:15 阶字号/字重从未生效,一律回退浏览器默认)—— */
+  --md-sys-typescale-display-large: 400 57px/64px var(--site-font-stack);
+  --md-sys-typescale-display-medium: 400 45px/52px var(--site-font-stack);
+  --md-sys-typescale-display-small: 400 36px/44px var(--site-font-stack);
+  --md-sys-typescale-headline-large: 400 32px/40px var(--site-font-stack);
+  --md-sys-typescale-headline-medium: 400 28px/36px var(--site-font-stack);
+  --md-sys-typescale-headline-small: 400 24px/32px var(--site-font-stack);
+  --md-sys-typescale-title-large: 400 22px/28px var(--site-font-stack);
+  --md-sys-typescale-title-medium: 500 16px/24px var(--site-font-stack);
+  --md-sys-typescale-title-small: 500 14px/20px var(--site-font-stack);
+  --md-sys-typescale-body-large: 400 16px/24px var(--site-font-stack);
+  --md-sys-typescale-body-medium: 400 14px/20px var(--site-font-stack);
+  --md-sys-typescale-body-small: 400 12px/16px var(--site-font-stack);
+  --md-sys-typescale-label-large: 500 14px/20px var(--site-font-stack);
+  --md-sys-typescale-label-medium: 500 12px/16px var(--site-font-stack);
+  --md-sys-typescale-label-small: 500 11px/16px var(--site-font-stack);
 
   /* —— 栅格(spec §2.2/§2.4):4/8dp;内容列 1040;断点 600/840/1200/1600 —— */
   --site-unit: 4px;
   --site-content-col: 1040px;
   --site-section-gap: 128px;
   --site-section-gap-narrow: 80px;
+  --site-section-gap-small: 48px;
+
+  /* —— 换幕带(v4 spec §11-11/§17.1):恒取 light 主题 inverse 实值,不随主题翻转;
+     消费点 = #gallery.band(Task 5),无其他消费者即红(禁无主变量)。
+     C5 口径:全站新增硬编码色值仅此两枚——恒定带底的语义即「不随主题翻转」,
+     无法用 --md-sys-* token 表达;Blob/AppBar SVG 存量色值未触碰 —— */
+  --site-band-bg: #313033;
+  --site-band-fg: #F4EFF4;
 
   /* —— 站点级用法变量 —— */
   --site-font-latin: 'Inter Variable', Inter, sans-serif;
@@ -47,6 +57,12 @@
   }
 }
 
+@media (max-width: 600px) {
+  :root {
+    --site-section-gap: var(--site-section-gap-small);
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -55,10 +71,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 锚点落点防 sticky AppBar 盖段标题(v4 spec §4:栏高 64 + 16 呼吸) */
+section[id] {
+  scroll-margin-top: 80px;
+}
+
 body {
   margin: 0;
-  font: var(--md-sys-typescale-body-large) / var(--md-sys-typescale-body-large, 1);
-  font-family: var(--site-font-stack);
+  font: var(--md-sys-typescale-body-large);
   background: var(--md-sys-color-background);
   color: var(--md-sys-color-on-background);
   -webkit-font-smoothing: antialiased;
@@ -100,6 +120,9 @@ a {
 .t-label-large { font: var(--md-sys-typescale-label-large); letter-spacing: 0.1px; }
 .t-label-medium { font: var(--md-sys-typescale-label-medium); letter-spacing: 0.5px; }
 .t-label-small { font: var(--md-sys-typescale-label-small); letter-spacing: 0.5px; }
+/* 等宽数字(v4 §12 细节批):数字行防跳字。消费点 = markup class(组件 scoped 样式
+   各有一枚 font-variant-numeric 文本,类在此兜底 + 语义归属工具层) */
+.tnum { font-variant-numeric: lining-nums tabular-nums; }
 
 /* —— 4/8dp 间距工具类 —— */
 .gap-1 { gap: calc(var(--site-unit) * 1); }
@@ -149,6 +172,25 @@ a {
   border: 1px solid var(--md-sys-color-outline);
 }
 
+/* Text 按钮(v4 §4 M1:hero 副 CTA 用 Text 拉开与 Filled 的重量差) */
+.site-button--text {
+  background: transparent;
+  color: var(--md-sys-color-primary);
+  border: none;
+  padding-inline: calc(var(--site-unit) * 4);
+}
+
+/* Elevated 按钮(v4 §4 M8:primary-container 彩色带上的官方替代档 = surface 底 + elevation-1,
+   禁 tonal 叠 tonal;光源正上方 y 恒正 x 恒 0,§5.3) */
+.site-button--elevated {
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  border: none;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 30%),
+    0 2px 6px 2px rgb(0 0 0 / 15%);
+}
+
 .site-field {
   background: transparent;
   border: 1px solid var(--md-sys-color-outline);
@@ -186,6 +228,14 @@ a {
   border-radius: var(--md-sys-shape-corner-large);
 }
 
+/* 全页唯一 elevated 卡(v4 §11-2:M5 周网格主角卡;其余卡禁再引此类) */
+.site-card--elevated {
+  background: var(--md-sys-color-surface-container-low);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 30%),
+    0 2px 6px 2px rgb(0 0 0 / 15%);
+}
+
 /* 分隔线专用(outlineVariant 只许出现在这里) */
 .site-divider {
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
@@ -194,6 +244,74 @@ a {
 :focus-visible {
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
+}
+
+/* —— State layer(v4 §12 细节批,2026-10-23 用户增补;M3 交互指纹,纯 CSS 无 ripple)——
+   hover 档包桌面闸(触屏无粘滞 hover);active 档不包(触屏按压接管)。
+   叠色 = currentColor 混色(hover 8% / active 10%),禁裸 background 色变:
+   透明底控件(chip 未选/field/dot 未选/theme 钮/链接)直接叠;
+   具底变体(filled/tonal/elevated 按钮、已选 chip/dot)由后置 blend 把同一
+   currentColor 混在原 token 底之上——「只叠色不改既有语义」,否则 8% 替底
+   会把实心 CTA 洗成近透明(特异性 blend (0,3,0)/(0,2,0)+后置 > 通用 (0,2,0))。 */
+@media (hover: hover) and (pointer: fine) {
+  .site-button:hover,
+  .site-chip:hover,
+  .site-field:hover,
+  .views__dot:hover,
+  .appbar__theme:hover,
+  a:hover {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+}
+
+.site-button:active,
+.site-chip:active,
+.site-field:active,
+.views__dot:active,
+.appbar__theme:active,
+a:active {
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+/* 具底控件的叠色 blend(currentColor 混入 token 底之上,比例同通用档) */
+.site-button--filled:is(:hover, :active) {
+  background-color: color-mix(in srgb, currentColor 8%, var(--md-sys-color-primary));
+}
+.site-button--filled:active {
+  background-color: color-mix(in srgb, currentColor 10%, var(--md-sys-color-primary));
+}
+.site-button--tonal:is(:hover, :active) {
+  background-color: color-mix(in srgb, currentColor 8%, var(--md-sys-color-secondary-container));
+}
+.site-button--tonal:active {
+  background-color: color-mix(in srgb, currentColor 10%, var(--md-sys-color-secondary-container));
+}
+.site-button--elevated:is(:hover, :active) {
+  background-color: color-mix(in srgb, currentColor 8%, var(--md-sys-color-surface));
+}
+.site-button--elevated:active {
+  background-color: color-mix(in srgb, currentColor 10%, var(--md-sys-color-surface));
+}
+.site-chip[aria-pressed='true']:is(:hover, :active) {
+  background-color: color-mix(in srgb, currentColor 8%, var(--md-sys-color-secondary-container));
+}
+.site-chip[aria-pressed='true']:active {
+  background-color: color-mix(in srgb, currentColor 10%, var(--md-sys-color-secondary-container));
+}
+.views__dot[aria-checked='true']:is(:hover, :active) {
+  background-color: color-mix(in srgb, currentColor 8%, var(--md-sys-color-secondary-container));
+}
+.views__dot[aria-checked='true']:active {
+  background-color: color-mix(in srgb, currentColor 10%, var(--md-sys-color-secondary-container));
+}
+/* 带底链接 blend(评审 Important-1):.skip-link 是 <a>,通用 a:hover/a:active
+   (0,1,1) 压过 .skip-link 底 (0,1,0) → 悬停/按压把 secondary-container 洗成
+   近透明。同具底变体配方混入原 token 底,(0,2,0) 稳压通用档 */
+.skip-link:is(:hover, :active) {
+  background-color: color-mix(in srgb, currentColor 8%, var(--md-sys-color-secondary-container));
+}
+.skip-link:active {
+  background-color: color-mix(in srgb, currentColor 10%, var(--md-sys-color-secondary-container));
 }
 
 .skip-link {
@@ -225,9 +343,44 @@ a {
   transform: none;
 }
 
-/* prefers-reduced-motion:揭示直出 0ms(spec §2.3) */
+/* —— 微交互(v4 §6-7/8;T8)——
+   区序即层叠纪律:本区必须写在 reveal 终态块之后。可点卡同挂 .reveal 时,
+   hover 位移(0,3,0)与 reveal 终态 transform:none (0,3,0) 同特异性,后写者胜;
+   写在前 = hover 抬起被静默压死。 */
+.site-card--interactive {
+  transition:
+    transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
+}
+@media (hover: hover) and (pointer: fine) {
+  .site-card--interactive:is(:hover, :focus-visible) {
+    transform: translateY(-2px);
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 30%),
+      0 2px 6px 2px rgb(0 0 0 / 15%);
+  }
+}
+
+/* 按钮 press:scale(0.97) 160ms 标准缓动(§6-8 定值;曲线进 --site-motion-standard,
+   时长 160 非 M3 档不入 token 表,此处挂规格注释)。transition 挂 base(松开回弹同样
+   160ms 跟手;挂 :active 则松开瞬切无过渡)。仅钮家族——chip/dot/theme 按压反馈=
+   state layer 10% 叠色,不叠缩放。禁零缩放入场。reduce 停缩放=区尾覆盖。 */
+.site-button {
+  transition: transform 160ms var(--site-motion-standard);
+}
+.site-button:active {
+  transform: scale(0.97);
+}
+
+/* prefers-reduced-motion:更少更柔非归零(v4 spec §6)——
+   位移归零、循环停,reveal 保留 opacity 200ms 淡入(200ms 写死:
+   motion.css 的 reduce 档把 --md-sys-motion-duration-* 全归零,
+   此处不能引 token,否则淡入被闸死)。opacity 终值由 data-revealed 控制 */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .js .reveal { transition: none; opacity: 1; transform: none; }
+  .js .reveal { transition: opacity 200ms ease; transform: none; }
   .reveal, [data-blob] { animation: none !important; }
+  /* §6:reduce 停位移/缩放(卡 hover 抬起、钮 press 缩放)——阴影保留(非动效) */
+  .site-card--interactive:is(:hover, :focus-visible),
+  .site-button:active { transform: none; }
 }

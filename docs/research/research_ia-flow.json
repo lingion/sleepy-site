@@ -1,0 +1,91 @@
+{
+  "summary": "大厂官网动线的共性是六段叙事弧（钩子→概览→深挖→生态→信任→转化）配 scroll 权重分配；首屏铁律=情绪化短标题+真实产品 UI+唯一主行动，图片即产品；段落防同质靠结构原型轮换（split/bento/pinned/full-bleed/showcase）+全宽与容器交替+surface 阶梯代替换色；CTA 靠\"每视口一个主按钮+首尾各一次+吸顶常驻\"，开篇堆 ≥3 按钮实测 -8%；量化佐证前置（大数字标题 +18%）。动画双时间尺度、一次性入场、reduced-motion 直达终态。",
+  "principles": [
+    "六段动线骨架：HOOK(8-10% scroll)→OVERVIEW(10-12%)→DEEP DIVE(40-50%)→TRUST(10-15%)→CONVERSION(8-10%)，文案阶梯=渴望→介绍→概览→细节证明→整合→安心→选择→行动（Apple 拆解，monryse.it）。",
+    "首屏构成三件套：边缘到边缘背景媒体+情绪化主标题+8-15 词副标题+一个主行动；桌面 80vh/平板 60vh/手机 50vh，标题 48-64px 递减至 28-36px，手机端按钮 edge-to-edge+更强遮罩。",
+    "首屏视觉必须是产品本体：真实 UI 截图/内嵌 demo/产品 mock，禁插画与氛围图（Linear 用真实 issue 详情 mock，Vercel 用动画 build log，Figma 用嵌入 demo）——'营销页即产品'。",
+    "CTA 单主+重复纪律：每个视口只允许一个实心主按钮（Raycast：每 fold 一枚白色药丸）；主 CTA 首屏+尾段各一次，中段每约 3 段复现一次（实测 +4%），3 个及以上按钮挤在开篇 -8%；顶部导航常驻一枚紧凑主按钮（+11~12%）。",
+    "佐证前置且量化：具名数字（如 348 校）做大字标题是提升最高的 hero 变体（+18%），其次客户引言做标题（+12%）、标注式产品截图（+9%）；logo 墙/星级只是弱佐证（+6~8%），自动视频背景 -7%、微笑团队照 -11%。",
+    "段落节奏=结构原型轮换：相邻两段禁止同原型；split 左右交替（媒体侧每块翻转）、bento、pinned scrub、full-bleed 单大字、showcase 面板行、表格式对比轮换使用；全宽 bleed 段与容器卡片段交替出现。",
+    "留白即层级：8px 模数栅格；桌面块间距 96px/平板 64px/手机 48px，块内文间距 24-32px，hero 上下留 120px；禁装饰性分隔线，用间距和 surface 明度阶梯分隔（Raycast 深色 ladder #07080a→#0d0d0d→#101111，越亮越近）。",
+    "一段一主张（one beat one benefit）：每段只证一个卖点、只回答'产品实际做什么'的一个侧面；不能justify其滚动距离的场景直接删；每 beat 预算约 2 秒滚动注意力，首尾段呼吸大、中段快。",
+    "大留白+低密度是高端感来源：Linear 每段先铺大留白再进内容；信息密度极低反而是'精密工具'的信号，与'轻便'人设一致。",
+    "强调色纪律：彩色只允许一支（Linear 仅 #7170ff，层次全靠中性灰拉开）；签名渐变全站只出现一次且只在首屏带内（Raycast 红条纹）；渐变只存在于面板内部，不许横跨整段（Stripe）。",
+    "动画双时间尺度+仅 transform/opacity：氛围层 1.6-3.2s 慢循环，微交互 0.1-0.4s；入场一次性（约 1/5 可见触发、600ms、相邻元素 100ms stagger），主缓动 easeOutQuad 家族（cubic-bezier(.25,.46,.45,.94)）；reduced-motion 时每个 pinned 场景直接落到终态视觉。",
+    "转化层必须是普通 DOM：下载/价格/按钮不渲染进 canvas 或 WebGL，保证可爬、可键盘操作、手机可点；移动端 hero 图片在文字之上堆叠，首屏底部即出现第一条佐证带（Stripe partner strip）。"
+  ],
+  "patterns": [
+    {
+      "name": "六段叙事弧（页面级）",
+      "what": "HOOK→OVERVIEW→DEEP DIVE→ECOSYSTEM/TRUST→CONVERSION，按 8-10/10-12/40-50/10-15/8-10% 分配滚动权重；深挖段内部再轮换原型",
+      "why": "把'为什么下载'拆成递进证明链，每段占比决定停留时长与说服密度",
+      "example": "Apple 产品页拆解 monryse.it/en/studio/apple-landing-pages/；OVERVIEW 处放可选索引行让访客自选路径"
+    },
+    {
+      "name": "首屏原型 A：居中大字+产品大图",
+      "what": "标题 48-64px 居中、8-15 词副题、一枚主按钮、产品 UI 铺满下半屏",
+      "why": "最短路径建立'产品长什么样'的直观印象——正是本项目用户目标",
+      "example": "Linear hero：左对齐 H1(64px/字重510/行高1.0)+灰副题+真实产品 mock（uiscanner/GitHub design-teardowns）"
+    },
+    {
+      "name": "首屏原型 B：巨型数字标题",
+      "what": "单一量化事实做主视觉文字（如'348 校'），配一行注解+下载按钮",
+      "why": "2000 页实测 +18% 提升，是所有 hero 变体里最强；数字即差异化证据",
+      "example": "digitalapplied.com 转化研究；Sleepy 场景=348 校直连+GPL 开源双数字"
+    },
+    {
+      "name": "首屏原型 C：oversized art 出血叠字",
+      "what": "视觉故意超大并裁切出页面边缘，叠在标题后方但保持文字对比度；导航三分区透明无底",
+      "why": "'让图溢出画框'传达丰盛与自信，同时文字层级不受损",
+      "example": "Stripe 现行 hero：48px 细标题+双链接动作+半透明 artwork 横穿（iter0.com/blog/stripe-homepage-decoded）"
+    },
+    {
+      "name": "Split 交替段（深挖主力）",
+      "what": "文字讲收益、媒体做证明，左右侧每块翻转；手机端媒体在上文字在下",
+      "why": "翻转即节奏，避免连续同构；Apple 用其撑起 40-50% 的深挖权重",
+      "example": "Apple DEEP DIVE 段；适配 Sleepy 的教务直连/提醒两段——文字侧写收益，截图侧保主体完整可读"
+    },
+    {
+      "name": "Bento 网格段（功能密度）",
+      "what": "12 列底栅、tile 有意不对称，tile 大小即层级（最大 tile 左上放主导功能截图），每 tile 只放一条信息（icon+3-6 词标题+<15 词描述），半径 16-24px/内距 24-32px/间隙 16-24px",
+      "why": "分块比线性流信息查找快 23%；大 tile 被注视时间是小 tile 2.6 倍；天然响应式（桌面 3 列→手机单列）",
+      "example": "sotasync.com bento 研究；Apple 推广后 Stripe/Linear/Notion 均采用"
+    },
+    {
+      "name": "Pinned scrub 段（受控叙事）",
+      "what": "段锁定视口，scroll 进度驱动动画/步骤；一场景一主张，hold 住产品状态直到收益出现再释放；scrub 值统一驱动全部 reveal",
+      "why": "把解释权从读者手里拿回来，强制线性阅读最关键论证；适合'截图内滚动演示 App 交互'类内容",
+      "example": "motionkit.io Apple 动画拆解 + aetumi.app beat 配比(0-0.2/0.2-0.45/…)；reduced-motion 下直达终态"
+    },
+    {
+      "name": "Showcase 面板行（能力概览）",
+      "what": "hero 后紧跟能力展示：宽窄不一的产品界面面板排在灰底上（816px+400px→三等 400px→1232px 嵌入式），每面板 26px 轻量小标题",
+      "why": "多而不乱的'功能丰富'证据：用面板宽度差做层级，不用图标网格模板感",
+      "example": "Stripe homepage 结构（iter0.com）"
+    },
+    {
+      "name": "Surface ladder 节奏段",
+      "what": "同一色相内用明度阶梯（深→浅 4 档）交替相邻段底色，卡片靠 1px 发丝描边分层不靠投影",
+      "why": "不换色也能制造'抬起/放下'的段落节奏，深色系统下保持整体一致——MD3 surface-container 角色的网页用法",
+      "example": "Raycast：#07080a→#0d0d0d→#101111→#121212，描边 rgba(255,255,255,.08-.16)（thebook-design.vercel.app/design/raycast）"
+    },
+    {
+      "name": "Full-bleed 插叙段（呼吸/断章）",
+      "what": "整屏只放一句大字主张或一条统计，无图无卡；常用作深挖段之间的换幕",
+      "why": "大留白重置注意力预算，防'连续信息'疲劳；单条主张的记忆留存最高",
+      "example": "Linear 每段先铺大留白再进内容；closing hook 与 close 段给最多呼吸空间"
+    },
+    {
+      "name": "对比/选择辅助段",
+      "what": "表格五列全宽对比（平板横滚、手机堆叠为卡片）或 lineup 选择器，行内放各卡对应行动按钮",
+      "why": "转化前最后的'帮我决定'层；软件页可省略 lineup、保留一个技术渐变块即可（Apple 软件 vs 硬件差异）",
+      "example": "Raycast pricing 三档+对比表；Apple 硬件页 lineup comparison"
+    },
+    {
+      "name": "CTA 收尾段（可爬化的转化层）",
+      "what": "尾段=价格/版本/行动/规格，普通 DOM；一枚主下载按钮+少量链接式跟进（蓝字+箭头），按钮文案=动词+收益",
+      "why": "滚动权重 8-10% 收拢全部论证到一个动作；DOM 保证 crawl/键盘/触摸可用",
+      "example": "Apple CONVERSION 段；'Download for Android'式 verb+benefit 文案"
+    }
+  ]
+}

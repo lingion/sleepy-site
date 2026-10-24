@@ -1,35 +1,62 @@
 ---
-// M3 tonal app bar(spec §2.2):常驻置顶;滚动态 = surface→surfaceContainer 无投影(M2 阴影已纠)
-// zh|EN 语言链 + 明暗开关(tooltip「晚课专用。」spec §2.5)
+// v4 AppBar(spec §4):三段式 = 品牌标 / 4 枚锚点文字链(Text 档,≤840px 隐藏)/ [下载]Filled S + 语言 + 主题
+// 滚动态 surface→surface-container tonal 升起(仅 background-color 150ms,无投影);高 64px
+// 互隐 IO(T6,spec §11-6):hero 在视口 → appbar CTA hide;离开 → show。缺省 show = JS-off 必显。
+// 锚点串走 appbar.anchors 键树(zh/en 同形,禁 ternary 硬编码);label 走 aria-label 键。
+import { zh } from '../i18n/zh';
+import type { SiteCopy } from '../i18n/zh';
+
 interface Props {
   lang: 'zh' | 'en';
+  copy?: SiteCopy;
 }
 const { lang } = Astro.props;
+const c = Astro.props.copy ?? zh;
 const other = lang === 'zh' ? '/en/' : '/';
 const otherLabel = lang === 'zh' ? 'EN' : '中文';
+const anchors = [
+  { href: '#views', label: c.appbar.anchors.views },
+  { href: '#schools', label: c.appbar.anchors.schools },
+  { href: '#reminders', label: c.appbar.anchors.reminders },
+  { href: '#trust', label: c.appbar.anchors.trust },
+];
 ---
 
 <header class="appbar" id="appbar">
   <div class="appbar__inner site-col">
     <a class="appbar__brand t-title-medium" href={lang === 'zh' ? '/' : '/en/'}>
-      <!-- 品牌标内联(与 /favicon.svg 同源几何):避免位形随主题反相,深浅底都稳 -->
-      <svg width="24" height="24" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="brand-lg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#D8D3FF"/>
-            <stop offset="1" stop-color="#9C87FE"/>
-          </linearGradient>
-        </defs>
-        <rect x="4" y="4" width="112" height="112" rx="26" fill="url(#brand-lg)"/>
-        <path d="M29.9 35.1 L54.1 25.4 L106.8 25.4 L106.8 103.5 L29.9 103.5 Z" fill="#fff"/>
-        <rect x="43.9" y="46.3" width="20.6" height="16.1" rx="5" fill="#D3CDFF"/>
-        <rect x="71" y="46.3" width="20.7" height="16.1" rx="5" fill="#D3CDFF"/>
-        <rect x="43.9" y="67.6" width="20.6" height="15.1" rx="5" fill="#D3CDFF"/>
-        <rect x="71" y="67.6" width="20.7" height="15.1" rx="5" fill="#947FFF"/>
+      <!-- 品牌标 = /favicon.svg 胶囊 logo 忠实转写(几何/色值逐字照抄源文件,禁反相禁改底;白底方块深浅主题均稳) -->
+      <svg width="24" height="24" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+        <rect width="512" height="512" rx="115" fill="#FFFFFF"/>
+        <rect x="63" y="117" width="36" height="118" rx="18" fill="#9176DF"/>
+        <rect x="63" y="335" width="36" height="60" rx="18" fill="#9176DF"/>
+        <rect x="121" y="82" width="36" height="198" rx="18" fill="#9176DF"/>
+        <rect x="121" y="346" width="36" height="72" rx="18" fill="#9176DF"/>
+        <rect x="180" y="59" width="35" height="95" rx="17" fill="#9176DF"/>
+        <rect x="180" y="220" width="35" height="118" rx="17" fill="#9176DF"/>
+        <rect x="180" y="404" width="35" height="49" rx="17" fill="#9176DF"/>
+        <rect x="238" y="48" width="36" height="95" rx="18" fill="#9176DF"/>
+        <rect x="238" y="208" width="36" height="96" rx="18" fill="#9176DF"/>
+        <rect x="238" y="369" width="36" height="95" rx="18" fill="#9176DF"/>
+        <rect x="297" y="59" width="35" height="49" rx="17" fill="#9176DF"/>
+        <rect x="297" y="174" width="35" height="118" rx="17" fill="#9176DF"/>
+        <rect x="297" y="358" width="35" height="95" rx="17" fill="#9176DF"/>
+        <rect x="355" y="94" width="35" height="72" rx="17" fill="#C2C4D0"/>
+        <rect x="414" y="117" width="35" height="60" rx="17" fill="#C2C4D0"/>
+        <rect x="414" y="277" width="35" height="118" rx="17" fill="#C2C4D0"/>
+        <rect x="355" y="232" width="35" height="197" rx="17" fill="#C2C4D0"/>
       </svg>
       Sleepy
     </a>
+    <nav class="appbar__anchors" aria-label={c.appbar.navLabel}>
+      {
+        anchors.map((a) => (
+          <a class="appbar__anchor" href={a.href}>{a.label}</a>
+        ))
+      }
+    </nav>
     <nav class="appbar__actions" aria-label={lang === 'zh' ? '页面操作' : 'Page actions'}>
+      <a class="site-button site-button--filled appbar__cta t-label-large" href="https://github.com/lingion/sleepy/releases/latest" data-appbar-cta="show">{c.appbar.ctaDownload}</a>
       <a class="site-chip appbar__lang t-label-large" href={other}>{otherLabel}</a>
       <button
         class="appbar__theme"
@@ -61,6 +88,7 @@ const otherLabel = lang === 'zh' ? 'EN' : '中文';
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: calc(var(--site-unit) * 4);
     block-size: 64px;
   }
   .appbar__brand {
@@ -69,11 +97,47 @@ const otherLabel = lang === 'zh' ? 'EN' : '中文';
     gap: calc(var(--site-unit) * 2);
     color: var(--md-sys-color-on-surface);
     text-decoration: none;
+    flex-shrink: 0;
+  }
+  /* 锚点组(spec §4:Text 档文字链;≤840px 隐藏) */
+  .appbar__anchors {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--site-unit) * 5);
+    margin-inline-start: auto;
+  }
+  .appbar__anchor {
+    font: var(--md-sys-typescale-label-large);
+    color: var(--md-sys-color-on-surface-variant);
+    text-decoration: none;
+    padding-block: calc(var(--site-unit) * 2);
+    transition: color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .appbar__anchor:hover {
+      color: var(--md-sys-color-on-surface);
+    }
   }
   .appbar__actions {
     display: flex;
     align-items: center;
     gap: calc(var(--site-unit) * 2);
+    flex-shrink: 0;
+  }
+  .appbar__cta {
+    /* Filled S 紧凑档(spec §4):高度压至 36,字号 label-large */
+    padding: 6px 16px;
+    text-decoration: none;
+    /* 互隐过渡(T6):visibility 两态 + opacity 150ms(reduce 档 token 归零自动瞬切);
+       禁 display:none —— 锚点/操作组横向布局会跳动 */
+    transition:
+      opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
+      visibility var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
+  }
+  /* hero 在视口内 → 钮隐(spec §11-6 任意视口至多一枚 Filled);缺省 show 可见 */
+  .appbar__cta[data-appbar-cta='hide'] {
+    opacity: 0;
+    visibility: hidden;
   }
   .appbar__lang {
     text-decoration: none;
@@ -92,12 +156,18 @@ const otherLabel = lang === 'zh' ? 'EN' : '中文';
     align-items: center;
     justify-content: center;
   }
-  .appbar__theme:hover {
-    background: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+  /* hover 位移闸(v4 §12):粘滞 hover 态只在真悬停设备生效;触屏按压走 :active(全局 state layer) */
+  @media (hover: hover) and (pointer: fine) {
+    .appbar__theme:hover {
+      background: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+    }
   }
   .icon-moon { display: none; }
   :global([data-theme='dark']) .appbar .icon-sun { display: none; }
   :global([data-theme='dark']) .appbar .icon-moon { display: block; }
+  @media (max-width: 840px) {
+    .appbar__anchors { display: none; }
+  }
 </style>
 
 <script>
@@ -109,4 +179,13 @@ const otherLabel = lang === 'zh' ? 'EN' : '中文';
     mark();
   }
   document.querySelector('[data-icon-theme]')?.addEventListener('click', () => window.siteToggleTheme?.());
+  // CTA 互隐(T6,spec §11-6):hero 在视口 → 钮 hide;离开 → show。
+  // #hero 缺失(无 hero 页/构建异动)或旧内核无 IO → 保持缺省 show,不崩。
+  const cta = document.querySelector<HTMLElement>('[data-appbar-cta]');
+  const hero = document.getElementById('hero');
+  if (cta && hero && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => {
+      cta.dataset.appbarCta = e.isIntersecting ? 'hide' : 'show';
+    }).observe(hero);
+  }
 </script>

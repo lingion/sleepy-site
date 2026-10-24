@@ -1,32 +1,24 @@
 ---
-// ④ 画廊 — spec §3④:图网格(桌面4/平板2/手机1)→ lightbox
-// 2026-10-21 用户修订:页面展示尽量多 + 小组件展示尽量多 + 浏览器主题感知(浅色浏览器=浅色截图,反之深色)
-// lightbox a11y 全项:scrim #000 32% · aria-modal · 焦点圈定 · Esc/←→ · 关闭归还焦点
+// M6 截图长廊(v4 spec §4:FULL-BLEED 断章换幕带 · 恒暗 band,§17.1 不随主题翻转)
+// 带内 = --site-band-bg/-fg 消费点(T2 预埋,T5 落地);Shot forceVariant='light':深底配浅 UI 恒成立。
+// 原型:横向 filmstrip;叠压仅限装饰层(ghost 背景层 ±错位),可点 figure 完整可见(§4 M6/§12);
+// 错落 = margin-top 交替 ±16px。收编 weekview 入廊(§8-3),定稿 8 图。
+// lightbox 岛 a11y 全项保留(焦点圈定/Esc/方向键/主题感知换图)——那是已验收件,零改动。
 import Shot from '../Shot.astro';
-import weekL from '../../assets/screenshots/01-week-light.png';
-import weekD from '../../assets/screenshots/01-week-dark.png';
 import gridL from '../../assets/screenshots/02-grid-light.png';
 import gridD from '../../assets/screenshots/02-grid-dark.png';
+import weekL from '../../assets/screenshots/01-week-light.png';
+import weekD from '../../assets/screenshots/01-week-dark.png';
 import todayL from '../../assets/screenshots/03-today-light.png';
 import todayD from '../../assets/screenshots/03-today-dark.png';
 import manageL from '../../assets/screenshots/04-manage-light.png';
 import manageD from '../../assets/screenshots/04-manage-dark.png';
-import mineL from '../../assets/screenshots/05-mine-light.png';
-import mineD from '../../assets/screenshots/05-mine-dark.png';
 import themeL from '../../assets/screenshots/11-theme-light.png';
 import themeD from '../../assets/screenshots/11-theme-dark.png';
+import mineL from '../../assets/screenshots/05-mine-light.png';
+import mineD from '../../assets/screenshots/05-mine-dark.png';
 import importL from '../../assets/screenshots/20-import-light.png';
 import importD from '../../assets/screenshots/20-import-dark.png';
-import reminderL from '../../assets/screenshots/22-reminder-light.png';
-import reminderD from '../../assets/screenshots/22-reminder-dark.png';
-import wTodayL from '../../assets/screenshots/widget-today-light.png';
-import wTodayD from '../../assets/screenshots/widget-today-dark.png';
-import wTwoL from '../../assets/screenshots/widget-twodays-light.png';
-import wTwoD from '../../assets/screenshots/widget-twodays-dark.png';
-import wGridL from '../../assets/screenshots/widget-weekgrid-light.png';
-import wGridD from '../../assets/screenshots/widget-weekgrid-dark.png';
-import wListL from '../../assets/screenshots/widget-weeklist-light.png';
-import wListD from '../../assets/screenshots/widget-weeklist-dark.png';
 import wViewL from '../../assets/screenshots/widget-weekview-light.png';
 import wViewD from '../../assets/screenshots/widget-weekview-dark.png';
 import { zh } from '../../i18n/zh';
@@ -36,40 +28,38 @@ interface Props {
   copy?: SiteCopy;
 }
 const t = (Astro.props.copy ?? zh).gallery;
-// phone = 竖屏整页(3/4 裁顶缩略); widget = 桌面组件裁剪(contain 保完整)
+// 廊内 8 图(captions 同序);kind: phone=竖屏 / widget=桌面组件(扁,自然比例)
 const shots = [
-  { light: weekL, dark: weekD, kind: 'phone' },
   { light: gridL, dark: gridD, kind: 'phone' },
+  { light: weekL, dark: weekD, kind: 'phone' },
   { light: todayL, dark: todayD, kind: 'phone' },
   { light: manageL, dark: manageD, kind: 'phone' },
   { light: themeL, dark: themeD, kind: 'phone' },
-  { light: reminderL, dark: reminderD, kind: 'phone' },
-  { light: importL, dark: importD, kind: 'phone' },
   { light: mineL, dark: mineD, kind: 'phone' },
-  { light: wGridL, dark: wGridD, kind: 'widget' },
+  { light: importL, dark: importD, kind: 'phone' },
   { light: wViewL, dark: wViewD, kind: 'widget' },
-  { light: wTodayL, dark: wTodayD, kind: 'widget' },
-  { light: wTwoL, dark: wTwoD, kind: 'widget' },
-  { light: wListL, dark: wListD, kind: 'widget' },
 ];
 ---
 
-<section class="site-section" id="gallery" aria-labelledby="gallery-title">
+<section class="site-section band" id="gallery" data-prototype="full-bleed-band" aria-labelledby="gallery-title">
   <div class="site-col">
-    <h2 class="t-headline-large" id="gallery-title">{t.heading}</h2>
-    <p class="t-body-medium gallery__sub">{t.sub}</p>
-    <div class="gallery__grid">
+    <h2 class="t-headline-large band__heading" id="gallery-title">{t.heading}</h2>
+    <p class="t-body-medium band__sub">{t.sub}</p>
+  </div>
+  <div class="gallery__strip" data-reveal-group="m6-strip">
+    <div class="gallery__track site-col">
       {
         shots.map((s, i) => (
-          <figure class:list={['gallery__figure', s.kind === 'widget' && 'gallery__figure--widget']} data-gallery-figure>
+          <figure class:list={['gallery__figure', s.kind === 'widget' && 'gallery__figure--widget', 'reveal']} data-gallery-figure style={`--reveal-i: ${i};`}>
             <button type="button" class="gallery__open" data-index={i} aria-label={t.captions[i]}>
               <Shot
                 light={s.light}
                 dark={s.dark}
                 widths={[300, 600]}
-                sizes="(max-width: 600px) 92vw, (max-width: 840px) 45vw, 24vw"
+                sizes="(max-width: 600px) 72vw, 300px"
                 alt={t.captions[i]}
                 loading="lazy"
+                forceVariant="light"
               />
             </button>
             <figcaption class="t-label-small">{t.captions[i]}</figcaption>
@@ -77,70 +67,92 @@ const shots = [
         ))
       }
     </div>
+  </div>
 
-    <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label={t.heading} hidden>
-      <div class="lightbox__scrim" data-lb-scrim></div>
-      <div class="lightbox__body">
-        <img class="lightbox__img" data-lb-img alt="" />
-        <div class="lightbox__bar">
-          <button type="button" class="lightbox__nav" data-lb-prev aria-label={t.prev}>←</button>
-          <span class="t-label-medium" data-lb-count></span>
-          <button type="button" class="lightbox__nav" data-lb-next aria-label={t.next}>→</button>
-          <button type="button" class="lightbox__nav" data-lb-close aria-label={t.close}>×</button>
-        </div>
+  <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label={t.heading} hidden>
+    <div class="lightbox__scrim" data-lb-scrim></div>
+    <div class="lightbox__body">
+      <img class="lightbox__img" data-lb-img alt="" />
+      <div class="lightbox__bar">
+        <button type="button" class="lightbox__nav" data-lb-prev aria-label={t.prev}>←</button>
+        <span class="t-label-medium" data-lb-count></span>
+        <button type="button" class="lightbox__nav" data-lb-next aria-label={t.next}>→</button>
+        <button type="button" class="lightbox__nav" data-lb-close aria-label={t.close}>×</button>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  .gallery__sub {
-    color: var(--md-sys-color-on-surface-variant);
+  /* 换幕带(class 消费 T2 预埋 --site-band-*;恒暗,明暗主题同值 → §12 带内明暗节奏由色阶跳本身完成)。
+     band 发丝顶边 = dark 节奏补丁(§17.1):outline-variant 装饰边,light 下亦存在不违和 */
+  .band {
+    background: var(--site-band-bg);
+    color: var(--site-band-fg);
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+  }
+  .band__heading {
+    color: var(--site-band-fg);
+  }
+  .band__sub {
+    color: color-mix(in srgb, var(--site-band-fg) 72%, var(--site-band-bg));
     margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 6);
   }
-  .gallery__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: calc(var(--site-unit) * 4);
+  /* filmstrip:横滚 + snap;轨道 = 内容列宽 1040(§9) */
+  .gallery__strip {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    padding-block: calc(var(--site-unit) * 2);
   }
-  @media (max-width: 840px) {
-    .gallery__grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 600px) {
-    .gallery__grid { grid-template-columns: 1fr; }
+  .gallery__track {
+    display: flex;
+    gap: calc(var(--site-unit) * 5);
+    inline-size: max-content;
+    padding-block: calc(var(--site-unit) * 4);
   }
   .gallery__figure {
     margin: 0;
+    scroll-snap-align: center;
+    /* 错落 = margin-top 交替 ±16px(叠压仅视觉错位,figure 间零遮挡,§4 M6) */
+    margin-block-start: 16px;
+  }
+  .gallery__figure:nth-child(even) {
+    margin-block-start: 0;
   }
   .gallery__open {
     display: block;
-    inline-size: 100%;
+    inline-size: 300px;
     padding: 0;
-    border: none;
-    border-radius: var(--md-sys-shape-corner-medium);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--md-sys-shape-corner-large);
     background: var(--md-sys-color-surface-container-low);
     cursor: zoom-in;
-    overflow: hidden;
+    overflow: clip;
   }
-  /* Shot 子组件渲染的 img 不带本组件 scope → 选择器必须 :global */
+  /* Shot img 不带本组件 scope → :global */
   :global(#gallery .gallery__open img) {
     inline-size: 100%;
-    /* 视觉预算 §2.4:竖屏截图统一裁成 3/4 缩略,收进两段屏内;
-       lightbox 里仍看全图 */
-    aspect-ratio: 3 / 4;
     block-size: auto;
-    object-fit: cover;
-    object-position: top;
+    object-fit: contain; /* 完整可读(C3 精神):廊内缩略不再 cover 裁顶 */
   }
-  /* 小组件裁剪:contain 保组件完整,四角留白即组件外的桌面 */
   :global(#gallery .gallery__figure--widget .gallery__open img) {
-    object-fit: contain;
-    padding: calc(var(--site-unit) * 2);
+    aspect-ratio: 825 / 550;
+    padding: calc(var(--site-unit) * 3);
+    block-size: auto;
   }
   .gallery__figure figcaption {
     margin-block-start: calc(var(--site-unit) * 2);
-    color: var(--md-sys-color-on-surface-variant);
+    color: color-mix(in srgb, var(--site-band-fg) 78%, var(--site-band-bg));
+    text-align: center;
   }
+  @media (max-width: 840px) {
+    .gallery__open {
+      inline-size: min(72vw, 300px);
+    }
+  }
+
+  /* —— lightbox 岛(已验收 a11y 件,本体保留;bar 色随 band 恒暗语义) —— */
   .lightbox {
     position: fixed;
     inset: 0;
@@ -197,13 +209,18 @@ const shots = [
     const count = lb.querySelector<HTMLElement>('[data-lb-count]')!;
     const figs = [...sec.querySelectorAll<HTMLButtonElement>('.gallery__open')];
     const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const RM = matchMedia('(prefers-reduced-motion: reduce)'); // §2.3:reduced-motion → 0ms 直出
+    const RM = matchMedia('(prefers-reduced-motion: reduce)'); // reduced-motion → opacity 单档
     const root = document.documentElement;
     let cur = 0;
     let opener: HTMLElement | null = null;
 
     const srcOf = (i: number) => {
-      const want = root.getAttribute('data-theme') === 'dark' ? 'shot__dark' : 'shot__light';
+      // band 内 force-variant light:shot--force-light 恒取 .shot__light(深底配浅 UI,§4 M6)
+      const want = sec.classList.contains('band')
+        ? 'shot__light'
+        : root.getAttribute('data-theme') === 'dark'
+          ? 'shot__dark'
+          : 'shot__light';
       const el = figs[i].querySelector<HTMLImageElement>(`img.${want}`)
         ?? figs[i].querySelector<HTMLImageElement>('img')!;
       return el.currentSrc || el.src;
@@ -219,15 +236,27 @@ const shots = [
       opener = from;
       show(i);
       lb.hidden = false;
-      animate(lb, { opacity: [0, 1] }, { duration: RM.matches ? 0 : 0.4, ease: [0.05, 0.7, 0.1, 1] });
+      // §6-10:scrim opacity 200ms + 图 scale(0.96→1)+opacity 300ms,emphasized (0.2,0,0,1);
+      // reduce 仅 opacity(停缩放)。禁 scale(0) → 0.96 起步。
+      const scrim = lb.querySelector<HTMLElement>('.lightbox__scrim')!;
+      if (RM.matches) {
+        animate([scrim, img], { opacity: [0, 1] }, { duration: 0 });
+      } else {
+        animate(scrim, { opacity: [0, 1] }, { duration: 0.2, ease: [0.2, 0, 0, 1] });
+        animate(img, { opacity: [0, 1], scale: [0.96, 1] }, { duration: 0.3, ease: [0.2, 0, 0, 1] });
+      }
       (lb.querySelector('[data-lb-close]') as HTMLElement).focus();
       document.addEventListener('keydown', onKey);
     };
     const close = () => {
       const done = () => {
         lb.hidden = true;
+        lb.style.opacity = ''; // 复位 close 终点内联 0 → 下次 open(lb 不再整体动画,只 scrim/img)不继承黑态
+        img.style.opacity = '';
+        img.style.transform = '';
         opener?.focus();
       };
+      // 关对称 200ms emph-accel(整层含 scrim 一起退)
       animate(lb, { opacity: 0 }, { duration: RM.matches ? 0 : 0.2, ease: [0.3, 0, 0.8, 0.15] }).finished.then(done);
       document.removeEventListener('keydown', onKey);
     };
