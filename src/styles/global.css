@@ -341,6 +341,35 @@ a:active {
   transform: none;
 }
 
+/* —— 微交互(v4 §6-7/8;T8)——
+   区序即层叠纪律:本区必须写在 reveal 终态块之后。可点卡同挂 .reveal 时,
+   hover 位移(0,3,0)与 reveal 终态 transform:none (0,3,0) 同特异性,后写者胜;
+   写在前 = hover 抬起被静默压死。 */
+.site-card--interactive {
+  transition:
+    transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+    box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
+}
+@media (hover: hover) and (pointer: fine) {
+  .site-card--interactive:is(:hover, :focus-visible) {
+    transform: translateY(-2px);
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 30%),
+      0 2px 6px 2px rgb(0 0 0 / 15%);
+  }
+}
+
+/* 按钮 press:scale(0.97) 160ms 标准缓动(§6-8 定值;曲线进 --site-motion-standard,
+   时长 160 非 M3 档不入 token 表,此处挂规格注释)。transition 挂 base(松开回弹同样
+   160ms 跟手;挂 :active 则松开瞬切无过渡)。仅钮家族——chip/dot/theme 按压反馈=
+   state layer 10% 叠色,不叠缩放。禁零缩放入场。reduce 停缩放=区尾覆盖。 */
+.site-button {
+  transition: transform 160ms var(--site-motion-standard);
+}
+.site-button:active {
+  transform: scale(0.97);
+}
+
 /* prefers-reduced-motion:更少更柔非归零(v4 spec §6)——
    位移归零、循环停,reveal 保留 opacity 200ms 淡入(200ms 写死:
    motion.css 的 reduce 档把 --md-sys-motion-duration-* 全归零,
@@ -349,4 +378,7 @@ a:active {
   html { scroll-behavior: auto; }
   .js .reveal { transition: opacity 200ms ease; transform: none; }
   .reveal, [data-blob] { animation: none !important; }
+  /* §6:reduce 停位移/缩放(卡 hover 抬起、钮 press 缩放)——阴影保留(非动效) */
+  .site-card--interactive:is(:hover, :focus-visible),
+  .site-button:active { transform: none; }
 }

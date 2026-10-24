@@ -34,7 +34,7 @@ const panes = [
       <div class="views__panels">
         {
           panes.map((p, i) => (
-            <figure class:list={['views__pane', 'reveal', `views__pane--${p.key}`]} data-pane={p.key} style={`--reveal-i: ${i};`}>
+            <figure class:list={['views__pane', 'site-card--interactive', 'reveal', `views__pane--${p.key}`]} data-pane={p.key} style={`--reveal-i: ${i};`}>
               <span class="views__stage">
                 <Shot
                   light={p.light}
@@ -110,10 +110,14 @@ const panes = [
     background: var(--md-sys-color-surface-container-lowest);
     border: 1px solid var(--md-sys-color-outline-variant);
     cursor: pointer;
+    /* transform/box-shadow 并入本条 transition:scoped 整条会替换全局
+       .site-card--interactive 的 transition 声明,漏项则 hover 抬起变瞬跳(§6-7) */
     transition:
       background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
       border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
-      opacity var(--md-sys-motion-duration-medium2) cubic-bezier(0.23, 1, 0.32, 1);
+      opacity var(--md-sys-motion-duration-medium2) var(--site-motion-standard),
+      transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+      box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
   }
   .views__pane-copy {
     display: flex;
@@ -135,7 +139,9 @@ const panes = [
 
   /* —— data-view 状态机(迁移自 Features,§4 M2:复用现有状态机)——
      当前视图面板 = 前景:实底 + outline 描边;其余面板退为背景(低对比)。
-     outline(3:1)= 当前态边界(§5.3:交互边用 outline,装饰边才 outline-variant) */
+     outline(3:1)= 当前态边界(§5.3:交互边用 outline,装饰边才 outline-variant)。
+     §6-5 编排行写 transform+opacity+filter:原型并排化(§11-15)后无滑入/模糊对象,
+     切换属性面收敛为 opacity+border-color,时长/曲线仍按 300ms (0.23,1,0.32,1) 消费 */
   .views[data-view='grid'] .views__pane--grid,
   .views[data-view='week'] .views__pane--week,
   .views[data-view='today'] .views__pane--today {

@@ -144,6 +144,59 @@ describe('AppBar.astro(spec §2.2/§2.5)', () => {
   });
 });
 
+describe('Task 8 微交互闸(v4 §6-5/7/8 编排行)', () => {
+  it('--site-motion-standard 进 motion.css 双档 + reduce 归零(§6-5/8 定值曲线)', () => {
+    const motion = readFileSync(new URL('./motion.css', import.meta.url), 'utf8');
+    expect(motion).toContain('--site-motion-standard: cubic-bezier(0.23, 1, 0.32, 1)');
+    // reduce 块不含此 token(它是曲线非时长,归零无意义)——但必须仍在两处被消费
+  });
+
+  it('卡 hover §6-7:(hover:hover) 闸内 translateY(-2px) + emphasized 200ms,.reveal 压不住(特异性/次序)', () => {
+    const hoverBlocks = globalCss.match(/@media \(hover: hover\) and \(pointer: fine\)\s*\{[\s\S]*?\n\}/g) ?? [];
+    const cardHover = hoverBlocks.find((b) => b.includes('.site-card--interactive:is(:hover, :focus-visible)'));
+    expect(cardHover, '卡 hover 位移必须包桌面闸(触屏不触发)').toBeDefined();
+    expect(cardHover).toMatch(/transform:\s*translateY\(-2px\)/);
+    // 后置锁:reveal 终态块(.js .reveal[data-revealed])必须在卡 hover 之前(同 (0,3,0) 后写者胜)
+    const revealedIdx = globalCss.search(/\.js \.reveal\[data-revealed='true'\]/);
+    const hoverIdx = globalCss.indexOf('.site-card--interactive:is(:hover');
+    expect(revealedIdx).toBeGreaterThanOrEqual(0);
+    expect(hoverIdx, '卡 hover 块必须后于 reveal 终态块,否则被 transform:none 压死').toBeGreaterThan(revealedIdx);
+    // base transition:时长/曲线消费 token(short4=200ms + emphasized)
+    expect(globalCss).toMatch(/\.site-card--interactive\s*\{[^}]*transition:[^}]*transform var\(--md-sys-motion-duration-short4\) var\(--md-sys-motion-easing-emphasized\)/);
+  });
+
+  it('按钮 press §6-8:scale(0.97) 160ms standard 曲线,禁 scale(0);transition 挂 base(松开回弹跟手)', () => {
+    expect(globalCss).toMatch(/\.site-button:active\s*\{\s*transform:\s*scale\(0\.97\)/);
+    expect(globalCss).not.toMatch(/scale\(\s*0\s*[,)]/);
+    expect(globalCss).toMatch(/\.site-button\s*\{\s*transition:\s*transform 160ms var\(--site-motion-standard\)/);
+  });
+
+  it('reduce 停位移/缩放:卡 hover 与钮 press 在 reduce 块内 transform:none(§6 备注)', () => {
+    const reduceBlock = globalCss.match(/@media \(prefers-reduced-motion: reduce\)\s*\{[\s\S]*?\n\}/g) ?? [];
+    const all = reduceBlock.join('\n');
+    expect(all).toMatch(/\.site-card--interactive:is\(:hover, :focus-visible\)/);
+    expect(all).toMatch(/\.site-button:active/);
+    expect(all).toMatch(/transform:\s*none/);
+  });
+
+  it('#5 三视图切换:pane markup 消费 site-card--interactive,scoped transition 并入 transform/box-shadow(防整条替换致瞬跳)', () => {
+    const views = read('../components/sections/Views.astro');
+    expect(views).toMatch(/class:list=\{\['views__pane', 'site-card--interactive'/);
+    expect(views).toMatch(/transition:[^}]*transform var\(--md-sys-motion-duration-short4\)[^}]*box-shadow var\(--md-sys-motion-duration-short4\)/s);
+    // 曲线收进 token:样式不得残留 cubic-bezier(0.23 硬编码(注释文字无 cubic-bezier 字样,不假中)
+    expect(views).not.toMatch(/cubic-bezier\(0\.23/);
+    expect(views).toMatch(/opacity var\(--md-sys-motion-duration-medium2\) var\(--site-motion-standard\)/);
+  });
+
+  it('#10 lightbox 编排:scrim 0.2s emphasized 开 + 图 0.3s scale(0.96→1),禁 lb 整层 0.4s 假动效;关对称 0.2s emph-accel', () => {
+    const gallery = read('../components/sections/Gallery.astro');
+    expect(gallery).toMatch(/animate\(scrim,\s*\{\s*opacity:\s*\[0,\s*1\]\s*\},\s*\{\s*duration:\s*0\.2,\s*ease:\s*\[0\.2, 0, 0, 1\]/);
+    expect(gallery).toMatch(/animate\(img,\s*\{\s*opacity:\s*\[0,\s*1\],\s*scale:\s*\[0\.96,\s*1\]\s*\},\s*\{\s*duration:\s*0\.3,\s*ease:\s*\[0\.2, 0, 0, 1\]/);
+    expect(gallery).toMatch(/animate\(lb,\s*\{\s*opacity:\s*0\s*\},\s*\{\s*duration:\s*RM\.matches \? 0 :\s*0\.2,\s*ease:\s*\[0\.3, 0, 0\.8, 0\.15\]/);
+    expect(gallery).not.toMatch(/duration:\s*RM\.matches \? 0 :\s*0\.4/);
+  });
+});
+
 describe('Blob.astro 三档定值(spec §2.4,数值定死)', () => {
   it('hue 0/+15/-15° 三档 + stops 角 135/90/200 成对', () => {
     expect(blob).toContain('293.82');
@@ -200,7 +253,8 @@ describe('Task 7 视觉细节闸(v4 §12 代码可闸项)', () => {
   });
   it('光源正上方:global.css 每条 box-shadow 所有分量 x 恒 0(v4 §5.3)', () => {
     const decls = globalCss.match(/box-shadow:\s*[^;]+;/g) ?? [];
-    // 现值两处:elevated 按钮 + elevated 卡(双分量);数量下限 2 = 闸不许被悄悄清空
+    // 现三处:elevated 按钮 + elevated 卡 + 卡 hover L2(Task 8 抬上同形态);
+    // 数量下限 2 = 闸不许被悄悄清空
     expect(decls.length).toBeGreaterThanOrEqual(2);
     for (const d of decls) {
       const value = d.replace(/^box-shadow:\s*/, '');

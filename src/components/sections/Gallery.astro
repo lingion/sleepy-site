@@ -236,15 +236,27 @@ const shots = [
       opener = from;
       show(i);
       lb.hidden = false;
-      animate(lb, { opacity: [0, 1] }, { duration: RM.matches ? 0 : 0.4, ease: [0.05, 0.7, 0.1, 1] });
+      // §6-10:scrim opacity 200ms + 图 scale(0.96→1)+opacity 300ms,emphasized (0.2,0,0,1);
+      // reduce 仅 opacity(停缩放)。禁 scale(0) → 0.96 起步。
+      const scrim = lb.querySelector<HTMLElement>('.lightbox__scrim')!;
+      if (RM.matches) {
+        animate([scrim, img], { opacity: [0, 1] }, { duration: 0 });
+      } else {
+        animate(scrim, { opacity: [0, 1] }, { duration: 0.2, ease: [0.2, 0, 0, 1] });
+        animate(img, { opacity: [0, 1], scale: [0.96, 1] }, { duration: 0.3, ease: [0.2, 0, 0, 1] });
+      }
       (lb.querySelector('[data-lb-close]') as HTMLElement).focus();
       document.addEventListener('keydown', onKey);
     };
     const close = () => {
       const done = () => {
         lb.hidden = true;
+        lb.style.opacity = ''; // 复位 close 终点内联 0 → 下次 open(lb 不再整体动画,只 scrim/img)不继承黑态
+        img.style.opacity = '';
+        img.style.transform = '';
         opener?.focus();
       };
+      // 关对称 200ms emph-accel(整层含 scrim 一起退)
       animate(lb, { opacity: 0 }, { duration: RM.matches ? 0 : 0.2, ease: [0.3, 0, 0.8, 0.15] }).finished.then(done);
       document.removeEventListener('keydown', onKey);
     };

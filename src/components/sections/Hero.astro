@@ -77,20 +77,20 @@ const t = c.hero;
     letter-spacing: -0.25px;
     color: var(--md-sys-color-on-surface);
     margin-block-end: calc(var(--site-unit) * 4);
-    animation: hero-enter 500ms var(--md-sys-motion-easing-emphasize-decelerate) both;
+    animation: rise var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasize-decelerate) both;
   }
   .hero__sub {
     max-width: 46ch;
     color: var(--md-sys-color-on-surface-variant);
     margin-block-end: calc(var(--site-unit) * 8);
-    animation: hero-enter 500ms var(--md-sys-motion-easing-emphasize-decelerate) 100ms both;
+    animation: rise var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasize-decelerate) 100ms both;
   }
   .hero__ctas {
     display: flex;
     flex-wrap: wrap;
     gap: calc(var(--site-unit) * 3);
     margin-block-end: calc(var(--site-unit) * 8);
-    animation: hero-enter 500ms var(--md-sys-motion-easing-emphasize-decelerate) 200ms both;
+    animation: rise var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasize-decelerate) 200ms both;
   }
   /* Filled XL(全页唯一实心之一):加大字号与内距 */
   .hero__cta-xl {
@@ -104,7 +104,7 @@ const t = c.hero;
     align-items: baseline;
     gap: calc(var(--site-unit) * 2);
     color: var(--md-sys-color-on-surface-variant);
-    animation: hero-enter 500ms var(--md-sys-motion-easing-emphasize-decelerate) 200ms both;
+    animation: rise var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasize-decelerate) 200ms both;
   }
   .hero__ribbon-num {
     color: var(--md-sys-color-on-surface);
@@ -137,17 +137,30 @@ const t = c.hero;
     block-size: 100%;
     object-fit: contain;
   }
-  /* §6-1~2:hero 一次性入场编排(唯一 @keyframes;禁循环);图列直绘零动效 */
-  @keyframes hero-enter {
+  /* §6-1~2:hero 一次性入场编排(全站唯二 @keyframes = rise/fade,零循环);图列直绘零动效 */
+  @keyframes rise {
     from { opacity: 0; transform: translateY(24px); }
     to { opacity: 1; transform: none; }
   }
+  /* 纯 opacity 档:blob 入场(§6-11 裁决 fea-major#6,循环删除并入编排)+ reduce 文字层
+     (to 隐式 = Blob.astro 静态 opacity 0.65);reduce 档 [data-blob] 被 global.css animation:none 闸死 */
+  @keyframes fade {
+    from { opacity: 0; }
+  }
+  :global(#hero [data-blob]) {
+    animation: fade var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasize-decelerate) 200ms both;
+  }
+  /* reduce 文字层:位移编排降纯 opacity 200ms 直现(200ms 写死——reduce 档 duration token 归零
+     不可引,同 global.css reveal 先例);delay 清零防拖尾超 §6-2 预算 */
   @media (prefers-reduced-motion: reduce) {
     .hero__slogan,
     .hero__sub,
     .hero__ctas,
     .hero__ribbon {
-      animation: none;
+      animation-name: fade;
+      animation-duration: 200ms;
+      animation-timing-function: ease;
+      animation-delay: 0ms;
     }
   }
   @media (max-width: 840px) {
