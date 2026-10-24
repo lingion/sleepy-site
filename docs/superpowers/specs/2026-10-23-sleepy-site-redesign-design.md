@@ -32,7 +32,7 @@
 
 | # | 用户口径 | 落点 | 产物级验收断言 |
 |---|---|---|---|
-| C1 | 首页第一张图=周视图 | §4 M1 | dist 中首页文档序第一个 img 元素 src 含 `01-week`(不变量断言,非快照);375px 首屏内周视图上沿可见(截图目检) |
+| C1 | 首页第一张图=周视图 | §4 M1 | dist 中首页文档序第一个 img 元素 src 含 `01-week`(不变量断言,非快照);375px 整图下置首屏外(R2 已批准,原「上沿可见」线作废),周视图仍为文档序第一 img |
 | C2 | 官方书面语;一意思一正面述;禁设问/反问/正反重复/口语;中英双语 | §7 | 全部 zh/en 串过正则(半角?、全角?、吗、呢、不慌、扫一眼)零命中;键树同形闸续绿;交付附 zh/en 全键 diff 表(en 长度列) |
 | C3 | 教务直连+提醒两图完整显示;截断只许无效区 | §5.4、§8 | 20-import/22-reminder 预处理后 contain 自然比例渲染,CSS 无 cover 于该两图;断言图列盒宽高比=裁后资产宽高比 ±2% |
 | C4 | weekgrid 高×2 更竖;weeklist/today/twoday 高÷2 更扁 | §8 资产(**已解决**) | **已验收资产为准**:renderer 直出 825×1375 / 825×343 / 825×550(用户 2026-10-23 验收「就这个样子」;weekgrid 3:5 替代字面 ×2 算术,以批准资产为准);站内卡片容器=资产自然比例,禁二次裁拉 |
@@ -51,7 +51,7 @@
 sticky 置顶;三段式:品牌标(左)/锚点文字链 功能·学校·组件·信任(Text 档,≤840px 隐藏)/右侧 [下载] Filled S 紧凑主按钮 + 语言 + 主题。滚动态 surface→surface-container tonal 升起,边界 outline-variant 发丝线,无投影,仅 background-color 过渡 150ms。高 64px。**新增配套**:`section[id]{scroll-margin-top:80px}`(锚点落点防 sticky 栏盖段标题,上线即现缺陷 [feasibility])。禁 FAB/抽屉 [material-web]。
 
 ### M1 Hero(HOOK,8-10% scroll,surface 底)
-非对称 split 55/45。左=display-large 标题(clamp 36→57px,字重 400)+≤15 词副题(body-large,行宽≤46ch)+CTA 组:[下载 Android] Filled XL(全页唯一实心)+[在线体验] **Text 档** [裁决:P1 明令 Text 拉开重量差,P2 剖面画 Tonal — 取 P1]。右=01-week 周视图截图(C1):屏幕本体无设备框,预处理裁状态栏+导航键后按自然比例 contain 完整显示,容器写死 aspect-ratio 防 CLS,**直接绘制零动效**(LCP 保护,§6-3)。带底佐证 ribbon:**348 校教务直连 · GPL-3.0 开源 · 数据留存本机** — 不对称排版(大数字 348 用 display-small + tabular-nums 领头,两短语跟随),非等距三点分隔 [goals-minor:去 SaaS 模板腔]。桌面段高内容驱动(图列 38-42%,删「80vh」硬数 [feasibility]);手机 375px:文字+CTA+ribbon 在上,周视图**上半部预览裁切**入首屏、下沿自然出血,完整图留给 M2 面板 [裁决:保 C1 移动落地,弃 P1「50vh+截图下置」=首图被推出首屏违 C1;**[待你批 R2]**]。全页唯一渐变只许在此带内、同色相超低 alpha。
+非对称 split 55/45。左=display-large 标题(clamp 36→57px,字重 400)+≤15 词副题(body-large,行宽≤46ch)+CTA 组:[下载 Android] Filled XL(全页唯一实心)+[在线体验] **Text 档** [裁决:P1 明令 Text 拉开重量差,P2 剖面画 Tonal — 取 P1]。右=01-week 周视图截图(C1):屏幕本体无设备框,预处理裁状态栏+导航键后按自然比例 contain 完整显示,容器写死 aspect-ratio 防 CLS,**直接绘制零动效**(LCP 保护,§6-3)。带底佐证 ribbon:**348 校教务直连 · GPL-3.0 开源 · 数据留存本机** — 不对称排版(大数字 348 用 display-small + tabular-nums 领头,两短语跟随),非等距三点分隔 [goals-minor:去 SaaS 模板腔]。桌面段高内容驱动(图列 38-42%,删「80vh」硬数 [feasibility]);手机 375px:文字+CTA+ribbon 在上,周视图**整幅完整显示置于首屏外**(DOM 末位,≤840px 自然落文字下),禁裁预览 [**R2 已批准**:整图下置首屏外,不裁预览]。全页唯一渐变只许在此带内、同色相超低 alpha。
 
 ### M2 三视图总览(OVERVIEW,10-12%,surface-container-low 全宽带)
 Stripe showcase 面板行 [ia-flow]:三块宽窄不一面板(网格视图最宽——用户定调绝大多数人用网格;大 tile 注视时间 2.6×)。**[裁决:面板并排为唯一呈现,切换器降级为「点面板即切换前景放大」的交互,不再同时声称两 UI 互斥形态 — goals-major#5①]** 复用现有 data-view CSS 状态机+radiogroup 键盘漫游(已实现,2026-10-23 增补),脚本选择器解耦为全局 `[data-views]` [feasibility]。**选择器视觉升级为 MD3 Segmented Button(M3 签名控件,2026-10-23 用户增补):描边药丸组 1px outline、段间发丝 outline-variant、选中段 secondary-container + check 图标 + on-secondary-container 字;radiogroup 语义不变,仅 dots 外观重铸。**每面板 26px 轻量小标题,一面板一主张。段标题 headline-medium 左置。
