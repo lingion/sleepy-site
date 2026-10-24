@@ -1,0 +1,19 @@
+---
+// en /download/ — zh 页镜像(spec §1 hreflang 互指)
+import Base from '../../layouts/Base.astro';
+import DownloadPanel from '../../components/pages/DownloadPanel.astro';
+import { site } from '../../i18n/ui';
+import { en } from '../../i18n/en';
+---
+
+<Base
+  lang="en"
+  title={`${en.downloadPage.heading} · Sleepy`}
+  description={en.downloadPage.universalNote}
+  path="/en/download/"
+  mirror="/download/"
+  ogImage={`${site}/og/download-en.png`}
+  ogImageAlt={en.downloadPage.heading}
+>
+  <DownloadPanel copy={en.downloadPage} lang="en" />
+</Base>

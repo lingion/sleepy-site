@@ -1,0 +1,20 @@
+---
+// zh /download/ — v5 四页之三:下载中心独立页(spec §2.4)
+// 纯出口页:全页唯一 Elevated 主钮、零 reveal;主体归 DownloadPanel,旧段 Download.astro 本体 Task 7 处理
+import Base from '../layouts/Base.astro';
+import DownloadPanel from '../components/pages/DownloadPanel.astro';
+import { site } from '../i18n/ui';
+import { zh } from '../i18n/zh';
+---
+
+<Base
+  lang="zh"
+  title={`${zh.downloadPage.heading} · Sleepy`}
+  description={zh.downloadPage.universalNote}
+  path="/download/"
+  mirror="/en/download/"
+  ogImage={`${site}/og/download-zh.png`}
+  ogImageAlt={zh.downloadPage.heading}
+>
+  <DownloadPanel copy={zh.downloadPage} lang="zh" />
+</Base>
