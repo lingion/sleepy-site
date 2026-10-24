@@ -276,7 +276,7 @@ git commit -m "feat(faq): FAQ.md 快照管线(build-faq+en 译文+条数闸)"
 ## Task 4: /schools/ 学校查找页(SchoolsTool 组件 + 原生岛 URL 态 + details 折叠 + content-visibility)
 
 **Files:**
-- Create: `src/lib/schools-island.ts`、`src/lib/schools-island.test.ts`、`src/components/pages/SchoolsTool.astro`、`src/pages/schools/index.astro`、`src/pages/en/schools/index.astro`、`tests/page.schools.test.ts`
+- Create: `src/lib/schools-island.ts`、`src/lib/schools-island.test.ts`、`src/components/pages/SchoolsTool.astro`、`src/pages/schools.astro`、`src/pages/en/schools.astro`(flat 文件名 + directory 输出 → dist/client/schools/index.html,与文件结构一致)、`tests/page.schools.test.ts`
 - Modify: `src/lib/schools-view.ts`(SchoolRow + `aliases: string[]`)、`src/lib/search.ts`(SearchableSchool + `aliases?`、matchSchool 命中含 alias)、`src/lib/search.test.ts`(lixin 用例)
 
 **Interfaces:**
@@ -352,7 +352,7 @@ Run: `npm run build && npx vitest run tests/page.schools.test.ts src/lib/schools
 - [ ] **Step 6: Commit**
 
 ```bash
-git add src/lib/schools-island.ts src/lib/schools-island.test.ts src/components/pages/SchoolsTool.astro src/pages/schools.astro src/pages/en/schools.astro tests/page.schools.test.ts
+git add src/lib/schools-island.ts src/lib/schools-island.test.ts src/lib/schools-view.ts src/lib/search.ts src/lib/search.test.ts src/components/pages/SchoolsTool.astro src/pages/schools.astro src/pages/en/schools.astro tests/page.schools.test.ts
 git commit -m "feat(schools): 学校查找独立页(URL 态/details 折叠/content-visibility)"
 ```
 
