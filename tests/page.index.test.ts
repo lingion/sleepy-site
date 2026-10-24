@@ -108,10 +108,21 @@ describe('AppBar 锚点 + 常驻钮(spec §4)', () => {
     const src = readFileSync(new URL('../src/components/AppBar.astro', import.meta.url), 'utf8');
     // 缺省态:JS-off 钮必显,Astro 静态 markup 写死 show
     expect(src).toContain('data-appbar-cta="show"');
-    // 互隐逻辑落点:IO 观察 #hero,回调写 appbarCta/appbar-cta
+    // 互隐逻辑落点:IO 观察 #hero,脚本侧写 dataset.appbarCta
+    // (原 /appbarCta|appbar-cta/ 无鉴别力——markup 恒含 appbar-cta,只锁脚本侧)
     expect(src).toContain('IntersectionObserver');
     expect(src).toMatch(/getElementById\(['"]hero['"]\)/);
-    expect(src).toMatch(/appbarCta|appbar-cta/);
+    expect(src).toMatch(/dataset\.appbarCta\s*=/);
+    // 方向锁:hero 相交 → hide(逐字锁简报 Step 2 三元)。`? 'show' : 'hide'` 反转即红;
+    // 取反改写 `!x.isIntersecting ? 'hide'` 虽含正句子串,由下行负闸拦截
+    expect(src).toMatch(/isIntersecting\s*\?\s*['"]hide['"]\s*:\s*['"]show['"]/);
+    expect(src).not.toMatch(/!\s*[\w$]+\.isIntersecting\s*\?/);
+    // 机制锁:hide 态 = visibility:hidden 保留占位(布局零跳动)。
+    // display:none 负闸只约束 hide 规则本体——icon 主题切换/≤840px 锚点隐藏合法用 display:none,文件级禁串必红
+    const hide = src.match(/\.appbar__cta\[data-appbar-cta=['"]hide['"]\]\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(hide, '.appbar__cta hide 规则存在').not.toBe('');
+    expect(hide).toMatch(/visibility:\s*hidden/);
+    expect(hide).not.toMatch(/display:\s*none/);
   });
 });
 
