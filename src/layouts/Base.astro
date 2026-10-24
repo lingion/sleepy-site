@@ -13,31 +13,49 @@ import release from '../data/release.json';
 import { getImage } from 'astro:assets';
 import heroShotLight from '../assets/screenshots/01-week-light.png';
 
-// LCP preload(T3/T5):hero 前景图 = 01-week 周视图(C1 首图不变量)。
+// LCP preload(T3/T5,spec §2.6-8):hero 前景图 = 01-week 周视图(C1 首图不变量)。
 // 参数必须与 Hero.astro 的 <Shot> 完全一致
 // (同 widths/sizes/width/height → 同 transform hash → preload 命中浏览器缓存,零重复请求)。
+// preloadHero 开关:仅两主页传 true;getImage 同条件化(非主页不产生构建期图像处理)。
 const HERO_WIDTHS = [420, 840];
 const HERO_SIZES = '(max-width: 840px) 88vw, 440px';
-const heroImg = await getImage({
-  src: heroShotLight,
-  widths: HERO_WIDTHS,
-  sizes: HERO_SIZES,
-  width: heroShotLight.width,
-  height: heroShotLight.height,
-});
 
 interface Props {
   lang: 'zh' | 'en';
   title: string;
   description: string;
-  /** 当前页在双语对里的镜像路径(en 页传 '/' , zh 页传 '/en/') */
+  /** 本页 zh 规范路径,如 '/' · '/schools/'(canonical/hreflang/og:url 的基准) */
+  path: string;
+  /** 本页双语对里的对侧路径(en 主页传 '/', zh 主页传 '/en/';v5 多页化:恒指本页对,旧单页假设废弃) */
   mirror: string;
+  /** 绝对 URL;缺省 = site + '/og/home-' + lang + '.png'(Task 8 OG 产出后各路由显式传) */
+  ogImage?: string;
+  ogImageAlt?: string;
+  /** 缺省 false;仅两主页传 true(spec §2.6-8:工具页/FAQ/404 禁背死 preload) */
+  preloadHero?: boolean;
+  /** 缺省 false;两主页显式 true —— AppBar CTA 缺省态分支的输入,与 preloadHero 独立(终审 I2) */
+  hasHero?: boolean;
+  /** 缺省不发;主页传 SoftwareApplication 对象(Task 8 接线) */
+  jsonLd?: object;
+  /** 缺省不发 RSS link —— Task 8 建 /rss.xml 路由前挂上即断链(终审裁决) */
+  rssLink?: string;
 }
 
-const { lang, title, description, mirror } = Astro.props;
+const { lang, title, description, path, mirror, ogImage, ogImageAlt, preloadHero, hasHero, jsonLd, rssLink } =
+  Astro.props;
 const copy = lang === 'zh' ? zh : en;
 const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
 const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
+const ogImg = ogImage ?? `${site}/og/home-${lang}.png`;
+const heroImg = preloadHero
+  ? await getImage({
+      src: heroShotLight,
+      widths: HERO_WIDTHS,
+      sizes: HERO_SIZES,
+      width: heroShotLight.width,
+      height: heroShotLight.height,
+    })
+  : null;
 ---
 
 <!doctype html>
@@ -50,29 +68,39 @@ const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate icon" href="/favicon.ico" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="canonical" href={site + Astro.url.pathname} />
-    <link rel="alternate" hreflang="zh-CN" href={site + (lang === 'zh' ? '/' : mirror)} />
-    <link rel="alternate" hreflang="en" href={site + (lang === 'en' ? '/en/' : mirror)} />
+    <link rel="canonical" href={site + path} />
+    {/* hreflang 恒指本页双语对(path/mirror 语义对),不再出现单页恒指 '/'(spec §2.6-2) */}
+    <link rel="alternate" hreflang="zh-CN" href={site + (lang === 'zh' ? path : mirror)} />
+    <link rel="alternate" hreflang="en" href={site + (lang === 'en' ? path : mirror)} />
     <link rel="alternate" hreflang="x-default" href={site + '/'} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={site + Astro.url.pathname} />
+    <meta property="og:url" content={site + path} />
     <meta property="og:locale" content={ogLocale} />
     <meta property="og:locale:alternate" content={lang === 'zh' ? 'en_US' : 'zh_CN'} />
+    {/* OG 大图三链(spec §2.6-1):值必为绝对 URL,爬虫不解析相对路径;缺省主页图保证永不为空 */}
+    <meta property="og:image" content={ogImg} />
+    <meta property="og:image:alt" content={ogImageAlt ?? title} />
+    <meta name="twitter:image" content={ogImg} />
     <meta name="twitter:card" content="summary_large_image" />
+    {rssLink && <link rel="alternate" type="application/rss+xml" title="Sleepy release feed" href={rssLink} />}
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <meta name="theme-color" content="#0F0D15" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#FDF8FF" media="(prefers-color-scheme: light)" />
 
     {/* LCP preload(T3):hero 前景图最早发现。imagesrcset+imagesizes 与 img 一致,
-        浏览器按 srcset 选档预载,命中同一 transform hash 的缓存条目,零重复下载。 */}
-    <link
-      rel="preload"
-      as="image"
-      href={heroImg.src}
-      imagesrcset={heroImg.srcSet.attribute}
-      imagesizes={HERO_SIZES}
-    />
+        浏览器按 srcset 选档预载,命中同一 transform hash 的缓存条目,零重复下载。
+        preloadHero=false(工具页/FAQ/404)整块不产出——背着死 preload 违反 §0 基线(spec §2.6-8)。 */}
+    {heroImg && (
+      <link
+        rel="preload"
+        as="image"
+        href={heroImg.src}
+        imagesrcset={heroImg.srcSet.attribute}
+        imagesizes={HERO_SIZES}
+      />
+    )}
 
     {/* FOUC 守卫(spec §1):首帧前读 localStorage 定 data-theme,无首屏闪变。
         is:inline = 不打包不延迟,这是唯一允许的内联脚本。 */}
@@ -91,11 +119,11 @@ const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
   </head>
   <body>
     <a class="skip-link" href="#main">{lang === 'zh' ? '跳到正文' : 'Skip to content'}</a>
-    <AppBar lang={lang} copy={copy} />
+    <AppBar lang={lang} copy={copy} hasHero={hasHero ?? false} mirror={mirror} />
     <main id="main">
       <slot />
     </main>
-    <Footer lang={lang} build={build} copy={copy} />
+    <Footer lang={lang} build={build} copy={copy} mirror={mirror} path={path} />
     <script>
       // 主题开关(lightbox 岛在 T6;此处只做 FOUC 之后的持久化 toggle)
       const root = document.documentElement;

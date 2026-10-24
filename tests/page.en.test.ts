@@ -60,8 +60,8 @@ describe('/en/ 结构镜像(v4 八段)', () => {
     expect(preload).not.toBeNull();
     expect(preload?.getAttribute('href')).toBe(doc.querySelector('img[fetchpriority="high"]')?.getAttribute('src'));
   });
-  it('AppBar 4 锚点 + data-appbar-cta', () => {
-    for (const h of ['#views', '#schools', '#reminders', '#trust']) {
+  it('AppBar 4 导航项(en 前缀绝对路径)+ data-appbar-cta', () => {
+    for (const h of ['/en/#views', '/en/schools/', '/en/faq/', '/en/#reminders']) {
       expect(doc.querySelector(`#appbar a[href="${h}"]`), h).not.toBeNull();
     }
     expect(doc.querySelector('#appbar [data-appbar-cta]')).not.toBeNull();

@@ -118,13 +118,12 @@ export const zh = {
     qqGroupLabel: 'QQ 群',
   },
   appbar: {
-    // 锚点 = 段入口(spec §4 四枚:功能·学校·组件·信任);「学校名录」为避校名子串泄漏的 4 字形式(§15 泄漏闸)
+    // 锚点 = 跨页导航(spec §2.1 四枚:功能·学校名录·常见问答·组件);「学校名录/常见问答」为避校名子串泄漏的四字形式(§15 泄漏闸)
     anchors: {
       views: '功能',
       schools: '学校名录',
       faq: '常见问答',
       reminders: '组件',
-      trust: '信任',
     },
     ctaDownload: '下载',
     navLabel: '区块导航',

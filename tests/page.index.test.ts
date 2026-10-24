@@ -93,10 +93,14 @@ describe('ribbon 佐证条(spec §4 M1)', () => {
   });
 });
 
-describe('AppBar 锚点 + 常驻钮(spec §4)', () => {
-  it('#appbar 4 锚点依序齐备', () => {
-    for (const h of ['#views', '#schools', '#reminders', '#trust']) {
+describe('AppBar 锚点 + 常驻钮(spec §2.1 v5 跨页导航)', () => {
+  it('#appbar 4 导航项依序齐备(绝对路径形式:锚点回主页,页面项指工具页)', () => {
+    for (const h of ['/#views', '/schools/', '/faq/', '/#reminders']) {
       expect(doc.querySelector(`#appbar a[href="${h}"]`), h).not.toBeNull();
+    }
+    // 旧裸 # 锚点绝迹(F2:v4 单页假设修复)
+    for (const old of ['#views', '#schools', '#reminders', '#trust']) {
+      expect(doc.querySelector(`#appbar a[href="${old}"]`), old).toBeNull();
     }
   });
   it('#appbar 存在 data-appbar-cta 下载钮(Filled 档)', () => {
@@ -104,10 +108,10 @@ describe('AppBar 锚点 + 常驻钮(spec §4)', () => {
     expect(cta).not.toBeNull();
     expect(cta?.getAttribute('class')).toContain('site-button--filled');
   });
-  it('CTA 互隐闸(§11-6):markup 缺省 show + 源码 IO 引用 #hero 与 appbar-cta', () => {
+  it('CTA 互隐闸(§11-6):缺省态 prop 化 + 源码 IO 引用 #hero 与 appbar-cta', () => {
     const src = readFileSync(new URL('../src/components/AppBar.astro', import.meta.url), 'utf8');
-    // 缺省态:JS-off 钮必显,Astro 静态 markup 写死 show
-    expect(src).toContain('data-appbar-cta="show"');
+    // 缺省态(§10 改写):字面 show 随 prop 化失效 → 三元方向锁(hasHero 页 show / 工具页 hide 终态);反转即红
+    expect(src).toMatch(/hasHero\s*\?\s*['"]show['"]\s*:\s*['"]hide['"]/);
     // 互隐逻辑落点:IO 观察 #hero,脚本侧写 dataset.appbarCta
     // (原 /appbarCta|appbar-cta/ 无鉴别力——markup 恒含 appbar-cta,只锁脚本侧)
     expect(src).toContain('IntersectionObserver');
@@ -196,8 +200,9 @@ describe('文案 v4 新契约(spec §7 R1-R5 + C2)', () => {
       expect(HTML, w).not.toContain(w);
     }
   });
-  it('FAQ 外链钉死', () => {
-    expect(HTML).toContain('https://github.com/lingion/sleepy/blob/main/FAQ.md');
+  it('FAQ 站内化(§10 改写:ui.ts faqUrl 随 /faq/ 页落地,消费方 Trust/Footer 自动生效)', () => {
+    expect(HTML).toContain('href="/faq/"');
+    expect(HTML).not.toContain('https://github.com/lingion/sleepy/blob/main/FAQ.md');
   });
 });
 

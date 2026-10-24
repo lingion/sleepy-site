@@ -12,7 +12,7 @@ import Download from '../../components/sections/Download.astro';
 import { en } from '../../i18n/en';
 ---
 
-<Base lang="en" title={en.meta.title} description={en.meta.description} mirror="/">
+<Base lang="en" title={en.meta.title} description={en.meta.description} path="/en/" mirror="/" preloadHero hasHero>
   <Hero copy={en} />
   <Views copy={en} />
   <Connect copy={en} />

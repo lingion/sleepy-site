@@ -122,7 +122,6 @@ export const en: SiteCopy = {
       schools: 'Directory',
       faq: 'FAQ',
       reminders: 'Widgets',
-      trust: 'Trust',
     },
     ctaDownload: 'Download',
     navLabel: 'Section navigation',

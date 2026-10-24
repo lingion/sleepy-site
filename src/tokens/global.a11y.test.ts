@@ -217,14 +217,17 @@ describe('Footer.astro(v4 §4/§13 R1 再基线)', () => {
     expect(footer).not.toContain('Blob');
     expect(footer).not.toMatch(/variant=\{2\}|variant=2/);
   });
-  it('GPL + QQ 群号 + sponsor 钉死链接(值在 ui.ts / footer 键树,spec §2.5 保留项)', async () => {
+  it('GPL 钉死 + QQ/sponsor 引用已清(v5 §10:Footer 瘦身,键留、消费方迁 /download/)', async () => {
     const { zh: zhCopy } = await import('../i18n/zh');
     expect(footer).toContain('{t.license}');
     expect(zhCopy.footer.license).toContain('GPL');
+    // ui.ts 键全部保留(qqGroup/sponsorUrl 仍由 Trust.astro 与 /download/ 消费)
     expect(ui).toContain('1063407652');
     expect(ui).toContain('https://github.com/lingion/sleepy/blob/main/sponsor.md');
-    expect(footer).toContain('{qqGroup}');
-    expect(footer).toContain('{sponsorUrl}');
+    // 正 pin 翻负闸:Footer 源码不再 import/引用二者(外溢链接归位 /download/)
+    expect(footer).not.toMatch(/\bqqGroup\b/);
+    expect(footer).not.toMatch(/\bsponsorUrl\b/);
+    expect(footer).not.toMatch(/\bonlineTrialUrl\b/);
   });
 });
 
