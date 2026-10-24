@@ -150,8 +150,11 @@ const anchors = [
     align-items: center;
     justify-content: center;
   }
-  .appbar__theme:hover {
-    background: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+  /* hover 位移闸(v4 §12):粘滞 hover 态只在真悬停设备生效;触屏按压走 :active(全局 state layer) */
+  @media (hover: hover) and (pointer: fine) {
+    .appbar__theme:hover {
+      background: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+    }
   }
   .icon-moon { display: none; }
   :global([data-theme='dark']) .appbar .icon-sun { display: none; }

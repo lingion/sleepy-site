@@ -174,3 +174,71 @@ describe('Footer.astro(v4 §4/§13 R1 再基线)', () => {
     expect(footer).toContain('{sponsorUrl}');
   });
 });
+
+describe('Task 7 视觉细节闸(v4 §12 代码可闸项)', () => {
+  it('.tnum 工具类存在 + Hero ribbon/Schools statLine/Download 版本行 markup class 消费', () => {
+    // 定义:global.css 排版工具类区,值逐字 lining-nums tabular-nums
+    expect(globalCss).toMatch(/\.tnum\s*\{[^}]*font-variant-numeric:\s*lining-nums tabular-nums/);
+    // 消费 = markup class 属性的独立 token 含 tnum(实勘:三组件 scoped 样式早已含
+    // tabular-nums 文本,查样式文本 = 假绿;Astro 编译加 :where(.astro-hash) 使 scoped
+    // 样式正则脆断 —— 裁决 2:只查 markup)。token 化拆分防 hero__ribbon-num 子串假中
+    const hero = read('../components/sections/Hero.astro');
+    const schools = read('../components/sections/Schools.astro');
+    const download = read('../components/sections/Download.astro');
+    const classTokens = (src: string, el: string) =>
+      [...src.matchAll(/class="([^"]*)"/g)]
+        .map((m) => m[1].split(/\s+/))
+        .find((cls) => cls.includes(el));
+    expect(classTokens(hero, 'hero__ribbon'), 'Hero .hero__ribbon markup 缺 tnum').toContain('tnum');
+    expect(classTokens(schools, 'schools__stat'), 'Schools .schools__stat markup 缺 tnum').toContain('tnum');
+    expect(classTokens(download, 'download__version'), 'Download .download__version markup 缺 tnum').toContain('tnum');
+  });
+  it('.appbar__theme:hover 位移包 @media (hover: hover) 闸(触屏无粘滞 hover 态)', () => {
+    // 闸后形态:media 开括号后首个选择器即 .appbar__theme:hover;
+    // AppBar.astro 另有一枚 (hover: hover) 块(锚点链),紧接其后必须限定到 theme 才不算假绿
+    expect(appBar).toMatch(/@media \(hover: hover\)[^{]*\{\s*\.appbar__theme:hover\s*\{/);
+  });
+  it('光源正上方:global.css 每条 box-shadow 所有分量 x 恒 0(v4 §5.3)', () => {
+    const decls = globalCss.match(/box-shadow:\s*[^;]+;/g) ?? [];
+    // 现值两处:elevated 按钮 + elevated 卡(双分量);数量下限 2 = 闸不许被悄悄清空
+    expect(decls.length).toBeGreaterThanOrEqual(2);
+    for (const d of decls) {
+      const value = d.replace(/^box-shadow:\s*/, '');
+      for (const layer of value.split(',')) {
+        const [x] = layer.trim().split(/\s+/);
+        expect(x, `box-shadow x 分量必须 0(光源正上方): ${d}`).toBe('0');
+      }
+    }
+  });
+  // 逐块提取(不锚定「第一枚」):多枚 (hover:hover) 块时任一枚含全选择器即为绿
+  const hoverBlocks = globalCss.match(/@media \(hover: hover\) and \(pointer: fine\)\s*\{[\s\S]*?\n\}/g) ?? [];
+
+  it('state layer hover 档:(hover:hover) 闸内 currentColor 8% 叠色,禁 @material/web(无 ripple,plan 定案)', () => {
+    const layer = hoverBlocks.find((b) => b.includes('.site-button:hover'));
+    expect(layer, 'global.css 须有 state layer hover 档,包 @media (hover: hover) and (pointer: fine)').toBeDefined();
+    for (const sel of ['.site-button:hover', '.site-chip:hover', '.site-field:hover', '.views__dot:hover', '.appbar__theme:hover', 'a:hover']) {
+      expect(layer, `state layer hover 档缺选择器 ${sel}`).toContain(sel);
+    }
+    // 反馈 = currentColor 混色叠色(禁裸 background 色变:叠色不吞控件既有语义底)
+    expect(layer).toContain('background-color: color-mix(in srgb, currentColor 8%, transparent)');
+    expect(globalCss).not.toContain('@material/web');
+  });
+  it('state layer active 档:顶层零缩进(不包 media query,触屏按压接管),currentColor 10%', () => {
+    // 不变量=嵌套层级:本文件 @media 内规则一律缩进,故 \n 紧接选择器(零缩进)= 顶层。
+    // 若 :active 被挪进 media 块(会带缩进)即红 —— 触屏按压反馈不可被桌面闸吞
+    const active = globalCss.match(
+      /^\.site-button:active,\s*\.site-chip:active,\s*\.site-field:active,\s*\.views__dot:active,\s*\.appbar__theme:active,\s*a:active\s*\{[^}]*background-color:\s*color-mix\(in srgb, currentColor 10%, transparent\)/m
+    );
+    expect(active, 'active 档须为顶层六选择器组 + currentColor 10% 混色(禁包 media)').not.toBeNull();
+    // 次序:active 档在 hover 档之后(同特异性后置才准按压盖过悬停)
+    const layer = hoverBlocks.find((b) => b.includes('.site-button:hover'));
+    if (layer) {
+      expect(globalCss.indexOf('.site-button:active')).toBeGreaterThan(
+        globalCss.indexOf(layer) + layer.length
+      );
+    }
+  });
+  it(':focus-visible 全局 2px primary 描边保留(state layer 不吞焦点闸)', () => {
+    expect(globalCss).toMatch(/:focus-visible\s*\{\s*outline:\s*2px solid var\(--md-sys-color-primary\)/);
+  });
+});
