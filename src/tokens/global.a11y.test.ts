@@ -65,10 +65,10 @@ describe('global.css 设计契约(spec §2.2)', () => {
   it('reduced-motion reveal 升档:opacity 200ms 淡入 + 位移归零(v4 spec §6,旧 §2.3「0ms 直出」契约随 v4 废弃)', () => {
     const reduceBlock = globalCss.match(/@media \(prefers-reduced-motion: reduce\)\s*\{[\s\S]*?\n\}/);
     expect(reduceBlock, 'global.css 须有 reduce 块').not.toBeNull();
-    expect(reduceBlock[0]).toMatch(/transition:\s*opacity 200ms ease/);
-    expect(reduceBlock[0]).toMatch(/transform:\s*none/);
+    expect(reduceBlock![0]).toMatch(/transition:\s*opacity 200ms ease/);
+    expect(reduceBlock![0]).toMatch(/transform:\s*none/);
     // 旧「直出 opacity:1」必须绝迹:opacity 交由 data-revealed 控制
-    expect(reduceBlock[0]).not.toMatch(/\.js \.reveal\s*\{[^}]*opacity:\s*1\s*[;}]/);
+    expect(reduceBlock![0]).not.toMatch(/\.js \.reveal\s*\{[^}]*opacity:\s*1\s*[;}]/);
     expect(globalCss).toMatch(/\.js \.reveal\[data-revealed='true'\]\s*\{[^}]*opacity:\s*1/);
   });
   it('内容列 1040dp + section 间距 128/80(spec §2.2/§2.4)', () => {
