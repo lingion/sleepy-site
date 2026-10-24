@@ -152,6 +152,7 @@ export const zh = {
     heading: '收录与检索',
     sub: '名录按省份与教务协议分组,支持校名或拼音检索。',
     searchLabel: '校名检索',
+    placeholder: '输入校名或拼音,如 jiaotong…',
     provinceLabel: '省份',
     typeLabel: '协议',
     expandAll: '展开全部',
