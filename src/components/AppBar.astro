@@ -76,8 +76,30 @@ const dlHref = `${home}download/`;
         <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-15a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm0 17a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0v-2a1 1 0 0 1 1-1ZM3.5 5.1A1 1 0 0 1 4.9 3.5l1.4 1.5A1 1 0 1 1 4.9 6.5L3.5 5.1Zm15.2 13.9a1 1 0 0 1 1.4-1.4l1.4 1.4a1 1 0 0 1-1.4 1.5l-1.4-1.5ZM3 12a1 1 0 0 1-1 1H.9a1 1 0 1 1 0-2H2a1 1 0 0 1 1 1Zm19-1a1 1 0 0 1 1 1v.1a1 1 0 1 1-2 0V12a1 1 0 0 1 1-1ZM4.9 19.1a1 1 0 0 1-1.4-1.5L4.9 16a1 1 0 0 1 1.5 1.5l-1.5 1.5ZM19.1 4.9a1 1 0 0 1 1.4 0v.1l-1.4 1.4a1 1 0 0 1-1.5-1.4L19.1 5Z"/></svg>
         <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.3 4.9a.4.4 0 0 0-.5-.5A8.8 8.8 0 1 0 19.6 19a.4.4 0 0 0 .1-.5A10.4 10.4 0 0 1 12.3 4.9Z"/></svg>
       </button>
+      <!-- 汉堡菜单(2026-10-25 用户报:≤840px 锚点组 display:none 后手机无页间导航):
+           轻量 disclosure 模式,桌面隐藏/移动显示;面板复用 anchors 同源 href 不变量 -->
+      <button
+        class="appbar__menu"
+        type="button"
+        aria-expanded="false"
+        aria-controls="appbar-menu"
+        aria-label={lang === 'zh' ? '打开导航菜单' : 'Open navigation menu'}
+        data-appbar-menu
+        data-label-open={lang === 'zh' ? '打开导航菜单' : 'Open navigation menu'}
+        data-label-close={lang === 'zh' ? '关闭导航菜单' : 'Close navigation menu'}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </nav>
   </div>
+  <nav class="appbar__menu-panel" id="appbar-menu" aria-label={c.appbar.navLabel} hidden>
+    {
+      anchors.map((a) => (
+        <a class="appbar__menu-link t-title-small" href={a.href}>{a.label}</a>
+      ))
+    }
+    <a class="appbar__menu-link appbar__menu-dl t-title-small" href={dlHref}>{c.appbar.ctaDownload}</a>
+  </nav>
 </header>
 
 <style>
@@ -173,8 +195,46 @@ const dlHref = `${home}download/`;
   .icon-moon { display: none; }
   :global([data-theme='dark']) .appbar .icon-sun { display: none; }
   :global([data-theme='dark']) .appbar .icon-moon { display: block; }
+  /* 汉堡钮:桌面恒隐(锚点组在场),≤840px 接管锚点组的导航职责 */
+  .appbar__menu {
+    display: none;
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: var(--md-sys-shape-corner-full);
+    border: none;
+    background: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .appbar__menu:hover {
+      background: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+    }
+  }
+  .appbar__menu-panel {
+    display: grid;
+    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+    background: var(--md-sys-color-surface-container);
+    padding-block: calc(var(--site-unit) * 2);
+  }
+  .appbar__menu-panel[hidden] { display: none; }
+  .appbar__menu-link {
+    color: var(--md-sys-color-on-surface);
+    text-decoration: none;
+    padding: calc(var(--site-unit) * 3) calc(var(--site-unit) * 6);
+    min-block-size: 44px; /* 触屏目标 ≥44(站点纪律) */
+    display: flex;
+    align-items: center;
+  }
+  .appbar__menu-dl {
+    color: var(--md-sys-color-primary);
+  }
   @media (max-width: 840px) {
     .appbar__anchors { display: none; }
+    .appbar__menu { display: inline-flex; }
   }
 </style>
 
@@ -187,6 +247,29 @@ const dlHref = `${home}download/`;
     mark();
   }
   document.querySelector('[data-icon-theme]')?.addEventListener('click', () => window.siteToggleTheme?.());
+  // 汉堡 disclosure:钮只管 aria-expanded ⇄ 面板 hidden;链接点击/Esc/升档回桌面 均收合
+  const menuBtn = document.querySelector<HTMLButtonElement>('[data-appbar-menu]');
+  const menuPanel = document.getElementById('appbar-menu');
+  if (menuBtn && menuPanel) {
+    const setOpen = (open: boolean) => {
+      menuPanel.hidden = !open;
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? menuBtn.dataset.labelClose! : menuBtn.dataset.labelOpen!);
+    };
+    menuBtn.addEventListener('click', () => setOpen(menuPanel.hidden));
+    menuPanel.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menuPanel.hidden) {
+        setOpen(false);
+        menuBtn.focus();
+      }
+    });
+    matchMedia('(min-width: 841px)').addEventListener('change', (ev) => {
+      if (ev.matches) setOpen(false);
+    });
+  }
   // CTA 互隐(T6,spec §11-6):hero 在视口 → 钮 hide;离开 → show。
   // 非主页 markup 缺省即 hide 终态,无 #hero 时 IO 不启用(spec §2.4 CTA 纪律);
   // #hero 缺失(无 hero 页/构建异动)或旧内核无 IO → 保持缺省态,不崩。
