@@ -1,6 +1,8 @@
 // v5 /faq/ 产物闸(plan Task 6 Step 1)— dist/client/faq/index.html 级 DOM 验收
-// 快照渲染(34 问 = faq.json = FAQ.md ### 计数)、8 节(「相关链接」无问剔除)、禁问句豁免面 = article 外框架文本、
-// TOC 锚点全命中、相对仓库链绝对化死链防御(spec R4 目检可发现 = 尾卡「更新于」直读 faq.json)
+// 快照渲染(43 问 = faq.json = FAQ.md ### 计数;2026-10-25 v1.0.62 事实刷新 34→43,节名序零变动)、
+// 8 节(「相关链接」无问剔除)、禁问句豁免面 = article 外框架文本、
+// TOC 锚点全命中、相对仓库链绝对化死链防御(样本随快照平移 schools-list→sponsor;
+// spec R4 目检可发现 = 尾卡「更新于」直读 faq.json)
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
@@ -24,12 +26,12 @@ const enDoc = load('../dist/client/en/faq/index.html').window.document;
 const enHtml = enDoc.documentElement.innerHTML;
 
 describe('快照计数闸(plan Task 6)', () => {
-  it('34 问 = faq.json items 总和 = FAQ.md ### 计数 = 页面 article 数', () => {
+  it('43 问 = faq.json items 总和 = FAQ.md ### 计数 = 页面 article 数', () => {
     const mdCount = (readFileSync(new URL('../fixtures/FAQ.md', import.meta.url), 'utf8').match(/^### /gm) ?? []).length;
-    expect(mdCount).toBe(34);
-    expect(faq.sections.reduce((n, s) => n + s.items.length, 0)).toBe(34);
-    expect(zhDoc.querySelectorAll('[data-faq-item]')).toHaveLength(34);
-    expect(enDoc.querySelectorAll('[data-faq-item]')).toHaveLength(34);
+    expect(mdCount).toBe(43);
+    expect(faq.sections.reduce((n, s) => n + s.items.length, 0)).toBe(43);
+    expect(zhDoc.querySelectorAll('[data-faq-item]')).toHaveLength(43);
+    expect(enDoc.querySelectorAll('[data-faq-item]')).toHaveLength(43);
   });
   it('8 节(终审 I9:FAQ.md 实测 9 个 ## 节,剔除「相关链接」恰 8)且节名序 = faq.json zh 序', () => {
     const secs = [...zhDoc.querySelectorAll('[data-faq-section]')];
@@ -105,9 +107,16 @@ describe('尾卡与 TOC(spec §2.4)', () => {
 });
 
 describe('死链防御(Task 3 绝对化规则的产物侧 pin)', () => {
-  it('docs/schools-list.md 渲为 /blob/main/ 前缀且零 href="docs/ 相对链', () => {
-    expect(zhHtml).not.toContain('href="docs/');
-    expect(zhHtml).toContain(`${repoUrl}/blob/main/docs/schools-list.md`);
+  it('sponsor.md 相对链渲为 /blob/main/ 前缀且 article 内零相对 href(死链闸样本)', () => {
+    // 只查 article 内容链:absolutize 的靶面。页壳站内导航(/en/faq/ 等根绝对路径)合法不查
+    for (const doc of [zhDoc, enDoc]) {
+      const bad = [...doc.querySelectorAll('article a')].filter(
+        (a) => !/^(https?:|mailto:|#)/.test(a.getAttribute('href') ?? '')
+      );
+      expect(bad, `relative href in article: ${bad.map((a) => a.getAttribute('href')).join(', ')}`).toHaveLength(0);
+    }
+    expect(zhHtml).toContain(`${repoUrl}/blob/main/sponsor.md`);
+    expect(enHtml).toContain(`${repoUrl}/blob/main/sponsor.md`);
   });
 });
 

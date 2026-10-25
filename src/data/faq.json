@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-12",
+  "updatedAt": "2026-10-25",
   "sections": [
     {
       "zh": "项目是什么",
@@ -139,7 +139,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "课表和设置存储在本机。项目不集成 Firebase Analytics、Crashlytics、Sentry、Bugsnag、AppCenter、Bugly 等分析或崩溃上报 SDK，也不要求登录云端账号。教务导入会访问学校站点，节假日刷新会下载公共日期数据，版本检查和下载会访问 GitHub 或项目镜像；普通查看和编辑课表可离线完成。"
+                    "v": "课表和设置存储在本机。项目不集成 Firebase Analytics、Crashlytics、Sentry、Bugsnag、AppCenter、Bugly 等分析或崩溃上报 SDK，也不要求登录云端账号。教务导入会访问学校站点，节假日刷新会下载公共日期数据，版本检查和下载会访问 GitHub 或项目镜像；普通查看和编辑课表可离线完成。关于页提供隐私政策入口链接。"
                   }
                 ]
               }
@@ -150,7 +150,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "Schedules and settings are stored on the device. The project integrates no analytics or crash-reporting SDKs such as Firebase Analytics, Crashlytics, Sentry, Bugsnag, AppCenter or Bugly, and does not require a cloud login. Academic-affairs import visits the school site, holiday refresh downloads public date data, and version checks and downloads access GitHub or the project mirror; viewing and editing schedules work offline."
+                    "v": "Schedules and settings are stored on the device. The project integrates no analytics or crash-reporting SDKs such as Firebase Analytics, Crashlytics, Sentry, Bugsnag, AppCenter or Bugly, and does not require a cloud login. Academic-affairs import visits the school site, holiday refresh downloads public date data, and version checks and downloads access GitHub or the project mirror; viewing and editing schedules work offline. The About page links the hosted privacy policy."
                   }
                 ]
               }
@@ -238,6 +238,65 @@
                   {
                     "t": "text",
                     "v": ". When reporting academic-affairs problems, never attach accounts, passwords, verification codes, cookies, tokens or personal schedules."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-1-q-6",
+          "q": {
+            "zh": "如何支持这个项目？",
+            "en": "How can I support the project?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "项目接受自愿赞助，支付宝 / 微信收款码见 "
+                  },
+                  {
+                    "t": "link",
+                    "href": "https://github.com/lingion/sleepy/blob/main/sponsor.md",
+                    "inline": [
+                      {
+                        "t": "text",
+                        "v": "赞助页"
+                      }
+                    ]
+                  },
+                  {
+                    "t": "text",
+                    "v": "。赞助不影响任何功能，Sleepy 始终免费且无付费等级。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "The project accepts voluntary sponsorship; Alipay and WeChat QR codes are on the "
+                  },
+                  {
+                    "t": "link",
+                    "href": "https://github.com/lingion/sleepy/blob/main/sponsor.md",
+                    "inline": [
+                      {
+                        "t": "text",
+                        "v": "sponsor page"
+                      }
+                    ]
+                  },
+                  {
+                    "t": "text",
+                    "v": ". Sponsoring never unlocks features: Sleepy stays free with no paid tiers."
                   }
                 ]
               }
@@ -573,7 +632,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "先在学校选择页搜索全名/别名，或输入教务 URL 尝试识别。仍失败时，在 "
+                    "v": "学校选择页是全国学校目录，逐校标注导入状态：一部分学校已带教务协议、可直接路由导入；其余为目录登记、解析器尚未接入，应用内明示——「还没适配」和「没有这所学校」是两回事。目录中没有你的学校，或学校显示未适配而你想推动适配时：先在学校选择页搜索全名/别名，或输入教务 URL 尝试识别；仍失败时，在 "
                   },
                   {
                     "t": "link",
@@ -587,21 +646,7 @@
                   },
                   {
                     "t": "text",
-                    "v": " 使用学校适配模板，提供学校教务系统地址、失败页面和操作步骤。不要提交任何登录凭据或未脱敏的个人数据。当前学校清单见 "
-                  },
-                  {
-                    "t": "link",
-                    "href": "https://github.com/lingion/sleepy/blob/main/docs/schools-list.md",
-                    "inline": [
-                      {
-                        "t": "code",
-                        "v": "docs/schools-list.md"
-                      }
-                    ]
-                  },
-                  {
-                    "t": "text",
-                    "v": "；清单和协议会随适配更新。"
+                    "v": " 使用学校适配模板，提供学校教务系统地址、失败页面和操作步骤。不要提交任何登录凭据或未脱敏的个人数据。"
                   }
                 ]
               }
@@ -612,7 +657,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "First search the full name or alias on the school-picking page, or enter the academic-affairs URL to try identification. If that still fails, open an "
+                    "v": "The school-picking page is a national school catalog with an explicit import status per school: a subset carries a routing protocol and imports directly, the rest are catalog registrations whose parsers are not wired yet and are marked as such in-app — \"not adapted yet\" and \"no such school\" are now different things. If your school is missing from the catalog, or shows as not adapted and you want to push adaptation forward: first search the full name or alias on the school-picking page, or enter the academic-affairs URL to try identification. If that still fails, open an "
                   },
                   {
                     "t": "link",
@@ -626,21 +671,7 @@
                   },
                   {
                     "t": "text",
-                    "v": " with the school adaptation template, providing the school's academic-affairs address, failing page and steps. Never submit login credentials or unredacted personal data. The current school list is in "
-                  },
-                  {
-                    "t": "link",
-                    "href": "https://github.com/lingion/sleepy/blob/main/docs/schools-list.md",
-                    "inline": [
-                      {
-                        "t": "code",
-                        "v": "docs/schools-list.md"
-                      }
-                    ]
-                  },
-                  {
-                    "t": "text",
-                    "v": "; the list and protocols evolve with each adaptation."
+                    "v": " with the school adaptation template, providing the school's academic-affairs address, failing page and steps. Never submit login credentials or unredacted personal data."
                   }
                 ]
               }
@@ -649,6 +680,37 @@
         },
         {
           "id": "sec-3-q-2",
+          "q": {
+            "zh": "从目录里未验证的学校导入成功了，维护者怎么知道？",
+            "en": "I imported successfully from a catalog school that isn't verified — does the maintainer know?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "从未在线验证过的学校导入成功后会弹出成功报告，一键复制：版本、日期、校名、目录 ID、协议、课程数。不发任何网络请求、不自动上传；报告只含学校侧公开信息，粘贴到 Issues 或 Discussions 即可帮助维护者确认协议可用。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "Importing from a catalog entry that has not been verified online pops a success report you can copy in one tap: app version, date, school name, catalog ID, protocol, course count. Nothing is uploaded and no network request is made; the report contains only school-side public facts. Paste it into an Issue or Discussion to confirm the protocol works."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-3-q-3",
           "q": {
             "zh": "教务导入如何工作？账号密码会被保存吗？",
             "en": "How does the academic-affairs import work? Are my credentials stored?"
@@ -679,7 +741,7 @@
           }
         },
         {
-          "id": "sec-3-q-3",
+          "id": "sec-3-q-4",
           "q": {
             "zh": "支持哪些导入格式？",
             "en": "Which import formats are supported?"
@@ -856,7 +918,7 @@
           }
         },
         {
-          "id": "sec-3-q-4",
+          "id": "sec-3-q-5",
           "q": {
             "zh": "`sleepy-v1` 是什么？",
             "en": "What is `sleepy-v1`?"
@@ -903,7 +965,7 @@
           }
         },
         {
-          "id": "sec-3-q-5",
+          "id": "sec-3-q-6",
           "q": {
             "zh": "可以导出什么？",
             "en": "What can I export?"
@@ -915,7 +977,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "课表可以导出为 WakeUp 兼容 JSON、WakeUp 分享文本、ICS 和 "
+                    "v": "课表可以导出为 WakeUp 兼容 JSON、ICS 和 "
                   },
                   {
                     "t": "code",
@@ -923,7 +985,15 @@
                   },
                   {
                     "t": "text",
-                    "v": "。Android 10+ 将 JSON/ICS 写入 "
+                    "v": "；两个分享入口（导出页分享文本、顶栏分享面板）输出的就是 "
+                  },
+                  {
+                    "t": "code",
+                    "v": "sleepy-v1"
+                  },
+                  {
+                    "t": "text",
+                    "v": " 原生格式，分享出去的课表当纯文本也能读，导入回环不变。Android 10+ 将 JSON/ICS 写入 "
                   },
                   {
                     "t": "code",
@@ -942,7 +1012,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "Schedules export as WakeUp-compatible JSON, WakeUp share text, ICS and "
+                    "v": "Schedules export as WakeUp-compatible JSON, ICS and "
                   },
                   {
                     "t": "code",
@@ -950,7 +1020,15 @@
                   },
                   {
                     "t": "text",
-                    "v": ". On Android 10+ JSON/ICS are written to "
+                    "v": "; both share entry points (export-page share text and the top-bar share sheet) emit "
+                  },
+                  {
+                    "t": "code",
+                    "v": "sleepy-v1"
+                  },
+                  {
+                    "t": "text",
+                    "v": " natively, so a shared timetable reads as plain text and the import round-trip is unchanged. On Android 10+ JSON/ICS are written to "
                   },
                   {
                     "t": "code",
@@ -966,7 +1044,38 @@
           }
         },
         {
-          "id": "sec-3-q-6",
+          "id": "sec-3-q-7",
+          "q": {
+            "zh": "可以导出到小爱课程表吗？",
+            "en": "Can I export to the Xiaoai class table?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "可以。导出页提供「导出到小爱课程表」：课表在本地生成并校验周次范围、日期与作息表字段后，经深链交给小爱（小米语音助手）课程表导入器。最终导入体验以小爱客户端的接收为准。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "Yes. The export page offers \"Export to Xiaoai class table\": the timetable is generated and validated locally — week range, dates and time-schedule fields — then handed to the Xiaoai (Xiaomi assistant) class-table importer via deep link. The final import experience depends on the Xiaoai client receiving it."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-3-q-8",
           "q": {
             "zh": "可以直接写入系统日历吗？",
             "en": "Can it write to the system calendar directly?"
@@ -978,7 +1087,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "可以。在导出页选设备上的可写日历、日期范围，预览后确认；此操作才申请日历读写权限。可应用调课和日历提醒。实验性第 1 节闹钟取决于日历应用和账户支持。"
+                    "v": "可以。在导出页选设备上的可写日历、日期范围，预览后确认；此操作才申请日历读写权限。可应用调课和日历提醒。设备没有 Google 账号或任何日历账号、可写日历列表为空时，Sleepy 会按需创建一个自有隐藏本地日历；增量指纹写入保证重复导出不覆盖你在日历应用里的手动编辑。实验性第 1 节闹钟取决于日历应用和账户支持。"
                   }
                 ]
               }
@@ -989,7 +1098,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "Yes. On the export page pick a writable calendar on the device and a date range, preview, then confirm; calendar read/write permission is requested only at this step. Rescheduled classes and calendar reminders apply. The experimental first-period alarm depends on calendar app and account support."
+                    "v": "Yes. On the export page pick a writable calendar on the device and a date range, preview, then confirm; calendar read/write permission is requested only at this step. Rescheduled classes and calendar reminders apply. When the device has no Google account or any calendar account and the writable-calendar list is empty, Sleepy creates its own hidden local calendar on demand; incremental fingerprint upsert means re-exporting never wipes your manual edits in the calendar app. The experimental first-period alarm depends on calendar app and account support."
                   }
                 ]
               }
@@ -997,7 +1106,7 @@
           }
         },
         {
-          "id": "sec-3-q-7",
+          "id": "sec-3-q-9",
           "q": {
             "zh": "如何完整备份或换机？",
             "en": "How do I back up everything or move to a new device?"
@@ -1044,7 +1153,7 @@
           }
         },
         {
-          "id": "sec-3-q-8",
+          "id": "sec-3-q-10",
           "q": {
             "zh": "需要哪些权限？",
             "en": "Which permissions are required?"
@@ -1186,7 +1295,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "可以。作息表支持手动逐节填写，也支持根据首节时间、每节时长、节数和课间模板推算时间。不同课表可以绑定不同作息表。"
+                    "v": "可以。作息表支持手动逐节填写，也支持根据首节时间、每节时长、节数和课间模板推算时间。不同课表可以绑定不同作息表。导入教务课表时恒会创建对应作息表。"
                   }
                 ]
               }
@@ -1197,7 +1306,69 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "Yes. Timetables support per-period manual entry and derivation from the first period's start, per-class duration, period count and inter-class break template. Different schedules can bind different timetables."
+                    "v": "Yes. Timetables support per-period manual entry and derivation from the first period's start, per-class duration, period count and inter-class break template. Different schedules can bind different timetables. Importing an academic-affairs timetable always creates its time-schedule alongside it."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-4-q-5",
+          "q": {
+            "zh": "周视图能显示日期吗？",
+            "en": "Does the week view show dates?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "可以。开启「显示星期」后，周视图课程旁与日详情栏会打印真实日期（M 月 d 日），不用从教学周倒推。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "Yes. With \"show weekday\" enabled, the week view prints the actual date (M/d) next to each course and in the day detail panel — no more counting back from the class week."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-4-q-6",
+          "q": {
+            "zh": "长课间怎么显示？",
+            "en": "How are long breaks rendered?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "课与课之间的长空档渲染为悬浮薄带而不是拉高的空行：行高保持刚性，紧邻薄带的课程卡满高显示，用餐时段按时间比例标识。表头可隐藏时间行。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "A long gap between classes renders as a thin floating band instead of a stretched empty row: row heights stay rigid, course cards next to a band keep full height, meal breaks are marked proportionally to time, and the header can hide the time row."
                   }
                 ]
               }
@@ -1233,32 +1404,52 @@
                 "items": [
                   [
                     {
+                      "t": "bold",
+                      "v": "Today"
+                    },
+                    {
                       "t": "text",
-                      "v": "**Today**：当天课程列表"
+                      "v": "：当天课程列表"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "TwoDay"
+                    },
+                    {
                       "t": "text",
-                      "v": "**TwoDay**：今天和明天的双栏视图"
+                      "v": "：今天和明天的双栏视图"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekList"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekList**：一周课程清单"
+                      "v": "：一周课程清单"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekView"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekView**：周视图缩略图"
+                      "v": "：周视图缩略图"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekGrid"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekGrid**：完整节次网格"
+                      "v": "：完整节次网格"
                     }
                   ]
                 ]
@@ -1276,7 +1467,7 @@
                   },
                   {
                     "t": "text",
-                    "v": "。"
+                    "v": "。管理入口在独立的「添加或管理桌面小组件」页：全部变体进添加画廊，启动器预览按真实渲染器等比重绘，刷新按钮就在组件旁边。"
                   }
                 ]
               }
@@ -1297,32 +1488,52 @@
                 "items": [
                   [
                     {
+                      "t": "bold",
+                      "v": "Today"
+                    },
+                    {
                       "t": "text",
-                      "v": "**Today**: the day's course list"
+                      "v": ": the day's course list"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "TwoDay"
+                    },
+                    {
                       "t": "text",
-                      "v": "**TwoDay**: today and tomorrow in two columns"
+                      "v": ": today and tomorrow in two columns"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekList"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekList**: a weekly course list"
+                      "v": ": a weekly course list"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekView"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekView**: a week-grid thumbnail"
+                      "v": ": a week-grid thumbnail"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekGrid"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekGrid**: the full period grid"
+                      "v": ": the full period grid"
                     }
                   ]
                 ]
@@ -1340,7 +1551,7 @@
                   },
                   {
                     "t": "text",
-                    "v": "."
+                    "v": ". Management lives on its own \"Add or Manage Widgets\" page: all variants in an add gallery, launcher previews re-rendered at true scale from the real widget faces, and the refresh button next to the widgets it refreshes."
                   }
                 ]
               }
@@ -1391,7 +1602,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "主题颜色来自应用的主题设置，课程颜色按稳定的黄金角 HSL 分布生成。刷新应用主题后，应用会广播 widget 更新；如果桌面仍显示旧内容，移除并重新添加 widget，或检查系统对后台和桌面组件的限制。"
+                    "v": "主题颜色来自应用的主题设置；课程颜色跟随外观中「课程配色」所选档位。刷新应用主题后，应用会广播 widget 更新；如果桌面仍显示旧内容，移除并重新添加 widget，或检查系统对后台和桌面组件的限制。"
                   }
                 ]
               }
@@ -1402,7 +1613,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "Theme colors come from the app's theme settings; course colors use a stable golden-angle HSL distribution. After the app theme changes, the app broadcasts widget updates; if the launcher still shows old content, remove and re-add the widget, or check system limits on background and launcher components."
+                    "v": "Theme colors come from the app's theme settings; course colors follow the mode selected under Appearance → Course colors. After the app theme changes, the app broadcasts widget updates; if the launcher still shows old content, remove and re-add the widget, or check system limits on background and launcher components."
                   }
                 ]
               }
@@ -1428,7 +1639,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "课前提醒支持输入 1 到 999 分钟，不限于几个固定选项。今日摘要、明日摘要和课前提醒在「我的 → 提醒」中分别设置。"
+                    "v": "课前提醒支持输入 1 到 999 分钟，不限于几个固定选项。今日摘要、明日摘要和课前提醒的总开关在「我的 → 提醒」中分别设置，每张课表另有独立开关。"
                   }
                 ]
               }
@@ -1439,7 +1650,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "Pre-class reminders accept 1 to 999 minutes, not just a few fixed options. Today summary, tomorrow summary and pre-class reminders are configured separately under \"Mine → Reminders\"."
+                    "v": "Pre-class reminders accept 1 to 999 minutes, not just a few fixed options. Today summary, tomorrow summary and pre-class reminders are configured separately under \"Mine → Reminders\", and each schedule has its own switch."
                   }
                 ]
               }
@@ -1448,6 +1659,107 @@
         },
         {
           "id": "sec-6-q-2",
+          "q": {
+            "zh": "课前提醒的横幅和流体云是什么关系？",
+            "en": "What is the relationship between the banner and Fluid Cloud reminder?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "二选一：横幅是普通可划通知，手环等设备天然兼容；流体云是实况卡片，属实验能力，显示效果受系统和厂商支持影响。两者互斥，切回横幅会真正停止流体云投放服务。旧的双开关配置无损迁移。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "It is an either/or choice: banner is a plain dismissable notification and is naturally wearable-friendly; Fluid Cloud is a promoted live card, experimental, with display depending on system and vendor support. The two are mutually exclusive, and switching back to banner truly stops the cast service. The old pair of switches migrates losslessly."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-6-q-3",
+          "q": {
+            "zh": "多张课表的提醒会刷屏吗？",
+            "en": "Will multiple schedules spam me with reminders?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "["
+                  },
+                  {
+                    "t": "text",
+                    "v": "课表名]」前缀。点按进入统一每日议程，也支持给定日期直达。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "["
+                  },
+                  {
+                    "t": "text",
+                    "v": "timetable]` prefix. Tapping it opens the unified daily agenda, which also accepts a date and jumps straight there."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-6-q-4",
+          "q": {
+            "zh": "每张课表的提醒开关在哪里？",
+            "en": "Where are the per-timetable reminder switches?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "「我的 → 提醒 → 课表提醒」独立页面：全部课表与各自开关一屏排开，总开关关着也能先配置。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "On their own page: Mine → Reminders → Table reminders. All tables and their switches in one list; you can preconfigure while the master switch is off."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-6-q-5",
           "q": {
             "zh": "节假日、调休和上课勿扰怎么设置？",
             "en": "How do I set holidays, swapped rest days and class do-not-disturb?"
@@ -1478,7 +1790,7 @@
           }
         },
         {
-          "id": "sec-6-q-3",
+          "id": "sec-6-q-6",
           "q": {
             "zh": "提醒是云推送吗？",
             "en": "Are reminders cloud push?"
@@ -1509,7 +1821,7 @@
           }
         },
         {
-          "id": "sec-6-q-4",
+          "id": "sec-6-q-7",
           "q": {
             "zh": "关闭提醒后还会收到吗？",
             "en": "Will I still get reminders after turning them off?"
@@ -1521,7 +1833,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "应用的提醒总开关关闭后不会主动安排新的提醒。Android 系统通知权限仍由系统设置控制；若通知被系统或厂商省电策略拦截，需要在系统设置里恢复权限。"
+                    "v": "应用的提醒总开关关闭后不会主动安排新的提醒；单张课表的提醒开关也可以单独关闭。Android 系统通知权限仍由系统设置控制；若通知被系统或厂商省电策略拦截，需要在系统设置里恢复权限。"
                   }
                 ]
               }
@@ -1532,7 +1844,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "With the app's master reminder switch off, no new reminders are scheduled. Android notification permission remains controlled by system settings; if notifications are intercepted by the system or vendor battery policy, restore the permission in system settings."
+                    "v": "With the app's master reminder switch off, no new reminders are scheduled; each timetable's own switch can also be turned off individually. Android notification permission remains controlled by system settings; if notifications are intercepted by the system or vendor battery policy, restore the permission in system settings."
                   }
                 ]
               }
@@ -1609,6 +1921,37 @@
         },
         {
           "id": "sec-7-q-3",
+          "q": {
+            "zh": "课程颜色是怎么决定的？能跟随主题吗？",
+            "en": "How are course colors decided? Can they follow the theme?"
+          },
+          "a": {
+            "zh": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "「外观 → 课程配色」三档：经典撒色是旧的稳定黄金角 HSL 分布，行为不变；跟随主题把课程色相放在当前主题色的安全弧上，避开主题色带与补色带；自定义可拖动一次种子色，全表课程围绕它重新编排。色相按课程组 ID 落库，改名或重新导入课表不会再换颜色。控件统一为轨道式分段开关。"
+                  }
+                ]
+              }
+            ],
+            "en": [
+              {
+                "type": "paragraph",
+                "inline": [
+                  {
+                    "t": "text",
+                    "v": "Appearance → Course colors has three modes: Classic keeps the old stable golden-angle HSL scatter unchanged; Follow Theme places course hues on a safe arc of the current theme color, carving out the theme band and the complement band; Custom lets you drag a seed hue once and every course re-harmonizes around it. Hues persist per course group ID, so renaming a course or re-importing a timetable no longer reshuffles colors. The switches are rail-style segmented controls throughout."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "sec-7-q-4",
           "q": {
             "zh": "选中主题卡片会改变卡片尺寸吗？",
             "en": "Does selecting a theme card change the card's size?"

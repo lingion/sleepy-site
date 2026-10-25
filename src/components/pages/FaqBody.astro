@@ -16,7 +16,7 @@ interface Props {
 }
 const { copy: t, lang } = Astro.props;
 
-type Inline = { t: 'text'; v: string } | { t: 'code'; v: string } | { t: 'link'; href: string; inline?: Inline[] };
+type Inline = { t: 'text'; v: string } | { t: 'code'; v: string } | { t: 'bold'; v: string } | { t: 'link'; href: string; inline?: Inline[] };
 type Block =
   | { type: 'paragraph'; inline: Inline[] }
   | { type: 'list'; ordered: boolean; items: Inline[][] }
@@ -28,6 +28,7 @@ function inlineToHtml(parts: Inline[] | undefined): string {
   return (parts ?? [])
     .map((i) => {
       if (i.t === 'code') return `<code>${esc(i.v)}</code>`;
+      if (i.t === 'bold') return `<strong>${esc(i.v)}</strong>`;
       if (i.t === 'link') {
         const href = esc(i.href);
         const rel = /^(https?:)?\/\//.test(i.href) ? ' rel="noopener noreferrer" target="_blank"' : '';
