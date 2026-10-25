@@ -30,3 +30,4 @@ pnpm-debug.log*
 tmp-cdp/
 .shots/
 tmp-lh/
+.review/

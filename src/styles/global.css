@@ -115,9 +115,30 @@ h1, h2, h3, h4, h5, h6, p {
   margin: 0;
 }
 
+/* display:block 保留全站(其余 img 仍需块级化);Shot 双图例外由上方三件套接管:
+   light 主题靠 .shot__dark(0,1,0) 先藏暗版单显 light,dark 主题靠 (0,2,1) 两条藏亮显暗。
+   首帧即正确单显 = CLS 根因修复的落点(窗口期双显/双藏两种塌陷同时封死) */
 img {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Shot 流式窗口兜底(双藏 26px 塌陷封死,2026-10-25 延迟注入取证):
+   dark 主题两条 (0,2,1) 夹在 chunk 默认档 (0,2,0) 与终态档 (0,3,0) 之间——
+   藏 light / 显 dark 首帧即终态同向,chunk 分块插入的「藏 light 已落、显 dark 未落」
+   双藏窗口被 (0,2,1) 显 dark 条恒压过;gallery force-light 带 (0,3,0)+ 稳压不受扰。
+   双显方向的首帧由 .shot__light{display:block} + img{block} 决定(亮版恒显 =
+   正确首帧,暗版见下方单类规则先藏);light 主题单显 = 两条兜底零命中 +
+   单类 .shot__dark{none} 先藏暗版。theme.img.gate 不变量不破:终态权威归 Shot,
+   global 只做流式窗口兜底 */
+.shot__dark {
+  display: none;
+}
+html[data-theme='dark'] .shot__light {
+  display: none;
+}
+html[data-theme='dark'] .shot__dark {
   display: block;
 }
 

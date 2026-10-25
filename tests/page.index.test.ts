@@ -364,19 +364,60 @@ describe('a11y/SEO 基线(保留项)', () => {
 });
 
 describe('Task 10 mobile 剖面缺陷锁(Lighthouse home/schools 复测归零项)', () => {
-  it('hero 图盒比例钉 img 本体(移动 CLS 0.41→0):block 化 + aspect-ratio + 零 100% 高', () => {
+  it('hero 图盒比例钉 img 本体(移动 CLS 0.41→0):aspect-ratio + 零 100% 高 + 零 display(块级化归 Shot)', () => {
     const src = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
     const rule = src.match(/:global\(#hero \.hero__device img\)\s*\{([^}]*)\}/s)?.[1] ?? '';
     expect(rule, 'img 规则存在').not.toBe('');
     expect(rule).toContain('aspect-ratio: 1080 / 2048');
-    expect(rule).toContain('display: block');
     expect(rule).toContain('block-size: auto');
     expect(rule).not.toContain('block-size: 100%');
+    // 2026-10-25 双显事故:display 声明曾在此(1,1,1)压过 Shot 主题规则;块级化已迁 Shot
+    expect(rule).not.toMatch(/display\s*:/);
   });
   it('pane lead = on-surface 不降级 variant(dim 叠色对比闸:三占二恒 ×.55)', () => {
     const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');
     const rule = src.match(/\.views__pane-lead\s*\{[^}]*\}/)?.[0] ?? '';
     expect(rule).toContain('var(--md-sys-color-on-surface)');
     expect(rule).not.toContain('on-surface-variant');
+  });
+});
+
+describe('Shot 流式窗口三件套兜底(CLS 0.4711 根因锁,2026-10-25 延迟注入取证)', () => {
+  // 根因:Shot 显隐活在页面级 chunk,慢网分块落地有窗口期——chunk 缺席双显 1369→697,
+  // 分块中间态双藏 26px(C 实验 t=1080 shift=0.4737)。旧双显 bug 掩盖塌陷(0.0151 假阴性)。
+  // 修复:显式单显兜底进 Base 首包,首帧即正确;特异性夹档 (0,1,0)/(0,2,1) vs chunk (0,2,0)/(0,3,0)。
+  const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, ''); // 剥注释:根因注释含 .shot__dark{none} 等字面量,不剥正则先命中注释
+  const pick = (sel: string) => css.match(new RegExp(`${sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+
+  it('兜底一:light 主题首帧 .shot__dark 藏(0,1,0 单类,压不过任何 chunk scoped 规则)', () => {
+    expect(pick('.shot__dark')).toMatch(/display:\s*none/);
+  });
+  it('兜底二:dark 主题藏 light(0,2,1 压 chunk .shot__light{block} (0,2,0))', () => {
+    expect(pick("html[data-theme='dark'] .shot__light")).toMatch(/display:\s*none/);
+  });
+  it('兜底三:dark 主题显 dark(0,2,1 压 chunk .shot__dark{none} (0,2,0),封双藏窗)', () => {
+    expect(pick("html[data-theme='dark'] .shot__dark")).toMatch(/display:\s*block/);
+  });
+  it('夹档不变量:兜底选择器恒单 data-theme 属性面(特异性 ≤ (0,2,1),禁压 chunk 终态/gallery force-light (0,3,0))', () => {
+    // 从真源码提取全部规则选择器,禁对硬编码常量匹配(那永远绿 = 零鉴别力)
+    const selectors = [...css.matchAll(/([^{}]+)\{/g)].map((m) => m[1].trim()).filter((s) => s.includes('data-theme'));
+    expect(selectors.length, 'data-theme 选择器存在').toBeGreaterThanOrEqual(2);
+    for (const sel of selectors) {
+      expect((sel.match(/\[data-theme/g) || []).length, sel).toBe(1); // 双属性 = (0,3,x) 即红
+    }
+  });
+  it('FOUC 守卫 data-theme 属性面存在(兜底二/三的选择器依赖)', () => {
+    expect(HTML).toMatch(/<script[^>]*>[\s\S]*data-theme[\s\S]*<\/script>/);
+  });
+  it('hero device ≤840px 显式定宽(CLS 0.4397 位移本体:fit-content 宽随未达图内容塌 26)', () => {
+    const src = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
+    // 闭合锚 2 空格缩进(内层规则 4 空格):惰性 [\s\S]*? 遇 4 空格 } 不停,整段媒体查询收全
+    const mq = src.match(/@media\s*\(max-width:\s*840px\)\s*\{([\s\S]*?)\n {2}\}/)?.[1] ?? '';
+    const dev = mq.match(/\.hero__device\s*\{([^}]*)\}/)?.[1] ?? '';
+    // min(100%,420) 定宽 = 容器宽恒确定,脱离图加载;max-inline-size 回退(内容驱动塌缩)即红
+    expect(dev, '.hero__device ≤840px 规则存在').not.toBe('');
+    expect(dev).toContain('inline-size: min(100%, 420px)');
+    expect(dev).not.toMatch(/max-inline-size/);
   });
 });

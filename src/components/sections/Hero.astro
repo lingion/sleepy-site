@@ -134,9 +134,9 @@ const t = c.hero;
      img 自带 aspect-ratio(= 裁后资产 1080×2048 自然比,两变体同尺寸):
      图字节到达前盒已按 100%宽 × 比例预留高度 —— 首帧零跳(CLS 闸,
      Lighthouse mobile 实测 span→block 位移 0.4 归因于隐变体后知尺寸);
-     块级化让预留高度真实占据布局(inline img 基线缝隙一并消除) */
+     块级化归 Shot 自持(2026-10-25 双显事故):本规则禁声明 display——
+     带 #hero 的特异性 (1,1,1) 会压过 Shot 主题切换规则,双图同显 */
   :global(#hero .hero__device img) {
-    display: block;
     border-radius: calc(var(--site-unit) * 3);
     inline-size: 100%;
     block-size: auto;
@@ -178,10 +178,15 @@ const t = c.hero;
     .hero__grid {
       grid-template-columns: 1fr;
     }
+    /* 显式定宽(CLS 0.4737 根因闸,2026-10-25 节流取证):margin-inline:auto 使
+       grid item 的 stretch 失效退 fit-content,宽度转由内容决定;img{inline-size:100%}
+       又依赖容器宽(循环)→ 图字节未达时内容=0 → 盒塌 padding+border 26px,图加载
+       完成撑回 380 = 位移本体(rules=269 全落地仍塌实证:与 CSS 到达时机无关,
+       内联样式实验同分 0.4711 反证)。min(100%,420) 使宽度恒确定(=轨道宽),
+       img 比例钉形随盒宽自适应,base 规则已够 —— 无需再覆盖 */
     .hero__device {
-      max-inline-size: 420px;
+      inline-size: min(100%, 420px);
       margin-inline: auto;
     }
-    /* img 比例钉形随盒宽自适应,base 规则已够 —— 无需 ≤840px 覆盖 */
   }
 </style>
