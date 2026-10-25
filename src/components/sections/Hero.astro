@@ -134,9 +134,9 @@ const t = c.hero;
      img 自带 aspect-ratio(= 裁后资产 1080×2048 自然比,两变体同尺寸):
      图字节到达前盒已按 100%宽 × 比例预留高度 —— 首帧零跳(CLS 闸,
      Lighthouse mobile 实测 span→block 位移 0.4 归因于隐变体后知尺寸);
-     块级化让预留高度真实占据布局(inline img 基线缝隙一并消除) */
+     块级化归 Shot 自持(2026-10-25 双显事故):本规则禁声明 display——
+     带 #hero 的特异性 (1,1,1) 会压过 Shot 主题切换规则,双图同显 */
   :global(#hero .hero__device img) {
-    display: block;
     border-radius: calc(var(--site-unit) * 3);
     inline-size: 100%;
     block-size: auto;

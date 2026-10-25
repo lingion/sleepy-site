@@ -73,6 +73,12 @@ const forceClass = forceVariant ? `shot--force-${forceVariant}` : undefined;
   .shot {
     display: contents;
   }
+  /* 块级化责任归组件自持(2026-10-25 hero 双显事故:消费方带 id 的 img{display:block}
+     (1,1,1) 压过本组件主题规则 (0,2,0)/(0,3,0) → 双图同显。img 显隐唯一源在此,
+     消费方禁再声明 display;light 显式块级顺带消 inline 基线缝隙) */
+  .shot__light {
+    display: block;
+  }
   .shot__dark {
     display: none;
   }

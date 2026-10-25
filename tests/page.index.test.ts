@@ -364,14 +364,15 @@ describe('a11y/SEO 基线(保留项)', () => {
 });
 
 describe('Task 10 mobile 剖面缺陷锁(Lighthouse home/schools 复测归零项)', () => {
-  it('hero 图盒比例钉 img 本体(移动 CLS 0.41→0):block 化 + aspect-ratio + 零 100% 高', () => {
+  it('hero 图盒比例钉 img 本体(移动 CLS 0.41→0):aspect-ratio + 零 100% 高 + 零 display(块级化归 Shot)', () => {
     const src = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
     const rule = src.match(/:global\(#hero \.hero__device img\)\s*\{([^}]*)\}/s)?.[1] ?? '';
     expect(rule, 'img 规则存在').not.toBe('');
     expect(rule).toContain('aspect-ratio: 1080 / 2048');
-    expect(rule).toContain('display: block');
     expect(rule).toContain('block-size: auto');
     expect(rule).not.toContain('block-size: 100%');
+    // 2026-10-25 双显事故:display 声明曾在此(1,1,1)压过 Shot 主题规则;块级化已迁 Shot
+    expect(rule).not.toMatch(/display\s*:/);
   });
   it('pane lead = on-surface 不降级 variant(dim 叠色对比闸:三占二恒 ×.55)', () => {
     const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');
