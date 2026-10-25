@@ -70,8 +70,8 @@ export const zh = {
     },
   },
   gallery: {
-    heading: '全部为真机截图',
-    sub: '每一张都来自线上版本,未用渲染图。点按任意一张查看大图。',
+    heading: '真机截图',
+    sub: '点按任意一张查看大图。',
     captions: [
       '网格视图',
       '周视图',

@@ -68,8 +68,8 @@ export const en: SiteCopy = {
     },
   },
   gallery: {
-    heading: 'Every shot is a real screenshot',
-    sub: 'Each image comes from the shipped app. Tap any one to view it full size.',
+    heading: 'Real screenshots',
+    sub: 'Tap any one to view full size.',
     captions: [
       'Grid view',
       'Week view',

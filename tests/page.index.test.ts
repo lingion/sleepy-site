@@ -205,7 +205,7 @@ describe('文案 v5 契约(spec §7 + §2.2 入口卡句)', () => {
   it('§7 对照表改后句逐句进产物(trial/schools 两 pin 已随 §10 迁出主页)', () => {
     expect(stripped).toContain('课表数据仅存于本机,不经任何服务器。'); // hero.sub(R1)
     expect(metaDesc.replace(/\s+/g, '')).toContain(`${schools.length}条教务直连,数据仅存本机,源码完整公开`); // meta.desc(R3,派生)
-    expect(stripped).toContain('全部为真机截图'); // gallery.heading
+    expect(stripped).toContain(zh.gallery.heading); // gallery.heading(派生 pin,v5 巡检批精简后禁再硬编码旧句)
   });
   it('入口卡派生句两数进产物(§10 行 4:statLine 派生 pin,禁手写;条数不当校数说 §4.1)', () => {
     const types = new Set(schools.map((s) => s.type)).size;
