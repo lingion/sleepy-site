@@ -1,9 +1,12 @@
 ---
-// footer — v4 spec §4:保留结构;blob#3 删(§13 R1 3→1);surface-container 深档底 + 发丝 outline-variant 顶边;
-// 文案走 copy.footer(zh/en 同形键树,禁内联 ternary 硬编码——泄漏闸只 walk zh.ts)。
+// footer — v5 spec §2.1 瘦身:五链 = 站内三链(/download /schools /faq)+ 开源仓库外链 + 语言 + build 行。
+// 原 App/Community 双列的外溢链接(releases/latest、在线体验、赞助、Issues、QQ 群)全部归位 /download/ 页(spec §2.4);
+// 站内链绝对路径形式随 lang 加前缀(多页化:任意页面点击恒指对应语言页)。
+// 文案走 copy.footer 键树(zh/en 同形,禁内联 ternary 硬编码——泄漏闸只 walk zh.ts);
+// t.dl/t.trial/t.qq/t.sponsor/t.faq/t.repo/t.community/t.app 八键保留不删(Homepage 文案历史,终审 F4),本组件引用已清。
 // 明暗两主题一律走 surface-container token 档(不锁 inverse-surface:dark 下 inverse 是浅灰,
 // 与「深档底」语义相反;§17.1 dark 节奏)。
-import { qqGroup, sponsorUrl, repoUrl, faqUrl, onlineTrialUrl } from '../i18n/ui';
+import { repoUrl } from '../i18n/ui';
 import { zh } from '../i18n/zh';
 import type { SiteCopy } from '../i18n/zh';
 
@@ -11,35 +14,29 @@ interface Props {
   lang: 'zh' | 'en';
   build: string;
   copy?: SiteCopy;
+  /** 语言链 = 本页双语对侧路径(Base 透传,与 AppBar 同源) */
+  mirror?: string;
+  /** 本页 zh 路径(Base 透传):回顶链在非主页回各页头 */
+  path?: string;
 }
-const { lang, build } = Astro.props;
-const t = (Astro.props.copy ?? zh).footer;
+const { lang, build, mirror = lang === 'zh' ? '/en/' : '/', path = '/' } = Astro.props;
+const c = Astro.props.copy ?? zh;
+const t = c.footer;
+const home = lang === 'zh' ? '/' : '/en/';
 ---
 
 <footer class="footer">
   <div class="site-col footer__inner">
-    <div class="footer__grid">
-      <section aria-labelledby="f-app">
-        <h4 class="t-title-small" id="f-app">{t.app}</h4>
-        <ul>
-          <li><a href="https://github.com/lingion/sleepy/releases/latest">{t.dl}</a></li>
-          <li><a href={onlineTrialUrl}>{t.trial}</a></li>
-          <li><a href={repoUrl}>{t.repo}</a></li>
-        </ul>
-      </section>
-      <section aria-labelledby="f-community">
-        <h4 class="t-title-small" id="f-community">{t.community}</h4>
-        <ul>
-          <li><a href={faqUrl}>{t.faq}</a></li>
-          <li><a href={sponsorUrl}>{t.sponsor}</a></li>
-          <li><a href={`${repoUrl}/issues`}>GitHub Issues</a></li>
-          <li>{t.qq} {qqGroup}</li>
-        </ul>
-      </section>
-    </div>
+    <nav class="footer__links" aria-label={lang === 'zh' ? '页脚导航' : 'Footer navigation'}>
+      <a href={`${home}download/`}>{t.dl}</a>
+      <a href={`${home}schools/`}>{c.appbar.anchors.schools}</a>
+      <a href={`${home}faq/`}>{t.faq}</a>
+      <a href={repoUrl}>{t.repo}</a>
+      <a class="footer__lang" href={mirror}>{lang === 'zh' ? 'EN' : '中文'}</a>
+    </nav>
     <p class="t-body-small footer__meta">
       <span>Sleepy · {t.license} · lingion</span>
-      <span><a href="#hero">{t.backToTop}</a> · <span data-build={build}>{t.build}: {build}</span></span>
+      <span><a href={path}>{t.backToTop}</a> · <span data-build={build}>{t.build}: {build}</span></span>
     </p>
     <noscript><p class="t-body-small">{t.noJs}</p></noscript>
   </div>
@@ -54,21 +51,10 @@ const t = (Astro.props.copy ?? zh).footer;
   .footer__inner {
     padding-block: calc(var(--site-unit) * 16) calc(var(--site-unit) * 8);
   }
-  .footer__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 200px));
-    gap: calc(var(--site-unit) * 8);
-  }
-  .footer h4 {
-    color: var(--md-sys-color-on-surface);
-    margin-block-end: calc(var(--site-unit) * 3);
-  }
-  .footer ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: calc(var(--site-unit) * 2);
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--site-unit) * 6);
   }
   .footer a {
     color: var(--md-sys-color-on-surface-variant);

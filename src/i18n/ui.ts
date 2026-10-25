@@ -4,5 +4,5 @@ export const site = 'https://sleepy.lingion.eu.cc';
 export const qqGroup = '1063407652';
 export const sponsorUrl = 'https://github.com/lingion/sleepy/blob/main/sponsor.md';
 export const repoUrl = 'https://github.com/lingion/sleepy';
-export const faqUrl = 'https://github.com/lingion/sleepy/blob/main/FAQ.md';
+export const faqUrl = '/faq/'; // v5 站内化(spec §2.1;Footer/Trust 消费方自动生效,原 GitHub 外链归 /download/「更多」区)
 export const onlineTrialUrl = 'https://sleepy.qdp.qzz.io';

@@ -14,7 +14,7 @@ import Download from '../components/sections/Download.astro';
 import { zh } from '../i18n/zh';
 ---
 
-<Base lang="zh" title={zh.meta.title} description={zh.meta.description} mirror="/en/">
+<Base lang="zh" title={zh.meta.title} description={zh.meta.description} path="/" mirror="/en/" preloadHero hasHero>
   <Hero />
   <Views />
   <Connect />

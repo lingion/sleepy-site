@@ -1,25 +1,33 @@
 ---
-// v4 AppBar(spec §4):三段式 = 品牌标 / 4 枚锚点文字链(Text 档,≤840px 隐藏)/ [下载]Filled S + 语言 + 主题
+// v5 AppBar(spec §2.1/§4):三段式 = 品牌标 / 4 枚导航文字链(Text 档,≤840px 隐藏)/ [下载]Filled S + 语言 + 主题
 // 滚动态 surface→surface-container tonal 升起(仅 background-color 150ms,无投影);高 64px
-// 互隐 IO(T6,spec §11-6):hero 在视口 → appbar CTA hide;离开 → show。缺省 show = JS-off 必显。
-// 锚点串走 appbar.anchors 键树(zh/en 同形,禁 ternary 硬编码);label 走 aria-label 键。
+// 互隐 IO(T6,spec §11-6):hero 在视口 → appbar CTA hide;离开 → show。缺省态 = hasHero ? show : hide
+// —— 工具页(无 hero)JS-off 即恒隐终态,消除「屏上恒见两枚 Filled」(spec §2.4 CTA 纪律)。
+// 锚点 href 不变量(spec §2.1):恒为绝对路径形式——锚点项 = 同语言主页锚点(/#views、/#reminders;
+// en 页 /en/#*);页面项 = /schools/、/faq/(en 页带 /en/ 前缀)。任意页面点击均回主页锚点。
+// label 走 appbar.anchors 键树(zh/en 同形,禁 ternary 硬编码);「学校名录/常见问答」四字形态防 EN 泄漏闸(§15)。
 import { zh } from '../i18n/zh';
 import type { SiteCopy } from '../i18n/zh';
 
 interface Props {
   lang: 'zh' | 'en';
   copy?: SiteCopy;
+  /** 两主页显式 true;缺省 false(工具页)→ CTA 缺省 hide + IO 不启用 */
+  hasHero?: boolean;
+  /** 本页双语对侧路径(Base 透传):语言链读它,单页硬编码假设废弃(终审 I4) */
+  mirror?: string;
 }
-const { lang } = Astro.props;
+const { lang, hasHero = false, mirror = lang === 'zh' ? '/en/' : '/' } = Astro.props;
 const c = Astro.props.copy ?? zh;
-const other = lang === 'zh' ? '/en/' : '/';
+const home = lang === 'zh' ? '/' : '/en/';
 const otherLabel = lang === 'zh' ? 'EN' : '中文';
 const anchors = [
-  { href: '#views', label: c.appbar.anchors.views },
-  { href: '#schools', label: c.appbar.anchors.schools },
-  { href: '#reminders', label: c.appbar.anchors.reminders },
-  { href: '#trust', label: c.appbar.anchors.trust },
+  { href: `${home}#views`, label: c.appbar.anchors.views },
+  { href: `${home}schools/`, label: c.appbar.anchors.schools },
+  { href: `${home}faq/`, label: c.appbar.anchors.faq },
+  { href: `${home}#reminders`, label: c.appbar.anchors.reminders },
 ];
+const dlHref = `${home}download/`;
 ---
 
 <header class="appbar" id="appbar">
@@ -56,8 +64,8 @@ const anchors = [
       }
     </nav>
     <nav class="appbar__actions" aria-label={lang === 'zh' ? '页面操作' : 'Page actions'}>
-      <a class="site-button site-button--filled appbar__cta t-label-large" href="https://github.com/lingion/sleepy/releases/latest" data-appbar-cta="show">{c.appbar.ctaDownload}</a>
-      <a class="site-chip appbar__lang t-label-large" href={other}>{otherLabel}</a>
+      <a class="site-button site-button--filled appbar__cta t-label-large" href={dlHref} data-appbar-cta={hasHero ? 'show' : 'hide'}>{c.appbar.ctaDownload}</a>
+      <a class="site-chip appbar__lang t-label-large" href={mirror}>{otherLabel}</a>
       <button
         class="appbar__theme"
         type="button"
@@ -134,7 +142,7 @@ const anchors = [
       opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
       visibility var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
   }
-  /* hero 在视口内 → 钮隐(spec §11-6 任意视口至多一枚 Filled);缺省 show 可见 */
+  /* hero 在视口内 → 钮隐(spec §11-6 任意视口至多一枚 Filled);缺省态 = hasHero ? show : hide */
   .appbar__cta[data-appbar-cta='hide'] {
     opacity: 0;
     visibility: hidden;
@@ -180,7 +188,8 @@ const anchors = [
   }
   document.querySelector('[data-icon-theme]')?.addEventListener('click', () => window.siteToggleTheme?.());
   // CTA 互隐(T6,spec §11-6):hero 在视口 → 钮 hide;离开 → show。
-  // #hero 缺失(无 hero 页/构建异动)或旧内核无 IO → 保持缺省 show,不崩。
+  // 非主页 markup 缺省即 hide 终态,无 #hero 时 IO 不启用(spec §2.4 CTA 纪律);
+  // #hero 缺失(无 hero 页/构建异动)或旧内核无 IO → 保持缺省态,不崩。
   const cta = document.querySelector<HTMLElement>('[data-appbar-cta]');
   const hero = document.getElementById('hero');
   if (cta && hero && 'IntersectionObserver' in window) {
