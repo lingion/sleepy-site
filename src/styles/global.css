@@ -172,6 +172,17 @@ a {
    各有一枚 font-variant-numeric 文本,类在此兜底 + 语义归属工具层) */
 .tnum { font-variant-numeric: lining-nums tabular-nums; }
 
+/* 标题换行纪律(v5 巡检批 2026-10-25:用户「所有标题排版好好斟酌,什么时候该换行」):
+   balance = 多行标题各行长度接近(禁「最后一行掉一个词」的 greedy 残行);单行可容纳时
+   整行不拆,短中文标题天然不触发 → zh 文案零改动。四页所有 h1-h4 统一吃这条。
+   FAQ 问句 = pretty:问句可长到两三行,balance 会把每行强拉等长(断句生硬),
+   pretty 只治末行孤儿、保留自然断句; specificity 类(0,1,0) 压过类型(0,0,1)。
+   非标题但同样吃残行的两块(faq 尾导读 p / schools 空态 p)点名 balance。
+   禁 <br> 硬换行(等宽/响应全塌)。不支持 balance 的旧浏览器回退 greedy 现状,零破坏。 */
+h1, h2, h3, h4 { text-wrap: balance; }
+.faq__tail-title, .schools__empty { text-wrap: balance; }
+.faq__q { text-wrap: pretty; }
+
 /* —— 4/8dp 间距工具类 —— */
 .gap-1 { gap: calc(var(--site-unit) * 1); }
 .gap-2 { gap: calc(var(--site-unit) * 2); }
