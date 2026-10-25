@@ -135,6 +135,32 @@ describe('AppBar 锚点 + 常驻钮(spec §2.1 v5 跨页导航)', () => {
     expect(hide).toMatch(/visibility:\s*hidden/);
     expect(hide).not.toMatch(/display:\s*none/);
   });
+  it('汉堡菜单闸(2026-10-25 用户报手机无页间导航):钮 + 面板 + 同源链接 + disclosure 脚本', () => {
+    // 产物级:≤840px 锚点组 display:none 后,汉堡钮是手机唯一页间导航
+    const btn = doc.querySelector('#appbar [data-appbar-menu]');
+    expect(btn, '汉堡钮存在').not.toBeNull();
+    expect(btn?.getAttribute('aria-expanded'), '缺省收合').toBe('false');
+    expect(btn?.getAttribute('aria-controls'), 'aria-controls 指向面板').toBe('appbar-menu');
+    // 面板:JS-off 可读性 = hidden 属性缺省收合,内容常驻 DOM(非脚本注入)
+    const panel = doc.querySelector('#appbar-menu');
+    expect(panel, '面板存在').not.toBeNull();
+    expect(panel?.hasAttribute('hidden'), '面板缺省 hidden').toBe(true);
+    // 链接 = 锚点组同源 href 不变量(4 导航项 + 下载),禁两套 URL 漂移
+    const hrefs = [...panel!.querySelectorAll('a')].map((a) => a.getAttribute('href'));
+    expect(hrefs).toEqual(['/#views', '/schools/', '/faq/', '/#reminders', '/download/']);
+    // 源码锁:≤840px 媒体查询内钮接管显示(删了 CSS 显示规则 → 钮恒 display:none → 此锁红)
+    const src = readFileSync(new URL('../src/components/AppBar.astro', import.meta.url), 'utf8');
+    const mq = src.match(/@media\s*\(max-width:\s*840px\)\s*\{[\s\S]*?\n\s*\}/)?.[0] ?? '';
+    expect(mq, '≤840px 媒体查询存在').not.toBe('');
+    expect(mq).toMatch(/\.appbar__menu\s*\{\s*display:\s*inline-flex/);
+    // disclosure 脚本三收合面:链接点击 / Escape / 升档回桌面(matchMedia change)
+    expect(src).toMatch(/key\s*===\s*['"]Escape['"]/);
+    expect(src).toMatch(/min-width:\s*841px/);
+    expect(src).toMatch(/closest\(['"]a['"]\)/);
+    // aria-label 随开合切换(打开 ⇄ 关闭),双语 prop 化
+    expect(src).toMatch(/data-label-open/);
+    expect(src).toMatch(/data-label-close/);
+  });
 });
 
 describe('M2 三视图 + MD3 Segmented Button(spec §4 M2)', () => {
