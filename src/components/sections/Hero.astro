@@ -33,10 +33,8 @@ const t = c.hero;
       </div>
       <p class="hero__ribbon tnum">
         <span class="hero__ribbon-num t-display-small">{rowCount}</span>
-        <span class="hero__ribbon-unit">{t.ribbon.schools}</span>
-        <span class="hero__ribbon-sep" aria-hidden="true">·</span>
-        <span class="hero__ribbon-fact">{t.ribbon.license}</span>
-        <span class="hero__ribbon-sep" aria-hidden="true">·</span>
+        <span class="hero__ribbon-unit">{t.ribbon.schools}<span class="hero__ribbon-sep" aria-hidden="true">·</span></span>
+        <span class="hero__ribbon-fact">{t.ribbon.license}<span class="hero__ribbon-sep" aria-hidden="true">·</span></span>
         <span class="hero__ribbon-fact">{t.ribbon.privacy}</span>
       </p>
     </div>
@@ -115,8 +113,12 @@ const t = c.hero;
     font: var(--md-sys-typescale-title-medium);
     margin-inline-end: calc(var(--site-unit) * 3);
   }
+  /* 分隔点随行首禁则(巡检批 2026-10-25):「·」= U+00B7,UAX#14 类 BA,禁 break-before
+     → 必须附着于前一分句尾。此前它是独立 flex item,窄屏换行点可落在它之前 → 点顶行首。
+     现并入前一 span 尾部;左侧 margin 复原原 flex gap 间距节奏,右侧间距由 item 间 gap 承担 */
   .hero__ribbon-sep {
     color: var(--md-sys-color-outline);
+    margin-inline-start: calc(var(--site-unit) * 2);
   }
   .hero__ribbon-fact {
     font: var(--md-sys-typescale-body-medium);
