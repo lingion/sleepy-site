@@ -5,9 +5,9 @@ import release from '../src/data/release.json';
 import schools from '../src/data/schools.grouped.json';
 import { zh } from '../src/i18n/zh';
 
-// v4 八段主页产物闸(T5 Step 1 再基线,spec §4/§7/§14):
+// v5 八段主页产物闸(plan Task 7 再基线,spec §2.2/§10):
 // dist/client/index.html 由 `npm run build` 产出 —— 产物级 DOM 验收。
-// 旧「六段/blob=3/6 句 microcopy pin/03-today hero」契约随 spec §14 作废,新契约 = 不变量式。
+// 四页化:台账段(schools)离页 → schoolCard 入口卡;M8 下载段瘦身为单出口。§10 逐条去向注在块头。
 
 const HTML = (() => {
   try {
@@ -20,20 +20,20 @@ const HTML = (() => {
 const dom = new JSDOM(HTML);
 const doc = dom.window.document;
 
-/** §14:新断言一律不变量式;段序 + data-prototype 原型表共读 */
+/** §14:新断言一律不变量式;段序 + data-prototype 原型表共读(§10:36-43 行:v4 删 schools 换 schoolCard,净数仍 8) */
 const PROTOTYPE: Record<string, string> = {
   hero: 'split',
   views: 'showcase',
   connect: 'edit-split',
-  schools: 'tool-island',
+  schoolCard: 'entry-card',
   reminders: 'pinned',
   gallery: 'full-bleed-band',
   trust: 'narration',
   download: 'tonal-band',
 };
 
-describe('八段依序 + 原型表(spec §4 v4)', () => {
-  const ids = ['hero', 'views', 'connect', 'schools', 'reminders', 'gallery', 'trust', 'download'];
+describe('八段依序 + 原型表(spec §2.2 v5 段序)', () => {
+  const ids = ['hero', 'views', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
   it('main 直系 section = 八段依序,各带 data-prototype', () => {
     const secs = [...doc.querySelectorAll('main > section')];
     expect(secs.map((s) => s.id)).toEqual(ids);
@@ -44,6 +44,13 @@ describe('八段依序 + 原型表(spec §4 v4)', () => {
   it('#features 段随 Features.astro 绝迹', () => {
     expect(doc.getElementById('features')).toBeNull();
     expect(HTML).not.toContain('id="features"');
+  });
+  it('#schools 段随台账离页绝迹(§10 行 1 负闸;348 行与三态过滤岛不再进主页)', () => {
+    expect(doc.getElementById('schools')).toBeNull();
+    expect(HTML).not.toContain('id="schools"');
+    expect(HTML).not.toContain('data-prototype="tool-island"');
+    expect(doc.querySelectorAll('#schoolCard [data-school]').length).toBe(0);
+    expect(doc.querySelector('#schoolCard input')).toBeNull();
   });
 });
 
@@ -162,20 +169,36 @@ describe('M2 三视图 + MD3 Segmented Button(spec §4 M2)', () => {
   });
 });
 
-describe('文案 v4 新契约(spec §7 R1-R5 + C2)', () => {
+describe('文案 v5 契约(spec §7 + §2.2 入口卡句)', () => {
   // 可见文本 = body 文本剔除 script/style 体(JSDOM textContent 会吞内联脚本,?? / ?. 的 ? 会污染问句闸)
   const clone = doc.body!.cloneNode(true) as DocumentFragment;
   for (const n of clone.querySelectorAll('script, style')) n.remove();
   const text = clone.textContent ?? '';
   const stripped = text.replace(/\s+/g, '');
   const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
-  it('§7 对照表改后句逐句进产物', () => {
+  it('§7 对照表改后句逐句进产物(trial/schools 两 pin 已随 §10 迁出主页)', () => {
     expect(stripped).toContain('课表数据仅存于本机,不经任何服务器。'); // hero.sub(R1)
-    expect(stripped).toContain('在线体验提供完整功能,无需安装。'); // download.trial(R2)
-    expect(stripped).toContain('全部收录按省份与教务协议分组,支持校名或拼音检索。'); // schools.sub(R2+R4)
     expect(metaDesc.replace(/\s+/g, '')).toContain('348条教务直连,数据仅存本机,源码完整公开'); // meta.desc(R3)
-    expect(stripped).toContain('收录与检索'); // schools.heading
     expect(stripped).toContain('全部为真机截图'); // gallery.heading
+  });
+  it('入口卡派生句两数进产物(§10 行 4:statLine 派生 pin 改「{rows} 所高校 · {types} 种教务协议」,禁手写)', () => {
+    const types = new Set(schools.map((s) => s.type)).size;
+    expect(stripped).toContain(`${schools.length}所高校·${types}种教务协议`.replace(/\s+/g, ''));
+    expect(schools.length).toBe(348);
+  });
+  it('入口钮 = /schools/?focus=s 精确 href + 卡内零 input(§2.2 终审 I2 合同侧 pin;行为侧 = Task 4 岛 + T4 目检)', () => {
+    const card = doc.getElementById('schoolCard')!;
+    const link = card.querySelector('a[href="/schools/?focus=s"]');
+    expect(link, '入口钮 href').not.toBeNull();
+    expect(link!.textContent).toContain(zh.homeSchoolCard.cta);
+    expect(card.querySelector('input'), '入口卡非搜索框本体').toBeNull();
+    expect(card.querySelector('script'), '入口卡非岛').toBeNull();
+    expect(card.querySelectorAll('.site-button--filled').length, '入口钮非 Filled(§11-6 主页恰两枚)').toBe(0);
+  });
+  it('入口卡计数句 tnum(§10 行 19:两数字 tnum;§2.2 入口卡)', () => {
+    const count = doc.querySelector('#schoolCard .schools-card__count')!;
+    expect(count, '计数句存在').not.toBeNull();
+    expect(count.getAttribute('class')!.split(/\s+/), 'tnum 类').toContain('tnum');
   });
   it('旧 pin 6 句全绝迹(C2 判废)', () => {
     for (const old of [
@@ -225,23 +248,7 @@ describe('reveal 不变量(spec §17.2)', () => {
   });
 });
 
-describe('M4 学校名录(spec §4 M4 / §15)', () => {
-  it('JS-off:全量分组静态可读(348 行全渲染)', () => {
-    const rows = doc.querySelectorAll('#schools [data-school]');
-    expect(rows.length).toBe(schools.length);
-    expect(schools.length).toBe(348);
-  });
-  it('statLine 口径「348 条收录 · 33 协议」(派生联动,禁手写)', () => {
-    const types = new Set(schools.map((s) => s.type)).size;
-    const txt = (doc.getElementById('schools')?.textContent ?? '').replace(/\s+/g, '');
-    expect(txt).toContain(`${schools.length}条收录·${types}协议`);
-  });
-  it('点击不跳转:校名行不是 <a>(§3③ 继承)', () => {
-    for (const row of doc.querySelectorAll('#schools [data-school]')) {
-      expect(row.tagName).not.toBe('A');
-      expect(row.querySelector('a')).toBeNull();
-    }
-  });
+describe('connect 段(spec §10 行 4:段未动,chip 派生断言留主页;台账三断言迁 page.schools.test.ts)', () => {
   it('connect 段 chip = 派生「348 校直连」', () => {
     expect((doc.getElementById('connect')?.textContent ?? '')).toContain(`${schools.length} 校直连`);
   });
@@ -260,8 +267,8 @@ describe('M5 提醒与组件墙(spec §4 M5 / C4)', () => {
     expect(el.length).toBe(1);
     expect(el[0].closest('#reminders'), 'elevated 属 M5 组件墙').not.toBeNull();
   });
-  it('组件墙四件:周网格竖卡 + 今日/两天/周列表扁条(全部真机比例)', () => {
-    for (const w of ['weekgrid', 'today', 'twodays', 'weeklist']) {
+  it('组件墙五件:周网格竖卡 + 今日/两天/周列表/周视图扁条(全部真机比例,Task 9 缺口修)', () => {
+    for (const w of ['weekgrid', 'today', 'twodays', 'weeklist', 'weekview']) {
       expect(doc.querySelector(`#reminders [data-widget="${w}"]`), w).not.toBeNull();
     }
   });
@@ -278,24 +285,38 @@ describe('M6 画廊 band(spec §4 M6)', () => {
   });
 });
 
-describe('M8 下载 + CTA 纪律(spec §4 M8 / §11-6)', () => {
-  it('latest 直链 + 四 ABI 行 + sha256 外链', () => {
+describe('M8 下载单出口 + CTA 纪律(spec §2.2 / §10 行 5-6)', () => {
+  const universal = release.assets.find((a) => a.name.includes('universal'))!;
+  it('恰一下载出口 = universal APK URL 进 #download 段', () => {
     const html = doc.getElementById('download')?.innerHTML ?? '';
-    expect(html).toContain('https://github.com/lingion/sleepy/releases/latest');
-    for (const a of release.assets) expect(html, `asset ${a.name}`).toContain(a.url);
-    expect(html).toContain(release.sha256sumsUrl);
-    expect(doc.querySelector('#download [data-store-disabled]')).not.toBeNull();
+    expect(html).toContain(universal.url);
+    const links = [...(doc.getElementById('download')?.querySelectorAll('a[href$=".apk"]') ?? [])];
+    expect(links.map((a) => a.getAttribute('href'))).toEqual([universal.url]);
   });
-  it('主按钮 = Elevated 档,带 class download--tonal(§11-6:彩色容器上禁 tonal 叠 tonal)', () => {
+  it('四 ABI 全 URL / sha 链 / store 占位 / releases/latest 直链 / trial 链绝迹(§10:ABI/sha/store 段内 + releases/latest 段级 — 主页其余钮受 §2.2 CTA 不动保护)', () => {
+    const html = doc.getElementById('download')?.innerHTML ?? '';
+    // §10 原文 = universal 之外「其余」ABI URL 绝迹;universal 是主钮 href(上条已 pin),不在负闸集
+    for (const a of release.assets.filter((x) => !x.name.includes('universal'))) expect(html, `asset ${a.name}`).not.toContain(a.url);
+    expect(html).not.toContain(release.sha256sumsUrl);
+    expect(doc.querySelector('#download [data-store-disabled]')).toBeNull();
+    expect(html).not.toContain('https://github.com/lingion/sleepy/releases/latest');
+    expect(html).not.toContain('https://sleepy.qdp.qzz.io'); // onlineTrialUrl 随体验链迁出
+  });
+  it('次行 Text 链「其他架构与校验 →」指 /download/(新去向)', () => {
+    const link = doc.querySelector('#download a[href="/download/"]');
+    expect(link).not.toBeNull();
+    expect(link!.textContent).toContain('其他架构与校验');
+  });
+  it('主钮 = Elevated 档链 universal,tonal 绝迹;段零 Filled(§10 行 6)', () => {
     expect(doc.querySelector('#download .site-button--elevated')).not.toBeNull();
     expect(doc.querySelector('#download.download--tonal')).not.toBeNull();
     expect(doc.querySelector('#download .site-button--tonal'), 'tonal 绝迹').toBeNull();
+    expect(doc.querySelector('#download .site-button--filled'), 'download 段零 Filled').toBeNull();
+    const primary = doc.querySelector('#download a.site-button--elevated')!;
+    expect(primary.getAttribute('href')).toBe(universal.url);
   });
-  it('全页 Filled 仅 AppBar S + hero XL 两枚(§11-6)', () => {
+  it('全页 Filled 仅 AppBar S + hero XL 两枚(§11-6,瘦身不破)', () => {
     expect(doc.querySelectorAll('.site-button--filled').length).toBe(2);
-  });
-  it('Android 8.0+ minSdk 事实', () => {
-    expect(doc.getElementById('download')?.textContent ?? '').toContain('Android 8.0');
   });
 });
 
@@ -313,5 +334,23 @@ describe('a11y/SEO 基线(保留项)', () => {
   it('锚点落点闸:section[id] scroll-margin-top 在 global.css(T2 联动)', () => {
     const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
     expect(css).toMatch(/section\[id\]\s*\{[^}]*scroll-margin-top:\s*80px/);
+  });
+});
+
+describe('Task 10 mobile 剖面缺陷锁(Lighthouse home/schools 复测归零项)', () => {
+  it('hero 图盒比例钉 img 本体(移动 CLS 0.41→0):block 化 + aspect-ratio + 零 100% 高', () => {
+    const src = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
+    const rule = src.match(/:global\(#hero \.hero__device img\)\s*\{([^}]*)\}/s)?.[1] ?? '';
+    expect(rule, 'img 规则存在').not.toBe('');
+    expect(rule).toContain('aspect-ratio: 1080 / 2048');
+    expect(rule).toContain('display: block');
+    expect(rule).toContain('block-size: auto');
+    expect(rule).not.toContain('block-size: 100%');
+  });
+  it('pane lead = on-surface 不降级 variant(dim 叠色对比闸:三占二恒 ×.55)', () => {
+    const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');
+    const rule = src.match(/\.views__pane-lead\s*\{[^}]*\}/)?.[0] ?? '';
+    expect(rule).toContain('var(--md-sys-color-on-surface)');
+    expect(rule).not.toContain('on-surface-variant');
   });
 });

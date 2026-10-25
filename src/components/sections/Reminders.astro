@@ -16,6 +16,8 @@ import wTwoL from '../../assets/screenshots/widget-twodays-light.png';
 import wTwoD from '../../assets/screenshots/widget-twodays-dark.png';
 import wListL from '../../assets/screenshots/widget-weeklist-light.png';
 import wListD from '../../assets/screenshots/widget-weeklist-dark.png';
+import wViewL from '../../assets/screenshots/widget-weekview-light.png';
+import wViewD from '../../assets/screenshots/widget-weekview-dark.png';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
 
@@ -24,10 +26,11 @@ interface Props {
 }
 const c = Astro.props.copy ?? zh;
 const t = c.reminders;
-// 扁条三件:资产自然比例 825×343
+// 扁条四件(Task 9 缺口修:weekview 550 高补入):today/twodays/weeklist 825×343 + weekview 825×550
 const strips = [
   { key: 'today', label: t.widgets.todayLabel, light: wTodayL, dark: wTodayD },
   { key: 'twodays', label: t.widgets.twodaysLabel, light: wTwoL, dark: wTwoD },
+  { key: 'weekview', label: t.widgets.weekviewLabel, light: wViewL, dark: wViewD },
   { key: 'weeklist', label: t.widgets.listLabel, light: wListL, dark: wListD },
 ] as const;
 ---

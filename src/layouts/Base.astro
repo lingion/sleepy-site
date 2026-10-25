@@ -39,9 +39,11 @@ interface Props {
   jsonLd?: object;
   /** 缺省不发 RSS link —— Task 8 建 /rss.xml 路由前挂上即断链(终审裁决) */
   rssLink?: string;
+  /** 缺省 false;true → meta robots=noindex(spec §2.6-7:404 免收录;静态导出无 HTTP 头可设) */
+  noindex?: boolean;
 }
 
-const { lang, title, description, path, mirror, ogImage, ogImageAlt, preloadHero, hasHero, jsonLd, rssLink } =
+const { lang, title, description, path, mirror, ogImage, ogImageAlt, preloadHero, hasHero, jsonLd, rssLink, noindex } =
   Astro.props;
 const copy = lang === 'zh' ? zh : en;
 const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
@@ -68,7 +70,9 @@ const heroImg = preloadHero
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate icon" href="/favicon.ico" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="canonical" href={site + path} />
+    {/* 404(noindex)不声明 canonical——指向他页与免收录信号矛盾(spec §2.6-7) */}
+    {!noindex && <link rel="canonical" href={site + path} />}
+    {noindex && <meta name="robots" content="noindex" />}
     {/* hreflang 恒指本页双语对(path/mirror 语义对),不再出现单页恒指 '/'(spec §2.6-2) */}
     <link rel="alternate" hreflang="zh-CN" href={site + (lang === 'zh' ? path : mirror)} />
     <link rel="alternate" hreflang="en" href={site + (lang === 'en' ? path : mirror)} />

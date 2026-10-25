@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sleepy.lingion.eu.cc/sitemap-index.xml

@@ -1,0 +1,56 @@
+---
+// v5 404(spec §2.6-7):Cloudflare Pages 接管根级 404.html;正面陈述零致歉 + 四页链接 + zh 主 en 尾行
+// noindex:Base 发 meta robots(静态导出无 HTTP 头可设);不声明 canonical(与免收录矛盾)
+import Base from '../layouts/Base.astro';
+import { zh } from '../i18n/zh';
+import { en } from '../i18n/en';
+const links = [
+  { href: '/', label: zh.notFound.home },
+  { href: '/schools/', label: zh.notFound.schools },
+  { href: '/download/', label: zh.notFound.download },
+  { href: '/faq/', label: zh.notFound.faq },
+];
+---
+
+<Base
+  lang="zh"
+  title={`${zh.notFound.heading} · Sleepy`}
+  description={zh.notFound.sub}
+  path="/"
+  mirror="/en/"
+  noindex
+>
+  <section class="site-col nf">
+    <h1 class="t-headline-large">{zh.notFound.heading}</h1>
+    <p class="t-body-medium nf__sub">{zh.notFound.sub}</p>
+    <nav class="nf__links" aria-label={zh.notFound.sub}>
+      {links.map((l) => (
+        <a class="site-chip" href={l.href}>{l.label}</a>
+      ))}
+    </nav>
+    <p class="t-body-small nf__en">
+      <a href="/en/">{zh.notFound.enHint}{en.notFound.home}</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding-block: calc(var(--site-unit) * 20) calc(var(--site-unit) * 24);
+  }
+  .nf__sub {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-block-start: calc(var(--site-unit) * 3);
+    max-width: 56ch;
+  }
+  .nf__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--site-unit) * 2);
+    margin-block-start: calc(var(--site-unit) * 6);
+  }
+  .nf__en {
+    margin-block-start: calc(var(--site-unit) * 8);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+</style>

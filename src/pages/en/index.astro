@@ -1,24 +1,35 @@
 ---
-// en 镜像页 — v4 八段(结构不变量与 zh 主页同形,§7 R5;spec §1 hreflang 互指/§4.1 校名保中文)
+// en 镜像页 — v5 八段(结构不变量与 zh 主页同形,§7 R5;spec §1 hreflang 互指/§4.1 校名保中文)
+// Task 7:台账段 → 入口卡;组件一律 copy={en} + lang='en'(入口卡/下载次链 href 前缀随语言)。
 import Base from '../../layouts/Base.astro';
 import Hero from '../../components/sections/Hero.astro';
 import Views from '../../components/sections/Views.astro';
 import Connect from '../../components/sections/Connect.astro';
-import Schools from '../../components/sections/Schools.astro';
+import SchoolsCard from '../../components/sections/SchoolsCard.astro';
 import Reminders from '../../components/sections/Reminders.astro';
 import Gallery from '../../components/sections/Gallery.astro';
 import Trust from '../../components/sections/Trust.astro';
 import Download from '../../components/sections/Download.astro';
 import { en } from '../../i18n/en';
+import { site } from '../../i18n/ui';
 ---
 
-<Base lang="en" title={en.meta.title} description={en.meta.description} path="/en/" mirror="/" preloadHero hasHero>
+<Base
+  lang="en"
+  title={en.meta.title}
+  description={en.meta.description}
+  path="/en/"
+  mirror="/"
+  preloadHero
+  hasHero
+  rssLink={`${site}/rss.xml`}
+>
   <Hero copy={en} />
   <Views copy={en} />
   <Connect copy={en} />
-  <Schools copy={en} lang="en" />
+  <SchoolsCard copy={en} lang="en" />
   <Reminders copy={en} />
   <Gallery copy={en} />
   <Trust copy={en} />
-  <Download copy={en} />
+  <Download copy={en} lang="en" />
 </Base>

@@ -34,10 +34,10 @@ describe('/en/ hreflang 互指(spec §1)', () => {
   });
 });
 
-describe('/en/ 结构镜像(v4 八段)', () => {
-  const ids = ['hero', 'views', 'connect', 'schools', 'reminders', 'gallery', 'trust', 'download'];
+describe('/en/ 结构镜像(v5 八段)', () => {
+  const ids = ['hero', 'views', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
   const PROTO: Record<string, string> = {
-    hero: 'split', views: 'showcase', connect: 'edit-split', schools: 'tool-island',
+    hero: 'split', views: 'showcase', connect: 'edit-split', schoolCard: 'entry-card',
     reminders: 'pinned', gallery: 'full-bleed-band', trust: 'narration', download: 'tonal-band',
   };
   it('八段依序 + data-prototype 同 zh 页', () => {
@@ -82,18 +82,13 @@ describe('/en/ 无 zh 文案泄漏(组件 props 全覆盖)', () => {
   it('zh.ts 全部含汉字叶子在 EN 页零出现', () => {
     for (const s of leaves) expect(HTML.includes(s), `泄漏: ${s.slice(0, 20)}`).toBe(false);
   });
-  it('校名中文保留(设计,非泄漏):EN 页仍列真实校名', () => {
-    expect(HTML.includes(schools[0].name)).toBe(true);
-  });
-  it('EN 页 en.ts 关键串在场(组件 copy=en 全覆盖反证)', () => {
+  it('EN 页 en.ts 关键串在场(组件 copy=en 全覆盖反证;trial/schools.heading pin 随 §10 迁出主页)', () => {
     // 可见文本 = 剔除 script/style 体(内联脚本的 ?. / ?? 会污染问句闸)
     const clone = doc.body!.cloneNode(true) as DocumentFragment;
     for (const n of clone.querySelectorAll('script, style')) n.remove();
     const text = (clone.textContent ?? '').replace(/\s+/g, ' ');
     expect(text).toContain(en.hero.slogan); // slogan A 案现值(en.ts 单点,§7.2 签收前可换)
-    expect(text).toContain(en.download.trial);
     expect(text).toContain(en.gallery.heading);
-    expect(text).toContain(en.schools.heading);
   });
   it('EN 页零问号(R2 双语同规)', () => {
     const clone = doc.body!.cloneNode(true) as DocumentFragment;

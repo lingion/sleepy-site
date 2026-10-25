@@ -1,75 +1,41 @@
 ---
-// M8 下载(v4 spec §4:CONVERSION 8-10%,primary-container tonal 带 · 全页唯一彩色大面,收拢论证)
-// §13 R1:原 blob#2 渐变删除(R1 3→1 裁决),带底改 primary-container 平涂(§10 注:Download 带平涂)。
-// 主按钮 = Elevated 档(§11-6:彩色容器上禁 tonal 叠 tonal → surface 底 + elevation-1)。
-// 左=版本行(tag·日期·minSdk,tabular)+ABI 下载行(universal 推荐)+sha256/商店占位/在线体验 Text 链;
-// 右=02-grid 裁后完整图(§5.4 contain 零裁拉)。全部转化元素普通 DOM(可爬/可键盘/可触摸)。
+// M8 下载出口段(v5 瘦身,plan Task 7 / spec §2.2):主页单一转化出口
+// tonal 带底不变(全站唯一彩色大面);主钮 = Elevated 档直链 release.json universal APK(§11-6:Filled=2 不破)。
+// 原 ABI 行列表、sha 链、商店占位、体验链全部移出主页 → /download/ 面板(Task 5 已落地,行样式 blend 随 I11 定死迁 DownloadPanel)。
+// 次行 Text 链「其他架构与校验 →」指 /download/(§10 行 5 新去向);版本行 tag·日期 tnum(download.versionLine 函数形态)。
 import Shot from '../Shot.astro';
 import gridLight from '../../assets/screenshots/02-grid-light.png';
 import gridDark from '../../assets/screenshots/02-grid-dark.png';
 import release from '../../data/release.json';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
-import { onlineTrialUrl, repoUrl } from '../../i18n/ui';
 
 interface Props {
   copy?: SiteCopy;
+  /** 显示语言:决定「其他架构与校验」次链前缀(zh=/download/,en=/en/download/) */
+  lang?: 'zh' | 'en';
 }
-const t = (Astro.props.copy ?? zh).download;
-const abiOf = (name: string) => name.replace(/^app-|-release\.apk$/g, '');
-const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+const c = Astro.props.copy ?? zh;
+const lang = Astro.props.lang ?? 'zh';
+const t = c.download;
+const dp = c.downloadPage;
+const moreHref = lang === 'en' ? '/en/download/' : '/download/';
 const date = release.date.slice(0, 10);
-const notes = t.abiNotes as Record<string, string>;
+const universal = release.assets.find((a) => a.name.includes('universal'))!;
 ---
 
 <section class="site-section download--tonal" id="download" data-prototype="tonal-band" aria-labelledby="download-title">
   <div class="site-col download__grid">
     <div class="download__main">
       <h2 class="t-headline-large" id="download-title">{t.heading}</h2>
-      <p class="t-body-medium download__version tnum">
-        <a href="https://github.com/lingion/sleepy/releases/latest">GitHub Releases</a> ·
-        {t.versionLine(release.tag, date)} · {t.minSdk}
-      </p>
+      <p class="t-body-medium download__version tnum">{t.versionLine(release.tag, date)}</p>
       <p class="download__cta">
-        <a class="site-button site-button--elevated download__cta-xl" href={`${repoUrl}/releases/latest`}>{t.cta}</a>
+        <a class="site-button site-button--elevated download__cta-xl" href={universal.url} download rel="download" aria-label={t.downloadAria('universal', `${(universal.size / 1024 / 1024).toFixed(1)} MB`)}>{t.cta}</a>
       </p>
-      <ul class="download__list" data-reveal-group="m8-rows">
-        {
-          release.assets.map((a, i) => {
-            const abi = abiOf(a.name);
-            const size = mb(a.size);
-            const isRec = abi === 'universal';
-            return (
-              <li>
-                <a class="download__row reveal" data-rec={isRec || undefined} style={`--reveal-i: ${i};`} href={a.url} download rel="download" aria-label={t.downloadAria(abi, size)}>
-                  <span class="download__row-main">
-                    <span class="download__row-name">
-                      {abi}
-                      {isRec && <span class="download__row-badge">{t.recommended}</span>}
-                    </span>
-                    <span class="download__row-note">{notes[abi]}</span>
-                  </span>
-                  <span class="download__row-side">
-                    <span class="download__row-size">{size}</span>
-                    <svg class="download__row-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-                      <path d="M11 4h2v9.15l3.6-3.6 1.4 1.45-5.5 5.5-5.5-5.5 1.4-1.45 3.6 3.6z" fill="currentColor" /><path d="M4 18h16v2H4z" fill="currentColor" />
-                    </svg>
-                  </span>
-                </a>
-              </li>
-            );
-          })
-        }
-      </ul>
       <p class="t-body-small download__note">{t.universalNote}</p>
-      <p class="t-body-small download__sha">
-        <a href={release.sha256sumsUrl}>{t.shaLink}</a>
+      <p class="t-body-small download__more">
+        <a class="site-button site-button--text" href={moreHref}>{dp.otherArchLink}</a>
       </p>
-      <div class="download__stores">
-        <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>Google Play</span>
-        <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>{t.storeBadgeCn}</span>
-      </div>
-      <p class="t-body-small download__trial"><a href={onlineTrialUrl}>{t.trial}</a></p>
     </div>
     <div class="download__media reveal" style="--reveal-i: 0;">
       <div class="download__frame">
@@ -113,130 +79,22 @@ const notes = t.abiNotes as Record<string, string>;
     margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 4);
     font-variant-numeric: lining-nums tabular-nums;
   }
-  .download__version a {
-    color: inherit;
-  }
-  /* 主 CTA:Filled XL 之外全页第二枚 XL 级主按钮 = Elevated 档(§4 M8) */
+  /* 主钮 = Elevated 档(§11-6:彩色容器上禁 tonal 叠 tonal → surface 底 + elevation-1) */
   .download__cta {
-    margin-block-end: calc(var(--site-unit) * 6);
+    margin-block-end: calc(var(--site-unit) * 4);
   }
   .download__cta-xl {
     font-size: 16px;
     padding: 14px 32px;
     text-decoration: none;
   }
-  .download__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: calc(var(--site-unit) * 2);
-    max-inline-size: 440px;
-  }
-  /* ABI 行:容器档上的浮层行(§4 M8 保留行式);文字 on-primary-container 配对 */
-  .download__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: calc(var(--site-unit) * 4);
-    padding: calc(var(--site-unit) * 3.5) calc(var(--site-unit) * 5);
-    border-radius: var(--md-sys-shape-corner-medium);
-    background: color-mix(in srgb, var(--md-sys-color-surface) 55%, var(--md-sys-color-primary-container));
-    color: var(--md-sys-color-on-primary-container);
-    text-decoration: none;
-    transition:
-      background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .download__row:hover {
-      background: color-mix(in srgb, var(--md-sys-color-surface) 75%, var(--md-sys-color-primary-container));
-    }
-  }
-  /* state layer active blend(评审 Important-1):全局 a:active (0,1,1) 会替掉
-     本行 scoped 底 (0,1,0)→按压冲底。blend 入行底 token(与 base 逐字同),
-     (0,2,0) 稳压通用档;后置平特异性盖过上方 :hover 档(桌面按压 = 按底 +
-     10% 叠色),触屏按压无 hover 同样命中。禁 @media 包裹:触屏接管。 */
-  .download__row:active {
-    background: color-mix(in srgb, currentColor 10%, color-mix(in srgb, var(--md-sys-color-surface) 55%, var(--md-sys-color-primary-container)));
-  }
-  .download__row:focus-visible {
-    outline: 2px solid var(--md-sys-color-on-primary-container);
-    outline-offset: 2px;
-  }
-  .download__row-main {
-    display: grid;
-    gap: 2px;
-    min-width: 0;
-  }
-  .download__row-name {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--site-unit) * 2);
-    font: var(--md-sys-typescale-title-small);
-  }
-  .download__row-badge {
-    font: var(--md-sys-typescale-label-small);
-    padding: 2px 8px;
-    border-radius: var(--md-sys-shape-corner-full);
-    background: var(--md-sys-color-primary);
-    color: var(--md-sys-color-on-primary);
-  }
-  .download__row[data-rec] {
-    background: color-mix(in srgb, var(--md-sys-color-surface) 78%, var(--md-sys-color-primary-container));
-  }
-  .download__row[data-rec]:hover {
-    background: color-mix(in srgb, var(--md-sys-color-surface) 90%, var(--md-sys-color-primary-container));
-  }
-  /* 推荐行按压 blend:底 token 不同(78% 档),须各自混入自身底,
-     否则后置 :active (0,2,0) 会把 blend 落回 55% 底 → 按压瞬间跳色 */
-  .download__row[data-rec]:active {
-    background: color-mix(in srgb, currentColor 10%, color-mix(in srgb, var(--md-sys-color-surface) 78%, var(--md-sys-color-primary-container)));
-  }
-  .download__row-note {
-    font: var(--md-sys-typescale-body-small);
-    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 78%, var(--md-sys-color-primary-container));
-  }
-  .download__row-side {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--site-unit) * 4);
-    flex-shrink: 0;
-  }
-  .download__row-size {
-    font: var(--md-sys-typescale-body-small);
-    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 78%, var(--md-sys-color-primary-container));
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-  .download__row-icon {
-    display: block;
-  }
   .download__note {
-    margin-block-start: calc(var(--site-unit) * 3);
     color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 82%, var(--md-sys-color-primary-container));
   }
-  .download__sha {
-    margin-block-start: calc(var(--site-unit) * 2);
+  .download__more {
+    margin-block-start: calc(var(--site-unit) * 3);
   }
-  .download__stores {
-    display: flex;
-    gap: calc(var(--site-unit) * 3);
-    margin-block-start: calc(var(--site-unit) * 5);
-  }
-  .store-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: calc(var(--site-unit) * 2) calc(var(--site-unit) * 4);
-    border-radius: var(--md-sys-shape-corner-small);
-    border: 1px solid color-mix(in srgb, var(--md-sys-color-on-primary-container) 30%, transparent);
-    background: transparent;
-    color: var(--md-sys-color-on-primary-container);
-    opacity: 0.55;
-    font: var(--md-sys-typescale-label-medium);
-  }
-  .download__trial {
-    margin-block-start: calc(var(--site-unit) * 5);
-  }
-  .download__trial a {
+  .download__more a {
     color: var(--md-sys-color-on-primary-container);
   }
   /* Shot img 不带本组件 scope → :global */
@@ -263,9 +121,6 @@ const notes = t.abiNotes as Record<string, string>;
     .download__cta-xl {
       inline-size: 100%;
       justify-content: center;
-    }
-    .download__list {
-      max-inline-size: none;
     }
   }
 </style>

@@ -128,13 +128,19 @@ const t = c.hero;
     padding: calc(var(--site-unit) * 3);
     background: var(--md-sys-color-surface-container-low);
     border: 1px solid var(--md-sys-color-outline-variant);
-    aspect-ratio: 1080 / 2048;
+    /* 比例钉死移入 img 本体(下条规则):双处钉 = padding 差一步的错位高度 */
   }
-  /* Shot 子组件渲染的 img 不带本组件 scope → :global(Gallery 同法) */
+  /* Shot 子组件渲染的 img 不带本组件 scope → :global(Gallery 同法)。
+     img 自带 aspect-ratio(= 裁后资产 1080×2048 自然比,两变体同尺寸):
+     图字节到达前盒已按 100%宽 × 比例预留高度 —— 首帧零跳(CLS 闸,
+     Lighthouse mobile 实测 span→block 位移 0.4 归因于隐变体后知尺寸);
+     块级化让预留高度真实占据布局(inline img 基线缝隙一并消除) */
   :global(#hero .hero__device img) {
+    display: block;
     border-radius: calc(var(--site-unit) * 3);
     inline-size: 100%;
-    block-size: 100%;
+    block-size: auto;
+    aspect-ratio: 1080 / 2048;
     object-fit: contain;
   }
   /* §6-1~2:hero 一次性入场编排(全站唯二 @keyframes = rise/fade,零循环);图列直绘零动效 */
@@ -173,12 +179,9 @@ const t = c.hero;
       grid-template-columns: 1fr;
     }
     .hero__device {
-      aspect-ratio: auto;
       max-inline-size: 420px;
       margin-inline: auto;
     }
-    :global(#hero .hero__device img) {
-      block-size: auto;
-    }
+    /* img 比例钉形随盒宽自适应,base 规则已够 —— 无需 ≤840px 覆盖 */
   }
 </style>

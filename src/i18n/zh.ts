@@ -65,6 +65,7 @@ export const zh = {
       listLabel: '周列表组件',
       todayLabel: '今日组件',
       twodaysLabel: '未来两天组件',
+      weekviewLabel: '周视图组件',
     },
   },
   gallery: {
@@ -191,6 +192,16 @@ export const zh = {
     tailIssues: 'GitHub Issues',
     tailDiscussions: 'Discussions',
     tailQq: 'QQ 群',
+  },
+  // v5 404 页(spec §2.6-7:正面陈述零致歉 + 四页链接 + zh 主 en 尾)
+  notFound: {
+    heading: '这个路径不在名录里',
+    sub: '官网只有主页、学校查找、下载中心、常见问答四页,从下面任选一个继续。',
+    home: '主页',
+    schools: '学校查找',
+    download: '下载中心',
+    faq: '常见问答',
+    enHint: 'This page is not in the catalog — ',
   },
 } as const;
 

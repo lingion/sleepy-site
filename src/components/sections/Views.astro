@@ -134,8 +134,11 @@ const panes = [
   .views__pane-title {
     color: var(--md-sys-color-on-surface);
   }
+  /* lead = on-surface 非 variant:背景 pane 恒带 opacity .55(dim 态,任意时刻三占二),
+     variant 在暗档叠 dim 后实测 3.86 不过 WCAG 文本闸;层级由字号字重差(title-medium
+     500/16 vs body-medium 400/14)承担,色彩不降级(Lighthouse mobile 复测归零) */
   .views__pane-lead {
-    color: var(--md-sys-color-on-surface-variant);
+    color: var(--md-sys-color-on-surface);
     max-width: 46ch;
   }
   .views__stage {

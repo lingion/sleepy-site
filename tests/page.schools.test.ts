@@ -5,6 +5,8 @@ import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
 import { applyInitialState, filterRows, parseUrlState } from '../src/lib/schools-island';
 import { catalogUpdatedAt, schools } from '../src/lib/schools-view';
+import { zh } from '../src/i18n/zh';
+import { en } from '../src/i18n/en';
 
 const load = (p: string): JSDOM => {
   try {
@@ -113,6 +115,19 @@ describe('空态与底行(spec §2.3)', () => {
     expect(zhHtml).toContain('issues/new?template=school_adaptation.yml');
     expect(zhHtml).toContain('未收录的学校可在 GitHub 提交适配申请');
   });
+  it('JS-off 搜索框隐藏闸(spec §8「搜索框隐藏态」):label 挂 js-only 门控', () => {
+    // 门控面 = global.css `.js-only{visibility:hidden}` + `html.js .js-only{visible}`(FOUC 守卫首帧挂 .js)
+    expect(zhHtml).toContain('class="schools__search js-only"');
+    const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+    expect(css).toMatch(/\.js-only\s*\{[^}]*visibility:\s*hidden/);
+    expect(css).toMatch(/html\.js\s+\.js-only\s*\{[^}]*visibility:\s*visible/);
+  });
+  it('hidden 属性闸:作者 display 不得压死 UA [hidden]{display:none}', () => {
+    // 岛 JS 的 expand/collapse 互斥、空态显隐全靠 hidden 属性;.site-button inline-flex
+    // 实证作者层恒胜 UA 层(收起钮挂 hidden 仍渲染)→ 全局 [hidden] 必须 !important 兜底
+    const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+    expect(css).toMatch(/\[hidden\]\s*\{[^}]*display:\s*none\s*!important/);
+  });
   it('底行:更新于日期 + 名录随适配更新 + 提交适配 CTA', () => {
     expect(zhHtml).toContain(catalogUpdatedAt); // 2026-10-19,快照末次刷新日
     expect(zhHtml).toContain('名录随适配更新');
@@ -138,5 +153,20 @@ describe('页面骨架', () => {
   it('展开全部/收起全部 Text 钮存在(开关态永不入 URL — 无 data-* 同步 URL 的 href)', () => {
     expect(zhHtml).toContain('展开全部');
     expect(zhHtml).toContain('收起全部');
+  });
+  it('真实校名保留策略随台账进工具页(§10 去向:EN 页仍列真实校名)', () => {
+    const enHtml = enDoc.documentElement.innerHTML;
+    expect(enHtml).toContain(schools[0].name);
+    expect(enHtml).toContain(schools[schools.length - 1].name);
+  });
+  it('en 页头 = schoolsPage.heading + sub(§10 去向:heading+sub pin 从主页测试迁来)', () => {
+    const enHtml = enDoc.documentElement.innerHTML;
+    expect(enHtml).toContain(en.schoolsPage.heading);
+    expect(enHtml).toContain(en.schoolsPage.sub);
+    expect(enHtml).not.toContain(zh.schoolsPage.heading);
+  });
+  it('派生计数句工具页页头第二次 pin(§10:198「入口卡与工具页各一次」,两数派生禁手写)', () => {
+    const types = new Set(schools.map((s) => s.type)).size;
+    expect(zhHtml.replace(/\s+/g, '')).toContain(`${schools.length}所高校·${types}种教务协议`.replace(/\s+/g, ''));
   });
 });
