@@ -83,6 +83,20 @@ describe('blocksToHtml 渲染规则(spec §5 终审 I11)', () => {
     expect((html.match(/<ol>/g) ?? []).length).toBeGreaterThanOrEqual(1);
     expect((html.match(/<code>/g) ?? []).length).toBeGreaterThanOrEqual(3);
   });
+  it('bold **x** → <strong>:快照实测 widget 家族(sec-5-q-1)5 枚,零星号残渣', () => {
+    const items = parseFaq(zhMd).flatMap((s) => s.items);
+    const w = items.find((i) => i.id === 'sec-5-q-1');
+    const html = blocksToHtml(w.a.zh);
+    expect(html).toContain('<strong>Today</strong>');
+    expect((html.match(/<strong>/g) ?? []).length).toBe(5);
+    expect(html).not.toContain('**');
+  });
+  it('全量 zh/en 渲染输出零 ** 残渣(源快照仅纯文本 bold,无嵌套)', () => {
+    for (const md of [zhMd, enMd]) {
+      const html = parseFaq(md).flatMap((s) => s.items).map((i) => blocksToHtml(Object.values(i.a)[0])).join('');
+      expect(html).not.toContain('**');
+    }
+  });
   it('文本转义:尖括号与 & 不进裸 HTML(快照内无 <,自造样本锁行为)', () => {
     const html = blocksToHtml([{ type: 'paragraph', inline: [{ t: 'text', v: 'a < b & c > d' }] }]);
     expect(html).toBe('<p>a &lt; b &amp; c &gt; d</p>');
