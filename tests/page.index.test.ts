@@ -301,7 +301,7 @@ describe('M5 提醒与组件墙(spec §4 M5 / C4)', () => {
 });
 
 describe('M6 画廊 band(spec §4 M6)', () => {
-  it('图数 = zh captions 长度(8,weekview 入廊);每 figure 浅/深两版(带内 CSS 强制 light)', () => {
+  it('图数 = zh captions 长度(8,weekview 入廊);每 figure 浅/深两版随主题翻转(2026-10-25 巡检批废带内强制 light)', () => {
     const figs = doc.querySelectorAll('#gallery [data-gallery-figure]');
     expect(figs.length).toBe(zh.gallery.captions.length);
     expect(zh.gallery.captions.length).toBe(8);
