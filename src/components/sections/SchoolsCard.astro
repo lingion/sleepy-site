@@ -1,0 +1,57 @@
+---
+// v5 主页 Schools 入口卡 — plan Task 7 / spec §2.2
+// 台账离页后的主页门面:surface-container-low 非岛(零 script 零 input),左派生句 + 右搜索框样式入口钮。
+// 两数一律派生自 schools-view rowCount/typeCount(禁手写,v4 计数闸同规则);两数字 tnum(§10 行 3)。
+// 终审 I2:入口钮 href=/schools/?focus=s,聚焦承接 = Task 4 岛读 focus=s(合同侧 pin 在 page.index 文案块)。
+import { zh } from '../../i18n/zh';
+import type { SiteCopy } from '../../i18n/zh';
+import { rowCount, typeCount } from '../../lib/schools-view';
+
+interface Props {
+  copy?: SiteCopy;
+  /** 显示语言:决定入口 href 前缀(zh=/schools/,en=/en/schools/) */
+  lang?: 'zh' | 'en';
+}
+const c = Astro.props.copy ?? zh;
+const lang = Astro.props.lang ?? 'zh';
+const t = c.homeSchoolCard;
+const href = `${lang === 'en' ? '/en/schools/' : '/schools/'}?focus=s`;
+const count = t.count.replace('{rows}', String(rowCount)).replace('{types}', String(typeCount));
+---
+
+<section class="site-section schools-card" id="schoolCard" data-prototype="entry-card" aria-labelledby="schoolCard-title">
+  <div class="site-col">
+    <div class="schools-card__inner reveal" style="--reveal-i: 0;">
+      <div class="schools-card__copy">
+        <h2 class="t-headline-large" id="schoolCard-title">{c.schools.heading}</h2>
+        <p class="t-body-medium schools-card__count tnum">{count}</p>
+      </div>
+      <a class="entry-card schools-card__link t-label-large" href={href}>
+        {t.cta}
+        <svg class="schools-card__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+          <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.51 4.51 0 0 1 9.5 14" fill="currentColor" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .schools-card { padding-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 12); }
+  .schools-card__inner {
+    background: var(--md-sys-color-surface-container-low);
+    border-radius: var(--md-sys-shape-corner-xl);
+    padding: calc(var(--site-unit) * 8);
+    display: grid;
+    gap: calc(var(--site-unit) * 6);
+    align-items: center;
+  }
+  .schools-card__copy { display: grid; gap: calc(var(--site-unit) * 2); min-inline-size: 0; }
+  .schools-card__count { color: var(--md-sys-color-on-surface-variant); max-width: 56ch; }
+  .schools-card__link { text-decoration: none; white-space: nowrap; }
+  .schools-card__icon { color: var(--md-sys-color-on-surface-variant); flex-shrink: 0; }
+  @media (min-width: 840px) {
+    .schools-card__inner { grid-template-columns: minmax(0, 1fr) auto; }
+    .schools-card__link { justify-self: end; }
+  }
+</style>

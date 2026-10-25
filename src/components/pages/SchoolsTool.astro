@@ -4,6 +4,8 @@
 // 类名裁决(终审 I10):schools__* 前缀沿用,scoped CSS 自持,global.css 零新类
 import typesEn from '../../data/types-en.json';
 import { repoUrl } from '../../i18n/ui';
+import { en } from '../../i18n/en';
+import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
 import { searchFace } from '../../lib/search';
 import {
@@ -11,6 +13,7 @@ import {
   provincesOrdered,
   rowCount,
   schools,
+  typeCount,
   typesOrdered,
 } from '../../lib/schools-view';
 
@@ -19,6 +22,11 @@ interface Props {
   lang: 'zh' | 'en';
 }
 const { copy: t, lang } = Astro.props;
+// §10:198 派生句第二处 pin:主页入口卡计数句在工具页页头复现(两数仍派生,禁手写)
+const dict = lang === 'zh' ? zh : en;
+const countLine = dict.homeSchoolCard.count
+  .replace('{rows}', String(rowCount))
+  .replace('{types}', String(typeCount));
 const typeLabel = (ty: string) => (lang === 'en' ? ((typesEn as Record<string, string>)[ty] ?? ty) : ty);
 const groups = provincesOrdered().map((p) => ({
   ...p,
@@ -27,6 +35,13 @@ const groups = provincesOrdered().map((p) => ({
 }));
 const adaptationUrl = `${repoUrl}/issues/new?template=school_adaptation.yml`;
 const shown0 = t.countShown.replace('{shown}', String(rowCount)).replace('{total}', String(rowCount));
+// Task 9 特征 chip(spec §3-2):未选 leading = 省定位针/协议连接点,已选 leading = check(12px inline SVG,CSS 显隐)
+const CHIP_CHECK =
+  '<svg class="chip-check" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const CHIP_PIN =
+  '<svg class="chip-lead" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 14s5-4.5 5-8A5 5 0 0 1 3 6c0 3.5 5 8 5 8Z" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6" r="1.8" fill="currentColor"/></svg>';
+const CHIP_NODE =
+  '<svg class="chip-lead" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="2.4" fill="currentColor"/><path d="M8 1v3.4M8 11.6V15M1 8h3.4M11.6 8H15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 ---
 
 <section class="schools-page" data-prototype="tool-island">
@@ -34,13 +49,14 @@ const shown0 = t.countShown.replace('{shown}', String(rowCount)).replace('{total
     <header class="schools__head">
       <h1 class="t-headline-large">{t.heading}</h1>
       <p class="t-body-medium schools__sub">{t.sub}</p>
+      <p class="t-body-medium schools__countline tnum">{countLine}</p>
     </header>
 
     <div class="schools__island reveal" style="--reveal-i: 0;">
       <p class="schools__stat site-chip tnum" role="status" data-shown-tpl={t.countShown}>{shown0}</p>
 
       <div class="schools__toolbar">
-        <label class="schools__search">
+        <label class="schools__search js-only">
           <span class="visually-hidden">{t.searchLabel}</span>
           <input
             class="site-field"
@@ -57,15 +73,15 @@ const shown0 = t.countShown.replace('{shown}', String(rowCount)).replace('{total
       </div>
 
       <div class="schools__chipbar" role="group" aria-label={t.provinceAria}>
-        <button type="button" class="site-chip" data-province="" aria-pressed="true">{lang === 'en' ? 'All' : '全部'}</button>
+        <button type="button" class="site-chip" data-province="" aria-pressed="true"><Fragment set:html={CHIP_CHECK} />{lang === 'en' ? 'All' : '全部'}</button>
         {groups.map((g) => (
-          <button type="button" class="site-chip" data-province={g.code} aria-pressed="false">{g.label}</button>
+          <button type="button" class="site-chip" data-province={g.code} aria-pressed="false"><Fragment set:html={CHIP_PIN} /><Fragment set:html={CHIP_CHECK} />{g.label}</button>
         ))}
       </div>
       <div class="schools__chipbar" role="group" aria-label={t.typeAria}>
-        <button type="button" class="site-chip" data-type="" aria-pressed="true">{lang === 'en' ? 'All' : '全部'}</button>
+        <button type="button" class="site-chip" data-type="" aria-pressed="true"><Fragment set:html={CHIP_CHECK} />{lang === 'en' ? 'All' : '全部'}</button>
         {typesOrdered().map((ty) => (
-          <button type="button" class="site-chip" data-type={ty} aria-pressed="false">{typeLabel(ty)}</button>
+          <button type="button" class="site-chip" data-type={ty} aria-pressed="false"><Fragment set:html={CHIP_NODE} /><Fragment set:html={CHIP_CHECK} />{typeLabel(ty)}</button>
         ))}
       </div>
 
@@ -201,6 +217,11 @@ const shown0 = t.countShown.replace('{shown}', String(rowCount)).replace('{total
     color: var(--md-sys-color-on-surface-variant);
     margin-block-start: calc(var(--site-unit) * 2);
     max-width: 56ch;
+  }
+  .schools__countline {
+    color: var(--md-sys-color-on-surface-variant);
+    margin-block-start: calc(var(--site-unit) * 2);
+    font-variant-numeric: lining-nums tabular-nums;
   }
   .schools__island {
     background: var(--md-sys-color-surface-container);

@@ -67,9 +67,36 @@
   box-sizing: border-box;
 }
 
+/* 无 JS 隐控件闸(spec §8-15 搜索框隐藏态):工具页交互输入对 JS-off 用户是死控件。
+   默认 opacity:0 + visibility:hidden;揭示靠 FOUC 守卫首帧挂 html.js(同 .reveal 的
+   .js 门控面)——守卫先于 body 渲染执行,有 JS 用户不见闪变,无 JS 永隐(非 display:none:
+   chip/组壳等其余控件仍可读,只收输入件本体)。label 的 visually-hidden 名随 visibility 一并收 */
+.js-only {
+  opacity: 0;
+  visibility: hidden;
+}
+html.js .js-only {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* hidden 属性闸(normalize 惯例):作者 display 规则压死 UA [hidden]{display:none}
+   ——作者层恒胜 UA 层,与特异性无关(.site-button inline-flex 实证:收起钮挂了
+   hidden 仍渲染)。岛 JS 的 expand/collapse 互斥、空态显隐全靠该属性。
+   !important = 唯一压过任何后续作者 display 声明的方式 */
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
+  /* 暗档滚动条/原生控件底色修正(spec §3-4;theme-color meta 已有,CSS 侧补声明) */
+  color-scheme: light dark;
 }
+
+/* 手动主题盖系统:FOUC 守卫恒设 data-theme,属性侧对齐 UA 控件底色 */
+html[data-theme='light'] { color-scheme: light; }
+html[data-theme='dark'] { color-scheme: dark; }
 
 /* 锚点落点防 sticky AppBar 盖段标题(v4 spec §4:栏高 64 + 16 呼吸) */
 section[id] {
@@ -205,15 +232,64 @@ a {
   outline-offset: -1px;
 }
 
-/* M3 filter chip(spec §2.2):未选 = transparent 底 + outline 描边;已选 = secondaryContainer */
+/* 入口卡搜索框样式钮(spec §2.2 主页 schoolCard):外观像搜索框但非 input,防误导——
+   底/描边/圆角/字号逐值对齐 .site-field,区别只在 cursor 与 hover 反馈 */
+.entry-card {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--site-unit) * 2);
+  background: var(--md-sys-color-surface);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface);
+  padding: 10px 20px;
+  min-inline-size: 240px;
+  cursor: pointer;
+  transition: border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
+}
+.entry-card:hover {
+  border-color: var(--md-sys-color-on-surface);
+}
+.entry-card:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: -1px;
+}
+
+/* 特征 chip(spec §3-2 Task 9 升档):胶囊 corner-full 为本站主动选择(不援引 MD3 背书);
+   未选 = transparent 底 + outline 描边;已选 = secondaryContainer + leading check;
+   leading 图标 = inline SVG 12px CSS 控显隐(省=定位针/协议=连接点/TOC=check),禁 box-shadow 造形 */
 .site-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--site-unit) * 1.5);
   border: 1px solid var(--md-sys-color-outline);
   background: transparent;
   color: var(--md-sys-color-on-surface-variant);
-  border-radius: var(--md-sys-shape-corner-small);
+  border-radius: var(--md-sys-shape-corner-full);
   font: var(--md-sys-typescale-label-large);
   padding: 6px 14px;
   cursor: pointer;
+  transition:
+    background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
+    border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
+    color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
+}
+
+/* leading 图标显隐:默认全隐(纯文字 chip 零占用),按压/当前态只亮对应一枚 */
+.site-chip svg {
+  display: none;
+  flex: none;
+  width: 12px;
+  height: 12px;
+}
+.site-chip[aria-pressed='true'] .chip-check { display: block; }
+.site-chip[aria-pressed='false'] .chip-lead { display: block; }
+/* FAQ TOC 当前态 = aria-current(链接非按钮,终审 I4):与按压态同语义填充 */
+.site-chip[aria-current='true'] .chip-check { display: block; }
+.site-chip[aria-current='true'] {
+  background: var(--md-sys-color-secondary-container);
+  border-color: transparent;
+  color: var(--md-sys-color-on-secondary-container);
 }
 
 .site-chip[aria-pressed='true'] {
@@ -383,4 +459,6 @@ a:active {
   /* §6:reduce 停位移/缩放(卡 hover 抬起、钮 press 缩放)——阴影保留(非动效) */
   .site-card--interactive:is(:hover, :focus-visible),
   .site-button:active { transform: none; }
+  /* Task 9:chip 上色过渡归零(spec §5 动效纪律:reduce 下色彩切换直出) */
+  .site-chip { transition: none; }
 }

@@ -64,6 +64,7 @@ export const en: SiteCopy = {
       listLabel: 'Week-list widget',
       todayLabel: 'Today widget',
       twodaysLabel: 'Next-two-days widget',
+      weekviewLabel: 'Week-view widget',
     },
   },
   gallery: {
@@ -187,5 +188,15 @@ export const en: SiteCopy = {
     tailIssues: 'GitHub Issues',
     tailDiscussions: 'Discussions',
     tailQq: 'QQ group',
+  },
+  // v5 404 页(spec §2.6-7:正面陈述零致歉 + 四页链接 + zh 主 en 尾)
+  notFound: {
+    heading: 'This page is not in the catalog',
+    sub: 'The site has four pages — home, school lookup, download center, FAQ. Pick one below to continue.',
+    home: 'Home',
+    schools: 'School lookup',
+    download: 'Download center',
+    faq: 'FAQ',
+    enHint: '这个路径不在名录里 — ',
   },
 } as const;

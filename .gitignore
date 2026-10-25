@@ -28,3 +28,5 @@ pnpm-debug.log*
 
 # CDP 探针脚本(T9/T10 验收工具,一次性 scratch,证据文档按路径引用)
 tmp-cdp/
+.shots/
+tmp-lh/

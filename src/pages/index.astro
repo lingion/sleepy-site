@@ -1,24 +1,50 @@
 ---
-// zh 主页 — v4 八段异构动线(spec §4):Hero → Views → Connect → Schools → Reminders → Gallery → Trust → Download
-// 原型轮换(治同质):split → showcase → edit-split → tool-island → pinned → full-bleed-band → narration → tonal-band
-// DOM 序 = 揭示序不变量(§17.2);Footer 在 Base 内。
+// zh 主页 — v5 八段(spec §2.2 段序):Hero → Views → Connect → schoolCard 入口卡 → Reminders → Gallery → Trust → Download 单出口
+// 原型轮换(治同质):split → showcase → edit-split → entry-card → pinned → full-bleed-band → narration → tonal-band
+// DOM 序 = 揭示序不变量(§17.2);Footer 在 Base 内;台账离页 → /schools/(Task 4),下载全景 → /download/(Task 5)。
 import Base from '../layouts/Base.astro';
 import Hero from '../components/sections/Hero.astro';
 import Views from '../components/sections/Views.astro';
 import Connect from '../components/sections/Connect.astro';
-import Schools from '../components/sections/Schools.astro';
+import SchoolsCard from '../components/sections/SchoolsCard.astro';
 import Reminders from '../components/sections/Reminders.astro';
 import Gallery from '../components/sections/Gallery.astro';
 import Trust from '../components/sections/Trust.astro';
 import Download from '../components/sections/Download.astro';
 import { zh } from '../i18n/zh';
+import { site, repoUrl } from '../i18n/ui';
+import release from '../data/release.json';
+
+// JSON-LD 恰一 = 主页 SoftwareApplication(spec §2.6-3,D8:禁 FAQPage/BreadcrumbList)
+const universal = release.assets.find((a) => a.name.includes('universal'))!;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Sleepy',
+  operatingSystem: 'Android',
+  softwareVersion: release.tag,
+  downloadUrl: universal.url,
+  license: 'GPL-3.0',
+  sameAs: repoUrl,
+  image: `${site}/og/home-zh.png`,
+};
 ---
 
-<Base lang="zh" title={zh.meta.title} description={zh.meta.description} path="/" mirror="/en/" preloadHero hasHero>
+<Base
+  lang="zh"
+  title={zh.meta.title}
+  description={zh.meta.description}
+  path="/"
+  mirror="/en/"
+  preloadHero
+  hasHero
+  jsonLd={jsonLd}
+  rssLink={`${site}/rss.xml`}
+>
   <Hero />
   <Views />
   <Connect />
-  <Schools />
+  <SchoolsCard />
   <Reminders />
   <Gallery />
   <Trust />

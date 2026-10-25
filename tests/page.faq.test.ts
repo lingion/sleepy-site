@@ -94,6 +94,14 @@ describe('尾卡与 TOC(spec §2.4)', () => {
     expect(zhHtml).toContain(`${zh.faqPage.updatedPrefix} ${faq.updatedAt}`);
     expect(enHtml).toContain(`${en.faqPage.updatedPrefix} ${faq.updatedAt}`);
   });
+  it('TOC 首节静态高亮:aria-current 恰一挂首链,余链无(Task 10:JS-off 也有当前节指示)', () => {
+    const links = [...zhDoc.querySelectorAll('[data-toc-link]')];
+    expect(links[0].getAttribute('aria-current')).toBe('true');
+    for (const a of links.slice(1)) expect(a.hasAttribute('aria-current'), `aria-current on ${a.getAttribute('href')}`).toBe(false);
+    // 高亮面 = chip-check 显隐 CSS 驱动(禁 JS-only 才亮,global.css 闸)
+    const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+    expect(css).toMatch(/\.site-chip\[aria-current='true'\]\s\.chip-check\s*\{\s*display:\s*block/);
+  });
 });
 
 describe('死链防御(Task 3 绝对化规则的产物侧 pin)', () => {

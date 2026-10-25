@@ -63,9 +63,13 @@ const zhUI = lang === 'zh';
       <p class="t-label-large faq__toc-title">{t.tocLabel}</p>
       <ul class="faq__toc-list">
         {
-          rendered.map((s) => (
+          rendered.map((s, i) => (
             <li>
-              <a class="site-chip faq__toc-link" data-toc-link href={`#${s.id}`}>
+              <a class="site-chip faq__toc-link" data-toc-link href={`#${s.id}`} aria-current={i === 0 ? 'true' : undefined}>
+                {/* leading check = Task 9 chip 形(12px inline SVG,CSS 显隐);aria-current 标当前节 */}
+                <svg class="chip-check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M3 8.5 6.5 12 13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
                 {s.name}
               </a>
             </li>
@@ -162,10 +166,6 @@ const zhUI = lang === 'zh';
   }
   .faq__toc-list::-webkit-scrollbar { display: none; }
   .faq__toc-link { text-decoration: none; white-space: nowrap; }
-  .faq__toc-link[data-active] {
-    background: var(--md-sys-color-secondary-container);
-    color: var(--md-sys-color-on-secondary-container);
-  }
 
   /* 桌面:TOC sticky 左栏(spec §2.4) */
   @media (min-width: 900px) {
@@ -177,7 +177,7 @@ const zhUI = lang === 'zh';
 </style>
 
 <script>
-  // TOC 高亮 = 原生 IntersectionObserver,只切 data-active 属性;色彩过渡 150ms(spec §5 工具页唯一动效)
+  // TOC 高亮 = 原生 IntersectionObserver,只切 aria-current(链接非按钮,终审 I4);色彩过渡 150ms(spec §5 工具页唯一动效)
   const tocLinks = [...document.querySelectorAll<HTMLElement>('[data-toc-link]')];
   const sections = [...document.querySelectorAll<HTMLElement>('[data-faq-section]')];
   if (tocLinks.length && sections.length && 'IntersectionObserver' in window) {
@@ -186,8 +186,8 @@ const zhUI = lang === 'zh';
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
-          for (const a of tocLinks) a.removeAttribute('data-active');
-          byId.get(e.target.id)?.setAttribute('data-active', '');
+          for (const a of tocLinks) a.removeAttribute('aria-current');
+          byId.get(e.target.id)?.setAttribute('aria-current', 'true');
         }
       },
       { rootMargin: '-10% 0px -70% 0px', threshold: 0 }

@@ -239,7 +239,8 @@ describe('Task 7 视觉细节闸(v4 §12 代码可闸项)', () => {
     // tabular-nums 文本,查样式文本 = 假绿;Astro 编译加 :where(.astro-hash) 使 scoped
     // 样式正则脆断 —— 裁决 2:只查 markup)。token 化拆分防 hero__ribbon-num 子串假中
     const hero = read('../components/sections/Hero.astro');
-    const schools = read('../components/sections/Schools.astro');
+    // §10 行 212:Schools.astro 已随 Task 7 删除 → 改读工具页组件,.schools__stat markup 沿用
+    const schools = read('../components/pages/SchoolsTool.astro');
     const download = read('../components/sections/Download.astro');
     const classTokens = (src: string, el: string) =>
       [...src.matchAll(/class="([^"]*)"/g)]
@@ -322,13 +323,53 @@ describe('Task 7 视觉细节闸(v4 §12 代码可闸项)', () => {
     expect(globalCss).toMatch(
       /\.skip-link:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, var\(--md-sys-color-secondary-container\)\)/
     );
-    // scoped 侧(Download.astro):行 :active blend 混入行底 token(base 55% / data-rec 78%)
-    const downloadSrc = read('../components/sections/Download.astro');
+    // scoped 侧(§10 行 213:行样式随 Task 5 迁 DownloadPanel → 改读该文件):
+    // 行 :active blend 混入行底 token(base 55% / data-rec 78%,逐值随 v4 Download 段迁移)
+    const downloadSrc = read('../components/pages/DownloadPanel.astro');
     expect(downloadSrc).toMatch(
-      /\.download__row:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, color-mix\(in srgb, var\(--md-sys-color-surface\) 55%, var\(--md-sys-color-primary-container\)\)\)/
+      /\.download-page__row:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, color-mix\(in srgb, var\(--md-sys-color-surface\) 55%, var\(--md-sys-color-primary-container\)\)\)/
     );
     expect(downloadSrc).toMatch(
-      /\.download__row\[data-rec\]:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, color-mix\(in srgb, var\(--md-sys-color-surface\) 78%/
+      /\.download-page__row\[data-rec\]:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, color-mix\(in srgb, var\(--md-sys-color-surface\) 78%/
     );
+  });
+});
+
+describe('Task 9 三缺口修(spec §3-2 特征 chip 升档 / §3-4 color-scheme)', () => {
+  it('.site-chip 胶囊化:corner-full + leading check SVG 显隐 + 选中态 secondary-container(回归守卫)', () => {
+    const chipRule = globalCss.match(/\.site-chip\s*\{[^}]*\}/);
+    expect(chipRule, 'global.css 缺 .site-chip 基础规则').not.toBeNull();
+    // 本站主动选择 pill 形态(spec §3-2:不援引 MD3 背书)
+    expect(chipRule![0]).toMatch(/border-radius:\s*var\(--md-sys-shape-corner-full\)/);
+    // leading 图标 = inline SVG(12px),CSS 控显隐:默认隐藏,选中/当前态显示;禁 box-shadow 造形
+    const iconHidden = globalCss.match(/\.site-chip\s+svg\s*\{[^}]*display:\s*none[^}]*\}/);
+    expect(iconHidden, 'chip 内 svg 须默认 display:none(CSS 显隐位)').not.toBeNull();
+    expect(iconHidden![0]).toMatch(/width:\s*12px/);
+    // 选中 = check 显;未选 = 族 leading 显(spec §3-2:省定位针/协议连接点)
+    expect(globalCss).toMatch(/\.site-chip\[aria-pressed='true'\]\s*\.chip-check\s*\{[^}]*display:/);
+    expect(globalCss).toMatch(/\.site-chip\[aria-pressed='false'\]\s*\.chip-lead\s*\{[^}]*display:/);
+    // 选中语义 = secondary-container 填充(终审 I4:已存在形态,禁漂移)
+    const pressed = globalCss.match(/\.site-chip\[aria-pressed='true'\]\s*\{[^}]*\}/);
+    expect(pressed, '选中态须挂 .site-chip[aria-pressed]').not.toBeNull();
+    expect(pressed![0]).toContain('var(--md-sys-color-secondary-container)');
+    // aria-pressed 是唯一样式/状态源:禁新写 .is-active 样式(两套选择器并存必漂移)
+    expect(globalCss).not.toMatch(/\.is-active/);
+  });
+  it('chip 上色过渡 150ms(motion token)+ reduce 块归零(spec §5)', () => {
+    const chipRule = globalCss.match(/\.site-chip\s*\{[^}]*\}/)!;
+    expect(chipRule[0]).toMatch(/transition:[^;]*var\(--md-sys-motion-duration-short3\)/);
+    const reduceBlock = globalCss.match(/@media \(prefers-reduced-motion: reduce\)\s*\{[\s\S]*?\n\}/);
+    expect(reduceBlock![0]).toMatch(/\.site-chip[^{]*\{[^}]*transition:\s*none/);
+  });
+  it('顶层 html 规则声明 color-scheme: light dark(spec §3-4:暗档滚动条/原生控件底色修正)', () => {
+    const htmlRules = globalCss.match(/^html\s*\{[^}]*\}/m);
+    expect(htmlRules, 'global.css 缺顶层 html 规则').not.toBeNull();
+    expect(htmlRules![0]).toMatch(/color-scheme:\s*light dark/);
+  });
+  it('FAQ TOC 当前态 = aria-current(链接非按钮)+ leading check 入条文(终审 I4)', () => {
+    const faq = read('../components/pages/FaqBody.astro');
+    expect(faq).toMatch(/aria-current/);
+    expect(faq).not.toMatch(/data-active/);
+    expect(faq).toMatch(/<svg/);
   });
 });
