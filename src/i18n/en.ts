@@ -1,14 +1,14 @@
 // en 文案单点(v4 spec §7 R5):键树与 zh.ts 严格同形 —— i18n-parity 测试闸。
 // slogan 暂用 A 案英译「Built open. Feels free.」(§7.2 签收前单点可换;zh 逐字保留已批 §13 R3,en 换值未批)。
 // 策略:校名保中文 + 拼音检索,EN 页翻译「文案面」不翻译「数据面」。
-// 数字纪律同 zh:348/33 由构建期派生传入,禁手写。
+// 数字纪律同 zh:计数由构建期派生传入,禁手写;条数不当校数说(§4.1)。
 import type { SiteCopy } from './zh';
 
 export const en: SiteCopy = {
   meta: {
     title: 'Sleepy — open-source timetable, built free',
-    description:
-      '348 direct academic-system connections. Data stays on the device; source fully open. An open-source Android timetable maintained by one person.',
+    description: (rows: number) =>
+      `${rows} direct academic-system connections. Data stays on the device; source fully open. An open-source Android timetable maintained by one person.`,
   },
   hero: {
     slogan: 'Built open. Feels free.',
@@ -33,7 +33,7 @@ export const en: SiteCopy = {
     heading: 'Direct academic connections',
     body: 'Pick your school, sign in, and the timetable is written straight to this device. When a system changes, the maintainer updates the adapter and the sync path stays available.',
     imageAlt: 'Academic import panel app screenshot',
-    chipLabel: (rows: number) => `${rows} schools connected`,
+    chipLabel: (rows: number) => `${rows} direct connections`,
   },
   schools: {
     heading: 'Catalog and search',
@@ -142,7 +142,7 @@ export const en: SiteCopy = {
     noJs: 'With JavaScript disabled the full list stays readable.',
   },
   homeSchoolCard: {
-    count: '{rows} schools · {types} academic protocols — type a school name to confirm coverage.',
+    count: '{rows} direct academic connections · {types} protocols — type a school name to confirm coverage.',
     cta: 'Find my school',
   },
   schoolsPage: {

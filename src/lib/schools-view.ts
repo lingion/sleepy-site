@@ -12,8 +12,8 @@ export interface SchoolRow {
 
 export const schools = schoolsRaw as unknown as SchoolRow[];
 
-/** 名录快照最后刷新日(= fixtures/schools.json 末次 data 提交的真实日期;重跑 data 链路时同步,目检可发现 — spec §5 内容类陈旧可接受) */
-export const catalogUpdatedAt = '2026-10-19';
+/** 名录快照最后刷新日(= fixtures/schools.json 对应上游 assets 末次 data 提交的真实日期 6759ad4d #179;重跑 data 链路时同步,目检可发现 — spec §5 内容类陈旧可接受) */
+export const catalogUpdatedAt = '2026-10-18';
 
 export const provinceCount = new Set(schools.map((s) => s.province.code)).size;
 export const typeCount = new Set(schools.map((s) => s.type)).size;

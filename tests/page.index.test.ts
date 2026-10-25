@@ -45,7 +45,7 @@ describe('八段依序 + 原型表(spec §2.2 v5 段序)', () => {
     expect(doc.getElementById('features')).toBeNull();
     expect(HTML).not.toContain('id="features"');
   });
-  it('#schools 段随台账离页绝迹(§10 行 1 负闸;348 行与三态过滤岛不再进主页)', () => {
+  it('#schools 段随台账离页绝迹(§10 行 1 负闸;全量行与三态过滤岛不再进主页)', () => {
     expect(doc.getElementById('schools')).toBeNull();
     expect(HTML).not.toContain('id="schools"');
     expect(HTML).not.toContain('data-prototype="tool-island"');
@@ -91,7 +91,7 @@ describe('C1 首图不变量 + LCP 链路(spec §3 C1 / §6 LCP / T3)', () => {
 });
 
 describe('ribbon 佐证条(spec §4 M1)', () => {
-  it('#hero 文本含派生计数 348、GPL-3.0、留存本机三事实', () => {
+  it('#hero 文本含派生计数与 GPL-3.0、留存本机三事实', () => {
     const txt = doc.getElementById('hero')?.textContent ?? '';
     expect(txt).toContain(String(schools.length));
     expect(txt).toContain(zh.hero.ribbon.schools);
@@ -204,13 +204,13 @@ describe('文案 v5 契约(spec §7 + §2.2 入口卡句)', () => {
   const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
   it('§7 对照表改后句逐句进产物(trial/schools 两 pin 已随 §10 迁出主页)', () => {
     expect(stripped).toContain('课表数据仅存于本机,不经任何服务器。'); // hero.sub(R1)
-    expect(metaDesc.replace(/\s+/g, '')).toContain('348条教务直连,数据仅存本机,源码完整公开'); // meta.desc(R3)
+    expect(metaDesc.replace(/\s+/g, '')).toContain(`${schools.length}条教务直连,数据仅存本机,源码完整公开`); // meta.desc(R3,派生)
     expect(stripped).toContain('全部为真机截图'); // gallery.heading
   });
-  it('入口卡派生句两数进产物(§10 行 4:statLine 派生 pin 改「{rows} 所高校 · {types} 种教务协议」,禁手写)', () => {
+  it('入口卡派生句两数进产物(§10 行 4:statLine 派生 pin,禁手写;条数不当校数说 §4.1)', () => {
     const types = new Set(schools.map((s) => s.type)).size;
-    expect(stripped).toContain(`${schools.length}所高校·${types}种教务协议`.replace(/\s+/g, ''));
-    expect(schools.length).toBe(348);
+    expect(stripped).toContain(`${schools.length}条教务直连·${types}种协议,输入校名即可确认收录。`);
+    expect(schools.length).toBe(1478);
   });
   it('入口钮 = /schools/?focus=s 精确 href + 卡内零 input(§2.2 终审 I2 合同侧 pin;行为侧 = Task 4 岛 + T4 目检)', () => {
     const card = doc.getElementById('schoolCard')!;
@@ -275,8 +275,8 @@ describe('reveal 不变量(spec §17.2)', () => {
 });
 
 describe('connect 段(spec §10 行 4:段未动,chip 派生断言留主页;台账三断言迁 page.schools.test.ts)', () => {
-  it('connect 段 chip = 派生「348 校直连」', () => {
-    expect((doc.getElementById('connect')?.textContent ?? '')).toContain(`${schools.length} 校直连`);
+  it('connect 段 chip = 派生「1478 条直连」', () => {
+    expect((doc.getElementById('connect')?.textContent ?? '')).toContain(`${schools.length} 条直连`);
   });
 });
 

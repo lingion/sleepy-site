@@ -32,5 +32,13 @@
   "boya_pp": "Boya PP (grad school SaaS)",
   "zju": "Zhejiang Univ. (zdbk)",
   "ustc": "USTC self-built",
-  "ucas": "UCAS (Megrez system)"
+  "ucas": "UCAS (Megrez system)",
+  "kingo_new": "New Kingo / JZ EAMS",
+  "shuwei_json": "Shuwei EAMS (JSON)",
+  "cumtb": "EAMS5 (CUMTB variant)",
+  "yl": "YL (CAS lyuap form)",
+  "umooc": "UMOOC platform form",
+  "scau": "SCAU portal (authserver form)",
+  "ecupl": "ECUPL portal (Struts form)",
+  "thu": "Tsinghua self-built (zhjwxk)"
 }

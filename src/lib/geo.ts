@@ -46,3 +46,25 @@ export function classifyProvince(name: string, idx: GeoIndex): ClassifyResult | 
   }
   return null;
 }
+
+// 第 4 层归组 — moe 目录号解省码:catalogId 'moe:GGPPNNNNNN'(教育部代码,第 3-4 位 = 省级行政区划码)。
+// 行政区划码是数字,本站省码是缩写(geo.provinces 键),故需全表映射;映射结果必须仍是已声明省码才算命中。
+// 非 moe 形态(Q_清华/W_唤醒指纹/null)一律 null —— 归组残差由人工表兜底,不猜。
+const NUM2CODE: Record<string, string> = {
+  '11': 'BJ', '12': 'TJ', '13': 'HE', '14': 'SX', '15': 'NM',
+  '21': 'LN', '22': 'JL', '23': 'HL',
+  '31': 'SH', '32': 'JS', '33': 'ZJ', '34': 'AH', '35': 'FJ', '36': 'JX', '37': 'SD',
+  '41': 'HA', '42': 'HB', '43': 'HN', '44': 'GD', '45': 'GX', '46': 'HI',
+  '50': 'CQ', '51': 'SC', '52': 'GZ', '53': 'YN', '54': 'XZ',
+  '61': 'SN', '62': 'GS', '63': 'QH', '64': 'NX', '65': 'XJ',
+};
+
+export function decodeProvinceByCatalogId(
+  catalogId: string | undefined | null,
+  provinces: Record<string, ProvinceMeta>,
+): string | null {
+  const m = typeof catalogId === 'string' ? catalogId.match(/^moe:(\d{10})$/) : null;
+  if (!m) return null;
+  const code = NUM2CODE[m[1].slice(2, 4)];
+  return code && provinces[code] ? code : null;
+}

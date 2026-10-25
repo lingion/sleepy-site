@@ -12,6 +12,7 @@ import Gallery from '../components/sections/Gallery.astro';
 import Trust from '../components/sections/Trust.astro';
 import Download from '../components/sections/Download.astro';
 import { zh } from '../i18n/zh';
+import { rowCount } from '../lib/schools-view';
 import { site, repoUrl } from '../i18n/ui';
 import release from '../data/release.json';
 
@@ -33,7 +34,7 @@ const jsonLd = {
 <Base
   lang="zh"
   title={zh.meta.title}
-  description={zh.meta.description}
+  description={zh.meta.description(rowCount)}
   path="/"
   mirror="/en/"
   preloadHero

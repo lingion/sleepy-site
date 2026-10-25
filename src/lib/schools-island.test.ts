@@ -42,11 +42,11 @@ describe('filterRows(URL 态 → 行集)', () => {
   });
   it('空 q 短路 = 省/协议过滤,不要求查询词', () => {
     const gd = filterRows(schools, parseUrlState('?p=GD'));
-    expect(gd).toHaveLength(27);
+    expect(gd).toHaveLength(92);
     expect(gd.every((r) => r.province.code === 'GD')).toBe(true);
   });
-  it('全空态 = 348 行全量(JS-off 可读不破)', () => {
-    expect(filterRows(schools, parseUrlState(''))).toHaveLength(348);
+  it('全空态 = 1478 行全量(JS-off 可读不破)', () => {
+    expect(filterRows(schools, parseUrlState(''))).toHaveLength(1478);
   });
   it('aliases 入检索面:lixin 命中上海立信(sortKeyFull 不含该串)', () => {
     const hit = filterRows(schools, parseUrlState('?q=lixin')).map((r) => r.name);
