@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseFaq, assertPairing, blocksToHtml } from './build-faq.mjs';
+import { parseFaq, assertPairing, blocksToHtml, parseInline } from './build-faq.mjs';
 
 // Task 3 数据管线闸(spec §5/§10):build-faq 纯离线 = 只读仓内快照 fixtures/FAQ.md + scripts/faq-en.md。
 // 测试同读快照保确定性;vitest include 覆盖 scripts/**/*.test.mjs(fetch-release.test.mjs 同法),
@@ -10,10 +10,10 @@ const zhMd = readFileSync(new URL('../fixtures/FAQ.md', import.meta.url), 'utf8'
 const enMd = readFileSync(new URL('./faq-en.md', import.meta.url), 'utf8');
 
 describe('parseFaq 结构闸(快照实测现值)', () => {
-  it('FAQ.md 解析 = 9 节剔除相关链接后 8 节 · 34 问 · 代码块 2 枚', () => {
+  it('FAQ.md 解析 = 9 节剔除相关链接后 8 节 · 43 问 · 代码块 2 枚', () => {
     const secs = parseFaq(zhMd);
     const items = secs.flatMap((s) => s.items);
-    expect(items.length).toBe(34);
+    expect(items.length).toBe(43);
     expect(secs.find((s) => s.zh === '相关链接')).toBeUndefined(); // 无问空节整节剔除(解析器规则,非点名)
     expect(secs.length).toBe(8);
     expect(items.filter((i) => i.a.zh.some((b) => b.type === 'pre')).length).toBe(2);
@@ -52,7 +52,7 @@ describe('zh/en 配对闸', () => {
     const zhItems = parseFaq(zhMd).flatMap((s) => s.items);
     expect(() => assertPairing(zhItems, zhItems.slice(1))).toThrow(/条数不一致/);
   });
-  it('仓内 faq-en.md 与快照现值恰配对(34=34,离线构建可复现)', () => {
+  it('仓内 faq-en.md 与快照现值恰配对(43=43,离线构建可复现)', () => {
     const zhItems = parseFaq(zhMd).flatMap((s) => s.items);
     const enItems = parseFaq(enMd).flatMap((s) => s.items);
     expect(() => assertPairing(zhItems, enItems)).not.toThrow();
@@ -60,19 +60,18 @@ describe('zh/en 配对闸', () => {
 });
 
 describe('blocksToHtml 渲染规则(spec §5 终审 I11)', () => {
-  it('相对仓库路径绝对化:docs/schools-list.md → repoUrl/blob/main/(禁 /faq/docs/ 死链)', () => {
-    const items = parseFaq(zhMd).flatMap((s) => s.items);
-    const dl = items.find((i) => i.q.zh.includes('不在名单'));
-    const html = blocksToHtml(dl.a.zh);
-    expect(html).toContain('href="https://github.com/lingion/sleepy/blob/main/docs/schools-list.md"');
-    expect(html).not.toMatch(/href="docs\//);
+  it('相对仓库路径绝对化:sponsor.md → repoUrl/blob/main/(禁 /faq/sponsor.md 死链;样本随快照平移 schools-list→sponsor)', () => {
+    // parseFaq 单语解析只填 a[lang],zh/en 各从各自源取(合并双语在 mergeDocs,归产物闸)
+    const sp = parseFaq(zhMd).flatMap((s) => s.items).find((i) => i.id === 'sec-1-q-6');
+    expect(blocksToHtml(sp.a.zh)).toContain('href="https://github.com/lingion/sleepy/blob/main/sponsor.md"');
+    const spEn = parseFaq(enMd, 'en').flatMap((s) => s.items).find((i) => i.id === 'sec-1-q-6');
+    expect(blocksToHtml(spEn.a.en)).toContain('href="https://github.com/lingion/sleepy/blob/main/sponsor.md"');
   });
-  it('链接优先于行内 code:链接文字内嵌反引号无残渣', () => {
-    const items = parseFaq(zhMd).flatMap((s) => s.items);
-    const dl = items.find((i) => i.q.zh.includes('不在名单'));
-    const html = blocksToHtml(dl.a.zh);
-    expect(html).not.toContain('`');
-    expect(html).toMatch(/<a href="[^"]*blob\/main\/docs\/schools-list\.md"><code>docs\/schools-list\.md<\/code><\/a>/);
+  it('链接优先于行内 code:链接文字内嵌反引号无残渣(自造样本锁行为,2026-10-25 快照平移后无此天然形态)', () => {
+    const inline = parseInline('见 [`docs/x.md`](docs/x.md) 收尾');
+    expect(JSON.stringify(inline)).not.toContain('`');
+    const html = blocksToHtml([{ type: 'paragraph', inline }]);
+    expect(html).toMatch(/<a href="[^"]*blob\/main\/docs\/x\.md"><code>docs\/x\.md<\/code><\/a>/);
   });
   it('pre 带 translate="no"(机读命令不翻译);a 标签/ul/ol/code 各≥1', () => {
     const items = parseFaq(zhMd).flatMap((s) => s.items);
