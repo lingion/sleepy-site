@@ -19,13 +19,22 @@ function absolutize(href) {
 
 // 行内解析次序定死(终审 I11):链接 [text](url) 优先于行内 code——
 // FAQ.md:44 链接文字内嵌行内码,先码后链会留反引号残渣。
+// bold **text** 在链接之后、code 之前拆(2026-10-25 用户报:sec-5-q-1 五枚 ** 原样漏页);
+// 源快照实测零嵌套(bold 内无 code/链),嵌套形态不支持——出现即整段落 text 保内容不保样式。
 export function parseInline(src, out = []) {
   const flush = (txt) => {
     if (!txt) return;
-    for (const p of txt.split(/(`[^`]+`)/)) {
-      if (!p) continue;
-      if (/^`[^`]+`$/.test(p)) out.push({ t: 'code', v: p.slice(1, -1) });
-      else out.push({ t: 'text', v: p });
+    for (const seg of txt.split(/(\*\*[^*]+\*\*)/)) {
+      if (!seg) continue;
+      if (/^\*\*[^*]+\*\*$/.test(seg)) {
+        out.push({ t: 'bold', v: seg.slice(2, -2) });
+        continue;
+      }
+      for (const p of seg.split(/(`[^`]+`)/)) {
+        if (!p) continue;
+        if (/^`[^`]+`$/.test(p)) out.push({ t: 'code', v: p.slice(1, -1) });
+        else out.push({ t: 'text', v: p });
+      }
     }
   };
   let i = 0;
@@ -55,6 +64,7 @@ function renderInline(items) {
   return items
     .map((x) => {
       if (x.t === 'code') return `<code>${esc(x.v)}</code>`;
+      if (x.t === 'bold') return `<strong>${esc(x.v)}</strong>`;
       if (x.t === 'link') return `<a href="${esc(x.href)}">${renderInline(x.inline)}</a>`;
       return esc(x.v);
     })

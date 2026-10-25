@@ -1233,32 +1233,52 @@
                 "items": [
                   [
                     {
+                      "t": "bold",
+                      "v": "Today"
+                    },
+                    {
                       "t": "text",
-                      "v": "**Today**：当天课程列表"
+                      "v": "：当天课程列表"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "TwoDay"
+                    },
+                    {
                       "t": "text",
-                      "v": "**TwoDay**：今天和明天的双栏视图"
+                      "v": "：今天和明天的双栏视图"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekList"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekList**：一周课程清单"
+                      "v": "：一周课程清单"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekView"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekView**：周视图缩略图"
+                      "v": "：周视图缩略图"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekGrid"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekGrid**：完整节次网格"
+                      "v": "：完整节次网格"
                     }
                   ]
                 ]
@@ -1297,32 +1317,52 @@
                 "items": [
                   [
                     {
+                      "t": "bold",
+                      "v": "Today"
+                    },
+                    {
                       "t": "text",
-                      "v": "**Today**: the day's course list"
+                      "v": ": the day's course list"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "TwoDay"
+                    },
+                    {
                       "t": "text",
-                      "v": "**TwoDay**: today and tomorrow in two columns"
+                      "v": ": today and tomorrow in two columns"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekList"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekList**: a weekly course list"
+                      "v": ": a weekly course list"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekView"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekView**: a week-grid thumbnail"
+                      "v": ": a week-grid thumbnail"
                     }
                   ],
                   [
                     {
+                      "t": "bold",
+                      "v": "WeekGrid"
+                    },
+                    {
                       "t": "text",
-                      "v": "**WeekGrid**: the full period grid"
+                      "v": ": the full period grid"
                     }
                   ]
                 ]
