@@ -20,7 +20,7 @@ describe('validate 防腐烂闸(spec §4.2)', () => {
   });
   it('仓内快照 release.json 本身必须通过校验(快照腐烂 = 测试红)', () => {
     expect(validate(snapshot)).toEqual([]);
-    expect(snapshot.tag).toBe('v1.0.61');
+    expect(snapshot.tag).toBe('v1.0.62');
     expect(snapshot.assets.map((a) => a.name).sort()).toEqual(
       ['app-arm64-v8a-release.apk', 'app-armeabi-v7a-release.apk', 'app-universal-release.apk', 'app-x86_64-release.apk'].sort(),
     );
