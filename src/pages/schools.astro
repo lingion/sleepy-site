@@ -1,0 +1,20 @@
+---
+// zh /schools/ — v5 四页之二:学校查找独立页(spec §2.3)
+// per-page meta 模板「{页面名} · Sleepy」(spec §2.6-3);页面主体与交互归 SchoolsTool
+import Base from '../layouts/Base.astro';
+import SchoolsTool from '../components/pages/SchoolsTool.astro';
+import { site } from '../i18n/ui';
+import { zh } from '../i18n/zh';
+---
+
+<Base
+  lang="zh"
+  title={`${zh.schoolsPage.heading} · Sleepy`}
+  description={zh.schoolsPage.sub}
+  path="/schools/"
+  mirror="/en/schools/"
+  ogImage={`${site}/og/schools-zh.png`}
+  ogImageAlt={zh.schoolsPage.heading}
+>
+  <SchoolsTool copy={zh.schoolsPage} lang="zh" />
+</Base>

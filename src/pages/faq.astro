@@ -1,0 +1,20 @@
+---
+// zh /faq/ — v5 四页之四:FAQ 独立页(spec §2.4)
+// 快照渲染:内容源 = src/data/faq.json(build-faq 管线,Task 3);主体归 FaqBody
+import Base from '../layouts/Base.astro';
+import FaqBody from '../components/pages/FaqBody.astro';
+import { site } from '../i18n/ui';
+import { zh } from '../i18n/zh';
+---
+
+<Base
+  lang="zh"
+  title={`${zh.faqPage.heading} · Sleepy`}
+  description={zh.faqPage.sub}
+  path="/faq/"
+  mirror="/en/faq/"
+  ogImage={`${site}/og/faq-zh.png`}
+  ogImageAlt={zh.faqPage.heading}
+>
+  <FaqBody copy={zh.faqPage} lang="zh" />
+</Base>
