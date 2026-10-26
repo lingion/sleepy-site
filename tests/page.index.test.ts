@@ -45,7 +45,7 @@ describe('八段依序 + 原型表(spec §2.2 v5 段序)', () => {
     expect(doc.getElementById('features')).toBeNull();
     expect(HTML).not.toContain('id="features"');
   });
-  it('#schools 段随台账离页绝迹(§10 行 1 负闸;348 行与三态过滤岛不再进主页)', () => {
+  it('#schools 段随台账离页绝迹(§10 行 1 负闸;全量行与三态过滤岛不再进主页)', () => {
     expect(doc.getElementById('schools')).toBeNull();
     expect(HTML).not.toContain('id="schools"');
     expect(HTML).not.toContain('data-prototype="tool-island"');
@@ -91,7 +91,7 @@ describe('C1 首图不变量 + LCP 链路(spec §3 C1 / §6 LCP / T3)', () => {
 });
 
 describe('ribbon 佐证条(spec §4 M1)', () => {
-  it('#hero 文本含派生计数 348、GPL-3.0、留存本机三事实', () => {
+  it('#hero 文本含派生计数与 GPL-3.0、留存本机三事实', () => {
     const txt = doc.getElementById('hero')?.textContent ?? '';
     expect(txt).toContain(String(schools.length));
     expect(txt).toContain(zh.hero.ribbon.schools);
@@ -171,10 +171,55 @@ describe('M2 三视图 + MD3 Segmented Button(spec §4 M2)', () => {
     expect(radios.length).toBe(3);
     expect(radios.filter((r) => r.getAttribute('aria-checked') === 'true').length).toBe(1);
   });
-  it('面板 3 块,网格列最宽(2.1fr 1fr 1fr,用户定调;dist CSS 外链 → 源码闸)', () => {
+  it('面板 3 块同格叠放,主次状态机:焦点居中清晰,背景模糊退后(巡检缺陷3 2026-10-25)', () => {
     expect(doc.querySelectorAll('#views [data-pane]').length).toBe(3);
     const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');
-    expect(src).toContain('grid-template-columns: 2.1fr 1fr 1fr');
+    // 用户原话:「三张一样大小的图片从上到下放/一样大小只是其他两个有阴影——
+    // 这不是切换视图的样子,视图是有主次之分的,被聚焦的应在中间,剩下两个
+    // 模糊或次层级放到背后」→ 等宽并列(旧 2.1fr 主三列)废除。
+    // 锁 grid 声明本体(注释可如实提及旧值作历史,声明位禁复活)
+    expect(src).not.toMatch(/grid-template-columns:[^;}]*2\.1fr/);
+    // 结构前提:三面板同格叠放(单 cell 堆栈),舞台横向裁切
+    expect(src).toMatch(/\.views__pane\s*\{[^}]*grid-area:\s*1\s*\/\s*1/);
+    expect(src).toMatch(/\.views__panels\s*\{[^}]*overflow:\s*hidden/);
+    // 环序不变量(圈序 grid→week→today 循环):右背景 = 下一枚,左背景 = 上一枚。
+    // 锁方位分配本身(四铁律③),红绿验证:任一对调换/删除 = 该侧断言红
+    const rightSel = (src.match(/([^{}]+)\{\s*--dir:\s*1;/s)?.[1] ?? '').replace(/\s+/g, ' ');
+    for (const pair of [
+      "data-view='grid'] .views__pane--week",
+      "data-view='week'] .views__pane--today",
+      "data-view='today'] .views__pane--grid",
+    ]) {
+      expect(rightSel, `右背景(--dir:1)缺 ${pair}`).toContain(pair);
+    }
+    const leftSel = (src.match(/([^{}]+)\{\s*--dir:\s*-1;/s)?.[1] ?? '').replace(/\s+/g, ' ');
+    for (const pair of [
+      "data-view='grid'] .views__pane--today",
+      "data-view='week'] .views__pane--grid",
+      "data-view='today'] .views__pane--week",
+    ]) {
+      expect(leftSel, `左背景(--dir:-1)缺 ${pair}`).toContain(pair);
+    }
+    // 背景档视觉语言:侧移(消费 --dir)+ 缩位 + 模糊 + 降透明(用户「模糊或
+    // 次层级放到背后」= 四特征齐备才算主次,缺一即红)。
+    // translate/scale 用 CSS Transforms L2 独立属性:与 .reveal / hover 的
+    // transform 简写正交合成,零特异性战争
+    const behindRule = src.match(/[^{}]+\{[^}]*translate:\s*calc\(var\(--dir\)[^}]*\}/s)?.[0] ?? '';
+    expect(behindRule, '背景档规则存在').not.toBe('');
+    expect(behindRule).toMatch(/scale:\s*0?\.\d+/);
+    expect(behindRule).toContain('blur(');
+    // 降透形态 = filter 函数链内 opacity(0.x)(禁裸 opacity 属性,会压死 .reveal
+    // 入场闸)——断言随实现形态写:`opacity:` 或 `opacity(` 任一即算降透存在
+    expect(behindRule).toMatch(/opacity[:(]\s*0?\.\d+/);
+    // 焦点档:无侧移、无缩位、无模糊、前景层(清晰满位;从 behind 块独立可断言)。
+    // 焦点档禁声明 opacity——自带 1 (0,4,1) 会闸死 .reveal 入场淡入 (0,2,0);
+    // 回焦时 behind 规则脱钩,opacity 落回 reveal 终值 1(正交合成,四铁律)
+    const focalRule = src.match(/\.views\[data-view='grid'\] \.views__pane--grid[^{]*\{([^}]*)\}/s)?.[1] ?? '';
+    expect(focalRule, '焦点档规则存在').not.toBe('');
+    expect(focalRule).toContain('translate: none');
+    expect(focalRule).toContain('scale: 1');
+    expect(focalRule).toContain('filter: none');
+    expect(focalRule).not.toMatch(/opacity/);
   });
   it('默认前景 = grid(data-view 初值)', () => {
     expect(doc.querySelector('#views [data-views]')?.getAttribute('data-view')).toBe('grid');
@@ -204,13 +249,13 @@ describe('文案 v5 契约(spec §7 + §2.2 入口卡句)', () => {
   const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
   it('§7 对照表改后句逐句进产物(trial/schools 两 pin 已随 §10 迁出主页)', () => {
     expect(stripped).toContain('课表数据仅存于本机,不经任何服务器。'); // hero.sub(R1)
-    expect(metaDesc.replace(/\s+/g, '')).toContain('348条教务直连,数据仅存本机,源码完整公开'); // meta.desc(R3)
-    expect(stripped).toContain('全部为真机截图'); // gallery.heading
+    expect(metaDesc.replace(/\s+/g, '')).toContain(`${schools.length}条教务直连,数据仅存本机,源码完整公开`); // meta.desc(R3,派生)
+    expect(stripped).toContain(zh.gallery.heading); // gallery.heading(派生 pin,v5 巡检批精简后禁再硬编码旧句)
   });
-  it('入口卡派生句两数进产物(§10 行 4:statLine 派生 pin 改「{rows} 所高校 · {types} 种教务协议」,禁手写)', () => {
+  it('入口卡派生句两数进产物(§10 行 4:statLine 派生 pin,禁手写;条数不当校数说 §4.1)', () => {
     const types = new Set(schools.map((s) => s.type)).size;
-    expect(stripped).toContain(`${schools.length}所高校·${types}种教务协议`.replace(/\s+/g, ''));
-    expect(schools.length).toBe(348);
+    expect(stripped).toContain(`${schools.length}条教务直连·${types}种协议,输入校名即可确认收录。`);
+    expect(schools.length).toBe(1478);
   });
   it('入口钮 = /schools/?focus=s 精确 href + 卡内零 input(§2.2 终审 I2 合同侧 pin;行为侧 = Task 4 岛 + T4 目检)', () => {
     const card = doc.getElementById('schoolCard')!;
@@ -275,8 +320,8 @@ describe('reveal 不变量(spec §17.2)', () => {
 });
 
 describe('connect 段(spec §10 行 4:段未动,chip 派生断言留主页;台账三断言迁 page.schools.test.ts)', () => {
-  it('connect 段 chip = 派生「348 校直连」', () => {
-    expect((doc.getElementById('connect')?.textContent ?? '')).toContain(`${schools.length} 校直连`);
+  it('connect 段 chip = 派生「1478 条直连」', () => {
+    expect((doc.getElementById('connect')?.textContent ?? '')).toContain(`${schools.length} 条直连`);
   });
 });
 
@@ -301,7 +346,7 @@ describe('M5 提醒与组件墙(spec §4 M5 / C4)', () => {
 });
 
 describe('M6 画廊 band(spec §4 M6)', () => {
-  it('图数 = zh captions 长度(8,weekview 入廊);每 figure 浅/深两版(带内 CSS 强制 light)', () => {
+  it('图数 = zh captions 长度(8,weekview 入廊);每 figure 浅/深两版随主题翻转(2026-10-25 巡检批废带内强制 light)', () => {
     const figs = doc.querySelectorAll('#gallery [data-gallery-figure]');
     expect(figs.length).toBe(zh.gallery.captions.length);
     expect(zh.gallery.captions.length).toBe(8);

@@ -1,12 +1,13 @@
 // zh 文案单点 — v4 spec §7 五规则:R1 一意思正面说一次 / R2 禁一切问句 / R3 否定枚举改机制陈述 / R4 去口语 / R5 与 en 同形镜像。
 // slogan「构建无壳,自由自在」逐字保留(§13 R3 品牌豁免已批;en 保留 §7.2 前现值「Built open. Feels free.」,签收前单点可换)。
-// 数字纪律(§15):348/33 一律构建期派生传入(statLine/chipLabel/ribbon 计数),i18n 内禁手写。
+// 数字纪律(§15):计数一律构建期派生传入(statLine/chipLabel/ribbon/meta),i18n 内禁手写现值;条数不当校数说(§4.1)。
 // 泄漏闸(page.en.test walk zh 含汉字叶子 ⊄ EN 页):短叶子避真实校名子串 → AppBar 锚点用「教务直连/学校名录」而非裸「教务/学校」。
 export const zh = {
   meta: {
     title: 'Sleepy — 开源课表,构建无壳,自由自在',
-    description:
-      '348 条教务直连,数据仅存本机,源码完整公开。一个人维护的开源 Android 课表。',
+    // 计数派生闸(§15):条数不当校数说(§4.1),现值由页面层传入
+    description: (rows: number) =>
+      `${rows} 条教务直连,数据仅存本机,源码完整公开。一个人维护的开源 Android 课表。`,
   },
   hero: {
     slogan: '构建无壳,自由自在',
@@ -33,8 +34,8 @@ export const zh = {
     heading: '教务直连',
     body: '选定学校登录,课表直接写入本机。教务系统改版,由维护者跟进适配,同步链路持续可用。',
     imageAlt: '教务导入应用截图',
-    // 派生数字 chip(§4 M3:卡缘 assist-chip「348 校直连」)
-    chipLabel: (rows: number) => `${rows} 校直连`,
+    // 派生数字 chip(§4 M3:卡缘 assist-chip「N 条直连」;条数不当校数说,§4.1)
+    chipLabel: (rows: number) => `${rows} 条直连`,
   },
   schools: {
     heading: '收录与检索',
@@ -69,8 +70,8 @@ export const zh = {
     },
   },
   gallery: {
-    heading: '全部为真机截图',
-    sub: '每一张都来自线上版本,未用渲染图。点按任意一张查看大图。',
+    heading: '真机截图',
+    sub: '点按任意一张查看大图。',
     captions: [
       '网格视图',
       '周视图',
@@ -146,7 +147,8 @@ export const zh = {
   },
   // v5 四页键组(spec §4 文案 + 数字纪律:占位 {rows}/{types}/{shown}/{total}/{tag}/{minSdk}/{date} 由渲染端替换)
   homeSchoolCard: {
-    count: '{rows} 所高校 · {types} 种教务协议,输入校名即可确认收录。',
+    // 计数派生闸(§15/§4.1):带协议条目数不当校数说(同录多入口、跨校区计数)
+    count: '{rows} 条教务直连 · {types} 种协议,输入校名即可确认收录。',
     cta: '查找我的学校',
   },
   schoolsPage: {

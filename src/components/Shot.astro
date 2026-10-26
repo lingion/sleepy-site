@@ -21,8 +21,8 @@ interface Props {
    */
   priority?: boolean;
   /**
-   * 变体锁定(T5/M6 换幕带):band 深底上「深底配浅 UI 恒成立」→ 带内截图强制取 light 版,
-   * 不随主题翻转。两版仍渲染(.shot__dark 保留在 DOM),仅 CSS 层定显示。
+   * 变体锁定(通用能力,预留):强制带内截图固定取某一主题版,不随主题翻转。
+   * 2026-10-25 巡检批:M6 画廊已改随主题翻转,当前无消费方;两版仍渲染,仅 CSS 层定显示。
    */
   forceVariant?: 'light' | 'dark';
 }
@@ -88,7 +88,7 @@ const forceClass = forceVariant ? `shot--force-${forceVariant}` : undefined;
   :global([data-theme='dark']) .shot__dark {
     display: block;
   }
-  /* T5/M6 带内强制变体(spec §4 M6:深底配浅 UI 恒成立,forceVariant 不随主题翻转)。
+  /* 强制变体(通用能力,当前无消费方):命中 forceClass 时该版恒显/恒藏,不随主题翻转。
      规则置于主题翻转之后:同 specificity 源码序胜出,更高阶选择器直接压过 */
   .shot--force-light .shot__dark,
   :global([data-theme='dark']) .shot--force-light .shot__dark {

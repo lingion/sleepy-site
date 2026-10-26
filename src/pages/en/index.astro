@@ -12,12 +12,13 @@ import Trust from '../../components/sections/Trust.astro';
 import Download from '../../components/sections/Download.astro';
 import { en } from '../../i18n/en';
 import { site } from '../../i18n/ui';
+import { rowCount } from '../../lib/schools-view';
 ---
 
 <Base
   lang="en"
   title={en.meta.title}
-  description={en.meta.description}
+  description={en.meta.description(rowCount)}
   path="/en/"
   mirror="/"
   preloadHero

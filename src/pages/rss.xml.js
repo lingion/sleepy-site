@@ -4,6 +4,7 @@
 import rss from '@astrojs/rss';
 import { site } from '../i18n/ui';
 import release from '../data/release.json';
+import { rowCount } from '../lib/schools-view';
 
 export async function GET(context) {
   const universal = release.assets.find((a) => a.name.includes('universal'));
@@ -21,7 +22,7 @@ export async function GET(context) {
         description: [
           `Sleepy ${release.tag} · ${new Date(release.date).toISOString().slice(0, 10)} 发布。`,
           `通用 APK:${universal?.name ?? 'app-universal-release.apk'}。`,
-          `校验和与全部架构见 sha256sums。348 所高校教务直连,课表数据仅存本机。`,
+          `校验和与全部架构见 sha256sums。${rowCount} 条教务直连,课表数据仅存本机。`,
         ].join(' '),
       },
     ],

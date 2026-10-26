@@ -1,6 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { buildGeoIndex, classifyProvince, type GeoData } from './geo';
+import {
+  buildGeoIndex,
+  classifyProvince,
+  decodeProvinceByCatalogId,
+  type GeoData,
+} from './geo';
 import geoRaw from '../data/geo-prefix.json';
 import manualRaw from '../data/province-manual.json';
 
@@ -9,7 +14,7 @@ const manual = manualRaw as Record<string, string>;
 const idx = buildGeoIndex(geo);
 const fixture = JSON.parse(
   readFileSync(new URL('../../fixtures/schools.json', import.meta.url), 'utf8'),
-) as { name: string; sortKey: string }[];
+) as { name: string; sortKey: string; type: string; catalogId?: string }[];
 
 describe('最长前缀优先(spec §4.1)', () => {
   it('「青岛科技大学」→ 山东(3 字「青岛科技」不存在时 2 字「青岛」城市头即中)', () => {
@@ -45,13 +50,17 @@ describe('同长度城市 > 省(spec §4.1 冲突定则)', () => {
   });
 });
 
-describe('覆盖率不变量:348 条 100% 可判(prefix ∪ manual)', () => {
-  it('仓内 fixture 每条学校:前缀命中或人工表命中,二者必居其一', () => {
+describe('覆盖率不变量:1478 条 100% 可判(prefix ∪ manual ∪ moe解)', () => {
+  it('仓内 fixture 每条学校:前缀/人工表/moe 解,三者必居其一', () => {
     const ungrouped = fixture.filter(
-      (s) => s.sortKey !== '*' && !classifyProvince(s.name, idx) && !(s.name in manual),
+      (s) =>
+        s.sortKey !== '*' &&
+        !classifyProvince(s.name, idx) &&
+        !(s.name in manual) &&
+        !decodeProvinceByCatalogId(s.catalogId, geo.provinces),
     );
     expect(ungrouped).toEqual([]);
-    expect(fixture.length).toBe(348);
+    expect(fixture.length).toBe(1478);
   });
   it("「其它」桶恰含 sortKey='*' 两条(北邮 VPN/WebVPN,不静默丢)", () => {
     const stars = fixture.filter((s) => s.sortKey === '*');
@@ -59,15 +68,25 @@ describe('覆盖率不变量:348 条 100% 可判(prefix ∪ manual)', () => {
       ['北京邮电大学新教务（VPN）', '北京邮电大学新教务（WebVPN）'].sort(),
     );
   });
-  it('33 协议计数锁(spec §4.1 口径「33 协议」;源数据协议面变化 = 有意变更,须对账后更新)', () => {
-    expect(new Set(fixture.map((s) => (s as unknown as { type: string }).type)).size).toBe(33);
+  it('41 协议计数锁(对齐上游 v1.0.62「41 在用协议」口径;协议面变化 = 有意变更,须对账后更新)', () => {
+    expect(new Set(fixture.map((s) => (s as unknown as { type: string }).type)).size).toBe(41);
   });
-  it('manual 表键必须是真实校名且值必须是已声明省码(防手滑)', () => {
+  it('manual 表键必须是真实校名且值必须是已声明省码或 OTHER(防手滑;OTHER 活在构建端,不在 geo.provinces)', () => {
     const names = new Set(fixture.map((s) => s.name));
     const codes = new Set(Object.keys(geo.provinces));
     for (const [name, code] of Object.entries(manual)) {
       expect(names.has(name), `manual key: ${name}`).toBe(true);
-      expect(codes.has(code), `manual value: ${name} → ${code}`).toBe(true);
+      expect(code === 'OTHER' || codes.has(code), `manual value: ${name} → ${code}`).toBe(true);
     }
+  });
+});
+
+describe('moe 编码解层(第四路)', () => {
+  it('10 位码第 3-4 位省区划查表命中省码;非 moe 形态/未知区划一律 null', () => {
+    expect(decodeProvinceByCatalogId('moe:4137000001', geo.provinces)).toBe('SD');
+    expect(decodeProvinceByCatalogId('moe:4144000001', geo.provinces)).toBe('GD');
+    expect(decodeProvinceByCatalogId('Q_清华大学', geo.provinces)).toBeNull();
+    expect(decodeProvinceByCatalogId('moe:4199000001', geo.provinces)).toBeNull();
+    expect(decodeProvinceByCatalogId(undefined, geo.provinces)).toBeNull();
   });
 });

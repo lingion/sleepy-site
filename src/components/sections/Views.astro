@@ -1,8 +1,12 @@
 ---
-// M2 三视图总览(v4 spec §4:showcase 面板行,stripe 式宽窄不一 · 一面板一主张)
-// 面板并排为唯一呈现;切换器 = 面板下方 MD3 Segmented Button(dots 重铸,2026-10-23 用户增补)
+// M2 三视图焦点切换器(v5 巡检批 2026-10-25 重铸:用户「三张一样大小的图片从上
+// 到下放/一样大小只是其他两个有阴影,这不是切换视图的样子——视图有主次之分,
+// 被聚焦的在中间,剩下两个模糊或次层级放到背后」)
+// 等宽并列(旧 2.1fr 1fr 1fr)废除:三面板同格叠放,焦点居中满位清晰,
+// 左右背景 = 环序上一枚/下一枚,侧移退后 + 缩位 + 模糊 + 降透明。
 // 状态机从 Features 整体迁入:data-views CSS 属性 + .views__peek + radiogroup 键盘漫游;
 // 脚本选择器解耦为全局 [data-views](§4 M2 接口);a11y 语义零变更。
+// 焦点/背景视觉全部 html.js 门控:JS-off = 三卡纵堆全可读(渐进增强 §8-15 同闸)。
 // 面板题 = title-large 22(§5.1 卡题档,brief Step 4 裁决取此档)。
 import Shot from '../Shot.astro';
 import weekL from '../../assets/screenshots/01-week-light.png';
@@ -99,12 +103,27 @@ const panes = [
     margin-block-end: calc(var(--site-unit) * 8);
   }
 
-  /* —— 面板行:2.1fr 1fr 1fr(网格最宽,用户定调)—— */
+  /* —— 焦点舞台:JS-on 三面板同格叠放(单 cell),焦点居中,背景环序分列两侧;
+     JS-off 行流纵堆全可读。旧 2.1fr 1fr 1fr 等宽并列已废(巡检缺陷3)—— */
   .views__panels {
     display: grid;
-    grid-template-columns: 2.1fr 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: calc(var(--site-unit) * 4);
-    align-items: stretch;
+    align-items: center;
+    justify-items: center;
+    overflow: hidden; /* 背景外溢裁切(舞台边界即容器) */
+    /* 背景侧移量 = min(27vw, 340px):上限保证焦点档下背景内缘压在焦点卡缘之内
+       (1440 屏:焦点半宽 210,背景内缘 340−155 = 185 < 210 → 真「放到背后」
+       重叠非漂浮分离);vw 档使窄屏侧移随视口收缩。
+       390 手机档 Playwright 实测(2026-10-26 收尾):shift=93.6 + scale 0.74
+       → 背景内缘 177.6 压在焦点右缘 345 之内(重叠),焦点缘外仍露 29px 窥缝,
+       外缘被容器裁 25.6px(舞台裁切本意)——无需再按档覆 scale */
+    --pane-shift: min(27vw, 340px);
+  }
+  /* 叠放与主次全档 html.js 门控:JS-off 无切换器语义,禁把两张图永久焊死在
+     模糊背后(渐进增强,同 .reveal/.js-only 闸面) */
+  html.js .views__pane {
+    grid-area: 1 / 1;
   }
   /* 面板 = filled 卡 container-lowest(§4 M2),跳出带底一档 */
   .views__pane {
@@ -117,12 +136,18 @@ const panes = [
     background: var(--md-sys-color-surface-container-lowest);
     border: 1px solid var(--md-sys-color-outline-variant);
     cursor: pointer;
+    inline-size: clamp(300px, 46vw, 420px);
     /* transform/box-shadow 并入本条 transition:scoped 整条会替换全局
-       .site-card--interactive 的 transition 声明,漏项则 hover 抬起变瞬跳(§6-7) */
+       .site-card--interactive 的 transition 声明,漏项则 hover 抬起变瞬跳(§6-7);
+       translate/scale/filter 为 L2 独立属性,与 reveal/hover 的 transform 简写
+       正交合成,零特异性战争(巡检缺陷3 重铸) */
     transition:
       background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
       border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
       opacity var(--md-sys-motion-duration-medium2) var(--site-motion-standard),
+      translate var(--md-sys-motion-duration-medium2) var(--site-motion-standard),
+      scale var(--md-sys-motion-duration-medium2) var(--site-motion-standard),
+      filter var(--md-sys-motion-duration-medium2) var(--site-motion-standard),
       transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
       box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
   }
@@ -134,9 +159,10 @@ const panes = [
   .views__pane-title {
     color: var(--md-sys-color-on-surface);
   }
-  /* lead = on-surface 非 variant:背景 pane 恒带 opacity .55(dim 态,任意时刻三占二),
-     variant 在暗档叠 dim 后实测 3.86 不过 WCAG 文本闸;层级由字号字重差(title-medium
-     500/16 vs body-medium 400/14)承担,色彩不降级(Lighthouse mobile 复测归零) */
+  /* lead = on-surface 非 variant:背景 pane 在焦点态下恒带模糊降透(dim 态,任意时刻
+     三占二),variant 在暗档叠 dim 后实测 3.86 不过 WCAG 文本闸;层级由字号字重差
+     (title-large 400/22 vs body-medium 400/14)承担,色彩不降级(巡检缺陷3 重铸后
+     dim 语言从裸 opacity 改为 filter 链,文本闸结论不变) */
   .views__pane-lead {
     color: var(--md-sys-color-on-surface);
     max-width: 46ch;
@@ -147,25 +173,52 @@ const panes = [
     min-block-size: 0;
   }
 
-  /* —— data-view 状态机(迁移自 Features,§4 M2:复用现有状态机)——
-     当前视图面板 = 前景:实底 + outline 描边;其余面板退为背景(低对比)。
+  /* —— data-view 状态机(焦点档,巡检缺陷3 重铸)——
+     焦点居中满位清晰:无侧移/无缩位/无模糊/前景层 + outline 当前态边界。
      outline(3:1)= 当前态边界(§5.3:交互边用 outline,装饰边才 outline-variant)。
-     §6-5 编排行写 transform+opacity+filter:原型并排化(§11-15)后无滑入/模糊对象,
-     切换属性面收敛为 opacity+border-color,时长/曲线仍按 300ms (0.23,1,0.32,1) 消费 */
-  .views[data-view='grid'] .views__pane--grid,
-  .views[data-view='week'] .views__pane--week,
-  .views[data-view='today'] .views__pane--today {
+     本档禁声明 opacity:.reveal 入场淡入(0,2,0)必须活过状态机——焦点态自带
+     opacity:1 (0,4,1) 会把入场闸死;层级由 translate/scale/filter/z 承担(四铁律:
+     属性面正交,不打特异性战争) */
+  html.js .views[data-view='grid'] .views__pane--grid,
+  html.js .views[data-view='week'] .views__pane--week,
+  html.js .views[data-view='today'] .views__pane--today {
+    translate: none;
+    scale: 1;
+    filter: none;
+    z-index: 1;
     border-color: var(--md-sys-color-outline);
   }
-  .views[data-view='grid'] .views__pane--week,
-  .views[data-view='grid'] .views__pane--today,
-  .views[data-view='week'] .views__pane--grid,
-  .views[data-view='week'] .views__pane--today,
-  .views[data-view='today'] .views__pane--grid,
-  .views[data-view='today'] .views__pane--week {
-    opacity: 0.55;
+  /* 环序方位分配:右背景 = 环序下一枚(--dir:1),左背景 = 环序上一枚(--dir:-1)。
+     圈序 grid→week→today→grid 循环不变量,测试锁方位(四铁律③)。 */
+  html.js .views[data-view='grid'] .views__pane--week,
+  html.js .views[data-view='week'] .views__pane--today,
+  html.js .views[data-view='today'] .views__pane--grid {
+    --dir: 1;
+  }
+  html.js .views[data-view='grid'] .views__pane--today,
+  html.js .views[data-view='week'] .views__pane--grid,
+  html.js .views[data-view='today'] .views__pane--week {
+    --dir: -1;
+  }
+  /* 背景档 = 用户「模糊或次层级放到背后」四特征齐备:
+     侧移(消费 --dir)+ 缩位 + 模糊与降透(合成进 filter 链)+ 沉入前景之下。
+     降透禁写成裸 opacity 属性:(0,4,1) 会压死 .reveal 入场 opacity:0 (0,2,0),
+     背景两卡在揭示前就带 .4 浮出、入场编排对它们失效——filter 函数链与
+     reveal 的 opacity 属性正交合成,两级闸各管各的 */
+  html.js .views[data-view='grid'] .views__pane--week,
+  html.js .views[data-view='grid'] .views__pane--today,
+  html.js .views[data-view='week'] .views__pane--grid,
+  html.js .views[data-view='week'] .views__pane--today,
+  html.js .views[data-view='today'] .views__pane--grid,
+  html.js .views[data-view='today'] .views__pane--week {
+    translate: calc(var(--dir) * var(--pane-shift));
+    scale: 0.74;
+    filter: blur(2px) opacity(0.4);
+    z-index: 0;
     background: var(--md-sys-color-surface-container);
   }
+  /* 背景不可点穿(焦点在层 1,但背景 pointer-events 保留 = 点任意侧卡切焦,
+     §4 M2 裁决:切换器降级为面板内交互);焦点档 cursor 在 .views__pane base */
 
   /* Shot 子组件渲染的 img 不带本组件 scope → :global(Hero 同法);
      裁后自然比例完整显示禁裁拉(§5.4/C3):stage 只定高度预算,img 按自身宽高比 contain,
@@ -291,9 +344,12 @@ const panes = [
      将 --md-sys-motion-duration-* 全档归零,切换即时完成(旧 0s 硬编码已随迁删除) */
 
   @media (max-width: 840px) {
-    /* 手机:三面板纵堆、网格首(DOM 序即视觉序,§4 M2 ≤840 剖面) */
+    /* 手机:焦点舞台同构(巡检缺陷3 重铸废「三面板纵堆、网格首」旧剖面——
+       用户原话点名「手机端三张一样大小的图片从上到下放下来」不是切换视图),
+       焦点满位居中,背景退侧。--pane-shift 收紧至 24vw:焦点半宽 150(300px 卡)
+       下背景内缘仍压在焦点缘之内(重叠非漂浮) */
     .views__panels {
-      grid-template-columns: 1fr;
+      --pane-shift: min(24vw, 240px);
     }
     :global(#views .views__stage) {
       block-size: min(60vh, 480px);
@@ -308,7 +364,8 @@ const panes = [
 <script>
   // 三视图切换器(迁移自 Features):翻 data-view 属性(CSS 状态机),radiogroup 方向键漫游
   // 选择器解耦为全局 [data-views](§4 M2 接口);reduced-motion 由 motion token 归零兜底;
-  // JS-off 静态 = grid 前景(默认态),三面板并排全可见(无 JS 也能读三张图)
+  // JS-off 静态 = grid 前景(默认态),三面板纵堆全可读(叠放被 html.js 门控,
+  // 无 JS 也能读三张图 —— 巡检缺陷3 重铸后并排改纵堆,本注释同步)
   for (const root of document.querySelectorAll<HTMLElement>('[data-views]')) {
     const ORDER = ['grid', 'week', 'today'] as const;
     const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-goto]')];

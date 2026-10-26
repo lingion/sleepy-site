@@ -39,7 +39,7 @@ describe('en/zh 键树同形(组件 props 全覆盖)', () => {
 });
 
 describe('协议 EN 标签表(spec §4.1)', () => {
-  it('数据里全部 33 协议都有 EN 标签', () => {
+  it('数据里全部 41 协议都有 EN 标签', () => {
     const types = [...new Set(schools.map((s) => s.type))];
     for (const ty of types) expect(typesEn, `type ${ty}`).toHaveProperty(ty);
   });
