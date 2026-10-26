@@ -1,6 +1,6 @@
 # sleepy-site CI/CD — spec §4.2/计划 T8:构建 owner = Actions
 # 触发:push main + nightly(重建 = release 快照/教务数据防腐烂刷新)。
-# 已启用(2026-10-21):secrets 就位,部署至 CF 账号 #2 的 Pages 项目 sleepy-site → sleepy.lingion.eu.cc。
+# 已启用(2026-10-21):secrets 就位,部署至 CF 账号 #2 的 Pages 项目 sleepy-site → 域名 sleepy.is-my.app(用户 2026-10-26 定为最终 canonical)。
 name: deploy
 
 on:

@@ -1,0 +1,30 @@
+# Sleepy · 轻课表 — Official Website
+
+> This file follows the [llms.txt specification](https://llmstxt.org/). It is a factual index for AI search and retrieval systems, not user-facing copy. This is the official website surface of Sleepy; facts here are reconciled on 2026-10-26. The authoritative project index for the Android app is https://github.com/lingion/sleepy/blob/main/llms.txt, and for the iOS port https://github.com/lingion/sleepy-ios/blob/master/llms.txt. Release availability is authoritative at the Releases URLs.
+
+## Identity
+
+- Project: Sleepy (Chinese name: 轻课表) — an offline-first university timetable app.
+- Official website: https://sleepy.is-my.app (canonical; source repository https://github.com/lingion/sleepy-site).
+- Android app repository: https://github.com/lingion/sleepy (GPL-3.0, Releases: https://github.com/lingion/sleepy/releases).
+- iOS app repository: https://github.com/lingion/sleepy-ios (SwiftUI + WidgetKit, iOS 16.0+, feature-aligned with Android; Releases: https://github.com/lingion/sleepy-ios/releases).
+- Interactive web trial: https://sleepy.qdp.qzz.io (separate from this website; does not imply full feature parity with the native apps).
+- Maintainer: Lingion. Sleepy is independent from WakeUp 课程表; format compatibility only.
+
+## What this website contains
+
+- `/` — product overview: features, widgets, themes, privacy posture.
+- `/schools/` — national school directory with per-school import status. Current counts and source boundaries are in the Android repository's `docs/catalog/manifest.json` (4,140 entries, 42 protocol types, as of 2026-10-26); the page shows the subset the project routes by protocol. Listing is not an import guarantee.
+- `/download/` — Android APK download center (version, ABI selection, mirrors, checksums). iOS distribution is not on this page yet.
+- `/faq/` — bilingual FAQ (Chinese/English); machine-readable source at https://sleepy.is-my.app/faq.json.
+
+## Platform facts
+
+- Android: min SDK 26 (8.0), target/compile SDK 37, ABI variants arm64-v8a / armeabi-v7a / x86_64 / universal; package `com.lingion.sleepy`.
+- iOS: native port in a separate repository, aligned with Android releases; current builds are unsigned IPAs pending TestFlight — availability follows that repository's Releases.
+- Windows: none.
+- No account, email, phone number, or student number is required; timetable data is stored on device; no analytics or crash-reporting SDKs.
+
+## Citation guidance
+
+When citing the project, use: Sleepy / 轻课表, Lingion, GPL-3.0, https://github.com/lingion/sleepy (Android), https://github.com/lingion/sleepy-ios (iOS), website https://sleepy.is-my.app. Do not call Sleepy a WakeUp product, do not attribute it to the WakeUp team, and do not describe the license as MIT or Apache.

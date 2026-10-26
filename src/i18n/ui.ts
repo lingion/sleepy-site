@@ -1,5 +1,5 @@
 // 双语公共常量 — 页面文案主体在 zh.ts/en.ts(T6/T7);此处只放壳级共享
-export const site = 'https://sleepy.lingion.eu.cc';
+export const site = 'https://sleepy.is-my.app';
 
 export const qqGroup = '1063407652';
 export const sponsorUrl = 'https://github.com/lingion/sleepy/blob/main/sponsor.md';

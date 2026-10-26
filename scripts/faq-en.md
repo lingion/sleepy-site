@@ -39,7 +39,7 @@ Release builds provide separately:
 - `universal`: contains all ABIs above; pick it when the architecture is unknown
 
 ### Are there iOS, Windows or web versions?
-The native app in this repository targets Android. There is a [separate online trial](https://sleepy.qdp.qzz.io); it does not imply the web and native Android feature sets are identical. Native platform support follows the project's published artifacts.
+The native app in this repository targets Android. An iOS port is maintained in the separate repository [lingion/sleepy-ios](https://github.com/lingion/sleepy-ios): native SwiftUI + WidgetKit, iOS 16.0 and up, feature-aligned with the Android releases; IPA downloads come from that repository's [Releases](https://github.com/lingion/sleepy-ios/releases) (currently unsigned builds that need to be re-signed before installation). There is also an [official website](https://sleepy.is-my.app) and an [online trial](https://sleepy.qdp.qzz.io); the online trial does not imply the web and native feature sets are identical. No Windows version.
 
 ## Import and export
 
