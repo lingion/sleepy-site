@@ -3,6 +3,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
+import { site } from '../src/i18n/ui';
 import { applyInitialState, filterRows, parseUrlState } from '../src/lib/schools-island';
 import { catalogUpdatedAt, schools } from '../src/lib/schools-view';
 import { zh } from '../src/i18n/zh';
@@ -147,8 +148,8 @@ describe('岛 JS 预算(spec §2.3 ≤6KB)', () => {
 describe('页面骨架', () => {
   it('页头「收录与检索」+ hreflang 指本页对 + canonical /schools/', () => {
     expect(zhDoc.querySelector('h1, .t-headline-large')!.textContent).toContain('收录与检索');
-    expect(zhHtml).toContain('href="https://sleepy.lingion.eu.cc/schools/"');
-    expect(zhHtml).toContain('href="https://sleepy.lingion.eu.cc/en/schools/"');
+    expect(zhHtml).toContain(`href="${site}/schools/"`);
+    expect(zhHtml).toContain(`href="${site}/en/schools/"`);
   });
   it('展开全部/收起全部 Text 钮存在(开关态永不入 URL — 无 data-* 同步 URL 的 href)', () => {
     expect(zhHtml).toContain('展开全部');

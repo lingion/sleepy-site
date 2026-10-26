@@ -4,6 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
+import { site } from '../src/i18n/ui';
 import release from '../src/data/release.json';
 import { zh } from '../src/i18n/zh';
 import { en } from '../src/i18n/en';
@@ -98,9 +99,9 @@ describe('信息区块(spec §2.4 六段)', () => {
 describe('页面骨架与双语镜像', () => {
   it('h1 = downloadPage.heading;canonical/hreflang 指对', () => {
     expect(zhDoc.querySelector('main h1')?.textContent).toBe(zh.downloadPage.heading);
-    expect(zhDoc.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe('https://sleepy.lingion.eu.cc/download/');
-    expect(zhDoc.querySelector('link[hreflang="en"]')?.getAttribute('href')).toBe('https://sleepy.lingion.eu.cc/en/download/');
-    expect(enDoc.querySelector('link[hreflang="zh-CN"]')?.getAttribute('href')).toBe('https://sleepy.lingion.eu.cc/download/');
+    expect(zhDoc.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe(`${site}/download/`);
+    expect(zhDoc.querySelector('link[hreflang="en"]')?.getAttribute('href')).toBe(`${site}/en/download/`);
+    expect(enDoc.querySelector('link[hreflang="zh-CN"]')?.getAttribute('href')).toBe(`${site}/download/`);
   });
   it('工具页禁编排(spec §5):无 reveal 类', () => {
     expect(zhDoc.querySelectorAll('[data-reveal-group], .reveal').length).toBe(0);

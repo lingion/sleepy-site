@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sleepy.lingion.eu.cc/sitemap-index.xml
+Sitemap: https://sleepy.is-my.app/sitemap-index.xml

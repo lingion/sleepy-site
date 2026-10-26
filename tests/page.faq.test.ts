@@ -9,7 +9,7 @@ import { JSDOM } from 'jsdom';
 import faq from '../src/data/faq.json';
 import { zh } from '../src/i18n/zh';
 import { en } from '../src/i18n/en';
-import { qqGroup, repoUrl } from '../src/i18n/ui';
+import { qqGroup, repoUrl, site } from '../src/i18n/ui';
 
 const load = (p: string): JSDOM => {
   try {
@@ -124,8 +124,8 @@ describe('页面骨架与双语镜像', () => {
   it('h1 = faqPage.heading;canonical/hreflang 指本页对', () => {
     expect(zhDoc.querySelector('main h1')?.textContent).toBe(zh.faqPage.heading);
     expect(enDoc.querySelector('main h1')?.textContent).toBe(en.faqPage.heading);
-    expect(zhHtml).toContain('href="https://sleepy.lingion.eu.cc/faq/"');
-    expect(zhHtml).toContain('href="https://sleepy.lingion.eu.cc/en/faq/"');
+    expect(zhHtml).toContain(`href="${site}/faq/"`);
+    expect(zhHtml).toContain(`href="${site}/en/faq/"`);
   });
   it('en 页节名 = faq.json en 序', () => {
     const secs = [...enDoc.querySelectorAll('[data-faq-section]')];
