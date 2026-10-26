@@ -171,10 +171,55 @@ describe('M2 三视图 + MD3 Segmented Button(spec §4 M2)', () => {
     expect(radios.length).toBe(3);
     expect(radios.filter((r) => r.getAttribute('aria-checked') === 'true').length).toBe(1);
   });
-  it('面板 3 块,网格列最宽(2.1fr 1fr 1fr,用户定调;dist CSS 外链 → 源码闸)', () => {
+  it('面板 3 块同格叠放,主次状态机:焦点居中清晰,背景模糊退后(巡检缺陷3 2026-10-25)', () => {
     expect(doc.querySelectorAll('#views [data-pane]').length).toBe(3);
     const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');
-    expect(src).toContain('grid-template-columns: 2.1fr 1fr 1fr');
+    // 用户原话:「三张一样大小的图片从上到下放/一样大小只是其他两个有阴影——
+    // 这不是切换视图的样子,视图是有主次之分的,被聚焦的应在中间,剩下两个
+    // 模糊或次层级放到背后」→ 等宽并列(旧 2.1fr 主三列)废除。
+    // 锁 grid 声明本体(注释可如实提及旧值作历史,声明位禁复活)
+    expect(src).not.toMatch(/grid-template-columns:[^;}]*2\.1fr/);
+    // 结构前提:三面板同格叠放(单 cell 堆栈),舞台横向裁切
+    expect(src).toMatch(/\.views__pane\s*\{[^}]*grid-area:\s*1\s*\/\s*1/);
+    expect(src).toMatch(/\.views__panels\s*\{[^}]*overflow:\s*hidden/);
+    // 环序不变量(圈序 grid→week→today 循环):右背景 = 下一枚,左背景 = 上一枚。
+    // 锁方位分配本身(四铁律③),红绿验证:任一对调换/删除 = 该侧断言红
+    const rightSel = (src.match(/([^{}]+)\{\s*--dir:\s*1;/s)?.[1] ?? '').replace(/\s+/g, ' ');
+    for (const pair of [
+      "data-view='grid'] .views__pane--week",
+      "data-view='week'] .views__pane--today",
+      "data-view='today'] .views__pane--grid",
+    ]) {
+      expect(rightSel, `右背景(--dir:1)缺 ${pair}`).toContain(pair);
+    }
+    const leftSel = (src.match(/([^{}]+)\{\s*--dir:\s*-1;/s)?.[1] ?? '').replace(/\s+/g, ' ');
+    for (const pair of [
+      "data-view='grid'] .views__pane--today",
+      "data-view='week'] .views__pane--grid",
+      "data-view='today'] .views__pane--week",
+    ]) {
+      expect(leftSel, `左背景(--dir:-1)缺 ${pair}`).toContain(pair);
+    }
+    // 背景档视觉语言:侧移(消费 --dir)+ 缩位 + 模糊 + 降透明(用户「模糊或
+    // 次层级放到背后」= 四特征齐备才算主次,缺一即红)。
+    // translate/scale 用 CSS Transforms L2 独立属性:与 .reveal / hover 的
+    // transform 简写正交合成,零特异性战争
+    const behindRule = src.match(/[^{}]+\{[^}]*translate:\s*calc\(var\(--dir\)[^}]*\}/s)?.[0] ?? '';
+    expect(behindRule, '背景档规则存在').not.toBe('');
+    expect(behindRule).toMatch(/scale:\s*0?\.\d+/);
+    expect(behindRule).toContain('blur(');
+    // 降透形态 = filter 函数链内 opacity(0.x)(禁裸 opacity 属性,会压死 .reveal
+    // 入场闸)——断言随实现形态写:`opacity:` 或 `opacity(` 任一即算降透存在
+    expect(behindRule).toMatch(/opacity[:(]\s*0?\.\d+/);
+    // 焦点档:无侧移、无缩位、无模糊、前景层(清晰满位;从 behind 块独立可断言)。
+    // 焦点档禁声明 opacity——自带 1 (0,4,1) 会闸死 .reveal 入场淡入 (0,2,0);
+    // 回焦时 behind 规则脱钩,opacity 落回 reveal 终值 1(正交合成,四铁律)
+    const focalRule = src.match(/\.views\[data-view='grid'\] \.views__pane--grid[^{]*\{([^}]*)\}/s)?.[1] ?? '';
+    expect(focalRule, '焦点档规则存在').not.toBe('');
+    expect(focalRule).toContain('translate: none');
+    expect(focalRule).toContain('scale: 1');
+    expect(focalRule).toContain('filter: none');
+    expect(focalRule).not.toMatch(/opacity/);
   });
   it('默认前景 = grid(data-view 初值)', () => {
     expect(doc.querySelector('#views [data-views]')?.getAttribute('data-view')).toBe('grid');
