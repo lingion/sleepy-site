@@ -118,7 +118,9 @@ const zhUI = lang === 'zh';
 
 <style>
   .faq-page { padding-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 14); }
-  .faq-page__grid { display: grid; gap: calc(var(--site-unit) * 8); align-items: start; }
+  /* 移动默认轨:minmax(0,1fr) 非裸 1fr——隐式轨 auto 最小=pre 长命令行 min-content,
+     会撑破视口(2026-10-26 缺陷批:FAQ 移动端全页横滚)。桌面档在尾 media 覆盖 */
+  .faq-page__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--site-unit) * 8); align-items: start; }
   .faq__head { display: grid; gap: calc(var(--site-unit) * 2); margin-block-end: calc(var(--site-unit) * 6); }
   .faq__sub { color: var(--md-sys-color-on-surface-variant); }
   .faq__section { margin-block-end: calc(var(--site-unit) * 10); scroll-margin-block-start: calc(var(--site-unit) * 10); }
@@ -128,10 +130,15 @@ const zhUI = lang === 'zh';
     scroll-margin-block-start: calc(var(--site-unit) * 10);
   }
   .faq__q { margin-block-end: calc(var(--site-unit) * 2); }
-  .faq__a :is(p, ul, ol) { margin-block: 0 calc(var(--site-unit) * 2); }
+  /* set:html 注入子树不附 scoped cid(2026-10-26 缺陷批):选择器末元素若落在注入
+     节点上,整条规则静默失效——.faq__pre 的 overflow-x:auto 从未生效,长命令行
+     overflow:visible 溢出文档(移动端全页横滚根因之二)。注入面样式一律经
+     .faq__a :global(...) 挂载;overflow-x:auto 恢复后 pre 的 min-width:auto 归零
+     (非 visible 滚动容器),grid 轨道不再被 min-content 顶破 */
   .faq__a { display: grid; gap: calc(var(--site-unit) * 2); color: var(--md-sys-color-on-surface-variant); }
-  .faq__a a { color: var(--md-sys-color-primary); }
-  .faq__pre {
+  .faq__a :global(:is(p, ul, ol)) { margin-block: 0 calc(var(--site-unit) * 2); }
+  .faq__a :global(a) { color: var(--md-sys-color-primary); }
+  .faq__a :global(.faq__pre) {
     margin: 0;
     padding: calc(var(--site-unit) * 3) calc(var(--site-unit) * 4);
     border-radius: var(--md-sys-shape-corner-small);
@@ -142,7 +149,7 @@ const zhUI = lang === 'zh';
     font-size: 13px;
     line-height: 1.6;
   }
-  .faq__list { padding-inline-start: 1.4em; }
+  .faq__a :global(.faq__list) { padding-inline-start: 1.4em; }
   .faq__tail {
     border-block-start: 1px solid var(--md-sys-color-outline-variant);
     padding-block-start: calc(var(--site-unit) * 6);
