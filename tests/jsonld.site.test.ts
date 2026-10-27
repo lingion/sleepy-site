@@ -20,14 +20,16 @@ const siteGraph = (p: string) => {
 describe('站级 JSON-LD 图(WebSite + Organization)', () => {
   for (const p of ['index.html', 'en/index.html', 'schools/index.html', 'en/schools/index.html',
     'download/index.html', 'en/download/index.html', 'faq/index.html', 'en/faq/index.html']) {
-    it(`${p}:@graph 含 WebSite(url=site)+ Organization(sameAs=repo, logo)`, () => {
+    it(`${p}:@graph 含 WebSite(url=site)+ Organization(sameAs 双仓数组, logo)`, () => {
       const g = siteGraph(p);
       expect(g['@context']).toBe('https://schema.org');
       const ws = g['@graph'].find((x: any) => x['@type'] === 'WebSite');
       const org = g['@graph'].find((x: any) => x['@type'] === 'Organization');
       expect(ws.url).toBe(site);
       expect(ws.inLanguage).toEqual(expect.arrayContaining(['zh-CN', 'en']));
-      expect(org.sameAs).toBe(repoUrl);
+      // GEO 批次 2026-10-27:sameAs 标量升双仓数组(Android+iOS)+ alternateName 中文品牌。
+      expect(org.sameAs).toEqual(expect.arrayContaining([repoUrl, 'https://github.com/lingion/sleepy-ios']));
+      expect(org.alternateName).toContain('轻课表');
       expect(org.logo.url).toMatch(/apple-touch-icon\.png/);
       expect(org.logo.width).toBe(180);
     });

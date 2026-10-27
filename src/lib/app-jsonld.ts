@@ -10,6 +10,12 @@ export function softwareApplicationJsonLd(lang: 'zh' | 'en') {
     '@type': 'SoftwareApplication',
     name: 'Sleepy',
     operatingSystem: 'Android',
+    // Google 官方 SoftwareApp 必填/推荐面:applicationCategory 必为 22 枚举之一,
+    // 课表应用归 EducationalApplication;offers 必填,免费应用显式 price=0
+    // (缺 offers 时 Google 富结果解析直接判不合格)。
+    applicationCategory: 'EducationalApplication',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    dateModified: release.date,
     softwareVersion: release.tag,
     downloadUrl: universal.url,
     license: 'GPL-3.0',

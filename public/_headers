@@ -1,0 +1,13 @@
+# Cloudflare Pages 响应头(官方 _headers 通道,随构建产物部署)。
+# 缓存分层:哈希资产不可变长存;其余零缓存保改版即时可见(HTML 与其查询串资源)。
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/og/*
+  Cache-Control: public, max-age=86400

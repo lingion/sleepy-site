@@ -59,14 +59,18 @@ const siteGraph = {
       '@id': `${site}/#website`,
       url: site,
       name: 'Sleepy',
+      description: 'Official website of Sleepy (轻课表) — an offline-first university timetable app for Android.',
       inLanguage: ['zh-CN', 'en'],
     },
     {
       '@type': 'Organization',
       '@id': `${site}/#organization`,
       name: 'Sleepy',
+      // alternateName 显式绑定中文品牌:AI 引擎对"Sleepy=轻课表"建同一实体的去歧义锚
+      alternateName: ['轻课表'],
       url: site,
-      sameAs: repoUrl,
+      // sameAs 多源:两应用仓 = 实体权威外链,E-E-A-T 信号 + GEO 实体归并
+      sameAs: [repoUrl, 'https://github.com/lingion/sleepy-ios'],
       logo: { '@type': 'ImageObject', url: `${site}/apple-touch-icon.png`, width: 180, height: 180 },
     },
   ],
