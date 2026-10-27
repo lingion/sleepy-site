@@ -33,3 +33,21 @@ describe('site 图标 URL 缓存破除(圆角换代必需)', () => {
 });
 
 // 同一分发面补课:OG 富化(爬虫预取渲染省一跳)+ apple-touch sizes 声明。
+describe('OG 站点名与图像尺寸 + apple-touch sizes(产物级)', () => {
+  const meta = (prop: string) => {
+    const m = html.match(new RegExp(`<meta (?:property|name)="${prop}" content="([^"]*)"`));
+    if (!m) throw new Error(`dist 中找不到 ${prop}`);
+    return m[1]!;
+  };
+  it('og:site_name = Sleepy(全站恒一名,品牌检索聚合)', () => {
+    expect(meta('og:site_name')).toBe('Sleepy');
+  });
+  it('og:image:width/height = 1200/630(全站 OG 图统一尺寸,已实测 8/8)', () => {
+    expect(meta('og:image:width')).toBe('1200');
+    expect(meta('og:image:height')).toBe('630');
+  });
+  it('apple-touch-icon 声明 sizes=180x180(资产实际尺寸)', () => {
+    expect(html).toMatch(/<link rel="apple-touch-icon"[^>]*sizes="180x180"/);
+  });
+});
+
