@@ -68,9 +68,12 @@ describe('CTA 纪律(§11-6 多页化延伸 / 终审 F3)', () => {
 });
 
 describe('信息区块(spec §2.4 六段)', () => {
-  it('在线体验外链 rel 含 noopener', () => {
+  it('在线体验外链 rel 含 noopener 且 href = 官网 preview 前缀(2026-10-27 体验链迁移)', () => {
     const a = zhDoc.querySelector('[data-role="trial"]');
     expect(a?.getAttribute('rel')).toContain('noopener');
+    expect(a?.getAttribute('href')).toBe('https://sleepy.is-my.app/preview');
+    const ae = enDoc.querySelector('[data-role="trial"]');
+    expect(ae?.getAttribute('href')).toBe('https://sleepy.is-my.app/preview');
   });
   it('商店占位 disabled ×2', () => {
     expect(zhDoc.querySelectorAll('[data-store-disabled]')).toHaveLength(2);

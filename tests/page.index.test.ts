@@ -98,6 +98,11 @@ describe('ribbon 佐证条(spec §4 M1)', () => {
     expect(txt).toContain('GPL-3.0');
     expect(txt).toContain(zh.hero.ribbon.privacy);
   });
+  it('#hero 在线体验钮 href = 官网 preview 前缀(2026-10-27 体验链迁移)', () => {
+    const trial = doc.querySelector('#hero a.site-button--text');
+    expect(trial, 'hero 体验钮存在').not.toBeNull();
+    expect(trial!.getAttribute('href')).toBe('https://sleepy.is-my.app/preview');
+  });
 });
 
 describe('AppBar 锚点 + 常驻钮(spec §2.1 v5 跨页导航)', () => {
