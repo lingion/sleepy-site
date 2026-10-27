@@ -4,6 +4,10 @@ import Base from '../../layouts/Base.astro';
 import FaqBody from '../../components/pages/FaqBody.astro';
 import { site } from '../../i18n/ui';
 import { en } from '../../i18n/en';
+import { faqJsonLd } from '../../lib/faq-jsonld';
+
+// FAQPage 富结果图 en 镜像(SEO 极致批次 S3c)
+const jsonLd = faqJsonLd('en');
 ---
 
 <Base
@@ -14,6 +18,7 @@ import { en } from '../../i18n/en';
   mirror="/faq/"
   ogImage={`${site}/og/faq-en.png`}
   ogImageAlt={en.faqPage.heading}
+  jsonLd={jsonLd}
   rssLink={`${site}/rss.xml`}
 >
   <FaqBody copy={en.faqPage} lang="en" />

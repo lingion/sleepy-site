@@ -13,22 +13,12 @@ import Trust from '../components/sections/Trust.astro';
 import Download from '../components/sections/Download.astro';
 import { zh } from '../i18n/zh';
 import { rowCount } from '../lib/schools-view';
-import { site, repoUrl } from '../i18n/ui';
-import release from '../data/release.json';
+import { site } from '../i18n/ui';
+import { softwareApplicationJsonLd } from '../lib/app-jsonld';
 
-// JSON-LD 恰一 = 主页 SoftwareApplication(spec §2.6-3,D8:禁 FAQPage/BreadcrumbList)
-const universal = release.assets.find((a) => a.name.includes('universal'))!;
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'Sleepy',
-  operatingSystem: 'Android',
-  softwareVersion: release.tag,
-  downloadUrl: universal.url,
-  license: 'GPL-3.0',
-  sameAs: repoUrl,
-  image: `${site}/og/home-zh.png`,
-};
+// 主页 SoftwareApplication(spec §2.6-3);生成器双语共用(src/lib/app-jsonld),
+// en 主页对等接线(SEO 极致批次 S3b)防字段漂移。
+const jsonLd = softwareApplicationJsonLd('zh');
 ---
 
 <Base

@@ -6,7 +6,7 @@ import '@fontsource-variable/inter/standard.css'; // latin+latin-ext 子集,Inte
 import '../tokens/theme.css';
 import '../tokens/motion.css';
 import '../styles/global.css';
-import { site } from '../i18n/ui';
+import { site, repoUrl } from '../i18n/ui';
 import { zh } from '../i18n/zh';
 import { en } from '../i18n/en';
 import release from '../data/release.json';
@@ -49,6 +49,28 @@ const copy = lang === 'zh' ? zh : en;
 const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
 const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
 const ogImg = ogImage ?? `${site}/og/home-${lang}.png`;
+// 站级实体图(SEO 极致批次 S3a):WebSite + Organization 铺全部可收录页,
+// 品牌搜索与知识面板的稳定锚;noindex 页(404)不发。页面级图经 jsonLd prop 另发。
+const siteGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${site}/#website`,
+      url: site,
+      name: 'Sleepy',
+      inLanguage: ['zh-CN', 'en'],
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${site}/#organization`,
+      name: 'Sleepy',
+      url: site,
+      sameAs: repoUrl,
+      logo: { '@type': 'ImageObject', url: `${site}/apple-touch-icon.png`, width: 180, height: 180 },
+    },
+  ],
+};
 const heroImg = preloadHero
   ? await getImage({
       src: heroShotLight,
@@ -67,9 +89,11 @@ const heroImg = preloadHero
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate icon" href="/favicon.ico" type="image/png" sizes="32x32" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {/* ?v= 缓存破除(2026-10-27 圆角换代):浏览器 favicon 缓存按 URL 判等不回源,
+        图标资产换代必须同时换 URL;升级图标时递增 v,禁回退到无查询串形态 */}
+    <link rel="icon" href="/favicon.svg?v=1" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico?v=1" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1" sizes="180x180" />
     {/* 404(noindex)不声明 canonical——指向他页与免收录信号矛盾(spec §2.6-7) */}
     {!noindex && <link rel="canonical" href={site + path} />}
     {noindex && <meta name="robots" content="noindex" />}
@@ -78,6 +102,7 @@ const heroImg = preloadHero
     <link rel="alternate" hreflang="en" href={site + (lang === 'en' ? path : mirror)} />
     <link rel="alternate" hreflang="x-default" href={site + '/'} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sleepy" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={site + path} />
@@ -85,10 +110,14 @@ const heroImg = preloadHero
     <meta property="og:locale:alternate" content={lang === 'zh' ? 'en_US' : 'zh_CN'} />
     {/* OG 大图三链(spec §2.6-1):值必为绝对 URL,爬虫不解析相对路径;缺省主页图保证永不为空 */}
     <meta property="og:image" content={ogImg} />
+    {/* 全站 OG 图统一 1200x630(public/og 8 枚实测),尺寸先声明让爬虫省一次预取渲染 */}
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogImageAlt ?? title} />
     <meta name="twitter:image" content={ogImg} />
     <meta name="twitter:card" content="summary_large_image" />
     {rssLink && <link rel="alternate" type="application/rss+xml" title="Sleepy release feed" href={rssLink} />}
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} />}
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <meta name="theme-color" content="#0F0D15" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#FDF8FF" media="(prefers-color-scheme: light)" />

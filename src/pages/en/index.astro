@@ -13,6 +13,10 @@ import Download from '../../components/sections/Download.astro';
 import { en } from '../../i18n/en';
 import { site } from '../../i18n/ui';
 import { rowCount } from '../../lib/schools-view';
+import { softwareApplicationJsonLd } from '../../lib/app-jsonld';
+
+// en 主页 SoftwareApplication 对等(SEO 极致批次 S3b):双语对页实体对称
+const jsonLd = softwareApplicationJsonLd('en');
 ---
 
 <Base
@@ -23,6 +27,7 @@ import { rowCount } from '../../lib/schools-view';
   mirror="/"
   preloadHero
   hasHero
+  jsonLd={jsonLd}
   rssLink={`${site}/rss.xml`}
 >
   <Hero copy={en} />

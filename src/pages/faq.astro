@@ -5,6 +5,10 @@ import Base from '../layouts/Base.astro';
 import FaqBody from '../components/pages/FaqBody.astro';
 import { site } from '../i18n/ui';
 import { zh } from '../i18n/zh';
+import { faqJsonLd } from '../lib/faq-jsonld';
+
+// FAQPage 富结果图(SEO 极致批次 S3c;用户定令覆盖旧 D8 禁例,详见 src/lib/faq-jsonld.ts)
+const jsonLd = faqJsonLd('zh');
 ---
 
 <Base
@@ -15,6 +19,7 @@ import { zh } from '../i18n/zh';
   mirror="/en/faq/"
   ogImage={`${site}/og/faq-zh.png`}
   ogImageAlt={zh.faqPage.heading}
+  jsonLd={jsonLd}
   rssLink={`${site}/rss.xml`}
 >
   <FaqBody copy={zh.faqPage} lang="zh" />
