@@ -125,11 +125,17 @@ describe('OG 分享图(spec §2.6-1:8 枚存在 + 各页绝对 URL 指本页对�
   }
 })
 
-describe('JSON-LD 恰一于主页(spec §2.6-3,D8:禁 FAQPage)', () => {
-  it('主页 ld+json 可 parse = SoftwareApplication,字段全', () => {
-    const scripts = [...zhDoc.querySelectorAll('head script[type="application/ld+json"]')]
-    expect(scripts.length).toBe(1)
-    const ld = JSON.parse(scripts[0].textContent!)
+// S3b/S3c 修订:页级图允许面 = zh/en 主页 SoftwareApplication + faq 双语 FAQPage
+// (用户"SEO 极致"定令覆盖旧 D8 禁 FAQPage);schools/download 仍须零页级图。
+describe('JSON-LD 页级图允许面(spec §2.6-3 + S3 系列修订)', () => {
+  const pageLd = (doc: Document) =>
+    [...doc.querySelectorAll('head script[type="application/ld+json"]')]
+      .map((s) => JSON.parse(s.textContent!))
+      .filter((x) => !x['@graph'])
+  it('主页含且仅含一枚 SoftwareApplication,字段全', () => {
+    const lds = pageLd(zhDoc)
+    expect(lds.length).toBe(1)
+    const ld = lds[0]
     const universal = release.assets.find((a) => a.name.includes('universal'))!
     expect(ld['@type']).toBe('SoftwareApplication')
     expect(ld.operatingSystem).toBe('Android')
@@ -137,12 +143,9 @@ describe('JSON-LD 恰一于主页(spec §2.6-3,D8:禁 FAQPage)', () => {
     expect(ld.downloadUrl).toBe(universal.url)
     expect(ld.license).toContain('GPL')
   })
-  it('其余 7 路由零 ld+json', () => {
-    for (const r of ROUTES) {
-      for (const lang of ['zh', 'en'] as const) {
-        if (r.slug === 'home' && lang === 'zh') continue
-        expect(routeDoc(r.file, lang).querySelectorAll('script[type="application/ld+json"]').length, `${r.slug}-${lang}`).toBe(0)
-      }
+  it('schools/download 四路由零页级 ld+json(en 主页/faq 双语由 jsonld.pages 锁)', () => {
+    for (const [file, lang] of [['schools/', 'zh'], ['schools/', 'en'], ['download/', 'zh'], ['download/', 'en']] as const) {
+      expect(pageLd(routeDoc(file, lang)), `${file}-${lang}`).toEqual([])
     }
   })
 })

@@ -6,7 +6,7 @@ import '@fontsource-variable/inter/standard.css'; // latin+latin-ext 子集,Inte
 import '../tokens/theme.css';
 import '../tokens/motion.css';
 import '../styles/global.css';
-import { site } from '../i18n/ui';
+import { site, repoUrl } from '../i18n/ui';
 import { zh } from '../i18n/zh';
 import { en } from '../i18n/en';
 import release from '../data/release.json';
@@ -49,6 +49,28 @@ const copy = lang === 'zh' ? zh : en;
 const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
 const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
 const ogImg = ogImage ?? `${site}/og/home-${lang}.png`;
+// 站级实体图(SEO 极致批次 S3a):WebSite + Organization 铺全部可收录页,
+// 品牌搜索与知识面板的稳定锚;noindex 页(404)不发。页面级图经 jsonLd prop 另发。
+const siteGraph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${site}/#website`,
+      url: site,
+      name: 'Sleepy',
+      inLanguage: ['zh-CN', 'en'],
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${site}/#organization`,
+      name: 'Sleepy',
+      url: site,
+      sameAs: repoUrl,
+      logo: { '@type': 'ImageObject', url: `${site}/apple-touch-icon.png`, width: 180, height: 180 },
+    },
+  ],
+};
 const heroImg = preloadHero
   ? await getImage({
       src: heroShotLight,
@@ -95,6 +117,7 @@ const heroImg = preloadHero
     <meta name="twitter:image" content={ogImg} />
     <meta name="twitter:card" content="summary_large_image" />
     {rssLink && <link rel="alternate" type="application/rss+xml" title="Sleepy release feed" href={rssLink} />}
+    {!noindex && <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} />}
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <meta name="theme-color" content="#0F0D15" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#FDF8FF" media="(prefers-color-scheme: light)" />
