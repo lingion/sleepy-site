@@ -57,3 +57,19 @@ describe('security.txt(RFC 9116 信任信号)', () => {
     expect(body).toMatch(/^Expires: \d{4}-\d{2}-\d{2}T/m);
   });
 });
+
+describe('页脚回顶链(纯锚,禁重载)', () => {
+  // 用户报障(2026-10-27):旧实现 href={path} 指当前页路径 —— 点「回到顶部」
+  // = 整页重新加载。HTML 规范 fragment "top" 特例:无同名元素时滚动到文档
+  // 顶部(不导航不重载);html{scroll-behavior:smooth} 已全局就位。
+  const pages = ['index.html', 'en/index.html', 'schools/index.html', 'en/schools/index.html',
+    'download/index.html', 'en/download/index.html', 'faq/index.html', 'en/faq/index.html'];
+  for (const p of pages) {
+    it(`${p}:回顶锚 href="#top"(非本页路径,点击不触发导航)`, () => {
+      const html = read(`../dist/client/${p}`);
+      const m = html.match(/<a href="([^"]*)"[^>]*>(?:回到顶部|Back to top)<\/a>/);
+      expect(m, '页脚应有回顶锚').not.toBeNull();
+      expect(m![1]).toBe('#top');
+    });
+  }
+});

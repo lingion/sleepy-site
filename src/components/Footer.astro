@@ -4,6 +4,9 @@
 // 站内链绝对路径形式随 lang 加前缀(多页化:任意页面点击恒指对应语言页)。
 // 文案走 copy.footer 键树(zh/en 同形,禁内联 ternary 硬编码——泄漏闸只 walk zh.ts);
 // t.dl/t.trial/t.qq/t.sponsor/t.faq/t.repo/t.community/t.app 八键保留不删(Homepage 文案历史,终审 F4),本组件引用已清。
+// 回顶链 = 纯锚 href="#top"(HTML 规范 fragment "top" 特例:文档无同名元素时直接滚到顶部,
+// 零导航零重载;平滑滚动由全局 html{scroll-behavior}承担,reduced-motion 自动降级即时)。
+// 旧实现 href=本页路径 已废——点「回到顶部」变整页重载(2026-10-27 用户报障)。
 // 明暗两主题一律走 surface-container token 档(不锁 inverse-surface:dark 下 inverse 是浅灰,
 // 与「深档底」语义相反;§17.1 dark 节奏)。
 import { repoUrl } from '../i18n/ui';
@@ -16,10 +19,8 @@ interface Props {
   copy?: SiteCopy;
   /** 语言链 = 本页双语对侧路径(Base 透传,与 AppBar 同源) */
   mirror?: string;
-  /** 本页 zh 路径(Base 透传):回顶链在非主页回各页头 */
-  path?: string;
 }
-const { lang, build, mirror = lang === 'zh' ? '/en/' : '/', path = '/' } = Astro.props;
+const { lang, build, mirror = lang === 'zh' ? '/en/' : '/' } = Astro.props;
 const c = Astro.props.copy ?? zh;
 const t = c.footer;
 const home = lang === 'zh' ? '/' : '/en/';
@@ -36,7 +37,7 @@ const home = lang === 'zh' ? '/' : '/en/';
     </nav>
     <p class="t-body-small footer__meta">
       <span>Sleepy · {t.license} · lingion</span>
-      <span><a href={path}>{t.backToTop}</a> · <span data-build={build}>{t.build}: {build}</span></span>
+      <span><a href="#top">{t.backToTop}</a> · <span data-build={build}>{t.build}: {build}</span></span>
     </p>
     <noscript><p class="t-body-small">{t.noJs}</p></noscript>
   </div>
