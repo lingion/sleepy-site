@@ -161,6 +161,18 @@ const heroImg = preloadHero
       <slot />
     </main>
     <Footer lang={lang} build={build} copy={copy} mirror={mirror} />
+    {/* 回顶浮标(2026-10-27 用户二次反馈:页脚链位置对「翻到一半回头」无效)。
+        呈现=NN/g 九准则:右下固定 + 文字标签(纯图标有歧义) + 出现后静止;
+        显隐=uxpatterns 细则:滚过一屏才浮出(短页永不出现)、fade 过渡、
+        页脚入视即收起(到底时页脚 #top 链就在手边,浮标不再挡 meta 行)。
+        默认 visibility:hidden = 无 JS 不显示空壳、不进 tab 序;页脚链保留为兜底。 */}
+    <button type="button" class="back-to-top" data-back-to-top>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 4.2 4.6 11.6l1.5 1.5 4.9-4.9 4.9 4.9 1.5-1.5z"/>
+        <path d="M11 3h2v13h-2z"/>
+      </svg>
+      <span>{copy.footer.backToTop}</span>
+    </button>
     <script>
       // 主题开关(lightbox 岛在 T6;此处只做 FOUC 之后的持久化 toggle)
       const root = document.documentElement;
@@ -187,6 +199,72 @@ const heroImg = preloadHero
         } catch {}
         return next;
       };
+      // 回顶浮标:滚过一屏且页脚未入视 → 浮现;点击 scrollTo({top:0})——
+      // 平滑/即时交全局 html{scroll-behavior}(reduced-motion 自动降级),零内联行为覆写。
+      // IO 盯页脚 = 到底即收(不挡 meta 行,且此刻页脚 #top 链已在手边)。
+      {
+        const btn = document.querySelector<HTMLButtonElement>('[data-back-to-top]');
+        const footer = document.querySelector('footer.footer');
+        if (btn && footer) {
+          let footerInView = false;
+          const sync = () => {
+            btn.dataset.visible = String(window.scrollY > window.innerHeight && !footerInView);
+          };
+          new IntersectionObserver(([e]) => {
+            footerInView = e.isIntersecting;
+            sync();
+          }).observe(footer);
+          addEventListener('scroll', sync, { passive: true });
+          sync();
+          btn.addEventListener('click', () => window.scrollTo({ top: 0 }));
+        }
+      }
     </script>
+
+  <style>
+    .back-to-top {
+      position: fixed;
+      inset-block-end: calc(var(--site-unit) * 6);
+      inset-inline-end: calc(var(--site-unit) * 6);
+      z-index: 40; /* 内容浮层档:低于 AppBar(50),不与其抢位 */
+      display: inline-flex;
+      align-items: center;
+      gap: calc(var(--site-unit) * 2);
+      padding: calc(var(--site-unit) * 2.5) calc(var(--site-unit) * 4);
+      border: none;
+      border-radius: var(--md-sys-shape-corner-full);
+      /* Filled 档(MD3 extended FAB 惯例)+ elevation-1 投影(光源正上方,§5.3 同款) */
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      font: var(--md-sys-typescale-label-large);
+      letter-spacing: 0.1px;
+      cursor: pointer;
+      box-shadow:
+        0 1px 2px rgb(0 0 0 / 30%),
+        0 2px 6px 2px rgb(0 0 0 / 15%);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(calc(var(--site-unit) * 2));
+      transition:
+        opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+        transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+        visibility 0s linear var(--md-sys-motion-duration-short4);
+    }
+    .back-to-top[data-visible='true'] {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition:
+        opacity var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+        transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized),
+        visibility 0s;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .back-to-top {
+        transition: none;
+        transform: none;
+      }
+    }
+  </style>
   </body>
 </html>
