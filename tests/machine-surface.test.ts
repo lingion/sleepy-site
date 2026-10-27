@@ -73,3 +73,39 @@ describe('页脚回顶链(纯锚,禁重载)', () => {
     });
   }
 });
+
+describe('回顶浮标(右下浮现,滚过一屏出现)', () => {
+  // 用户二次反馈(2026-10-27):页脚链位置对「翻到一半想回头」无效。
+  // 业内呈现 = NN/g 九准则(>4屏页/右下固定/带文字标签/出现后静止/小而显眼)
+  // + uxpatterns 细则(约一屏阈值/fade 显隐/语义 button/尊重 reduced-motion)。
+  // 浮标 = 主力路径;页脚 #top 链保留 = 无 JS 兜底(上一块已锁)。
+  const pages = ['index.html', 'en/index.html', 'schools/index.html', 'en/schools/index.html',
+    'download/index.html', 'en/download/index.html', 'faq/index.html', 'en/faq/index.html'];
+  for (const p of pages) {
+    it(`${p}:存在 data-back-to-top 浮标(button 语义 + 文字标签)`, () => {
+      const html = read(`../dist/client/${p}`);
+      const m = html.match(/<button[^>]*data-back-to-top[^>]*>([\s\S]*?)<\/button>/);
+      expect(m, '页面应有回顶浮标').not.toBeNull();
+      expect(m![1]).toMatch(/回到顶部|Back to top/);
+    });
+  }
+  it('浮标行为随页内联产出(scroll 阈值显隐 + scrollTo 归顶)', () => {
+    // Astro 把 <script> 编译为页内 <script type="module">(非独立 .js chunk),
+    // 契约须按页断言 —— 产物实测锚点。
+    const html = read('../dist/client/index.html');
+    expect(html).toContain('data-back-to-top');
+    expect(html).toMatch(/scrollTo\(\s*\{\s*top:\s*0/);
+    expect(html).toMatch(/innerHeight/); // 阈值 = 一屏(NN/g:短页不浮出)
+  });
+  it('浮标默认不可见,无 JS 时不显示空壳', () => {
+    const css = (() => {
+      const dir = new URL('../dist/client/_astro/', import.meta.url);
+      const { readdirSync, readFileSync: rf } = require('node:fs');
+      return readdirSync(dir)
+        .filter((f: string) => f.endsWith('.css'))
+        .map((f: string) => rf(new URL(f, dir), 'utf8'))
+        .join('\n');
+    })();
+    expect(css).toMatch(/back-to-top[\s\S]*?opacity:\s*0/);
+  });
+});
