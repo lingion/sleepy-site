@@ -38,9 +38,15 @@ describe('_headers 部署配置(Cloudflare Pages public/_headers)', () => {
     expect(h).toMatch(/\/_astro\/\*\n\s+Cache-Control: public, max-age=31536000, immutable/);
   });
   it('HTML 零缓存(改版即时可见)+ 安全头三件套', () => {
-    expect(h).toMatch(/Cache-Control: public, max-age=0, must-revalidate/);
+    expect(h).toMatch(/^\/\n\s+Cache-Control: public, max-age=0, must-revalidate/m);
     expect(h).toMatch(/X-Content-Type-Options: nosniff/);
     expect(h).toMatch(/Referrer-Policy: strict-origin-when-cross-origin/);
+  });
+  // 官方合并语义:_headers 多 pattern 命中同一请求时全部继承、同名头逗号拼接。
+  // /* 块再带 Cache-Control 会让资产响应头双值(线上 2026-10-27 实测拼接现场)。
+  it('全局 /* 块不含 Cache-Control(缓存指令单点声明,防逗号双值)', () => {
+    const rootBlock = h.match(/^\/\*\n(?:[ \t]+\S.*\n?)*/m)![0];
+    expect(rootBlock).not.toMatch(/Cache-Control/);
   });
 });
 

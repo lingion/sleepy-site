@@ -1,13 +1,38 @@
 # Cloudflare Pages 响应头(官方 _headers 通道,随构建产物部署)。
-# 缓存分层:哈希资产不可变长存;其余零缓存保改版即时可见(HTML 与其查询串资源)。
+# _headers 合并语义(官方 docs 实证):多 pattern 命中同一请求时各头全部继承,
+# 同名头值用逗号拼接 —— 故 Cache-Control 在任一请求的命中链上只许出现一次:
+# 全局 /* 块只放安全头,缓存指令按互不重叠的路径枚举单点声明。
 /*
-  Cache-Control: public, max-age=0, must-revalidate
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
 
+# 内容哈希资产:不可变长缓存
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
+# OG 生成图:一天中缓存
 /og/*
   Cache-Control: public, max-age=86400
+
+# HTML 与机读源:零缓存保改版即时可见(路径枚举与上方块零重叠)
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/en/*
+  Cache-Control: public, max-age=0, must-revalidate
+/schools/*
+  Cache-Control: public, max-age=0, must-revalidate
+/download/*
+  Cache-Control: public, max-age=0, must-revalidate
+/faq/*
+  Cache-Control: public, max-age=0, must-revalidate
+/faq.json
+  Cache-Control: public, max-age=0, must-revalidate
+/llms.txt
+  Cache-Control: public, max-age=0, must-revalidate
+/rss.xml
+  Cache-Control: public, max-age=0, must-revalidate
+/sitemap-index.xml
+  Cache-Control: public, max-age=0, must-revalidate
+/sitemap-0.xml
+  Cache-Control: public, max-age=0, must-revalidate
