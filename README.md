@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square" alt="License">
 </p>
 
-[Sleepy](https://github.com/lingion/sleepy)(开源安卓课表 App)的官方双语网站。静态 Astro 站点,线上地址 [sleepy.lingion.eu.cc](https://sleepy.lingion.eu.cc)。
+[Sleepy](https://github.com/lingion/sleepy)(开源安卓课表 App)的官方双语网站。静态 Astro 站点,线上地址 [sleepy.is-my.app](https://sleepy.is-my.app)。
 
 问题反馈和新建议请直接开 [Issues](https://github.com/lingion/sleepy-site/issues)。
 
