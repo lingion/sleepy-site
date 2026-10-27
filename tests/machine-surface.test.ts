@@ -97,6 +97,15 @@ describe('回顶浮标(右下浮现,滚过一屏出现)', () => {
     expect(html).toMatch(/scrollTo\(\s*\{\s*top:\s*0/);
     expect(html).toMatch(/innerHeight/); // 阈值 = 一屏(NN/g:短页不浮出)
   });
+  it('浮标箭头几何正确(单 path 上箭头,杆顶不越箭头尖)', () => {
+    // 缺陷回归锁(2026-10-27 用户报障「箭头出问题」):旧实现双 path 拼接——
+    // 杆 M11 3h2v13 顶 y=3 高于箭头尖 y=4.2,杆从尖上方戳出,渲染成 "†"
+    // 而非 "↑"。改单一多边形 path:尖 (12,3) 为唯一最高点,杆 (9.5–14.5 宽)
+    // 自尖下方 y=10 起,零接缝零越界。
+    const html = read('../dist/client/index.html');
+    expect(html, '旧缺陷杆 path 不得残留').not.toMatch(/M11 3h2v13/);
+    expect(html).toMatch(/M12 3 19 10h-4\.5v10h-5V10H5z/);
+  });
   it('浮标默认不可见,无 JS 时不显示空壳', () => {
     const css = (() => {
       const dir = new URL('../dist/client/_astro/', import.meta.url);
