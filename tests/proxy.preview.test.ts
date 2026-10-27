@@ -32,6 +32,40 @@ describe('preview path reverse proxy', () => {
     vi.unstubAllGlobals();
   });
 
+  it('rewrites relative ./ asset and manifest references in proxied HTML to stay under /preview', async () => {
+    // 上游真实 index.html 形态: favicon/apple-touch/manifest 用 ./ 相对路径。
+    // 无斜杠入口 /preview 时浏览器按 origin 根解析 ./ → sleepy.is-my.app/assets/...
+    // = Pages 根 404(线上 favicon 挂断的根因), 故必须改写为绝对 /preview/ 前缀。
+    const upstreamHtml =
+      '<!doctype html><html><head>' +
+      '<link rel="icon" type="image/png" href="./assets/sleepy-logo.png" />' +
+      '<link rel="apple-touch-icon" href="./assets/pwa-192.png" />' +
+      '<link rel="manifest" href="./manifest.webmanifest" />' +
+      '</head><body></body></html>';
+    const html = new Response(upstreamHtml, {
+      headers: { 'content-type': 'text/html; charset=utf-8' },
+    });
+    const { ctx } = makeCtx('/preview', html);
+    const res = await onRequest(ctx as never);
+    const body = await res.text();
+    expect(body).toContain('href="/preview/assets/sleepy-logo.png"');
+    expect(body).toContain('href="/preview/assets/pwa-192.png"');
+    expect(body).toContain('href="/preview/manifest.webmanifest"');
+    expect(body).not.toContain('href="./');
+  });
+
+  it('keeps upstream relative-free pages byte-identical apart from known rewrites', async () => {
+    // 非 ./ 开头的相对引用(如 src="x.png")不属于上游形态, 不许被误伤。
+    const upstreamHtml = '<html><img src="banner.png" alt=""></html>';
+    const html = new Response(upstreamHtml, {
+      headers: { 'content-type': 'text/html; charset=utf-8' },
+    });
+    const { ctx } = makeCtx('/preview/', html);
+    const res = await onRequest(ctx as never);
+    const body = await res.text();
+    expect(body).toBe(upstreamHtml);
+  });
+
   it('strips the /preview prefix before forwarding upstream', async () => {
     const html = new Response('<!doctype html><title>x</title>', {
       headers: { 'content-type': 'text/html; charset=utf-8' },

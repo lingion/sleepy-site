@@ -55,6 +55,10 @@ export const onRequest = async (context: PagesRequestContext): Promise<Response>
   let body = await upstream.text();
   if (contentType.includes('text/html')) {
     body = body.replace(/(["'])\/assets\//g, '$1' + PREFIX + '/assets/');
+    // 相对 ./ 引用(favicon/apple-touch/manifest): 无斜杠入口 /preview 下浏览器按
+    // origin 根解析 ./ → Pages 根 404(2026-10-27 线上顶栏 logo 挂断的次生根因)。
+    // 一并钉进前缀; 只动 "./ 形态, 裸相对(x.png)不匹配、不受影响。
+    body = body.replace(/(["'])\.\//g, '$1' + PREFIX + '/');
   } else {
     body = body.replace(/url\((['"]?)\/assets\//g, 'url($1' + PREFIX + '/assets/');
     body = body.replace(/(["'])\/assets\//g, '$1' + PREFIX + '/assets/');
