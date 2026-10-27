@@ -67,9 +67,11 @@ const heroImg = preloadHero
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="alternate icon" href="/favicon.ico" type="image/png" sizes="32x32" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {/* ?v= 缓存破除(2026-10-27 圆角换代):浏览器 favicon 缓存按 URL 判等不回源,
+        图标资产换代必须同时换 URL;升级图标时递增 v,禁回退到无查询串形态 */}
+    <link rel="icon" href="/favicon.svg?v=1" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico?v=1" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=1" />
     {/* 404(noindex)不声明 canonical——指向他页与免收录信号矛盾(spec §2.6-7) */}
     {!noindex && <link rel="canonical" href={site + path} />}
     {noindex && <meta name="robots" content="noindex" />}
