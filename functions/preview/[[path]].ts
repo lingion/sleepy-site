@@ -8,6 +8,10 @@
 
 export const UPSTREAM_ORIGIN = 'https://sleepy.qdp.qzz.io';
 const PREFIX = '/preview';
+// 重复 URL 收敛主锚:/preview 与 /preview/ 双 200 内容相同(2026-10-28 实测 md5 一致),
+// 官方 SEO Starter Guide 要求每份内容单一 URL;反代层给两份都注入自指 /preview/ 的
+// canonical。选注入而非 308 归一:定案禁跳转,且上游 GitHub Pages 直连形态保持零 SEO 标签。
+const CANONICAL_URL = 'https://sleepy.is-my.app/preview/';
 
 interface PagesRequestContext {
   request: Request;
@@ -59,6 +63,11 @@ export const onRequest = async (context: PagesRequestContext): Promise<Response>
     // origin 根解析 ./ → Pages 根 404(2026-10-27 线上顶栏 logo 挂断的次生根因)。
     // 一并钉进前缀; 只动 "./ 形态, 裸相对(x.png)不匹配、不受影响。
     body = body.replace(/(["'])\.\//g, '$1' + PREFIX + '/');
+    // 自指 canonical(重复 URL 收敛,见 CANONICAL_URL 注释)。仅当存在 <head> 时注入,
+    // 保持无 head 的响应逐字节不动(既有产物等同性契约)。
+    if (!/<link\b[^>]*rel=["']?canonical/i.test(body)) {
+      body = body.replace(/<head(\s[^>]*)?>/i, (m) => m + `<link rel="canonical" href="${CANONICAL_URL}">`);
+    }
   } else {
     body = body.replace(/url\((['"]?)\/assets\//g, 'url($1' + PREFIX + '/assets/');
     body = body.replace(/(["'])\/assets\//g, '$1' + PREFIX + '/assets/');

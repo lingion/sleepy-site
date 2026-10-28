@@ -140,6 +140,33 @@ describe('preview path reverse proxy', () => {
     expect(res.status).toBe(404);
   });
 
+  it('injects a self-referential canonical into proxied HTML', async () => {
+    // 官方 SEO Starter Guide「减少重复内容」条款:每份内容只应通过一个 URL 访问,
+    // 无法 301 归一时用 rel=canonical 指定主 URL。
+    // /preview 与 /preview/ 双形态同为 200 且逐字节相同(2026-10-28 全站核对实证),
+    // 上游 SPA 无 canonical → 反代层注入固定主 URL /preview/, 两形态都收敛到它。
+    for (const entry of ['/preview', '/preview/']) {
+      const html = new Response(
+        '<!doctype html><html><head><title>x</title></head><body></body></html>',
+        { headers: { 'content-type': 'text/html' } }
+      );
+      const { ctx } = makeCtx(entry, html);
+      const res = await onRequest(ctx as never);
+      const body = await res.text();
+      expect(body).toContain(
+        '<link rel="canonical" href="https://sleepy.is-my.app/preview/">'
+      );
+    }
+  });
+
+  it('does not inject canonical into non-HTML responses', async () => {
+    const css = new Response('body{}', { headers: { 'content-type': 'text/css' } });
+    const { ctx } = makeCtx('/preview/assets/index.css', css);
+    const res = await onRequest(ctx as never);
+    const body = await res.text();
+    expect(body).not.toContain('rel="canonical"');
+  });
+
   it('never injects a redirect of its own', async () => {
     const html = new Response('<!doctype html>', {
       headers: { 'content-type': 'text/html' },
