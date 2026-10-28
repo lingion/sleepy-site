@@ -164,6 +164,7 @@ export const en: SiteCopy = {
   },
   downloadPage: {
     heading: 'Download Sleepy',
+    metaDescription: "Sleepy's official download center: Android APK links by device architecture, sha256 checksums, installation steps, and a web version to try online — free and open source.",
     versionLine: '{tag} · {minSdk} · released {date}',
     recommended: 'Recommended',
     universalNote: 'Choose universal when the device architecture is unknown.',

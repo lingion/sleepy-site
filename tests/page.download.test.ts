@@ -106,6 +106,25 @@ describe('页面骨架与双语镜像', () => {
     expect(zhDoc.querySelector('link[hreflang="en"]')?.getAttribute('href')).toBe(`${site}/en/download/`);
     expect(enDoc.querySelector('link[hreflang="zh-CN"]')?.getAttribute('href')).toBe(`${site}/download/`);
   });
+  it('meta description = 页面要点概括而非操作提示(官方 SEO Starter Guide snippet 条款)', () => {
+    // 指南原文: good meta description is short, unique to one particular page,
+    // and includes the most relevant points of the page.
+    // 2026-10-28 全站核对发现本页曾直接借用 universalNote 操作提示当 description,
+    // 不概括页面 → 本用例锁独立 metaDescription 文案键 + 与操作提示串解耦。
+    const zhMeta = zhDoc.querySelector('meta[name="description"]')?.getAttribute('content');
+    const enMeta = enDoc.querySelector('meta[name="description"]')?.getAttribute('content');
+    expect(zhMeta).toBe(zh.downloadPage.metaDescription);
+    expect(enMeta).toBe(en.downloadPage.metaDescription);
+    expect(zhMeta).toBeTruthy();
+    expect(enMeta).toBeTruthy();
+    expect(zhMeta).not.toBe(zh.downloadPage.universalNote);
+    expect(enMeta).not.toBe(en.downloadPage.universalNote);
+    // 全站唯一性:与首页 description 不得相同
+    const homeMeta = new JSDOM(
+      readFileSync(new URL('../dist/client/index.html', import.meta.url), 'utf8')
+    ).window.document.querySelector('meta[name="description"]')?.getAttribute('content');
+    expect(zhMeta).not.toBe(homeMeta);
+  });
   it('工具页禁编排(spec §5):无 reveal 类', () => {
     expect(zhDoc.querySelectorAll('[data-reveal-group], .reveal').length).toBe(0);
   });
