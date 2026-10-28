@@ -1,14 +1,16 @@
 ---
 // 主题感知截图 —— 浅色浏览器显示浅色截图,深色浏览器显示深色截图。
 // data-theme 由 Base.astro 首帧前脚本设定(FOUC 守卫),这里纯 CSS 切换,零 JS、零闪变。
-// 两张图都是真机截图,深色那张对读屏器隐藏(alt=""),避免同一内容重复朗读。
+// 两张图都是真机截图。Bing 站长扫描把 Astro 渲染的空 alt(裸 alt 属性)计为「缺失替代文本」,
+// 故 dark 版携带与 light 相同的 alt 值;读屏防重复朗读全靠 aria-hidden="true"
+// (aria-hidden 优先于 alt 决定可及性树暴露),2026-10-28 实测该属性在 dark 上恒渲染。
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
   light: ImageMetadata;
   dark: ImageMetadata;
-  /** 朗读文本(浅色图承载;深色图 aria-hidden) */
+  /** 朗读文本(两版共用;dark 版 aria-hidden,读屏不重复朗读) */
   alt: string;
   widths?: number[];
   sizes?: string;
@@ -58,7 +60,7 @@ const forceClass = forceVariant ? `shot--force-${forceVariant}` : undefined;
     src={dark}
     widths={widths}
     sizes={sizes}
-    alt=""
+    alt={alt}
     aria-hidden="true"
     width={dark.width}
     height={dark.height}
