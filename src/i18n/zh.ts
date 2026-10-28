@@ -170,6 +170,7 @@ export const zh = {
   },
   downloadPage: {
     heading: '下载 Sleepy',
+    metaDescription: 'Sleepy 官方下载中心:Android APK 按架构直链,sha256 校验值、安装步骤与网页版在线体验,开源免费。',
     versionLine: '{tag} · {minSdk} · {date} 发布',
     recommended: '推荐',
     universalNote: '不确定手机架构时选择 universal。',
