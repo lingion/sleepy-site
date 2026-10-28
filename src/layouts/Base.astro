@@ -120,6 +120,9 @@ const heroImg = preloadHero
     <meta property="og:image:alt" content={ogImageAlt ?? title} />
     <meta name="twitter:image" content={ogImg} />
     <meta name="twitter:card" content="summary_large_image" />
+    {/* 百度站长所有权验证(2026-10-28,HTML 标签方式):官方要求验证通过后保留,
+        删除 = 站点掉出资源平台管辖且无告警,tests/baidu-verification.test.ts 锁令牌。 */}
+    <meta name="baidu-site-verification" content="codeva-kA7BwrU2wy" />
     {rssLink && <link rel="alternate" type="application/rss+xml" title="Sleepy release feed" href={rssLink} />}
     {!noindex && <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} />}
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
