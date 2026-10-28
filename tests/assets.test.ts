@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 // T4v4 资产尺寸闸(spec C3/C4 + §8):
-// widget 十图 = 2026-10-22 用户验收的 renderer 直出尺寸;
+// widget 十图 = 2026-10-22 验收通过的 renderer 直出尺寸;
 // 手机三图 = 预裁无效区(状态栏 y0-112 + 导航键 y2160-2340)后的 1080×2048,
 // raw 备份必须存在(不可逆操作留痕)。裁线下界经目检实测(01-week app 底导航标签止 y2155)。
 

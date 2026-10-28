@@ -126,7 +126,7 @@ describe('OG 分享图(spec §2.6-1:8 枚存在 + 各页绝对 URL 指本页对�
 })
 
 // S3b/S3c 修订:页级图允许面 = zh/en 主页 SoftwareApplication + faq 双语 FAQPage
-// (用户"SEO 极致"定令覆盖旧 D8 禁 FAQPage);schools/download 仍须零页级图。
+// (「SEO 极致」定令 2026-10-27 覆盖旧 D8 禁 FAQPage);schools/download 仍须零页级图。
 describe('JSON-LD 页级图允许面(spec §2.6-3 + S3 系列修订)', () => {
   const pageLd = (doc: Document) =>
     [...doc.querySelectorAll('head script[type="application/ld+json"]')]

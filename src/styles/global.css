@@ -172,7 +172,7 @@ a {
    各有一枚 font-variant-numeric 文本,类在此兜底 + 语义归属工具层) */
 .tnum { font-variant-numeric: lining-nums tabular-nums; }
 
-/* 标题换行纪律(v5 巡检批 2026-10-25:用户「所有标题排版好好斟酌,什么时候该换行」):
+/* 标题换行纪律(v5 巡检批 2026-10-25 需求「所有标题排版好好斟酌,什么时候该换行」):
    balance = 多行标题各行长度接近(禁「最后一行掉一个词」的 greedy 残行);单行可容纳时
    整行不拆,短中文标题天然不触发 → zh 文案零改动。四页所有 h1-h4 统一吃这条。
    FAQ 问句 = pretty:问句可长到两三行,balance 会把每行强拉等长(断句生硬),
@@ -354,7 +354,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
   outline-offset: 2px;
 }
 
-/* —— State layer(v4 §12 细节批,2026-10-23 用户增补;M3 交互指纹,纯 CSS 无 ripple)——
+/* —— State layer(v4 §12 细节批,2026-10-23 需求增补;M3 交互指纹,纯 CSS 无 ripple)——
    hover 档包桌面闸(触屏无粘滞 hover);active 档不包(触屏按压接管)。
    叠色 = currentColor 混色(hover 8% / active 10%),禁裸 background 色变:
    透明底控件(chip 未选/field/dot 未选/theme 钮/链接)直接叠;
