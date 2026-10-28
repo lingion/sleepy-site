@@ -72,7 +72,8 @@ const shots = [
   <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label={t.heading} hidden>
     <div class="lightbox__scrim" data-lb-scrim></div>
     <div class="lightbox__body">
-      <img class="lightbox__img" data-lb-img alt="" />
+      {/* 占位 alt 静态必填(Bing 计数只看产物 HTML);打开时 JS 按当前图 aria-label 覆写 */}
+      <img class="lightbox__img" data-lb-img alt="应用截图放大预览" />
       <div class="lightbox__bar">
         <button type="button" class="lightbox__nav" data-lb-prev aria-label={t.prev}>←</button>
         <span class="t-label-medium" data-lb-count></span>
