@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 // 2026-10-28: Google Search Console 以 sleepy.is-my.app 做所有权验证。
-// 用户提供的 DNS TXT 记录同一令牌(google-site-verification=l9EkNtXUntA_...);
+// GSC 下发的 DNS TXT 记录同一令牌(google-site-verification=l9EkNtXUntA_...);
 // 域名属性要求验证标记可经「替代方式」meta 标签满足, 官方同样要求验证后保留——
 // 删除 = 站点静默掉出 Search Console 管辖(收录/移除/安全报告全断)且无告警。
 // 锁两件事: ①Base.astro 携带与 GSC 一致的令牌(误改误删即红);

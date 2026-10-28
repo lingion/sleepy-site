@@ -123,7 +123,7 @@ const heroImg = preloadHero
     {/* 百度站长所有权验证(2026-10-28,HTML 标签方式):官方要求验证通过后保留,
         删除 = 站点掉出资源平台管辖且无告警,tests/baidu-verification.test.ts 锁令牌。 */}
     <meta name="baidu-site-verification" content="codeva-kA7BwrU2wy" />
-    {/* Google Search Console 所有权验证(2026-10-28,替代方式 meta):与用户提供的
+    {/* Google Search Console 所有权验证(2026-10-28,替代方式 meta):与 GSC 下发的
         DNS TXT 记录同令牌;官方要求验证通过后保留, 删除 = 站点掉出 GSC 管辖
         (收录状态/移除请求/安全报告全断)且无告警,tests/google-verification.test.ts 锁令牌。 */}
     <meta name="google-site-verification" content="l9EkNtXUntA_ZyNvr2f6GpYpTziiw-vSKOI3Sotl5aY" />
@@ -168,7 +168,7 @@ const heroImg = preloadHero
       <slot />
     </main>
     <Footer lang={lang} build={build} copy={copy} mirror={mirror} />
-    {/* 回顶浮标(2026-10-27 用户二次反馈:页脚链位置对「翻到一半回头」无效)。
+    {/* 回顶浮标(2026-10-27 二次反馈:页脚链位置对「翻到一半回头」无效)。
         呈现=NN/g 九准则:右下固定 + 文字标签(纯图标有歧义) + 出现后静止;
         显隐=uxpatterns 细则:滚过一屏才浮出(短页永不出现)、fade 过渡、
         页脚入视即收起(到底时页脚 #top 链就在手边,浮标不再挡 meta 行)。

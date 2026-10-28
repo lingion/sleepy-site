@@ -140,7 +140,7 @@ describe('AppBar 锚点 + 常驻钮(spec §2.1 v5 跨页导航)', () => {
     expect(hide).toMatch(/visibility:\s*hidden/);
     expect(hide).not.toMatch(/display:\s*none/);
   });
-  it('汉堡菜单闸(2026-10-25 用户报手机无页间导航):钮 + 面板 + 同源链接 + disclosure 脚本', () => {
+  it('汉堡菜单闸(2026-10-25 报手机无页间导航):钮 + 面板 + 同源链接 + disclosure 脚本', () => {
     // 产物级:≤840px 锚点组 display:none 后,汉堡钮是手机唯一页间导航
     const btn = doc.querySelector('#appbar [data-appbar-menu]');
     expect(btn, '汉堡钮存在').not.toBeNull();
@@ -179,7 +179,7 @@ describe('M2 三视图 + MD3 Segmented Button(spec §4 M2)', () => {
   it('面板 3 块同格叠放,主次状态机:焦点居中清晰,背景模糊退后(巡检缺陷3 2026-10-25)', () => {
     expect(doc.querySelectorAll('#views [data-pane]').length).toBe(3);
     const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');
-    // 用户原话:「三张一样大小的图片从上到下放/一样大小只是其他两个有阴影——
+    // 原需求:「三张一样大小的图片从上到下放/一样大小只是其他两个有阴影——
     // 这不是切换视图的样子,视图是有主次之分的,被聚焦的应在中间,剩下两个
     // 模糊或次层级放到背后」→ 等宽并列(旧 2.1fr 主三列)废除。
     // 锁 grid 声明本体(注释可如实提及旧值作历史,声明位禁复活)
@@ -205,7 +205,7 @@ describe('M2 三视图 + MD3 Segmented Button(spec §4 M2)', () => {
     ]) {
       expect(leftSel, `左背景(--dir:-1)缺 ${pair}`).toContain(pair);
     }
-    // 背景档视觉语言:侧移(消费 --dir)+ 缩位 + 模糊 + 降透明(用户「模糊或
+    // 背景档视觉语言:侧移(消费 --dir)+ 缩位 + 模糊 + 降透明(需求「模糊或
     // 次层级放到背后」= 四特征齐备才算主次,缺一即红)。
     // translate/scale 用 CSS Transforms L2 独立属性:与 .reveal / hover 的
     // transform 简写正交合成,零特异性战争

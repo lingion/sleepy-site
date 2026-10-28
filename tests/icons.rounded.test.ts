@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import sharp from 'sharp';
 
-// 2026-10-27 用户定令: 所有方形尖角 Sleepy logo 一律改圆角矩形。
+// 2026-10-27 定令: 所有方形尖角 Sleepy logo 一律改圆角矩形。
 // 品牌几何唯一源 = favicon.svg 底版 rect rx=115/512(iOS AppIcon 比例),位图按同比例圆角。
 // 断言取五点采样: 四角透明(圆角生效)+ 中心保留 + 外缘中点(上/左)保留 ——
 // 中心与外缘中点同时不透明才能区分「真圆角」与「整图蒙掉/缩小」。
@@ -43,7 +43,7 @@ function icoFrame(buf: Buffer, index: number): Buffer {
   return buf.subarray(offset, offset + size);
 }
 
-describe('品牌位图圆角化(用户定令 2026-10-27)', () => {
+describe('品牌位图圆角化(定令 2026-10-27)', () => {
   it('apple-touch-icon.png 四角透明、中心与外缘中点保留', expectRounded('apple-touch-icon', file('../public/apple-touch-icon.png')));
   it('favicon.ico 16 帧四角透明、中心与外缘中点保留', expectRounded('favicon.ico#0', icoFrame(file('../public/favicon.ico'), 0)));
   it('favicon.ico 32 帧四角透明、中心与外缘中点保留', expectRounded('favicon.ico#1', icoFrame(file('../public/favicon.ico'), 1)));

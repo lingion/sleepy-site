@@ -1,5 +1,5 @@
 ---
-// M2 三视图焦点切换器(v5 巡检批 2026-10-25 重铸:用户「三张一样大小的图片从上
+// M2 三视图焦点切换器(v5 巡检批 2026-10-25 重铸,需求「三张一样大小的图片从上
 // 到下放/一样大小只是其他两个有阴影,这不是切换视图的样子——视图有主次之分,
 // 被聚焦的在中间,剩下两个模糊或次层级放到背后」)
 // 等宽并列(旧 2.1fr 1fr 1fr)废除:三面板同格叠放,焦点居中满位清晰,
@@ -22,7 +22,7 @@ interface Props {
   copy?: SiteCopy;
 }
 const t = (Astro.props.copy ?? zh).views;
-// 环序 = grid→week→today;网格列最宽(用户定调:绝大多数人用网格,§4 M2)
+// 环序 = grid→week→today;网格列最宽(定调:绝大多数人用网格,§4 M2)
 const panes = [
   { key: 'grid', light: gridL, dark: gridD },
   { key: 'week', light: weekL, dark: weekD },
@@ -200,7 +200,7 @@ const panes = [
   html.js .views[data-view='today'] .views__pane--week {
     --dir: -1;
   }
-  /* 背景档 = 用户「模糊或次层级放到背后」四特征齐备:
+  /* 背景档 = 需求「模糊或次层级放到背后」四特征齐备:
      侧移(消费 --dir)+ 缩位 + 模糊与降透(合成进 filter 链)+ 沉入前景之下。
      降透禁写成裸 opacity 属性:(0,4,1) 会压死 .reveal 入场 opacity:0 (0,2,0),
      背景两卡在揭示前就带 .4 浮出、入场编排对它们失效——filter 函数链与
@@ -284,7 +284,7 @@ const panes = [
     transform: rotate(-135deg);
   }
 
-  /* —— Segmented Button(MD3 签名控件,2026-10-23 用户增补):
+  /* —— Segmented Button(MD3 签名控件,2026-10-23 需求增补):
      外框 1px outline(禁 outline-variant——非文本对比 3:1,测试闸)+ corner-full;
      段间 1px outline-variant 发丝(装饰分隔,允许);
      选中段 secondary-container 底 + ::before check(on-secondary-container 字)——
@@ -345,7 +345,7 @@ const panes = [
 
   @media (max-width: 840px) {
     /* 手机:焦点舞台同构(巡检缺陷3 重铸废「三面板纵堆、网格首」旧剖面——
-       用户原话点名「手机端三张一样大小的图片从上到下放下来」不是切换视图),
+       原需求点名「手机端三张一样大小的图片从上到下放下来」不是切换视图),
        焦点满位居中,背景退侧。--pane-shift 收紧至 24vw:焦点半宽 150(300px 卡)
        下背景内缘仍压在焦点缘之内(重叠非漂浮) */
     .views__panels {
