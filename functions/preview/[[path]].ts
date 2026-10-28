@@ -1,5 +1,5 @@
 // /preview 路径反代 —— 把 qdp.qzz.io 网页预览挂进官网 URL 之下。
-// 用户定案(2026-10-27): 地址栏必须保持 sleepy.is-my.app/preview, 全程不许跳转,
+// 定案(2026-10-27): 地址栏必须保持 sleepy.is-my.app/preview, 全程不许跳转,
 // 故采用 Pages Functions 反代而非重定向。契约测试: tests/proxy.preview.test.ts。
 //
 // 上游形态实测(2026-10-27): Vite SPA, hash 路由, 子路径回退返回同一张 index.html,
