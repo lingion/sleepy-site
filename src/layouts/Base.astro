@@ -123,6 +123,10 @@ const heroImg = preloadHero
     {/* 百度站长所有权验证(2026-10-28,HTML 标签方式):官方要求验证通过后保留,
         删除 = 站点掉出资源平台管辖且无告警,tests/baidu-verification.test.ts 锁令牌。 */}
     <meta name="baidu-site-verification" content="codeva-kA7BwrU2wy" />
+    {/* Google Search Console 所有权验证(2026-10-28,替代方式 meta):与用户提供的
+        DNS TXT 记录同令牌;官方要求验证通过后保留, 删除 = 站点掉出 GSC 管辖
+        (收录状态/移除请求/安全报告全断)且无告警,tests/google-verification.test.ts 锁令牌。 */}
+    <meta name="google-site-verification" content="l9EkNtXUntA_ZyNvr2f6GpYpTziiw-vSKOI3Sotl5aY" />
     {rssLink && <link rel="alternate" type="application/rss+xml" title="Sleepy release feed" href={rssLink} />}
     {!noindex && <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} />}
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
