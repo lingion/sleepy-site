@@ -635,7 +635,7 @@
                 "inline": [
                   {
                     "t": "text",
-                    "v": "iOS 在独立仓库 "
+                    "v": "iOS 版在独立仓库 "
                   },
                   {
                     "t": "link",
@@ -649,21 +649,21 @@
                   },
                   {
                     "t": "text",
-                    "v": " 维护，安装方式、最低系统和可用功能以该仓库的公开说明与 "
+                    "v": " 维护，基于 SwiftUI + WidgetKit 原生实现，iOS 16.0 起，与 Android 版功能对齐。目前以 "
                   },
                   {
                     "t": "link",
-                    "href": "https://github.com/lingion/sleepy-ios/releases",
+                    "href": "https://testflight.apple.com/join/SxymmDzf",
                     "inline": [
                       {
                         "t": "text",
-                        "v": "Releases"
+                        "v": "Apple TestFlight 公测"
                       }
                     ]
                   },
                   {
                     "t": "text",
-                    "v": " 为准，不能据 Android v1.0.63 推断功能完全相同。另有"
+                    "v": " 作为唯一合法上线途径分发，加入公测后即可直接安装体验并自动接收版本推送。另有"
                   },
                   {
                     "t": "link",
@@ -716,21 +716,21 @@
                   },
                   {
                     "t": "text",
-                    "v": " repository. Consult its public documentation and "
+                    "v": " repository, built natively with SwiftUI + WidgetKit for iOS 16.0 and up, feature-aligned with Android releases. It is currently distributed via "
                   },
                   {
                     "t": "link",
-                    "href": "https://github.com/lingion/sleepy-ios/releases",
+                    "href": "https://testflight.apple.com/join/SxymmDzf",
                     "inline": [
                       {
                         "t": "text",
-                        "v": "Releases"
+                        "v": "Apple TestFlight public beta"
                       }
                     ]
                   },
                   {
                     "t": "text",
-                    "v": " for installation methods, minimum system requirements and available features. Android v1.0.63 does not establish full feature parity with iOS. There is also an "
+                    "v": " as the only official release route, which can be installed directly and receives updates automatically. There is also an "
                   },
                   {
                     "t": "link",
