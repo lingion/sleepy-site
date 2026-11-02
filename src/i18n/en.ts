@@ -104,6 +104,10 @@ export const en: SiteCopy = {
     storeBadgeCn: 'App Market',
     deviceCaption: 'Grid view app screenshot',
     trial: 'The online trial provides full functionality without installation.',
+    iosTitle: 'Download for iOS (TestFlight)',
+    iosNote: 'Currently the only official release channel. Join the public beta via Apple TestFlight.',
+    iosBadgeAlt: 'Download on the App Store',
+    iosBadgeAria: 'Download Sleepy for iOS on the App Store (TestFlight public beta)',
   },
   trust: {
     heading: 'Who makes this',
@@ -179,6 +183,10 @@ export const en: SiteCopy = {
     moreTitle: 'More',
     moreLinks: { releases: 'All past releases', repo: 'Source repository', sponsor: 'Sponsor the project', issues: 'Report issues' },
     storeReserved: 'Store listing in the works',
+    iosTitle: 'Download for iOS (TestFlight)',
+    iosNote: 'Currently the only official release channel. Join the public beta via Apple TestFlight to experience the latest version.',
+    iosBadgeAlt: 'Download on the App Store',
+    iosBadgeAria: 'Download Sleepy for iOS on the App Store (TestFlight public beta)',
   },
   faqPage: {
     heading: 'FAQ',

@@ -3,7 +3,7 @@
 // 纯出口页:全页唯一 Elevated 主钮(§11-6 彩色容器上禁 Filled 叠 tonal)、零 reveal 编排(spec §5 工具页)、
 // 行样式复制迁移自 v4 Download.astro(旧段本体 Task 7 处理);架构引导三行小表 = spec §9 默认加
 import release from '../../data/release.json';
-import { repoUrl, sponsorUrl, onlineTrialUrl } from '../../i18n/ui';
+import { repoUrl, sponsorUrl, onlineTrialUrl, iosTestFlightUrl, iosRepoUrl } from '../../i18n/ui';
 import type { SiteCopy } from '../../i18n/zh';
 
 interface Props {
@@ -21,6 +21,8 @@ const notes = dl.abiNotes as Record<string, string>;
 const versionLine = t.versionLine.replace('{tag}', release.tag).replace('{minSdk}', dl.minSdk).replace('{date}', date);
 const universal = release.assets.find((a) => a.name.includes('universal'))!;
 const zhUI = lang === 'zh';
+const badgeSrc = zhUI ? '/badges/download-on-the-app-store-zh.svg' : '/badges/download-on-the-app-store-en.svg';
+const badgeWidth = zhUI ? 109 : 120;
 ---
 
 <section class="download-page" data-prototype="tool-quiet">
@@ -69,6 +71,30 @@ const zhUI = lang === 'zh';
     </ul>
     <p class="t-body-small download-page__note">{t.universalNote}</p>
 
+    <section class="download-page__block download-page__ios" aria-labelledby="dl-ios">
+      <h2 class="t-title-medium" id="dl-ios">{t.iosTitle}</h2>
+      <p class="t-body-small">{t.iosNote}</p>
+      <div class="download-page__apple-wrap">
+        <a
+          class="apple-store-badge-link"
+          href={iosTestFlightUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t.iosBadgeAria}
+        >
+          <img
+            class="apple-store-badge"
+            src={badgeSrc}
+            alt={t.iosBadgeAlt}
+            width={badgeWidth}
+            height="40"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      </div>
+    </section>
+
     <section class="download-page__block" aria-labelledby="dl-verify">
       <h2 class="t-title-medium" id="dl-verify">{t.verifyTitle}</h2>
       <p class="t-body-small">{t.verifyNote}</p>
@@ -111,6 +137,7 @@ const zhUI = lang === 'zh';
       <ul class="download-page__more">
         <li><a href="https://github.com/lingion/sleepy/releases">{t.moreLinks.releases}</a></li>
         <li><a href={repoUrl}>{t.moreLinks.repo}</a></li>
+        <li><a href={iosRepoUrl}>{zhUI ? 'iOS 源码仓库' : 'iOS source repository'}</a></li>
         <li><a href={sponsorUrl}>{t.moreLinks.sponsor}</a></li>
         <li><a href={`${repoUrl}/issues`}>{t.moreLinks.issues}</a></li>
       </ul>
@@ -219,6 +246,30 @@ const zhUI = lang === 'zh';
     color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 82%, var(--md-sys-color-primary-container));
   }
   .download-page__block { margin-block-end: calc(var(--site-unit) * 8); display: grid; gap: calc(var(--site-unit) * 2); }
+  .download-page__apple-wrap {
+    display: flex;
+    align-items: center;
+    margin-block-start: calc(var(--site-unit) * 1);
+  }
+  .apple-store-badge-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  }
+  .apple-store-badge-link:hover {
+    opacity: 0.88;
+  }
+  .apple-store-badge-link:focus-visible {
+    outline: 2px solid var(--md-sys-color-on-primary-container);
+    outline-offset: 3px;
+  }
+  .apple-store-badge {
+    display: block;
+    height: 40px;
+    width: auto;
+  }
   .download-page__steps { margin: 0; padding-inline-start: 1.4em; display: grid; gap: 4px; }
   .download-page__arch { border-collapse: collapse; margin: 0; }
   .download-page__arch th, .download-page__arch td {

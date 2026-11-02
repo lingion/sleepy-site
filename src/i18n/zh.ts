@@ -106,6 +106,10 @@ export const zh = {
     storeBadgeCn: '应用商店',
     deviceCaption: '网格视图应用截图',
     trial: '在线体验提供完整功能,无需安装。',
+    iosTitle: 'iOS 版下载（TestFlight）',
+    iosNote: '目前唯一合法上线途径。通过 Apple 官方 TestFlight 参与公测。',
+    iosBadgeAlt: '在 App Store 下载',
+    iosBadgeAria: '在 App Store 下载 Sleepy iOS 版（TestFlight 公测）',
   },
   trust: {
     heading: '谁在做这个',
@@ -185,6 +189,10 @@ export const zh = {
     moreTitle: '更多',
     moreLinks: { releases: '全部历史版本', repo: '源码仓库', sponsor: '赞助项目', issues: '反馈问题' },
     storeReserved: '商店上架准备中',
+    iosTitle: 'iOS 版下载（TestFlight）',
+    iosNote: '目前唯一合法上线途径。通过 Apple 官方 TestFlight 参与公测体验最新版本。',
+    iosBadgeAlt: '在 App Store 下载',
+    iosBadgeAria: '在 App Store 下载 Sleepy iOS 版（TestFlight 公测）',
   },
   faqPage: {
     heading: '常见问答',
