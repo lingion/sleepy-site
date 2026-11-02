@@ -48,7 +48,7 @@ export const zh = {
     body: '先查目录状态,再用学校账号登录教务系统导入。已配置条目仍可能受学校改版、验证码或网络限制影响;收录不代表导入成功保证。',
     imageAlt: '教务导入应用截图',
     // 派生数字 chip(§4 M3:卡缘 assist-chip「N 条直连」;条数不当校数说,§4.1)
-    chipLabel: (rows: number) => `${rows} 条已配置记录`,
+    chipLabel: (rows: number) => `${rows} 条直连`,
   },
   schools: {
     heading: '收录与检索',
@@ -165,8 +165,7 @@ export const zh = {
   // v5 四页键组(spec §4 文案 + 数字纪律:占位 {rows}/{types}/{shown}/{total}/{tag}/{minSdk}/{date} 由渲染端替换)
   homeSchoolCard: {
     // 计数派生闸(§15/§4.1):带协议条目数不当校数说(同录多入口、跨校区计数)
-    count: '{rows} 条目录记录 · {types} 种协议,输入校名查看接入状态。',
-    status: '{configured} 条已配置 · {unverified} 条未验证 · {pending} 条待接入。配置状态不等于逐校实机成功保证。',
+    count: '{rows} 条教务直连 · {types} 种协议,输入校名即可确认收录。',
     cta: '查找我的学校',
   },
   schoolsPage: {

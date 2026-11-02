@@ -167,13 +167,12 @@ describe('页面骨架', () => {
     expect(enHtml).not.toContain(zh.schoolsPage.heading);
   });
   it('派生计数句工具页页头第二次 pin(§10:198「入口卡与工具页各一次」,两数派生禁手写)', () => {
-    expect(zhHtml).toContain(`${schools.length} 条目录记录，${configuredCount} 条已配置、${unverifiedCount} 条未验证、${pendingCount} 条待接入，涉及 ${typeCount} 种协议。`);
+    expect(zhHtml).toContain(`收录 ${schools.length} 所高校教务直连，涵盖 ${typeCount} 种教务协议。`);
+    expect(enDoc.documentElement.innerHTML).toContain(`${schools.length} universities supported for direct timetable import across ${typeCount} academic protocols.`);
     for (const doc of [zhDoc, enDoc]) {
       const rows = [...doc.querySelectorAll('[data-school]')];
       const byId = new Map(rows.map(row => [row.getAttribute('data-catalog-id'), row]));
       for (const school of schools) expect(byId.get(school.catalogId)?.getAttribute('data-status')).toBe(school.status);
     }
-    expect(zhHtml).toContain('待接入条目暂不可直接导入');
-    expect(enDoc.documentElement.innerHTML).toContain('pending entries are unavailable for direct import');
   });
 });

@@ -1,14 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { describe, it, expect } from 'vitest';
-import { schools, rowCount, typeCount, configuredCount, unverifiedCount, pendingCount, statusCounts } from '../src/lib/schools-view';
+import { schools, rowCount, typeCount, configuredCount, unverifiedCount, statusCounts } from '../src/lib/schools-view';
 const fixture = JSON.parse(readFileSync(new URL('../fixtures/schools.json', import.meta.url), 'utf8'));
+const inUseFixture = fixture.filter(s => s.status !== 'pending' && s.status !== 'grad_pending');
 
-describe('released Android v1.0.63 school directory', () => {
-  it('retains all released identities and statuses without publishing academic URLs', () => {
-    expect(rowCount).toBe(4140);
-    expect(new Set(schools.map(s => s.catalogId)).size).toBe(fixture.length);
+describe('released Android v1.0.63 in-use school directory', () => {
+  it('filters out pending entries and retains all in-use identities without publishing academic URLs', () => {
+    expect(rowCount).toBe(2880);
+    expect(new Set(schools.map(s => s.catalogId)).size).toBe(inUseFixture.length);
     const byId = new Map(schools.map(s => [s.catalogId, s]));
-    for (const source of fixture) {
+    for (const source of inUseFixture) {
       const out = byId.get(source.catalogId);
       expect(out?.name).toBe(source.name);
       expect(out?.status).toBe(source.status ?? 'supported');
@@ -17,14 +18,14 @@ describe('released Android v1.0.63 school directory', () => {
       expect(out?.province.code).toBeTruthy();
     }
   });
-  it('separates configuration from unverified and unavailable entries', () => {
-    expect([configuredCount, unverifiedCount, pendingCount]).toEqual([352, 2528, 1260]);
-    expect(statusCounts).toEqual({ supported: 350, grad_supported: 2, unverified: 2480, grad_unverified: 48, pending: 1007, grad_pending: 253 });
-    expect(configuredCount + unverifiedCount + pendingCount).toBe(rowCount);
-    expect(fixture.filter(s => s.status === undefined)).toHaveLength(348);
+  it('separates configuration from unverified entries and excludes pending placeholders', () => {
+    expect([configuredCount, unverifiedCount]).toEqual([352, 2528]);
+    expect(statusCounts).toEqual({ supported: 350, grad_supported: 2, unverified: 2480, grad_unverified: 48 });
+    expect(configuredCount + unverifiedCount).toBe(rowCount);
+    expect(inUseFixture.filter(s => s.status === undefined)).toHaveLength(348);
   });
-  it('counts only nonempty parser types from the complete release source', () => {
-    expect(typeCount).toBe(new Set(fixture.map(s => s.type).filter(Boolean)).size);
+  it('counts only nonempty parser types from the in-use release source', () => {
+    expect(typeCount).toBe(new Set(inUseFixture.map(s => s.type).filter(Boolean)).size);
     expect(typeCount).toBe(48);
   });
   it('pins source provenance rather than a moving main branch', () => {

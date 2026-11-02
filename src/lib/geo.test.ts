@@ -50,16 +50,18 @@ describe('同长度城市 > 省(spec §4.1 冲突定则)', () => {
   });
 });
 
-describe('完整发布目录归组覆盖', () => {
-  it('每条源记录保留；无省份证据时明确标为未知', () => {
+describe('在用高校教务目录归组覆盖', () => {
+  it('每条在用记录保留；排除待接入条目，无省份证据时明确标为未知', () => {
     const grouped = JSON.parse(readFileSync(new URL('../data/schools.grouped.json', import.meta.url), 'utf8'));
     const snapshot = JSON.parse(readFileSync(new URL('../data/schools.snapshot.json', import.meta.url), 'utf8'));
+    const inUseFixture = fixture.filter((s: { status?: string }) => s.status !== 'pending' && s.status !== 'grad_pending');
     expect(fixture.length).toBe(4140);
-    expect(grouped.map((s: { catalogId: string }) => s.catalogId)).toEqual(fixture.map(s => s.catalogId));
+    expect(grouped.length).toBe(2880);
+    expect(grouped.map((s: { catalogId: string }) => s.catalogId)).toEqual(inUseFixture.map((s: { catalogId: string }) => s.catalogId));
     for (const s of grouped) {
-      const source = fixture.find(f => f.catalogId === s.catalogId)!;
+      const source = fixture.find((f: { catalogId: string }) => f.catalogId === s.catalogId)!;
       const code = source.sortKey === '*' ? 'OTHER' : manual[source.name]
-        ?? snapshot.provinceBySchool[source.name]
+        ?? snapshot.provinceBySchool?.[source.name]
         ?? classifyProvince(source.name, idx)?.code
         ?? decodeProvinceByCatalogId(source.catalogId, geo.provinces)
         ?? 'UNKNOWN';

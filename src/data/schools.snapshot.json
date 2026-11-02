@@ -2657,7 +2657,7 @@
     "长春东方职业学院": "JL",
     "中南财经政法大学 - 研究生": "HB"
   },
-  "rowCount": 4140,
+  "rowCount": 2880,
   "typeCount": 48,
   "configuredCount": 352,
   "unverifiedCount": 2528,
@@ -2666,8 +2666,6 @@
     "supported": 350,
     "grad_supported": 2,
     "unverified": 2480,
-    "grad_unverified": 48,
-    "pending": 1007,
-    "grad_pending": 253
+    "grad_unverified": 48
   }
 }
