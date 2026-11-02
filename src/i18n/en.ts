@@ -8,7 +8,7 @@ export const en: SiteCopy = {
   meta: {
     title: 'Sleepy — open-source timetable, built free',
     description: (rows: number) =>
-      `${rows} school catalog entries with individual import status. A local-first, open-source Android timetable.`,
+      `${rows} universities and schools supported for direct timetable import. A local-first, open-source Android timetable.`,
   },
   hero: {
     slogan: 'Built open. Feels free.',
@@ -16,7 +16,7 @@ export const en: SiteCopy = {
     ctaDownload: 'Download for Android',
     ctaTrial: 'Try it online',
     deviceCaption: 'Week view app screenshot',
-    ribbon: { schools: 'catalog entries', license: 'GPL-3.0 open source', privacy: 'Data stays on device' },
+    ribbon: { schools: 'schools supported', license: 'GPL-3.0 open source', privacy: 'Data stays on device' },
   },
   views: {
     heading: 'Three views, each in its place',

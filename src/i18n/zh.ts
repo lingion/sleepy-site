@@ -7,7 +7,7 @@ export const zh = {
     title: 'Sleepy — 开源课表,构建无壳,自由自在',
     // 计数派生闸(§15):条数不当校数说(§4.1),现值由页面层传入
     description: (rows: number) =>
-      `${rows} 条学校目录记录,逐条标明接入状态。本地优先、源码公开的 Android 课表。`,
+      `收录 ${rows} 所学校教务直连。本地优先、源码公开的 Android 课表。`,
   },
   hero: {
     slogan: '构建无壳,自由自在',
@@ -16,7 +16,7 @@ export const zh = {
     ctaTrial: '在线体验',
     deviceCaption: '周视图应用截图',
     // ribbon = 不对称佐证条:派生大数字领头 + 单位短语,两事实跟随
-    ribbon: { schools: '条目录记录', license: 'GPL-3.0 开源', privacy: '数据留存本机' },
+    ribbon: { schools: '所学校直连', license: 'GPL-3.0 开源', privacy: '数据留存本机' },
   },
   views: {
     heading: '三视图,各得其所',

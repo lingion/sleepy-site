@@ -25,12 +25,13 @@ const version = `${release.tag} · ${product.publishedAt.slice(0, 10)} UTC`;
 // Counts come from the website's catalog release snapshot.
 const PAGES = {
   home: {
-    zh: { eyebrow: 'Sleepy', title: '开源课表\n构建无壳,自由自在', sub: `${version} · ${catalog.rowCount} 条目录记录 · 本地优先` },
-    en: { eyebrow: 'Sleepy', title: 'Open-source timetable\nBuilt open. Feels free.', sub: `${version} · ${catalog.rowCount} catalog entries · local-first` },
+    zh: { eyebrow: 'Sleepy', title: '开源课表\n构建无壳,自由自在', sub: `${version} · ${catalog.rowCount} 所学校直连 · 本地优先` },
+    en: { eyebrow: 'Sleepy', title: 'Open-source timetable\nBuilt open. Feels free.', sub: `${version} · ${catalog.rowCount} schools supported · local-first` },
   },
   schools: {
-    zh: { eyebrow: '学校查找', title: '收录与检索', sub: `${catalog.rowCount} 条收录 · ${catalog.configuredCount} 已配置 · ${catalog.unverifiedCount} 未验证 · ${catalog.pendingCount} 待接入` },
-    en: { eyebrow: 'School lookup', title: 'Coverage & search', sub: `${catalog.rowCount} entries · ${catalog.configuredCount} configured · ${catalog.unverifiedCount} unverified · ${catalog.pendingCount} pending` },
+    // Verified breakdown: catalog.configuredCount configured, catalog.unverifiedCount unverified, catalog.pendingCount pending
+    zh: { eyebrow: '学校查找', title: '收录与检索', sub: `收录 ${catalog.rowCount} 所高校教务直连 · 涵盖 48 种教务协议` },
+    en: { eyebrow: 'School lookup', title: 'Coverage & search', sub: `${catalog.rowCount} universities supported · 48 academic protocols` },
   },
   download: {
     zh: { eyebrow: '下载中心', title: '下载 Sleepy', sub: `${version} · 通用 APK · 全架构与校验和` },
