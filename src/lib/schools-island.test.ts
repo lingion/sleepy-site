@@ -42,11 +42,16 @@ describe('filterRows(URL 态 → 行集)', () => {
   });
   it('空 q 短路 = 省/协议过滤,不要求查询词', () => {
     const gd = filterRows(schools, parseUrlState('?p=GD'));
-    expect(gd.length).toBeGreaterThan(0);
+    expect(gd.map(s => s.catalogId)).toEqual(schools.filter(s => s.province.code === 'GD').map(s => s.catalogId));
     expect(gd.every((r) => r.province.code === 'GD')).toBe(true);
   });
-  it('全空态 = 全量(JS-off 可读不破)', () => {
-    expect(filterRows(schools, parseUrlState(''))).toHaveLength(schools.length);
+  it('全空态按源顺序保留全部目录身份，包括待接入与省份未知条目', () => {
+    expect(filterRows(schools, parseUrlState('')).map(s => s.catalogId)).toEqual(schools.map(s => s.catalogId));
+    const unknown = filterRows(schools, parseUrlState('?p=UNKNOWN'));
+    expect(unknown.length).toBeGreaterThan(0);
+    expect(unknown.map(s => s.catalogId)).toEqual(schools.filter(s => s.province.code === 'UNKNOWN').map(s => s.catalogId));
+    const first = unknown[0];
+    expect(filterRows(schools, parseUrlState(`?p=UNKNOWN&q=${encodeURIComponent(first.name)}`)).map(s => s.catalogId)).toContain(first.catalogId);
   });
   it('aliases 入检索面:lixin 命中上海立信(sortKeyFull 不含该串)', () => {
     const hit = filterRows(schools, parseUrlState('?q=lixin')).map((r) => r.name);

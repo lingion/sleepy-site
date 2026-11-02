@@ -50,33 +50,31 @@ describe('同长度城市 > 省(spec §4.1 冲突定则)', () => {
   });
 });
 
-describe('覆盖率不变量:学校 100% 可判(prefix ∪ manual ∪ moe解)', () => {
-  it('仓内 fixture 每条学校:前缀/人工表/moe 解/修饰词回退,必居其一', () => {
-    const ungrouped = fixture.filter((s) => {
-      if (s.sortKey === '*') return false;
-      if (classifyProvince(s.name, idx) || s.name in manual || decodeProvinceByCatalogId(s.catalogId, geo.provinces)) {
-        return false;
-      }
-      const clean = s.name
-        .replace(/\s*[-–—]\s*研究生$/, '')
-        .replace(/[-–—]研究生$/, '')
-        .replace(/个人数据中心$/, '')
-        .replace(/（.*?）$/, '')
-        .replace(/\(.*?\)$/, '')
-        .trim();
-      return !(clean in manual) && !classifyProvince(clean, idx);
-    });
-    expect(ungrouped).toEqual([]);
-    expect(fixture.length).toBeGreaterThan(0);
-  });
-  it("「其它」桶条目不静默丢失", () => {
-    const stars = fixture.filter((s) => s.sortKey === '*');
-    for (const s of stars) {
-      expect(s.name).toBeDefined();
+describe('完整发布目录归组覆盖', () => {
+  it('每条源记录保留；无省份证据时明确标为未知', () => {
+    const grouped = JSON.parse(readFileSync(new URL('../data/schools.grouped.json', import.meta.url), 'utf8'));
+    const snapshot = JSON.parse(readFileSync(new URL('../data/schools.snapshot.json', import.meta.url), 'utf8'));
+    expect(fixture.length).toBe(4140);
+    expect(grouped.map((s: { catalogId: string }) => s.catalogId)).toEqual(fixture.map(s => s.catalogId));
+    for (const s of grouped) {
+      const source = fixture.find(f => f.catalogId === s.catalogId)!;
+      const code = source.sortKey === '*' ? 'OTHER' : manual[source.name]
+        ?? snapshot.provinceBySchool[source.name]
+        ?? classifyProvince(source.name, idx)?.code
+        ?? decodeProvinceByCatalogId(source.catalogId, geo.provinces)
+        ?? 'UNKNOWN';
+      expect(s.province.code).toBe(code);
+      if (code === 'UNKNOWN') expect(s.province.zh).toBe('省份未知');
     }
   });
-  it('协议面覆盖有效(在用协议面均派生一致)', () => {
-    expect(new Set(fixture.map((s) => (s as unknown as { type: string }).type)).size).toBeGreaterThan(30);
+  it("「其它」桶恰含 sortKey='*' 两条(北邮 VPN/WebVPN,不静默丢)", () => {
+    const stars = fixture.filter((s) => s.sortKey === '*');
+    expect(stars.map((s) => s.name).sort()).toEqual(
+      ['北京邮电大学新教务（VPN）', '北京邮电大学新教务（WebVPN）'].sort(),
+    );
+  });
+  it('完整 release 含 48 种非空协议；空类型不是协议', () => {
+    expect(new Set(fixture.map(s => s.type).filter(Boolean)).size).toBe(48);
   });
   it('manual 表键必须是真实校名且值必须是已声明省码或 OTHER(防手滑;OTHER 活在构建端,不在 geo.provinces)', () => {
     const names = new Set(fixture.map((s) => s.name));

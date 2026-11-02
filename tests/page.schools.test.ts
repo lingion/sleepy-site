@@ -1,11 +1,11 @@
 // v5 /schools/ 产物闸(plan Task 4 Step 3)— dist/client/schools/index.html 级 DOM 验收
-// JS-off 全量可读(1478 行在 HTML)+ details 折叠 + URL 深链首屏即过滤(applyInitialState 真断言)
+// JS-off 全量可读(完整目录行在 HTML)+ details 折叠 + URL 深链首屏即过滤(applyInitialState 真断言)
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
 import { site } from '../src/i18n/ui';
 import { applyInitialState, filterRows, parseUrlState } from '../src/lib/schools-island';
-import { catalogUpdatedAt, schools } from '../src/lib/schools-view';
+import { catalogUpdatedAt, schools, provincesOrdered, typeCount, configuredCount, unverifiedCount, pendingCount } from '../src/lib/schools-view';
 import { zh } from '../src/i18n/zh';
 import { en } from '../src/i18n/en';
 
@@ -23,19 +23,17 @@ const zhHtml = zhDoc.documentElement.innerHTML;
 const enDoc = load('../dist/client/en/schools/index.html').window.document;
 
 describe('JS-off 全量静态渲染(spec §2.3)', () => {
-  it('全量行在 HTML,各组各带 summary 计数', () => {
+  it('完整目录行全在 HTML,details 动态省份组各带 summary 计数', () => {
     expect(zhDoc.querySelectorAll('[data-school]')).toHaveLength(schools.length);
-    const expectedGroups = new Set(schools.map((s) => s.province.code)).size;
     const groups = [...zhDoc.querySelectorAll<HTMLElement>('details[data-group]')];
-    expect(groups).toHaveLength(expectedGroups);
+    expect(groups).toHaveLength(provincesOrdered().length);
     for (const g of groups) {
       const rows = g.querySelectorAll('[data-school]').length;
       expect(g.querySelector('summary')!.textContent).toContain(String(rows));
     }
     const gd = groups.find((g) => g.dataset.group === 'GD')!;
-    const expectedGdCount = schools.filter((s) => s.province.code === 'GD').length;
     expect(gd.querySelector('summary')!.textContent).toContain('广东');
-    expect(gd.querySelectorAll('[data-school]')).toHaveLength(expectedGdCount);
+    expect(gd.querySelectorAll('[data-school]')).toHaveLength(schools.filter(s => s.province.code === 'GD').length);
   });
   it('默认关组(JS-off 手机=一行一组可手开;桌面 open 由岛 JS 增强,产物不带)', () => {
     expect([...zhDoc.querySelectorAll<HTMLDetailsElement>('details[data-group]')].every((d) => !d.open)).toBe(true);
@@ -45,10 +43,9 @@ describe('JS-off 全量静态渲染(spec §2.3)', () => {
     expect(faces).toHaveLength(schools.length);
     for (const f of faces) expect(f).toBe(f?.toLowerCase()); // normalize 产物恒含小写
   });
-  it('en 路由镜像同数', () => {
-    const expectedGroups = new Set(schools.map((s) => s.province.code)).size;
+  it('en 路由镜像同数:完整目录行 动态省份组', () => {
     expect(enDoc.querySelectorAll('[data-school]')).toHaveLength(schools.length);
-    expect(enDoc.querySelectorAll('details[data-group]')).toHaveLength(expectedGroups);
+    expect(enDoc.querySelectorAll('details[data-group]')).toHaveLength(provincesOrdered().length);
   });
 });
 
@@ -170,7 +167,13 @@ describe('页面骨架', () => {
     expect(enHtml).not.toContain(zh.schoolsPage.heading);
   });
   it('派生计数句工具页页头第二次 pin(§10:198「入口卡与工具页各一次」,两数派生禁手写)', () => {
-    const types = new Set(schools.map((s) => s.type)).size;
-    expect(zhHtml.replace(/\s+/g, '')).toContain(`${schools.length}条教务直连·${types}种协议,输入校名即可确认收录。`);
+    expect(zhHtml).toContain(`${schools.length} 条目录记录，${configuredCount} 条已配置、${unverifiedCount} 条未验证、${pendingCount} 条待接入，涉及 ${typeCount} 种协议。`);
+    for (const doc of [zhDoc, enDoc]) {
+      const rows = [...doc.querySelectorAll('[data-school]')];
+      const byId = new Map(rows.map(row => [row.getAttribute('data-catalog-id'), row]));
+      for (const school of schools) expect(byId.get(school.catalogId)?.getAttribute('data-status')).toBe(school.status);
+    }
+    expect(zhHtml).toContain('待接入条目暂不可直接导入');
+    expect(enDoc.documentElement.innerHTML).toContain('pending entries are unavailable for direct import');
   });
 });

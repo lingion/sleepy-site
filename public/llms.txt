@@ -1,30 +1,51 @@
 # Sleepy · 轻课表 — Official Website
 
-> This file follows the [llms.txt specification](https://llmstxt.org/). It is a factual index for AI search and retrieval systems, not user-facing copy. This is the official website surface of Sleepy; facts here are reconciled on 2026-10-26. The authoritative project index for the Android app is https://github.com/lingion/sleepy/blob/main/llms.txt, and for the iOS port https://github.com/lingion/sleepy-ios/blob/master/llms.txt. Release availability is authoritative at the Releases URLs.
+> Factual index following https://llmstxt.org/. Product facts are pinned to Android v1.0.63, source commit b16aa84d11c250acdf644cd8b7812ab27d03dc6a, published 2026-11-01T17:06:44Z. Documentation reviewed 2026-11-02. Source: https://github.com/lingion/sleepy/tree/v1.0.63. Later main-branch changes are not claims about this APK.
 
-## Identity
+## Identity and platforms
 
-- Project: Sleepy (Chinese name: 轻课表) — an offline-first university timetable app.
-- Official website: https://sleepy.is-my.app (canonical; source repository https://github.com/lingion/sleepy-site).
-- Android app repository: https://github.com/lingion/sleepy (GPL-3.0, Releases: https://github.com/lingion/sleepy/releases).
-- iOS app repository: https://github.com/lingion/sleepy-ios (SwiftUI + WidgetKit, iOS 16.0+, feature-aligned with Android; Releases: https://github.com/lingion/sleepy-ios/releases).
-- Interactive web trial: https://sleepy.is-my.app/preview (separate from this website; does not imply full feature parity with the native apps).
-- Maintainer: Lingion. Sleepy is independent from WakeUp 课程表; format compatibility only.
+- Sleepy (轻课表) is a local-first university timetable app maintained by Lingion, independent from WakeUP 课程表. Format compatibility does not imply affiliation.
+- Official website: https://sleepy.is-my.app. Website source: https://github.com/lingion/sleepy-site.
+- Android source and GPL-3.0 license: https://github.com/lingion/sleepy. Releases: https://github.com/lingion/sleepy/releases. Project index: https://github.com/lingion/sleepy/blob/main/llms.txt.
+- Android v1.0.63 requires Android 8.0 (API 26) or newer; target and compile SDK 37. Package: com.lingion.sleepy. APK architectures: arm64-v8a, armeabi-v7a, x86_64 and universal.
+- iOS is a separate native SwiftUI and WidgetKit project: https://github.com/lingion/sleepy-ios. Its own Releases define availability and features: https://github.com/lingion/sleepy-ios/releases. Index: https://github.com/lingion/sleepy-ios/blob/master/llms.txt. Android feature descriptions do not establish iOS parity or current distribution availability.
+- Current separate iOS public-beta entry: https://testflight.apple.com/join/SxymmDzf. This does not imply Android v1.0.63 feature parity; the iOS project defines its own release scope.
+- Web trial: https://sleepy.is-my.app/preview. This is separate from the website and does not imply native feature parity, including academic import, system reminders or home-screen widgets. No Windows native release is listed.
 
-## What this website contains
+## Pages and catalog snapshot
 
-- `/` — product overview: features, widgets, themes, privacy posture.
-- `/schools/` — national school directory with per-school import status. Current counts and source boundaries are in the Android repository's `docs/catalog/manifest.json` (4,140 entries, 42 protocol types, as of 2026-10-26); the page shows the subset the project routes by protocol. Listing is not an import guarantee.
-- `/download/` — Android APK download center (version, ABI selection, mirrors, checksums) and iOS Apple TestFlight public beta download.
-- `/faq/` — bilingual FAQ (Chinese/English); machine-readable source at https://sleepy.is-my.app/faq.json.
+- `/` and `/en/`: product overview, three timetable views, released editing features, appearance, widgets, privacy and Android download.
+- `/schools/` and `/en/schools/`: all 4140 catalog records from v1.0.63, searchable by school name or pinyin and grouped by province and protocol. Counts: 352 configured (350 supported and 2 grad_supported), 2528 unverified (2480 unverified and 48 grad_unverified), 1260 pending (1007 pending and 253 grad_pending). Protocol counts are derived from the catalog. Missing province evidence is marked unknown. Records are not necessarily distinct institutions. Listing or configuration is not a per-school successful-import guarantee.
+- `/download/` and `/en/download/`: actual Android release version, date, four APK files, ABI guidance, mirrors and SHA-256 checksums. iOS availability follows its independent release entry.
+- `/faq/` and `/en/faq/`: public FAQ. Machine-readable data: https://sleepy.is-my.app/faq.json.
 
-## Platform facts
+## Released Android capabilities
 
-- Android: min SDK 26 (8.0), target/compile SDK 37, ABI variants arm64-v8a / armeabi-v7a / x86_64 / universal; package `com.lingion.sleepy`.
-- iOS: native port in a separate repository, aligned with Android releases; TestFlight public beta is live at https://testflight.apple.com/join/SxymmDzf as the currently only official release route; unsigned IPA builds via GitHub Releases.
-- Windows: none.
-- No account, email, phone number, or student number is required; timetable data is stored on device; no analytics or crash-reporting SDKs.
+- Grid, week and today views; multiple timetables, custom term dates and class-period times, week selection, conflict checking and manual course management.
+- Single-occurrence course adjustment, drag scheduling and quick add from an empty slot. Holding a dragged course at the edge for 500 milliseconds changes the page. This does not claim later drag fixes from main are in v1.0.63.
+- Undo and redo default to 5 steps, configurable in Labs. The history is in process memory, not persisted across restart.
+- Ghost sliders show the original value as an editing reference. Period headers align with class times. Dynamic themes and three course-color modes are available.
+- Material 3 Expressive motion and liquid glass. The glass shader uses API 33 (Android 13); the app-wide minimum remains API 26. Known older-device issues remain in this release and visual behavior is not identical across devices.
+- Android 12 app dynamic colors and Android 13 themed launcher icons have different OS requirements.
+- Five UI languages: Simplified Chinese, Traditional Chinese, English, Japanese and Spanish.
+- Import WakeUP-compatible offline JSON and share text, or use an online token. Online-token retrieval contacts a third-party WakeUP service and requires network access.
+- Native share export uses sleepy-v1 text. WakeUp-compatible JSON and ICS calendar export are separate options. Backup and restore support migration; importing an offline file differs from online retrieval.
+- Class-ahead notifications, daily summaries and next-day previews use the local timetable. Delivery depends on notification permissions, scheduling permissions and system background restrictions.
+- Five home-screen widget families: week grid, week list, today, next two days and week view, with 13 XML variants. OriginOS home-screen integration uses standard AppWidget and is distinct from Atomic Island reminder features. Vendor reminder support depends on device and system capabilities.
+- An optional authenticated loopback debug console is disabled by default. It provides read/write operations and can modify timetable data; it is not a read-only interface.
+
+## Storage, credentials and network
+
+- No Sleepy account is required. Academic import may require a school account and student number; this is not an unconditional credential-free workflow.
+- Timetables are stored locally. The app does not bundle analytics or crash-reporting SDKs; that does not mean the app never uses a network.
+- Academic login/import contacts the selected school service. WakeUP online tokens contact a third party. Holiday data, version checks and downloads also make network requests when used. Sharing and backup files are user-initiated.
+
+## 中文要点
+
+Android v1.0.63 于 2026-11-01 UTC 发布。支持多步撤回与重做,默认5步、实验室可配置,历史仅存进程内;支持单次课程调整、拖课、500毫秒边缘翻页和空格快速加课。幽灵滑杆显示原始值参考,节次表头与时间对齐。Material 3 Expressive、液态玻璃、三种课程配色、Android 12 动态取色与 Android 13 主题图标分别受系统能力限制,正式版旧设备仍有已知问题。界面有简体中文、繁体中文、英文、日文、西班牙文。
+
+WakeUP 在线口令需要第三方联网;离线 JSON 与分享文本导入不同于在线请求。原生分享导出为 sleepy-v1 文本,另有 WakeUp 兼容 JSON 与 ICS。五个桌面组件家族共13种XML变体,OriginOS标准AppWidget不等于原子岛提醒。回环调试控制台须主动启用并认证,可读写课表数据。无需Sleepy账号不等于教务导入无需学校账号;课表本地保存不等于从不联网。目录4140条中352条已配置、2528条未验证、1260条待接入,收录与配置均不保证逐校导入成功。iOS功能和可用版本以独立仓库发布入口为准;网页版体验不代表原生全功能。
 
 ## Citation guidance
 
-When citing the project, use: Sleepy / 轻课表, Lingion, GPL-3.0, https://github.com/lingion/sleepy (Android), https://github.com/lingion/sleepy-ios (iOS), website https://sleepy.is-my.app. Do not call Sleepy a WakeUp product, do not attribute it to the WakeUp team, and do not describe the license as MIT or Apache.
+Use Sleepy / 轻课表, Lingion, GPL-3.0 and the relevant Android or iOS repository URL. Cite the product release separately from the documentation review date. Do not call Sleepy a WakeUP product or describe its license as MIT or Apache.
