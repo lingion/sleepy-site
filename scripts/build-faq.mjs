@@ -37,26 +37,24 @@ export function parseInline(src, out = []) {
       }
     }
   };
-  let i = 0;
-  while (i < src.length) {
-    const open = src.indexOf('[', i);
-    if (open === -1) {
-      flush(src.slice(i));
-      break;
+  // Consume complete code spans and valid links; unmatched brackets remain ordinary text.
+  // In particular, `[timetable]` must never split a code span or discard its prefix.
+  const tokens = /`[^`]+`|\[[^\]\n]+\]\([^\s)]+\)/g;
+  let start = 0;
+  for (const match of src.matchAll(tokens)) {
+    flush(src.slice(start, match.index));
+    const token = match[0];
+    if (token.startsWith('`')) {
+      out.push({ t: 'code', v: token.slice(1, -1) });
+    } else {
+      const separator = token.indexOf('](');
+      const inner = [];
+      parseInline(token.slice(1, separator), inner);
+      out.push({ t: 'link', href: absolutize(token.slice(separator + 2, -1)), inline: inner });
     }
-    const closeB = src.indexOf(']', open + 1);
-    const closeP = closeB === -1 ? -1 : src.indexOf(')', closeB + 2);
-    if (closeB === -1 || src[closeB + 1] !== '(' || closeP === -1) {
-      flush(src.slice(open, open + 1)); // 不成对 = 普通字符
-      i = open + 1;
-      continue;
-    }
-    flush(src.slice(i, open));
-    const inner = [];
-    parseInline(src.slice(open + 1, closeB), inner); // 链接文字递归(可含 code)
-    out.push({ t: 'link', href: absolutize(src.slice(closeB + 2, closeP).trim()), inline: inner });
-    i = closeP + 1;
+    start = match.index + token.length;
   }
+  flush(src.slice(start));
   return out;
 }
 
@@ -194,7 +192,17 @@ export function assertPairing(zhItems, enItems) {
   }
 }
 
-// zh 侧 + en 侧节数组 → 合并 FaqDoc(同节序同问序;assertPairing 已保证条数)
+export function assertSectionPairing(zhSecs, enSecs) {
+  assertPairing(zhSecs, enSecs);
+  zhSecs.forEach((section, index) => {
+    assertPairing(section.items, enSecs[index].items);
+    section.items.forEach((item, question) => {
+      if (item.id !== enSecs[index].items[question].id) throw new Error('FAQ question order differs');
+    });
+  });
+}
+
+// Missing translations fail before merging; never silently substitute Chinese on English pages.
 function mergeDocs(zhSecs, enSecs, updatedAt) {
   return {
     updatedAt,
@@ -219,12 +227,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const zhSecs = parseFaq(zhMd, 'zh');
   const enSecs = parseFaq(enMd, 'en');
   try {
-    assertPairing(zhSecs.flatMap((s) => s.items), enSecs.flatMap((s) => s.items));
+    assertSectionPairing(zhSecs, enSecs);
   } catch (err) {
     console.error(`[build-faq] ${err.message}`);
     process.exit(1);
   }
-  const updatedAt = zhMd.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? ''; // 文件内声明优先(终审:写死用文件内声明)
+  const updatedAt = zhMd.match(/(?:内容核对日期|更新时间)[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1] ?? ''; // 文件内声明优先(终审:写死用文件内声明)
   const doc = mergeDocs(zhSecs, enSecs, updatedAt);
   writeFileSync(OUT, `${JSON.stringify(doc, null, 2)}\n`);
   console.log(

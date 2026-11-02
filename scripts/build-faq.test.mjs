@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseFaq, assertPairing, blocksToHtml, parseInline } from './build-faq.mjs';
+import { parseFaq, assertPairing, assertSectionPairing, blocksToHtml, parseInline } from './build-faq.mjs';
 
 // Task 3 数据管线闸(spec §5/§10):build-faq 纯离线 = 只读仓内快照 fixtures/FAQ.md + scripts/faq-en.md。
 // 测试同读快照保确定性;vitest include 覆盖 scripts/**/*.test.mjs(fetch-release.test.mjs 同法),
@@ -13,7 +13,7 @@ describe('parseFaq 结构闸(快照实测现值)', () => {
   it('FAQ.md 解析 = 9 节剔除相关链接后 8 节 · 43 问 · 代码块 2 枚', () => {
     const secs = parseFaq(zhMd);
     const items = secs.flatMap((s) => s.items);
-    expect(items.length).toBe(43);
+    expect(items.length).toBe(54);
     expect(secs.find((s) => s.zh === '相关链接')).toBeUndefined(); // 无问空节整节剔除(解析器规则,非点名)
     expect(secs.length).toBe(8);
     expect(items.filter((i) => i.a.zh.some((b) => b.type === 'pre')).length).toBe(2);
@@ -35,7 +35,7 @@ describe('parseFaq 结构闸(快照实测现值)', () => {
     const items = parseFaq(zhMd).flatMap((s) => s.items);
     expect(items[0].id).toBe('sec-1-q-1');
     expect(items[1].id).toBe('sec-1-q-2');
-    expect(items[items.length - 1].id).toBe('sec-8-q-3');
+    expect(items[items.length - 1].id).toBe('sec-8-q-4');
   });
   it('渲染子集四类齐备:paragraph/list(ol+ul)/pre/行内 code+a', () => {
     const items = parseFaq(zhMd).flatMap((s) => s.items);
@@ -56,6 +56,42 @@ describe('zh/en 配对闸', () => {
     const zhItems = parseFaq(zhMd).flatMap((s) => s.items);
     const enItems = parseFaq(enMd).flatMap((s) => s.items);
     expect(() => assertPairing(zhItems, enItems)).not.toThrow();
+  });
+});
+
+describe('released FAQ coverage', () => {
+  it('checks per-section order and rejects redistribution with the same total', () => {
+    const zh = parseFaq(zhMd, 'zh');
+    const en = parseFaq(enMd, 'en');
+    expect(() => assertSectionPairing(zh, en)).not.toThrow();
+    expect(zh.map((s) => s.items.length)).toEqual([6, 5, 12, 9, 4, 8, 6, 4]);
+    const wrong = structuredClone(en);
+    wrong[1].items.push(wrong[0].items.pop());
+    expect(() => assertSectionPairing(zh, wrong)).toThrow();
+  });
+  it('keeps complete bilingual reminder and write-capable console answers', () => {
+    const zh = parseFaq(zhMd).flatMap((s) => s.items);
+    const en = parseFaq(enMd, 'en').flatMap((s) => s.items);
+    const index = zh.findIndex((q) => q.q.zh === '多张课表的提醒会刷屏吗？');
+    expect(blocksToHtml(zh[index].a.zh)).toContain('所有课表合并为一条通知');
+    expect(blocksToHtml(zh[index].a.zh)).toContain('[课表名]');
+    expect(blocksToHtml(en[index].a.en)).toContain('one notification');
+    const consoleIndex = zh.findIndex((q) => q.q.zh === '本机调试控制台是只读的吗？');
+    expect(blocksToHtml(zh[consoleIndex].a.zh)).toContain('删除');
+    expect(blocksToHtml(en[consoleIndex].a.en)).toContain('delete');
+  });
+});
+
+describe('answer integrity', () => {
+  it('preserves text before and after literal or malformed brackets', () => {
+    for (const value of ['所有课表合并为一条通知，每条带「[课表名]」前缀。', 'prefix [unfinished suffix', 'prefix [label] tail']) {
+      const inline = parseInline(value);
+      expect(inline.map((part) => part.v ?? '').join('')).toBe(value);
+    }
+  });
+  it('keeps brackets inside inline code as one code span', () => {
+    const html = blocksToHtml([{ type: 'paragraph', inline: parseInline('Combined notifications use `[timetable]` prefixes.') }]);
+    expect(html).toBe('<p>Combined notifications use <code>[timetable]</code> prefixes.</p>');
   });
 });
 
