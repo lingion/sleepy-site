@@ -35,9 +35,9 @@ describe('/en/ hreflang 互指(spec §1)', () => {
 });
 
 describe('/en/ 结构镜像(v5 八段)', () => {
-  const ids = ['hero', 'views', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
+  const ids = ['hero', 'views', 'released', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
   const PROTO: Record<string, string> = {
-    hero: 'split', views: 'showcase', connect: 'edit-split', schoolCard: 'entry-card',
+    hero: 'split', views: 'showcase', released: 'release-notes', connect: 'edit-split', schoolCard: 'entry-card',
     reminders: 'pinned', gallery: 'full-bleed-band', trust: 'narration', download: 'tonal-band',
   };
   it('八段依序 + data-prototype 同 zh 页', () => {

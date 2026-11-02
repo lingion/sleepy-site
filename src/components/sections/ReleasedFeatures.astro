@@ -1,0 +1,32 @@
+---
+import { zh, type SiteCopy } from '../../i18n/zh';
+import product from '../../data/product-release.json';
+interface Props { copy?: SiteCopy }
+const t = (Astro.props.copy ?? zh).released;
+const version = t.version.replace('{tag}', product.tag).replace('{date}', product.publishedAt.slice(0, 10));
+---
+<section class="site-section released" id="released" data-prototype="release-notes" aria-labelledby="released-title">
+  <div class="site-col">
+    <header class="released__header">
+      <p class="t-label-large tnum">{version}</p>
+      <h2 class="t-headline-large" id="released-title">{t.heading}</h2>
+      <a href={product.sourceUrl} class="t-body-medium">{t.source}</a>
+    </header>
+    <dl class="released__items">
+      {Object.entries(t.items).map(([key, item]) => (
+        <div class="released__item" data-release-topic={key}>
+          <dt class="t-title-large">{item.title}</dt>
+          <dd class="t-body-large">{item.body}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+<style>
+  .released__header { display: grid; gap: calc(var(--site-unit) * 3); margin-block-end: calc(var(--site-unit) * 8); }
+  .released__header p, .released__item dd { color: var(--md-sys-color-on-surface-variant); }
+  .released__items { margin: 0; }
+  .released__item { display: grid; gap: calc(var(--site-unit) * 3); padding-block: calc(var(--site-unit) * 6); border-block-start: 1px solid var(--md-sys-color-outline-variant); }
+  .released__item dd { margin: 0; max-inline-size: 70ch; overflow-wrap: anywhere; }
+  @media (min-width: 840px) { .released__item { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: calc(var(--site-unit) * 10); } }
+</style>

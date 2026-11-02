@@ -26,6 +26,7 @@ const PROTOTYPE: Record<string, string> = {
   hero: 'split',
   views: 'showcase',
   connect: 'edit-split',
+  released: 'release-notes',
   schoolCard: 'entry-card',
   reminders: 'pinned',
   gallery: 'full-bleed-band',
@@ -33,8 +34,8 @@ const PROTOTYPE: Record<string, string> = {
   download: 'tonal-band',
 };
 
-describe('八段依序 + 原型表(spec §2.2 v5 段序)', () => {
-  const ids = ['hero', 'views', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
+describe('homepage section order including released capabilities', () => {
+  const ids = ['hero', 'views', 'released', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
   it('main 直系 section = 八段依序,各带 data-prototype', () => {
     const secs = [...doc.querySelectorAll('main > section')];
     expect(secs.map((s) => s.id)).toEqual(ids);
@@ -52,6 +53,20 @@ describe('八段依序 + 原型表(spec §2.2 v5 段序)', () => {
     expect(HTML).not.toContain('data-prototype="tool-island"');
     expect(doc.querySelectorAll('#schoolCard [data-school]').length).toBe(0);
     expect(doc.querySelector('#schoolCard input')).toBeNull();
+  });
+});
+
+describe('released capability copy stays visible in both languages', () => {
+  it('each homepage renders all release topics in the declared order', () => {
+    const enDoc = new JSDOM(readFileSync(new URL('../dist/client/en/index.html', import.meta.url), 'utf8')).window.document;
+    for (const page of [doc, enDoc]) {
+      const topics = [...page.querySelectorAll('#released [data-release-topic]')];
+      expect(topics.map(el => el.getAttribute('data-release-topic'))).toEqual(['editing', 'appearance', 'exchange', 'widgets', 'privacy', 'console']);
+      for (const item of topics) expect(item.querySelector('dd')?.textContent?.length).toBeGreaterThan(30);
+      const content = page.querySelector('#released')?.textContent ?? '';
+      for (const term of ['500', 'Material 3 Expressive', 'sleepy-v1', 'Android 12', 'Android 13', 'OriginOS']) expect(content).toContain(term);
+      expect(page.querySelector('#schoolCard [data-catalog-status]')?.textContent).toContain(String(configuredCount));
+    }
   });
 });
 
@@ -256,7 +271,7 @@ describe('文案 v5 契约(spec §7 + §2.2 入口卡句)', () => {
   it('§7 对照表改后句逐句进产物(trial/schools 两 pin 已随 §10 迁出主页)', () => {
     expect(stripped).toContain(zh.hero.sub.replace(/\s+/g, ''));
     expect(stripped).not.toContain('不经任何服务器');
-    expect(metaDesc.replace(/\s+/g, '')).toContain(`${schools.length}条学校目录`);
+    expect(metaDesc).toBe(zh.meta.description(schools.length));
     expect(stripped).toContain(zh.gallery.heading); // gallery.heading(派生 pin,v5 巡检批精简后禁再硬编码旧句)
   });
   it('入口卡派生句两数进产物(§10 行 4:statLine 派生 pin,禁手写;条数不当校数说 §4.1)', () => {
@@ -327,7 +342,7 @@ describe('reveal 不变量(spec §17.2)', () => {
 });
 
 describe('connect 段(spec §10 行 4:段未动,chip 派生断言留主页;台账三断言迁 page.schools.test.ts)', () => {
-  it('connect 段 chip = 派生「1478 条直连」', () => {
+  it('connect chip counts configured entries rather than the whole catalog', () => {
     expect((doc.getElementById('connect')?.textContent ?? '')).toContain(`${configuredCount} 条已配置记录`);
   });
 });
