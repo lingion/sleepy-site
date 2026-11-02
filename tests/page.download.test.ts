@@ -75,6 +75,26 @@ describe('信息区块(spec §2.4 六段)', () => {
     const ae = enDoc.querySelector('[data-role="trial"]');
     expect(ae?.getAttribute('href')).toBe('https://sleepy.is-my.app/preview');
   });
+  it('iOS TestFlight 官方公测下载入口在 + 官方 Apple Badge 规范', () => {
+    const a = zhDoc.querySelector('a[href="https://testflight.apple.com/join/SxymmDzf"]');
+    expect(a, 'zh TestFlight 链接存在').not.toBeNull();
+    expect(a?.getAttribute('target')).toBe('_blank');
+    expect(a?.getAttribute('rel')).toContain('noopener');
+    expect(zhHtml).toContain('目前唯一合法上线途径');
+
+    const img = a?.querySelector('img');
+    expect(img, 'Apple 徽章存在').not.toBeNull();
+    expect(img?.getAttribute('src')).toBe('/badges/download-on-the-app-store-zh.svg');
+    expect(img?.getAttribute('alt')).toBe(zh.downloadPage.iosBadgeAlt);
+    expect(img?.getAttribute('height')).toBe('40');
+
+    const ae = enDoc.querySelector('a[href="https://testflight.apple.com/join/SxymmDzf"]');
+    expect(ae, 'en TestFlight 链接存在').not.toBeNull();
+    const imge = ae?.querySelector('img');
+    expect(imge?.getAttribute('src')).toBe('/badges/download-on-the-app-store-en.svg');
+    expect(imge?.getAttribute('alt')).toBe(en.downloadPage.iosBadgeAlt);
+    expect(imge?.getAttribute('height')).toBe('40');
+  });
   it('商店占位 disabled ×2', () => {
     expect(zhDoc.querySelectorAll('[data-store-disabled]')).toHaveLength(2);
   });

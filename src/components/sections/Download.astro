@@ -8,6 +8,7 @@ import gridLight from '../../assets/screenshots/02-grid-light.png';
 import gridDark from '../../assets/screenshots/02-grid-dark.png';
 import release from '../../data/release.json';
 import { zh } from '../../i18n/zh';
+import { iosTestFlightUrl } from '../../i18n/ui';
 import type { SiteCopy } from '../../i18n/zh';
 
 interface Props {
@@ -22,6 +23,9 @@ const dp = c.downloadPage;
 const moreHref = lang === 'en' ? '/en/download/' : '/download/';
 const date = release.date.slice(0, 10);
 const universal = release.assets.find((a) => a.name.includes('universal'))!;
+const zhUI = lang === 'zh';
+const badgeSrc = zhUI ? '/badges/download-on-the-app-store-zh.svg' : '/badges/download-on-the-app-store-en.svg';
+const badgeWidth = zhUI ? 109 : 120;
 ---
 
 <section class="site-section download--tonal" id="download" data-prototype="tonal-band" aria-labelledby="download-title">
@@ -29,9 +33,31 @@ const universal = release.assets.find((a) => a.name.includes('universal'))!;
     <div class="download__main">
       <h2 class="t-headline-large" id="download-title">{t.heading}</h2>
       <p class="t-body-medium download__version tnum">{t.versionLine(release.tag, date)}</p>
-      <p class="download__cta">
-        <a class="site-button site-button--elevated download__cta-xl" href={universal.url} download rel="download" aria-label={t.downloadAria('universal', `${(universal.size / 1024 / 1024).toFixed(1)} MB`)}>{t.cta}</a>
-      </p>
+      <div class="download__ctas">
+        <p class="download__cta">
+          <a class="site-button site-button--elevated download__cta-xl" href={universal.url} download rel="download" aria-label={t.downloadAria('universal', `${(universal.size / 1024 / 1024).toFixed(1)} MB`)}>{t.cta}</a>
+        </p>
+        <div class="download__apple">
+          <a
+            class="apple-store-badge-link"
+            href={iosTestFlightUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t.iosBadgeAria}
+          >
+            <img
+              class="apple-store-badge"
+              src={badgeSrc}
+              alt={t.iosBadgeAlt}
+              width={badgeWidth}
+              height="40"
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        </div>
+      </div>
+      <p class="t-body-small download__apple-note">{t.iosNote}</p>
       <p class="t-body-small download__note">{t.universalNote}</p>
       <p class="t-body-small download__more">
         <a class="site-button site-button--text" href={moreHref}>{dp.otherArchLink}</a>
@@ -80,13 +106,47 @@ const universal = release.assets.find((a) => a.name.includes('universal'))!;
     font-variant-numeric: lining-nums tabular-nums;
   }
   /* 主钮 = Elevated 档(§11-6:彩色容器上禁 tonal 叠 tonal → surface 底 + elevation-1) */
+  .download__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--site-unit) * 4);
+    margin-block-end: calc(var(--site-unit) * 2);
+  }
   .download__cta {
-    margin-block-end: calc(var(--site-unit) * 4);
+    margin: 0;
   }
   .download__cta-xl {
     font-size: 16px;
     padding: 14px 32px;
     text-decoration: none;
+  }
+  .download__apple {
+    display: inline-flex;
+    align-items: center;
+  }
+  .apple-store-badge-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  }
+  .apple-store-badge-link:hover {
+    opacity: 0.88;
+  }
+  .apple-store-badge-link:focus-visible {
+    outline: 2px solid var(--md-sys-color-on-primary-container);
+    outline-offset: 3px;
+  }
+  .apple-store-badge {
+    display: block;
+    height: 40px;
+    width: auto;
+  }
+  .download__apple-note {
+    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 88%, var(--md-sys-color-primary-container));
+    margin-block-end: calc(var(--site-unit) * 3);
   }
   .download__note {
     color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 82%, var(--md-sys-color-primary-container));
@@ -118,8 +178,15 @@ const universal = release.assets.find((a) => a.name.includes('universal'))!;
     .download__grid {
       grid-template-columns: 1fr;
     }
+    .download__ctas {
+      flex-direction: column;
+      align-items: stretch;
+    }
     .download__cta-xl {
       inline-size: 100%;
+      justify-content: center;
+    }
+    .download__apple {
       justify-content: center;
     }
   }

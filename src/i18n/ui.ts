@@ -4,5 +4,7 @@ export const site = 'https://sleepy.is-my.app';
 export const qqGroup = '1063407652';
 export const sponsorUrl = 'https://github.com/lingion/sleepy/blob/main/sponsor.md';
 export const repoUrl = 'https://github.com/lingion/sleepy';
+export const iosRepoUrl = 'https://github.com/lingion/sleepy-ios';
+export const iosTestFlightUrl = 'https://testflight.apple.com/join/SxymmDzf';
 export const faqUrl = '/faq/'; // v5 站内化(spec §2.1;Footer/Trust 消费方自动生效,原 GitHub 外链归 /download/「更多」区)
 export const onlineTrialUrl = 'https://sleepy.is-my.app/preview'; // 官网前缀反代(PR #17), 地址栏零跳转;上游 sleepy.qdp.qzz.io 保持不变
