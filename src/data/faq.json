@@ -649,7 +649,7 @@
                   },
                   {
                     "t": "text",
-                    "v": " 维护，基于 SwiftUI + WidgetKit 原生实现，iOS 16.0 起，与 Android 版功能对齐。目前以 "
+                    "v": " 维护，基于 SwiftUI + WidgetKit 原生实现。当前官方入口是 "
                   },
                   {
                     "t": "link",
@@ -663,7 +663,7 @@
                   },
                   {
                     "t": "text",
-                    "v": " 作为唯一合法上线途径分发，加入公测后即可直接安装体验并自动接收版本推送。另有"
+                    "v": "，安装和更新按 TestFlight 流程完成。iOS 的最低系统和实际可用功能以其独立发布说明为准，不能据 Android v1.0.63 推断两端功能完全相同。另有"
                   },
                   {
                     "t": "link",
@@ -716,7 +716,7 @@
                   },
                   {
                     "t": "text",
-                    "v": " repository, built natively with SwiftUI + WidgetKit for iOS 16.0 and up, feature-aligned with Android releases. It is currently distributed via "
+                    "v": " repository, built natively with SwiftUI + WidgetKit. The current official entry is the "
                   },
                   {
                     "t": "link",
@@ -730,7 +730,7 @@
                   },
                   {
                     "t": "text",
-                    "v": " as the only official release route, which can be installed directly and receives updates automatically. There is also an "
+                    "v": ", with installation and updates handled through TestFlight. Its own release documentation defines minimum system requirements and available features; Android v1.0.63 does not establish complete feature parity. There is also an "
                   },
                   {
                     "t": "link",

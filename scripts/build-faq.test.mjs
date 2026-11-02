@@ -60,6 +60,12 @@ describe('zh/en 配对闸', () => {
 });
 
 describe('released FAQ coverage', () => {
+  it('preserves the official TestFlight entry without inferring Android feature parity', () => {
+    for (const text of [zhMd, enMd]) expect(text).toContain('https://testflight.apple.com/join/SxymmDzf');
+    expect(zhMd).toContain('不能据 Android v1.0.63 推断');
+    expect(enMd).toContain('does not establish complete feature parity');
+    expect(zhMd).not.toContain('与 Android 版功能对齐');
+  });
   it('checks per-section order and rejects redistribution with the same total', () => {
     const zh = parseFaq(zhMd, 'zh');
     const en = parseFaq(enMd, 'en');
