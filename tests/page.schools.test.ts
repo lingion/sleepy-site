@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
 import { site } from '../src/i18n/ui';
 import { applyInitialState, filterRows, parseUrlState } from '../src/lib/schools-island';
-import { catalogUpdatedAt, schools, provincesOrdered, typeCount, configuredCount, unverifiedCount, pendingCount } from '../src/lib/schools-view';
+import { catalogUpdatedAt, schools, provincesOrdered, typeCount } from '../src/lib/schools-view';
 import { zh } from '../src/i18n/zh';
 import { en } from '../src/i18n/en';
 
