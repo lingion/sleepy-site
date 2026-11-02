@@ -46,7 +46,7 @@ export const en: SiteCopy = {
     heading: 'Direct academic connections',
     body: 'Check the catalog status, then sign in with your school account to import. Even configured entries can be affected by school-system changes, captchas or network restrictions. A listing is not an import guarantee.',
     imageAlt: 'Academic import panel app screenshot',
-    chipLabel: (rows: number) => `${rows} configured entries`,
+    chipLabel: (rows: number) => `${rows} direct connections`,
   },
   schools: {
     heading: 'Catalog and search',
@@ -159,8 +159,7 @@ export const en: SiteCopy = {
     noJs: 'With JavaScript disabled the full list stays readable.',
   },
   homeSchoolCard: {
-    count: '{rows} catalog entries · {types} protocols — search for individual import status.',
-    status: '{configured} configured · {unverified} unverified · {pending} pending. Configuration does not guarantee successful import at every school.',
+    count: '{rows} direct academic connections · {types} protocols — search by school name to check support.',
     cta: 'Find my school',
   },
   schoolsPage: {

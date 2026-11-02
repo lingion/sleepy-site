@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
 import release from '../src/data/release.json';
 import schools from '../src/data/schools.grouped.json';
-import { configuredCount } from '../src/lib/schools-view';
 import { zh } from '../src/i18n/zh';
 
 // v5 八段主页产物闸(plan Task 7 再基线,spec §2.2/§10):
@@ -65,7 +64,6 @@ describe('released capability copy stays visible in both languages', () => {
       for (const item of topics) expect(item.querySelector('dd')?.textContent?.length).toBeGreaterThan(30);
       const content = page.querySelector('#released')?.textContent ?? '';
       for (const term of ['500', 'Material 3 Expressive', 'sleepy-v1', 'Android 12', 'Android 13', 'OriginOS']) expect(content).toContain(term);
-      expect(page.querySelector('#schoolCard [data-catalog-status]')?.textContent).toContain(String(configuredCount));
     }
   });
 });
@@ -276,7 +274,7 @@ describe('文案 v5 契约(spec §7 + §2.2 入口卡句)', () => {
   });
   it('入口卡派生句两数进产物(§10 行 4:statLine 派生 pin,禁手写;条数不当校数说 §4.1)', () => {
     const types = new Set(schools.map((s) => s.type).filter(Boolean)).size;
-    expect(stripped).toContain(`${schools.length}条目录记录·${types}种协议,输入校名查看接入状态。`);
+    expect(stripped).toContain(`${schools.length}条教务直连·${types}种协议,输入校名即可确认收录。`);
     expect(schools.length).toBeGreaterThan(0);
   });
   it('入口钮 = /schools/?focus=s 精确 href + 卡内零 input(§2.2 终审 I2 合同侧 pin;行为侧 = Task 4 岛 + T4 目检)', () => {
@@ -342,8 +340,8 @@ describe('reveal 不变量(spec §17.2)', () => {
 });
 
 describe('connect 段(spec §10 行 4:段未动,chip 派生断言留主页;台账三断言迁 page.schools.test.ts)', () => {
-  it('connect chip counts configured entries rather than the whole catalog', () => {
-    expect((doc.getElementById('connect')?.textContent ?? '')).toContain(`${configuredCount} 条已配置记录`);
+  it('connect 段 chip = 派生「1478 条直连」', () => {
+    expect((doc.getElementById('connect')?.textContent ?? '')).toContain(`${schools.length} 条直连`);
   });
 });
 

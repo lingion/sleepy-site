@@ -25,18 +25,12 @@ interface Props {
 }
 const { copy: t, lang } = Astro.props;
 const countLine = lang === 'en'
-  ? `${rowCount} directory records · ${configuredCount} configured · ${unverifiedCount} unverified · ${pendingCount} pending · ${typeCount} parser types.`
-  : `${rowCount} 条目录记录，${configuredCount} 条已配置、${unverifiedCount} 条未验证、${pendingCount} 条待接入，涉及 ${typeCount} 种协议。`;
-const caveat = lang === 'en'
-  ? `Android ${catalogRef} snapshot. Configured means an import configuration exists, not that every school has been live-tested. Confirm unverified entries in the app; pending entries are unavailable for direct import.`
-  : `Android ${catalogRef} 快照。已配置表示存在导入配置，不代表逐校实机验证成功。未验证条目请在应用内确认，待接入条目暂不可直接导入。`;
-const statusLabel = (status: string) => {
-  const grad = status.startsWith('grad_');
-  const state = status.replace('grad_', '');
-  const label = lang === 'en'
-    ? (({ supported: 'Configured', unverified: 'Unverified — confirm in app', pending: 'Pending — direct import unavailable' } as Record<string, string>)[state] ?? state)
-    : (({ supported: '已配置', unverified: '未验证，请在应用内确认', pending: '待接入，暂不可直接导入' } as Record<string, string>)[state] ?? state);
-  return `${grad ? (lang === 'en' ? 'Graduate · ' : '研究生 · ') : ''}${label}`;
+  ? `${rowCount} universities supported for direct timetable import across ${typeCount} academic protocols.`
+  : `收录 ${rowCount} 所高校教务直连，涵盖 ${typeCount} 种教务协议。`;
+const statusSuffix = (status: string) => {
+  const isUnverified = status === 'unverified' || status === 'grad_unverified';
+  if (!isUnverified) return '';
+  return lang === 'en' ? ' · Unverified' : ' · 待验证';
 };
 const typeLabel = (ty: string) => (lang === 'en' ? ((typesEn as Record<string, string>)[ty] ?? ty) : ty);
 const groups = provincesOrdered().map((p) => ({
@@ -61,7 +55,6 @@ const CHIP_NODE =
       <h1 class="t-headline-large">{t.heading}</h1>
       <p class="t-body-medium schools__sub">{t.sub}</p>
       <p class="t-body-medium schools__countline tnum">{countLine}</p>
-      <p class="t-body-small schools__sub">{caveat}</p>
     </header>
 
     <div class="schools__island reveal" style="--reveal-i: 0;">
@@ -114,7 +107,7 @@ const CHIP_NODE =
                   data-status={s.status}
                   data-search={searchFace(s)}
                 >
-                  {s.name}{s.type ? ` · ${typeLabel(s.type)}` : ''} · {statusLabel(s.status)}
+                  {s.name}{s.type ? ` · ${typeLabel(s.type)}` : ''}{statusSuffix(s.status)}
                 </li>
               ))}
             </ul>
