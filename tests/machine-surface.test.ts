@@ -32,6 +32,21 @@ describe('faq.json 机读路由(llms.txt 引址实物)', () => {
   });
 });
 
+describe('released product machine surface', () => {
+  it('llms declares a released source and a separate documentation review date', () => {
+    const product = JSON.parse(read('../src/data/product-release.json'));
+    const txt = read('../public/llms.txt');
+    for (const value of [product.tag, product.commit, product.publishedAt, product.reviewedAt, product.sourceUrl]) expect(txt).toContain(value);
+    expect(txt).not.toMatch(/SOP|Co-Authored-By|lingion@hrbeu|sleepy\.is-my\.app.*password/i);
+  });
+  it('OG generator derives release and status counts rather than old constants', () => {
+    const generator = read('../tools/make-og.mjs');
+    for (const path of ['src/data/release.json', 'src/data/product-release.json', 'src/data/schools.snapshot.json']) expect(generator).toContain(path);
+    for (const field of ['rowCount', 'configuredCount', 'unverifiedCount', 'pendingCount']) expect(generator).toContain(`catalog.${field}`);
+    expect(generator).not.toMatch(/348|v1\.0\.61/);
+  });
+});
+
 describe('_headers 部署配置(Cloudflare Pages public/_headers)', () => {
   const h = read('../public/_headers');
   it('内容哈希资产 immutable 长缓存', () => {
