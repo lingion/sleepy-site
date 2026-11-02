@@ -14,7 +14,7 @@ const manual = manualRaw as Record<string, string>;
 const idx = buildGeoIndex(geo);
 const fixture = JSON.parse(
   readFileSync(new URL('../../fixtures/schools.json', import.meta.url), 'utf8'),
-) as { name: string; sortKey: string; type: string; catalogId?: string }[];
+) as { name: string; sortKey: string; type: string; catalogId?: string; status?: string }[];
 
 describe('最长前缀优先(spec §4.1)', () => {
   it('「青岛科技大学」→ 山东(3 字「青岛科技」不存在时 2 字「青岛」城市头即中)', () => {
@@ -54,12 +54,12 @@ describe('在用高校教务目录归组覆盖', () => {
   it('每条在用记录保留；排除待接入条目，无省份证据时明确标为未知', () => {
     const grouped = JSON.parse(readFileSync(new URL('../data/schools.grouped.json', import.meta.url), 'utf8'));
     const snapshot = JSON.parse(readFileSync(new URL('../data/schools.snapshot.json', import.meta.url), 'utf8'));
-    const inUseFixture = fixture.filter((s: { status?: string }) => s.status !== 'pending' && s.status !== 'grad_pending');
+    const inUseFixture = fixture.filter((s) => s.status !== 'pending' && s.status !== 'grad_pending');
     expect(fixture.length).toBe(4140);
     expect(grouped.length).toBe(2880);
-    expect(grouped.map((s: { catalogId: string }) => s.catalogId)).toEqual(inUseFixture.map((s: { catalogId: string }) => s.catalogId));
+    expect(grouped.map((s: { catalogId?: string }) => s.catalogId)).toEqual(inUseFixture.map((s) => s.catalogId));
     for (const s of grouped) {
-      const source = fixture.find((f: { catalogId: string }) => f.catalogId === s.catalogId)!;
+      const source = fixture.find((f) => f.catalogId === s.catalogId)!;
       const code = source.sortKey === '*' ? 'OTHER' : manual[source.name]
         ?? snapshot.provinceBySchool?.[source.name]
         ?? classifyProvince(source.name, idx)?.code
