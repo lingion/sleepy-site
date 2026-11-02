@@ -1,176 +1,227 @@
 # Sleepy · Light Course Schedule FAQ (English)
 
-> This FAQ states only facts verifiable in current code and public releases. Updated: 2026-10-25. Full page docs, import formats and adaptation records live in the [project Wiki](https://github.com/lingion/sleepy/wiki).
+> This page covers Android v1.0.63, released on 2026-11-01 UTC (2026-11-02 Beijing time). Content reviewed on 2026-11-02. Features are based on the [released source](https://github.com/lingion/sleepy/tree/v1.0.63) and that version's APK, excluding later changes on main. See the [project Wiki](https://github.com/lingion/sleepy/wiki) for more information.
 
 ## What the project is
 
 ### What is the relationship between Sleepy and WakeUp Course Schedule?
-None. Sleepy is an independent open-source Android project with its own repository and maintainer. The two are compatible at the data-format level only: Sleepy can import JSON and share-text exported by WakeUp, and can export WakeUp-compatible JSON.
+There is no affiliation. Sleepy is an independent open-source schedule project. The Android app supports some WakeUp data formats and can resolve its online share codes. This does not mean it is developed by the WakeUp team or can use all of WakeUp's services.
 
 ### Is Sleepy free? Does it have ads or in-app purchases?
-It is free under the GPL-3.0 license. There are no ads, subscriptions, in-app purchases or paid tiers. The public APK is downloaded from [GitHub Releases](https://github.com/lingion/sleepy/releases).
+It is free under the GPL-3.0 license, with no ads, subscriptions, in-app purchases or paid tiers. Download official APKs from [GitHub Releases](https://github.com/lingion/sleepy/releases).
 
 ### Do I need to register an account?
-No account, email, phone number or student ID is required. After opening the app you can build a schedule manually or import an existing one.
+You do not need a Sleepy account or need to give Sleepy an email address or phone number. You can create schedules manually or import local files immediately. Direct academic-affairs import may still require a school account, student ID, password or verification code, entered on the school's login page. A school login is separate from a Sleepy account.
 
 ### Does it collect or upload data?
-Schedules and settings are stored on the device. The project integrates no analytics or crash-reporting SDKs such as Firebase Analytics, Crashlytics, Sentry, Bugsnag, AppCenter or Bugly, and does not require a cloud login. Academic-affairs import visits the school site, holiday refresh downloads public date data, and version checks and downloads access GitHub or the project mirror; viewing and editing schedules work offline. The About page links the hosted privacy policy.
+Schedules and settings are stored on your device. No project cloud account is required, and the app includes no analytics or crash-reporting SDKs such as Firebase Analytics, Crashlytics, Sentry, Bugsnag, AppCenter or Bugly. Ordinary schedule viewing and editing work offline.
+
+Network operations include visiting school sites for academic-affairs import, contacting the third-party `api.wakeup.fun` service to resolve WakeUP share codes, refreshing holiday data, and checking versions or downloading updates through GitHub or the project mirror. When you use the system calendar, system sharing or manual export, where the data goes depends on the app and action you choose. Local storage does not mean every operation is offline. The About page links to the privacy policy.
 
 ### Who maintains it? Where do I report problems?
-The project is maintained by Lingion. Bugs, new-school adaptations and feature requests go to [GitHub Issues](https://github.com/lingion/sleepy/issues); discussion goes to [Discussions](https://github.com/lingion/sleepy/discussions). When reporting academic-affairs problems, never attach accounts, passwords, verification codes, cookies, tokens or personal schedules.
+Lingion maintains the project. Report bugs, request school support or suggest features through [GitHub Issues](https://github.com/lingion/sleepy/issues); use [Discussions](https://github.com/lingion/sleepy/discussions) for discussion. Never post accounts, passwords, verification codes, cookies, tokens or unredacted personal schedules publicly.
 
 ### How can I support the project?
-The project accepts voluntary sponsorship; Alipay and WeChat QR codes are on the [sponsor page](sponsor.md). Sponsoring never unlocks features: Sleepy stays free with no paid tiers.
+Voluntary sponsorship is welcome. Alipay and WeChat payment codes are on the [sponsor page](sponsor.md). Sponsorship does not unlock extra features; the app has no paid tiers.
 
 ## Installation and versions
 
-### Which Android version is supported?
-Minimum Android 8.0 (API 26); target / compile SDK is 37. The release application id is `com.lingion.sleepy`, debug builds use `com.lingion.sleepy.debug`; their data is isolated.
+### Which Android versions are supported?
+The minimum is Android 8.0 (API 26); target and compile SDK are 37. The release package is `com.lingion.sleepy`, and the debug package in this source version is `com.lingion.sleepy.debug`. Their data is stored separately. Meeting the minimum system requirement does not mean every visual effect or vendor live notification works on older systems.
 
 ### What is the current version?
-The build version derives from Git tags; with no usable tag it falls back to release notes. Your installed version is shown under "About" in the app; public releases are authoritative on the [GitHub Releases](https://github.com/lingion/sleepy/releases) page.
+This page describes v1.0.63, with versionCode 10063. This release was published on 2026-11-01 UTC. Check the app's About page for your installed version. Download from the [v1.0.63 release page](https://github.com/lingion/sleepy/releases/tag/v1.0.63); later source commits and debug builds do not automatically count as features in this official release.
 
 ### Which APK ABIs are provided?
-Release builds provide separately:
+The official release provides four APK variants:
 
-- `arm64-v8a`: most modern phones
-- `armeabi-v7a`: 32-bit ARM devices
-- `x86_64`: common Android emulators
-- `universal`: contains all ABIs above; pick it when the architecture is unknown
+- `arm64-v8a`: most 64-bit ARM phones.
+- `armeabi-v7a`: 32-bit ARM devices, also called V7A.
+- `x86_64`: Android devices or emulators with this architecture.
+- `universal`: a universal package to try if you are unsure of the architecture.
+
+The release page provides `sha256sums.txt` to verify downloaded files. Do not treat PR CI test artifacts as official updates.
 
 ### Are there iOS, Windows or web versions?
-The native app in this repository targets Android. An iOS port is maintained in the separate repository [lingion/sleepy-ios](https://github.com/lingion/sleepy-ios): native SwiftUI + WidgetKit, iOS 16.0 and up, feature-aligned with the Android releases; IPA downloads come from that repository's [Releases](https://github.com/lingion/sleepy-ios/releases) (currently unsigned builds that need to be re-signed before installation). There is also an [official website](https://sleepy.is-my.app) and an [online trial](https://sleepy.is-my.app/preview); the online trial does not imply the web and native feature sets are identical. No Windows version.
+The iOS app is maintained in the separate [lingion/sleepy-ios](https://github.com/lingion/sleepy-ios) repository. Consult its public documentation and [Releases](https://github.com/lingion/sleepy-ios/releases) for installation methods, minimum system requirements and available features. Android v1.0.63 does not establish full feature parity with iOS. There is also an [official website](https://sleepy.is-my.app) and an [online trial](https://sleepy.is-my.app/preview); the web preview does not provide every native app capability. There is no native Windows version yet.
+
+### Which interface languages are supported?
+Android v1.0.63 includes Simplified Chinese, Traditional Chinese, English, Japanese and Spanish. The website currently offers Chinese and English. These are separate language sets.
 
 ## Import and export
 
 ### What if my school is not on the list?
-The school-picking page is a national school catalog with an explicit import status per school: a subset carries a routing protocol and imports directly, the rest are catalog registrations whose parsers are not wired yet and are marked as such in-app — "not adapted yet" and "no such school" are now different things. If your school is missing from the catalog, or shows as not adapted and you want to push adaptation forward: first search the full name or alias on the school-picking page, or enter the academic-affairs URL to try identification. If that still fails, open an [Issue](https://github.com/lingion/sleepy/issues/new?template=school_adaptation.yml) with the school adaptation template, providing the school's academic-affairs address, failing page and steps. Never submit login credentials or unredacted personal data.
+Search the full name or an alias on the school selection page, then try entering the academic-affairs URL for identification. A catalog listing does not mean a school is supported or that login is guaranteed to succeed. If the entry is missing, marked as pending support or fails to import, use the [school adaptation template](https://github.com/lingion/sleepy/issues/new?template=school_adaptation.yml) to provide the public academic-affairs address, failing page and steps. Do not submit login credentials or unredacted data.
 
-### I imported successfully from a catalog school that isn't verified — does the maintainer know?
-Importing from a catalog entry that has not been verified online pops a success report you can copy in one tap: app version, date, school name, catalog ID, protocol, course count. Nothing is uploaded and no network request is made; the report contains only school-side public facts. Paste it into an Issue or Discussion to confirm the protocol works.
+### How many catalog entries are there, and which are configured?
+The v1.0.63 catalog snapshot contains 4140 entries. After normalization under the app's status rules:
 
-### How does the academic-affairs import work? Are my credentials stored?
-The app opens the school's login page in an on-device WebView, the user enters credentials there, and returned schedule pages or API data are parsed. Sleepy does not write academic-affairs credentials into the schedule database. Failure-triage material must also be redacted per the project's adaptation guide.
+- The configured baseline is 352 entries: 350 `supported` and 2 `grad_supported`. Of these, 348 omit the status field and count as supported under compatibility rules; they are not another 348 entries.
+- There are 2528 unverified entries: 2480 `unverified` and 48 `grad_unverified`. Entries with an available parser route can be tried after confirmation.
+- There are 1260 entries awaiting integration: 1007 `pending` and 253 `grad_pending`. These cannot launch academic-affairs import directly.
+
+These are catalog status counts, not a claim that every school has been individually verified online or is guaranteed to import. A valid entry point, parser and available school service are still needed. The Shiguang source covers 264 schools; that is a different measure from the 43 entries that ultimately use the `sg_asset` route. It does not mean all 264 have been tested live. See the [catalog documentation](docs/catalog/README.md) for configuration data and sources.
+
+### I imported successfully from an unverified catalog school. How can I tell the maintainer?
+After success, you can copy a report containing the version, date, school name, catalog ID, protocol and course count, then paste it into Issues or Discussions yourself. This reporting entry point does not automatically upload anything over the network. Before sharing, check for information you do not want to make public.
+
+### How does academic-affairs import work? Are my credentials stored?
+The app opens the school's login page in an on-device WebView or retrieves schedules using the relevant protocol. You enter your school credentials on the school's page. Sleepy does not write the academic-affairs password into the schedule database. The school login site may use WebView sessions or cookies; not writing to the schedule database does not mean the school page never retains a session. Redact any troubleshooting material.
 
 ### Which import formats are supported?
-The current parser supports:
+The app can identify these formats from their content:
 
-- WakeUp share text (`【来自WakeUp课程表】`)
-- WakeUp JSON
-- iCalendar / ICS
-- CSV
-- HTML tables
-- tab-separated plain text
-- the native Sleepy `sleepy-v1` format
+- WakeUp offline share text (`【来自WakeUp课程表】`).
+- WakeUp JSON.
+- iCalendar / ICS.
+- CSV.
+- HTML tables.
+- Tab-separated plain text.
+- Sleepy's native `sleepy-v1`.
 
-The parser detects the format from content; users never pick an internal protocol name first. Legacy WakeUp data formats remain compatible.
+WakeUP online share codes are also supported. Online codes require a network connection and are separate from local file parsing.
+
+### How do I import a WakeUP share code?
+Enter the code, or share text containing it, in the import paste field. The app sends two POST requests to WakeUP's `api.wakeup.fun`, using `/pluto/app/antispam` and `/share_schedule/getv2`, then converts the shared schedule into local data.
+
+Expired codes, invalid shares, network problems or changes to the service's protocol can cause failure. Do not post share codes in public issues. Ordinary manual editing, saved schedules and offline-format imports do not depend on this third-party service.
 
 ### What is `sleepy-v1`?
-Sleepy's native plain-text exchange format, carrying a `chk` integrity field used to verify content on import and export. It is not a replacement requirement for the old WakeUp format: existing WakeUp JSON, share text and ICS still import.
+Sleepy's native plain-text exchange format includes a `chk` integrity field. It is readable directly and supports export/import round trips. It does not require replacing older WakeUp data: WakeUp JSON, offline share text and ICS can still be imported.
 
 ### What can I export?
-Schedules export as WakeUp-compatible JSON, ICS and `sleepy-v1`; both share entry points (export-page share text and the top-bar share sheet) emit `sleepy-v1` natively, so a shared timetable reads as plain text and the import round-trip is unchanged. On Android 10+ JSON/ICS are written to `Download/Sleepy/`; on Android 8–9 the app cache plus FileProvider sharing is used, and share text and sleepy-v1 go through the system share sheet. Timetables export as JSON or sleepy-v1. ICS files can be handed to the system calendar, Google Calendar or any iCalendar app.
+Schedules can be exported as WakeUp-compatible JSON, ICS and `sleepy-v1`. Share text from the export page and the top-bar share panel uses native sleepy-v1, not WakeUp's URL-encoded share text. Period timetables can be exported as JSON or sleepy-v1.
 
-### Can I export to the Xiaoai class table?
-Yes. The export page offers "Export to Xiaoai class table": the timetable is generated and validated locally — week range, dates and time-schedule fields — then handed to the Xiaoai (Xiaomi assistant) class-table importer via deep link. The final import experience depends on the Xiaoai client receiving it.
+On Android 10 and later, the relevant files are written to `Download/Sleepy/`. Android 8–9 uses the app cache and FileProvider sharing; text uses the system share sheet. ICS can be passed to the system calendar or an iCalendar-compatible app. Exporting one schedule is not a full backup.
 
-### Can it write to the system calendar directly?
-Yes. On the export page pick a writable calendar on the device and a date range, preview, then confirm; calendar read/write permission is requested only at this step. Rescheduled classes and calendar reminders apply. When the device has no Google account or any calendar account and the writable-calendar list is empty, Sleepy creates its own hidden local calendar on demand; incremental fingerprint upsert means re-exporting never wipes your manual edits in the calendar app. The experimental first-period alarm depends on calendar app and account support.
+### Can I export to Xiaoai's class timetable?
+Yes. The export page offers "Export to Xiaoai class timetable". It generates and validates week, date and period-timetable fields locally, then passes them to Xiaoai's timetable importer through a deep link. Whether it is accepted and how it appears depend on the Xiaoai client installed on the device.
 
-### How do I back up everything or move to a new device?
-"General settings → Data migration" exports a `.sleepybackup` containing schedules, timetables, preferences and widget configuration. Restore offers merge or overwrite: merge keeps local schedules and appends, but same-name preference keys take the backup's values; overwrite replaces only the schedule and settings modules present in the package, keeping local values for preference files absent from it. A single schedule's JSON/ICS is not a full backup.
+### Can it write directly to the system calendar?
+Yes. On the export page, choose a writable calendar on the device and a date range, preview, then confirm. Calendar read/write permission is requested at this point. Export supports applying class reschedules and calendar reminders. If no writable calendar exists, the app can create its own hidden local calendar on demand; incremental fingerprints help avoid duplicate writes. Events edited in the calendar app have retention rules, but this is not two-way real-time synchronization. The experimental first-period alarm depends on calendar app and account support.
+
+### How do I make a full backup or move to a new device?
+Use "Data migration" in "General settings" to export a `.sleepybackup` containing schedules, period timetables, preferences and widget configuration. Restore offers merge or overwrite. Merge keeps local schedules and appends restored ones; preference keys with the same name take the backup's values. Overwrite replaces only the schedule and settings modules included in the backup, keeping local values for preference files absent from it. Keep the original backup safe before restoring. A single schedule's JSON or ICS file is not a full backup.
 
 ### Which permissions are required?
-The school-picker location button requests foreground location on demand; enabling reminders requests notification permission, with pages offering exact-alarm, battery-optimization and do-not-disturb access entries; writing the system calendar requests calendar read/write; in-app update installation requires unknown-source install permission. Ordinary offline schedule viewing asks for none of these optional permissions.
+Common optional permissions include foreground location when you tap school location, notifications when enabling reminders, calendar read/write when exporting to the system calendar, and unknown-source installation when installing an update. Exact alarms, battery optimization and do-not-disturb access are configured through the relevant system settings. Background services and restoration after reboot also depend on system permissions and power-saving policies. Ordinary offline schedule viewing does not require granting all these permissions. This is not a complete list of Manifest permissions.
 
-## Schedules, conflicts and timetables
+## Schedules, conflicts and period timetables
 
 ### Can I keep multiple schedules at once?
-Yes. Each schedule is stored independently, with its own semester start date, maximum week count and period timetable.
+Yes. Schedules are stored independently, each with its own semester start date, maximum week count and period timetable. The schedule page offers a time grid and a week view grouped by day; the Today page brings together the day's courses. Wide landscape layouts can use two columns, while portrait tablets fall back to one.
 
-### If two courses overlap in time, is one lost?
-No data is deleted just because the interface shows one layer. The conflict layout keeps overlapping courses; tapping a covered area shows the others; manually adding a conflicting course displays weekday, period, weeks and the conflicting course details.
+### If two courses overlap, is one lost?
+Overlapping courses remain in the data. The conflict layout stacks them and provides a way to view them. When adding a course manually, it lists the weekday, periods, weeks and conflicting courses. A course being visually covered does not mean it has been deleted.
 
 ### What can undo revert?
-The most recent schedule-data change; redo restores what was just undone. Switching the current schedule is not a data change and never counts as a course-edit record.
+Undo and redo apply to schedule-data edits. The default history depth is 5 steps and can be changed in the lab section of "General settings". A value of 0 disables history; a negative value removes the step limit. A new edit clears the redo branch. Switching the current schedule does not count as a data-edit record.
+
+History is held in process memory and is lost when the process ends. It is not a backup. Whether an operation can be undone depends on whether it is included in schedule history; this does not mean every change made through the system calendar, external apps or diagnostic console can be restored.
+
+### How do I change just one class occurrence?
+Use the single-occurrence adjustment entry point to change the course instance on a specific date or in a specific week, without changing the whole course's recurrence rule. Edit the recurring course if the change should apply across the semester. Check the applicable dates separately for single-occurrence adjustments and holiday reschedule mappings.
+
+### Can I drag courses, move across weeks and add courses quickly?
+Long-press a course capsule to drag it and adjust the course instance according to its grid drop position. Holding near the left or right week edge triggers a week turn every 500 milliseconds until you leave the edge or reach the week boundary. An empty cell can open a quick-add capsule with its weekday and periods prefilled.
+
+This describes v1.0.63 behavior. Later fixes on main for drag white edges, scrolling and week turns on release are not automatically included in this official APK.
 
 ### Can period times be calculated automatically?
-Yes. Timetables support per-period manual entry and derivation from the first period's start, per-class duration, period count and inter-class break template. Different schedules can bind different timetables. Importing an academic-affairs timetable always creates its time-schedule alongside it.
+You can enter each period's start and end manually or calculate them from the first period's start, class duration, number of periods and break template. Different schedules can use different period timetables, and academic-affairs import handles the corresponding period times. The header also has a period start/end time alignment option to suit your display preference.
 
-### Does the week view show dates?
-Yes. With "show weekday" enabled, the week view prints the actual date (M/d) next to each course and in the day detail panel — no more counting back from the class week.
+### What is the ghost marker on a time slider?
+When adjusting a range or value, the ghost marker keeps the original value visible for comparison. It is not a second course or a second active interval. This reference is used in editors such as course periods and single-occurrence times. The new value you confirm is the one saved.
 
-### How are long breaks rendered?
-A long gap between classes renders as a thin floating band instead of a stretched empty row: row heights stay rigid, course cards next to a band keep full height, meal breaks are marked proportionally to time, and the header can hide the time row.
+### Can the week view show dates?
+Yes. With "Show weekday" enabled, the week view shows the actual date beside courses and in the day detail panel, so you do not have to work it out from the teaching week.
+
+### How are long breaks displayed?
+Long gaps use a thin floating band rather than stretching a whole row into a tall blank space. Course cards keep their corresponding row height, meal breaks are marked in proportion to time, and the header time row can be hidden.
 
 ## Widgets
 
-### Which widgets exist?
-There are five widget families now:
+### Which widgets are available?
+v1.0.63 has five families and 13 widget configuration XML files:
 
-1. **Today**: the day's course list
-2. **TwoDay**: today and tomorrow in two columns
-3. **WeekList**: a weekly course list
-4. **WeekView**: a week-grid thumbnail
-5. **WeekGrid**: the full period grid
+1. **Today**: the day's course list.
+2. **TwoDay**: today and tomorrow in two columns.
+3. **WeekList**: a weekly course list.
+4. **WeekView**: a week-view thumbnail.
+5. **WeekGrid**: the full period grid.
 
-They ship fixed-size variants per launcher; resources currently hold 13 widget configuration XMLs. Rendering uses synchronous `RemoteViews + Canvas`. Management lives on its own "Add or Manage Widgets" page: all variants in an add gallery, launcher previews re-rendered at true scale from the real widget faces, and the refresh button next to the widgets it refreshes.
+Widgets use synchronous `RemoteViews + Canvas` rendering, with variants for different launcher sizes. The separate "Add or Manage Home Screen Widgets" page provides an add gallery, instance management and refresh. Large cards determine each gallery row's height; smaller cards are proportionally scaled and centered. Widgets under later development are not included in these 13 configurations.
 
-### Why might widgets be blank on OPPO / OnePlus / ColorOS launchers?
-Older versions used Glance's asynchronous SessionWorker, which some ColorOS launchers froze. Since v1.0.29 the main render path is synchronous RemoteViews + Canvas. If a widget still misses refreshes, check launcher permissions, battery limits and notification permission, and refresh the widget manually first.
+### Why might widgets be blank on OPPO, OnePlus or ColorOS launchers?
+The old asynchronous Glance SessionWorker could be frozen by some ColorOS launchers. The main renderer now uses synchronous RemoteViews and Canvas. If problems remain, try a manual refresh and check launcher permissions and power-saving limits. Changing the renderer does not guarantee that every launcher will allow updates without restrictions.
 
-### Widget colors differ from the app; what do I do?
-Theme colors come from the app's theme settings; course colors follow the mode selected under Appearance → Course colors. After the app theme changes, the app broadcasts widget updates; if the launcher still shows old content, remove and re-add the widget, or check system limits on background and launcher components.
+### What if widget colors differ from the app?
+The app and widgets share their theme and course-color sources. Changing the theme triggers widget updates. If old content remains, refresh manually, check system restrictions and re-add the widget if necessary. Record its position and settings first; deleting and recreating it is not a lossless operation.
+
+### Are vivo Atomic Island and home screen widgets the same thing?
+No. v1.0.63's OriginOS home screen widgets use standard Android AppWidget and should not be advertised as certified native "atomic components". Atomic Island is a vendor live-card display for reminders. Whether it appears depends on the system version, permissions and vendor capabilities.
 
 ## Reminders
 
-### How many minutes ahead can it remind?
-Pre-class reminders accept 1 to 999 minutes, not just a few fixed options. Today summary, tomorrow summary and pre-class reminders are configured separately under "Mine → Reminders", and each schedule has its own switch.
+### How many minutes before class can it remind me?
+Pre-class reminders support 1 to 999 minutes. Today summaries, tomorrow summaries and pre-class reminders each have their own master switch, and each schedule also has its own reminder switch.
 
-### What is the relationship between the banner and Fluid Cloud reminder?
-It is an either/or choice: banner is a plain dismissable notification and is naturally wearable-friendly; Fluid Cloud is a promoted live card, experimental, with display depending on system and vendor support. The two are mutually exclusive, and switching back to banner truly stops the cast service. The old pair of switches migrates losslessly.
+### How do banner and Fluid Cloud pre-class reminders relate?
+The two modes are mutually exclusive. Banner mode uses ordinary dismissible notifications; Fluid Cloud uses experimental live cards and depends on system and vendor support. Switching back to banner stops the Fluid Cloud delivery service. A running service does not mean the system has displayed the card.
 
-### Will multiple schedules spam me with reminders?
-No. Daily and tomorrow reminders merge all timetables into a single notification sorted by class time; when more than one table contributes, each entry carries a `[timetable]` prefix. Tapping it opens the unified daily agenda, which also accepts a date and jumps straight there.
+### Is OPPO, OnePlus and realme Fluid Cloud integrated?
+The Android 16 Live Updates channel is integrated, and the repository contains behavior records for RMX6688 / ColorOS 16. The dedicated Pantanal / Seedling SDK and UPK channels cannot yet be described as fully integrated. Use the test and end controls on the reminders page to check your device's behavior. Notification permission or a "delivering" status does not prove that the system has shown a capsule. Older systems, or notifications not granted promoted status, may show only an ordinary notification. See the [verification scope](docs/vendors/oppo-coloros-fluid-cloud.md).
 
-### Where are the per-timetable reminder switches?
-On their own page: Mine → Reminders → Table reminders. All tables and their switches in one list; you can preconfigure while the master switch is off.
+### Will reminders from multiple schedules flood my notifications?
+v1.0.63 combines daily summaries and tomorrow reminders from all schedules into one notification, sorted by class time. When multiple schedules contribute, each entry has a `[schedule name]` prefix. Tapping opens the unified daily agenda, which also supports opening a specified date directly. Later versions' schedule-selection behavior is outside this page's release scope.
 
-### How do I set holidays, swapped rest days and class do-not-disturb?
-Holidays and reschedule mappings are managed in general settings; each schedule stores its own reschedules. The reminders page configures date rules independently, and class-time auto do-not-disturb with resume-on-end can be enabled after granting system DND access. Fluid Cloud is experimental; its display depends on system and vendor support.
+### Where are the per-schedule reminder switches?
+Open "Schedule reminders" from "Mine", then "Reminders". The list shows every schedule and its switch. You can configure them even when the master switch is off.
 
-### Are reminders cloud push?
-No. Reminders are scheduled on the device with AlarmManager, offering exact and inexact paths within what the Android version allows; after reboot or app update BootReceiver restores the schedule.
+### How do I set holidays, swapped days and class-time do-not-disturb?
+General settings manages holidays and reschedule mappings; each schedule stores its reschedules separately. Configure date rules on the reminders page. With system do-not-disturb access granted, the app can enable do-not-disturb during class and restore it afterward. Refreshing date data requires a network connection, and reminder display is also subject to the device's background policies.
 
-### Will I still get reminders after turning them off?
-With the app's master reminder switch off, no new reminders are scheduled; each timetable's own switch can also be turned off individually. Android notification permission remains controlled by system settings; if notifications are intercepted by the system or vendor battery policy, restore the permission in system settings.
+### Are reminders cloud push notifications?
+No. Reminders are scheduled locally with AlarmManager, using exact or inexact paths according to system capabilities. BootReceiver restores scheduling after a device reboot or app update. Notification permission, exact-alarm permission and power-saving policies can still affect delivery.
+
+### Will I still receive reminders after turning them off?
+Turning off the app's master switch stops it from actively scheduling new reminders. Each schedule's switch can also be turned off independently. Android still controls system notification permission. Notifications blocked by the system or vendor require attention in the corresponding settings.
 
 ## Theme and appearance
 
 ### Are dark mode and system dynamic color supported?
-"Mine → Appearance & theme" supports following the system, light and dark modes. Android 12+ can use Material You wallpaper-based dynamic color; devices without dynamic color use preset theme colors.
+"Appearance & theme" under "Mine" supports system, light and dark modes. Android 12 and later can use Material You wallpaper-based dynamic colors; preset palettes are used when dynamic color is unavailable.
 
 ### Can I customize theme colors?
-Yes. Custom themes can be created and edited: primary, secondary, tertiary accent and surface tint. Editing and saving the custom theme in use re-applies colors immediately — no need to tap another theme card first and tap back.
+You can create and edit custom themes, setting primary, secondary, tertiary accent and surface tint colors. Editing and saving the custom theme currently in use reapplies its colors without switching to another theme and back.
 
-### How are course colors decided? Can they follow the theme?
-Appearance → Course colors has three modes: Classic keeps the old stable golden-angle HSL scatter unchanged; Follow Theme places course hues on a safe arc of the current theme color, carving out the theme band and the complement band; Custom lets you drag a seed hue once and every course re-harmonizes around it. Hues persist per course group ID, so renaming a course or re-importing a timetable no longer reshuffles colors. The switches are rail-style segmented controls throughout.
+### How are course colors chosen? Can they follow the theme?
+Course colors have three modes: Classic, Follow Theme and Custom. Classic uses a stable golden-angle HSL distribution; Follow Theme arranges course colors around the theme color; Custom uses your chosen seed color. Hues are saved by course group, and the app and widgets share the same derivation rules. The golden-angle method is not used by every mode.
 
-### Does selecting a theme card change the card's size?
-The selection indicator uses a fixed-size slot; selected and unselected states keep the same card layout size, with the selected state expressed through color hierarchy and a check mark.
+### Does selecting a theme card change its size?
+The selection indicator occupies a fixed slot. Selected and unselected cards keep the same layout dimensions, with color and a check mark distinguishing their state.
+
+### Which devices support liquid glass and Material 3 Expressive motion?
+v1.0.63 introduces a liquid-glass bottom bar, Material 3 Expressive transitions and spring motion. The runtime shader path depends on graphics capabilities available on Android 13 (API 33) and later. System support affects the result.
+
+The release still has known bottom-bar display limitations on some older devices. It cannot guarantee the same refraction, blur or a complete fallback on those devices. Later compatibility fixes on main must not be described as already fixed in v1.0.63. The API 33 requirement for graphics effects does not change the whole app's minimum version to Android 13.
+
+### Are Android 13 themed icons supported?
+The app includes a monochrome layer for themed icons on Android 13 and later. The launcher must also support and enable them. This is separate from in-app dynamic color, available from Android 12.
 
 ## Development, testing and contribution
 
-### How do I build?
-JDK 17 is required. Linux / macOS:
+### How do I build it?
+You need JDK 17 and the corresponding Android toolchain. To reproduce the release described on this page, check out v1.0.63:
 
 ```sh
 git clone https://github.com/lingion/sleepy.git
 cd sleepy
+git switch --detach v1.0.63
 ./gradlew assembleDebug
 ```
 
-On Windows use `gradlew.bat assembleDebug`. The debug APK lands in `app/build/outputs/apk/debug/`; ABI-split builds generate one file per ABI.
+On Windows, use `gradlew.bat assembleDebug`. Output is in `app/build/outputs/apk/debug/`. Source on main, PRs and automated debug builds may include later changes. See the [build guide](docs/ci-automation.md) separately for current CI usage; it does not mean those changes are included in the official APK.
 
 ### How do I run tests?
 
@@ -178,7 +229,21 @@ On Windows use `gradlew.bat assembleDebug`. The debug APK lands in `app/build/ou
 ./gradlew testDebugUnitTest
 ```
 
-Test sources are under `app/src/test/`, covering parsers, schedule data, conflict layout, week calculation, widget logic, theme contracts and import/export modules. Never put real local accounts, academic-affairs sessions or personal schedules into fixtures.
+Tests are in `app/src/test/`, covering import parsing, data, conflicts, weeks, themes, widgets and other modules. Never put real credentials, sessions or personal schedules in test fixtures.
+
+### Is the local debug console read-only?
+No. This interface must be enabled explicitly. It listens on the loopback address `127.0.0.1:3737` and authenticates requests through `X-Sleepy-Token`. Once unlocked, it can query data and also create, modify or delete some schedules, courses, period timetables and preferences. Release builds impose additional restrictions on endpoints such as catalog overrides, mocks and triggers. Those restrictions do not make the whole interface read-only.
+
+Use it only for local diagnosis. Do not expose it to the public internet or give its token to untrusted tools. Operations can modify data, so back up first. Resetting a session does not guarantee that changes to arbitrary real data will be undone. See the [console documentation](docs/agent-debug-console/AGENT-SKILL.md) for interface boundaries.
 
 ### How do I contribute?
-Read `CONTRIBUTING.md` and the matching project SOP first, then submit one well-scoped change. New school adaptations must add protocol evidence, redacted fixtures and tests. Use the project-convention author email `lingion@hrbeu.edu.cn`, and commits carry no Claude attribution trailer.
+Read the public [CONTRIBUTING.md](CONTRIBUTING.md) first and submit a clearly scoped change. School adaptations need public protocol evidence, redacted fixtures and tests. Bug reports should include the version, reproduction steps and any necessary redacted screenshots. Do not submit personal data.
+
+## Related links
+
+- Source: [github.com/lingion/sleepy](https://github.com/lingion/sleepy)
+- Release: [v1.0.63](https://github.com/lingion/sleepy/releases/tag/v1.0.63)
+- Wiki: [github.com/lingion/sleepy/wiki](https://github.com/lingion/sleepy/wiki)
+- Issues: [github.com/lingion/sleepy/issues](https://github.com/lingion/sleepy/issues)
+- License: [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html)
+- Sponsorship: [sponsor.md](sponsor.md)

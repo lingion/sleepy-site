@@ -28,10 +28,10 @@ const enHtml = enDoc.documentElement.innerHTML;
 describe('快照计数闸(plan Task 6)', () => {
   it('43 问 = faq.json items 总和 = FAQ.md ### 计数 = 页面 article 数', () => {
     const mdCount = (readFileSync(new URL('../fixtures/FAQ.md', import.meta.url), 'utf8').match(/^### /gm) ?? []).length;
-    expect(mdCount).toBe(43);
-    expect(faq.sections.reduce((n, s) => n + s.items.length, 0)).toBe(43);
-    expect(zhDoc.querySelectorAll('[data-faq-item]')).toHaveLength(43);
-    expect(enDoc.querySelectorAll('[data-faq-item]')).toHaveLength(43);
+    expect(mdCount).toBe(54);
+    expect(faq.sections.reduce((n, s) => n + s.items.length, 0)).toBe(54);
+    expect(zhDoc.querySelectorAll('[data-faq-item]')).toHaveLength(54);
+    expect(enDoc.querySelectorAll('[data-faq-item]')).toHaveLength(54);
   });
   it('8 节(终审 I9:FAQ.md 实测 9 个 ## 节,剔除「相关链接」恰 8)且节名序 = faq.json zh 序', () => {
     const secs = [...zhDoc.querySelectorAll('[data-faq-section]')];
