@@ -32,7 +32,6 @@ const badgeWidth = zhUI ? 109 : 120;
       <p class="t-body-medium download-page__versionline tnum">
         <a href="https://github.com/lingion/sleepy/releases/latest">GitHub Releases</a>
         · {versionLine}
-        <a href={zhUI ? '/en/download/' : '/download/'} class="download-page__langlink">{zhUI ? 'English' : '中文'}</a>
       </p>
       <p class="download-page__primary">
         <a class="site-button site-button--elevated download-page__cta-xl" data-dl-primary href={universal.url} download rel="download" aria-label={`${dl.downloadAria('universal', mb(universal.size))}`}>
@@ -164,7 +163,6 @@ const badgeWidth = zhUI ? 109 : 120;
     font-variant-numeric: lining-nums tabular-nums;
   }
   .download-page__versionline a { color: inherit; }
-  .download-page__langlink { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
   .download-page__primary { margin-block: calc(var(--site-unit) * 4); }
   .download-page__cta-xl {
     font-size: 16px;
