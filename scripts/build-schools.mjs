@@ -1,110 +1,39 @@
-// 教务分组构建 — spec §4.1 不变量执行体
-// 输入: fixtures/schools.json(快照) + src/data/geo-prefix.json + src/data/province-manual.json
-// 输出: src/data/schools.grouped.json — 每条 +province:{code,zh,en}(sortKey==='*' →「其它」桶)
-// 归组四层(顺序固定):① '*'→其它 ② 人工表 ③ 最长前缀 ④ moe 目录号解省码;四层皆空 = 未归组。
-// 闸: ungrouped==0 否则 exit 1(覆盖率不变量,数字不硬编码);协议/省份计数全部现场派生打印。
+// Offline release snapshot transform. Never filters out pending entries.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import {
-  buildGeoIndex,
-  classifyProvince,
-  decodeProvinceByCatalogId,
-} from '../src/lib/geo.ts';
-
-const geo = JSON.parse(readFileSync(new URL('../src/data/geo-prefix.json', import.meta.url), 'utf8'));
-const manual = JSON.parse(readFileSync(new URL('../src/data/province-manual.json', import.meta.url), 'utf8'));
-const schools = JSON.parse(readFileSync(new URL('../fixtures/schools.json', import.meta.url), 'utf8'));
-
-const OTHER = { code: 'OTHER', zh: '其它', en: 'Other' };
+import { buildGeoIndex, classifyProvince, decodeProvinceByCatalogId } from '../src/lib/geo.ts';
+const read = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
+const geo = read('../src/data/geo-prefix.json');
+const manual = read('../src/data/province-manual.json');
+const schools = read('../fixtures/schools.json');
+const snapshot = read('../src/data/schools.snapshot.json');
 const idx = buildGeoIndex(geo);
-
-const grouped = [];
-const ungrouped = [];
-let manualHits = 0;
-let prefixHits = 0;
-let moeHits = 0;
-let starHits = 0;
-let baseHits = 0;
-for (const s of schools) {
-  let code;
-  if (s.sortKey === '*') {
-    code = OTHER.code; // 北邮 VPN/WebVPN 两条,不静默丢(spec §4.1)
-    starHits++;
-  } else if (s.name in manual) {
-    code = manual[s.name]; // 人工表优先于前缀(地理纠错,如 北师大珠海分校→GD)
-    manualHits++;
-  } else {
-    const hit = classifyProvince(s.name, idx);
-    if (hit) {
-      code = hit.code;
-      prefixHits++;
-    } else {
-      const moe = decodeProvinceByCatalogId(s.catalogId, geo.provinces);
-      if (moe) {
-        code = moe; // 第 4 层:名称无地理头,但教育部代码第 3-4 位是省级区划码
-        moeHits++;
-      } else {
-        // 第 5 层:去除常见修饰词(如 - 研究生、个人数据中心、括号附注等)后回落匹配
-        const clean = s.name
-          .replace(/\s*[-–—]\s*研究生$/, '')
-          .replace(/[-–—]研究生$/, '')
-          .replace(/个人数据中心$/, '')
-          .replace(/（.*?）$/, '')
-          .replace(/\(.*?\)$/, '')
-          .trim();
-        if (clean in manual) {
-          code = manual[clean];
-          baseHits++;
-        } else {
-          const baseHit = classifyProvince(clean, idx);
-          if (baseHit) {
-            code = baseHit.code;
-            baseHits++;
-          } else {
-            // 归入其它兜底,不因单条冷门未归类校名导致构建中断
-            code = OTHER.code;
-            ungrouped.push(s.name);
-          }
-        }
-      }
-    }
-  }
-  const meta = code === OTHER.code ? OTHER : geo.provinces[code];
-  if (!meta) {
-    console.error(`[build-schools] 省码 ${code} 无对应 meta(geo-prefix 查错层?)`);
-    process.exit(1);
-  }
-  // 官网不消费教务 URL(点击不跳转,spec §3③);catalogId/status 只服务归组与对账,不进包体
-  const { url, catalogId, status, ...rest } = s;
-  grouped.push({ ...rest, province: { code, zh: meta.zh, en: meta.en } });
-}
-
-if (ungrouped.length > 0) {
-  console.warn(`[build-schools] 提示: ${ungrouped.length} 条无法判定省份，已归入「其它」桶 →`);
-  for (const n of ungrouped.slice(0, 5)) console.warn(`  - ${n}`);
-  if (ungrouped.length > 5) console.warn(`  ...等 ${ungrouped.length} 条`);
-}
-
-// 协议面闸改「派生一致」而非「钉死数字」:源 fixture 与产物 type 集合必须全等(丢型 = 分组 bug);
-// 计数真值以打印为准(§4.1「在用协议数」随上游目录演进,逐批对账一次,测试侧另锁)。
-const srcTypes = new Set(schools.map((s) => s.type));
-const outTypes = new Set(grouped.map((g) => g.type));
-if (srcTypes.size !== outTypes.size || [...srcTypes].some((t) => !outTypes.has(t))) {
-  console.error('[build-schools] 协议面不一致: 源与产物 type 集合不等(分组丢型?)');
-  process.exit(1);
-}
-const provCodes = new Set(grouped.map((g) => g.province.code));
-if (provCodes.has('undefined')) {
-  console.error('[build-schools] province.code 有缺失(meta 查错层?)');
-  process.exit(1);
-}
-if (!provCodes.has('OTHER')) {
-  console.error("[build-schools] 「其它」桶缺失('*' 条目被丢?)");
-  process.exit(1);
-}
-
-const out = fileURLToPath(new URL('../src/data/schools.grouped.json', import.meta.url));
-writeFileSync(out, `${JSON.stringify(grouped, null, 2)}\n`);
-console.log(
-  `[build-schools] ${grouped.length}/${schools.length} 条全分组(前缀 ${prefixHits} · 人工表 ${manualHits} · moe解 ${moeHits} · '*'→其它 ${starHits})· ${provCodes.size} 省码(含其它)· ${srcTypes.size} 协议`,
-);
+const OTHER = { zh: '其它', en: 'Other' };
+const UNKNOWN = { zh: '省份未知', en: 'Province unknown' };
+const statuses = ['supported', 'grad_supported', 'unverified', 'grad_unverified', 'pending', 'grad_pending'];
+const identities = new Set();
+const statusCounts = Object.fromEntries(statuses.map(s => [s, 0]));
+const grouped = schools.map(s => {
+  if (!s.catalogId || identities.has(s.catalogId)) throw new Error(`Missing/duplicate catalogId: ${s.name}`);
+  identities.add(s.catalogId);
+  const status = s.status ?? 'supported';
+  if (!statuses.includes(status)) throw new Error(`Unknown status: ${status}`);
+  statusCounts[status]++;
+  const code = s.sortKey === '*' ? 'OTHER' : manual[s.name]
+    ?? snapshot.provinceBySchool?.[s.name]
+    ?? classifyProvince(s.name, idx)?.code
+    ?? decodeProvinceByCatalogId(s.catalogId, geo.provinces)
+    ?? 'UNKNOWN';
+  const meta = code === 'OTHER' ? OTHER : code === 'UNKNOWN' ? UNKNOWN : geo.provinces[code];
+  if (!meta) throw new Error(`Unknown province code: ${code}`);
+  // Whitelist public fields: keep identity/status, never ship academic endpoints.
+  return { name: s.name, type: s.type, sortKey: s.sortKey, sortKeyFull: s.sortKeyFull,
+    aliases: s.aliases ?? [], catalogId: s.catalogId, status, province: { code, ...meta } };
+});
+const typeCount = new Set(grouped.map(s => s.type).filter(Boolean)).size;
+const configuredCount = statusCounts.supported + statusCounts.grad_supported;
+const unverifiedCount = statusCounts.unverified + statusCounts.grad_unverified;
+const pendingCount = statusCounts.pending + statusCounts.grad_pending;
+writeFileSync(new URL('../src/data/schools.grouped.json', import.meta.url), JSON.stringify(grouped, null, 2) + '\n');
+writeFileSync(new URL('../src/data/schools.snapshot.json', import.meta.url), JSON.stringify({ ...snapshot,
+  rowCount: grouped.length, typeCount, configuredCount, unverifiedCount, pendingCount, statusCounts }, null, 2) + '\n');
+console.log(`[build-schools] ${grouped.length} records, ${typeCount} nonempty protocols; configured ${configuredCount}, unverified ${unverifiedCount}, pending ${pendingCount}; unknown province ${grouped.filter(s => s.province.code === 'UNKNOWN').length}`);

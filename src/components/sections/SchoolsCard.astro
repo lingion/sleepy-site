@@ -5,7 +5,7 @@
 // 终审 I2:入口钮 href=/schools/?focus=s,聚焦承接 = Task 4 岛读 focus=s(合同侧 pin 在 page.index 文案块)。
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
-import { rowCount, typeCount } from '../../lib/schools-view';
+import { rowCount, typeCount, configuredCount, unverifiedCount, pendingCount } from '../../lib/schools-view';
 
 interface Props {
   copy?: SiteCopy;
@@ -16,6 +16,7 @@ const c = Astro.props.copy ?? zh;
 const lang = Astro.props.lang ?? 'zh';
 const t = c.homeSchoolCard;
 const href = `${lang === 'en' ? '/en/schools/' : '/schools/'}?focus=s`;
+const status = t.status.replace('{configured}', String(configuredCount)).replace('{unverified}', String(unverifiedCount)).replace('{pending}', String(pendingCount));
 const count = t.count.replace('{rows}', String(rowCount)).replace('{types}', String(typeCount));
 ---
 
@@ -25,6 +26,7 @@ const count = t.count.replace('{rows}', String(rowCount)).replace('{types}', Str
       <div class="schools-card__copy">
         <h2 class="t-headline-large" id="schoolCard-title">{c.schools.heading}</h2>
         <p class="t-body-medium schools-card__count tnum">{count}</p>
+        <p class="t-body-medium schools-card__count tnum" data-catalog-status>{status}</p>
       </div>
       <a class="entry-card schools-card__link t-label-large" href={href}>
         {t.cta}

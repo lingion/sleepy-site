@@ -1,109 +1,75 @@
-// 教务快照刷新 — spec §4.1:快照 = 有意冻结副本(入仓),自动读取安卓最新更新。
-// 优先级: ① 本地安卓仓库(origin/main 或工作区) ② gh CLI (GitHub API raw) ③ 网络直接拉取 ④ 仓内快照兜底
-// 口径: 上游全表含 pending/grad_pending 在途条目,官网只收录「在用」cohort
-//       (status ∉ {pending, grad_pending};字段缺省 = supported,老快照兼容)。
-import { writeFileSync, readFileSync, existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
+// Refresh the reviewed release, never a mutable Android working tree or main.
+// Configured local Git objects, GitHub CLI and REST are equivalent immutable sources.
+import { readFileSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { buildGeoIndex, classifyProvince } from '../src/lib/geo.ts';
 
-const SNAPSHOT = fileURLToPath(new URL('../fixtures/schools.json', import.meta.url));
-const RAW_URL = 'https://raw.githubusercontent.com/lingion/sleepy/main/app/src/main/assets/schools.json';
-const API_URL = 'https://api.github.com/repos/lingion/sleepy/contents/app/src/main/assets/schools.json';
+const snapshotUrl = new URL('../src/data/schools.snapshot.json', import.meta.url);
+const previous = JSON.parse(readFileSync(snapshotUrl, 'utf8'));
+const args = process.argv.slice(2);
+if (args.length && (args.length !== 2 || args[0] !== '--ref')) throw new Error('Usage: fetch-schools.mjs [--ref <release-tag>]');
+const ref = args[1] ?? previous.ref;
+if (!/^v\d+\.\d+\.\d+$/.test(ref ?? '')) throw new Error('A release tag is required');
 
-const IN_USE = (s) => s.status !== 'pending' && s.status !== 'grad_pending';
-
-function tryLocalRepo() {
-  const candidates = [
-    process.env.SLEEPY_REPO_DIR,
-    '/Users/lingion_k/sleepy',
-    '../sleepy',
-  ].filter(Boolean);
-
-  for (const dir of candidates) {
-    if (existsSync(dir)) {
-      try {
-        const out = execSync('git show origin/main:app/src/main/assets/schools.json', {
-          cwd: dir,
-          encoding: 'utf8',
-          maxBuffer: 15 * 1024 * 1024,
-          stdio: ['pipe', 'pipe', 'ignore'],
-        });
-        JSON.parse(out);
-        return { text: out, source: `本地仓库 origin/main (${dir})` };
-      } catch {}
-
-      const filePath = `${dir}/app/src/main/assets/schools.json`;
-      if (existsSync(filePath)) {
-        try {
-          const out = readFileSync(filePath, 'utf8');
-          JSON.parse(out);
-          return { text: out, source: `本地文件 (${filePath})` };
-        } catch {}
-      }
-    }
-  }
-  return null;
-}
-
-function tryGhCli() {
+async function getApi(path) {
   try {
-    const out = execSync('gh api -H "Accept: application/vnd.github.raw" repos/lingion/sleepy/contents/app/src/main/assets/schools.json', {
-      encoding: 'utf8',
-      maxBuffer: 15 * 1024 * 1024,
-      stdio: ['pipe', 'pipe', 'ignore'],
-    });
-    JSON.parse(out);
-    return { text: out, source: 'gh api CLI' };
+    return JSON.parse(execFileSync('gh', ['api', `repos/lingion/sleepy/${path}`], {
+      encoding: 'utf8', maxBuffer: 15 * 1024 * 1024, timeout: 120000, stdio: ['ignore', 'pipe', 'ignore'],
+    }));
   } catch {
-    return null;
+    const headers = { Accept: 'application/vnd.github+json' };
+    if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+    const response = await fetch(`https://api.github.com/repos/lingion/sleepy/${path}`, {
+      signal: AbortSignal.timeout(60000), headers,
+    });
+    if (!response.ok) throw new Error(`GitHub API HTTP ${response.status}`);
+    return response.json();
   }
 }
 
-async function tryNetworkFetch() {
-  const headers = { Accept: 'application/vnd.github.raw' };
-  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-
-  // 1. 尝试 GitHub REST API
-  try {
-    const res = await fetch(API_URL, { headers, signal: AbortSignal.timeout(15_000) });
-    if (res.ok) {
-      const text = await res.text();
-      JSON.parse(text);
-      return { text, source: 'GitHub API (contents)' };
-    }
-  } catch {}
-
-  // 2. 尝试 raw.githubusercontent.com 直连/镜像
-  const urls = [
-    RAW_URL,
-    'https://raw.gitmirror.com/lingion/sleepy/main/app/src/main/assets/schools.json',
-  ];
-  for (const u of urls) {
+async function readSource(path, sourceSha) {
+  if (process.env.SLEEPY_REPO_DIR) {
     try {
-      const res = await fetch(u, { signal: AbortSignal.timeout(15_000) });
-      if (res.ok) {
-        const text = await res.text();
-        JSON.parse(text);
-        return { text, source: `网络直连 (${u})` };
-      }
-    } catch {}
+      return JSON.parse(execFileSync('git', ['show', `${sourceSha}:${path}`], {
+        cwd: process.env.SLEEPY_REPO_DIR, encoding: 'utf8', maxBuffer: 15 * 1024 * 1024,
+        timeout: 10000, stdio: ['ignore', 'pipe', 'ignore'],
+      }));
+    } catch { /* Use the same immutable revision through the API instead. */ }
   }
-  return null;
+  let file = await getApi(`contents/${path}?ref=${sourceSha}`);
+  if (file.encoding !== 'base64' && /^[0-9a-f]{40}$/.test(file.sha ?? '')) {
+    file = await getApi(`git/blobs/${file.sha}`);
+  }
+  if (file.encoding !== 'base64' || typeof file.content !== 'string') throw new Error(`Invalid source body: ${path}`);
+  return JSON.parse(Buffer.from(file.content, 'base64').toString('utf8'));
 }
 
-async function main() {
-  let fetched = tryLocalRepo() || tryGhCli() || (await tryNetworkFetch());
-
-  if (!fetched) {
-    console.warn('[fetch-schools] 未能从本地仓库或网络拉取最新 schools.json，使用仓内快照继续');
-    return;
+try {
+  const commit = await getApi(`commits/${encodeURIComponent(ref)}`);
+  const sourceSha = commit.sha;
+  if (!/^[0-9a-f]{40}$/.test(sourceSha)) throw new Error('Invalid source commit SHA');
+  const sourcePath = 'app/src/main/assets/schools.json';
+  const citySourcePath = 'app/src/main/assets/school_cities.json';
+  const [schools, cities] = await Promise.all([readSource(sourcePath, sourceSha), readSource(citySourcePath, sourceSha)]);
+  if (!Array.isArray(schools) || !schools.length || schools.some(s => !s.name || !s.catalogId)
+      || new Set(schools.map(s => s.catalogId)).size !== schools.length) throw new Error('Invalid school snapshot');
+  const allowed = new Set(['supported', 'grad_supported', 'unverified', 'grad_unverified', 'pending', 'grad_pending']);
+  if (schools.some(s => !allowed.has(s.status ?? 'supported'))) throw new Error('Unknown source status');
+  if (!cities.schools || typeof cities.schools !== 'object') throw new Error('Invalid city snapshot');
+  const idx = buildGeoIndex(JSON.parse(readFileSync(new URL('../src/data/geo-prefix.json', import.meta.url), 'utf8')));
+  const provinceBySchool = {};
+  for (const [name, values] of Object.entries(cities.schools)) {
+    const codes = values.map(city => classifyProvince(city, idx)?.code);
+    if (codes.length && codes.every(code => code && code === codes[0])) provinceBySchool[name] = codes[0];
   }
-
-  const before = JSON.parse(readFileSync(SNAPSHOT, 'utf8')).length;
-  const full = JSON.parse(fetched.text);
-  const next = full.filter(IN_USE);
-  writeFileSync(SNAPSHOT, `${JSON.stringify(next, null, 2)}\n`);
-  console.log(`[fetch-schools] 成功从 ${fetched.source} 读取最新教务: 快照 ${before} → ${next.length} 条 (上游全量 ${full.length}, 排除在途 ${full.length - next.length})`);
+  const release = await getApi(`releases/tags/${encodeURIComponent(ref)}`);
+  const releasedAt = release.published_at?.slice(0, 10);
+  if (!releasedAt) throw new Error('Release publication date missing');
+  // Validate every input before replacing either tracked snapshot. Keep all statuses.
+  writeFileSync(new URL('../fixtures/schools.json', import.meta.url), JSON.stringify(schools, null, 2) + '\n');
+  writeFileSync(snapshotUrl, JSON.stringify({ ref, sourceSha, sourcePath, releasedAt, citySourcePath, provinceBySchool }, null, 2) + '\n');
+  console.log(`[fetch-schools] ${ref} (${sourceSha}): ${schools.length} full records; run build-schools.mjs next.`);
+} catch (error) {
+  console.error(`[fetch-schools] Refresh aborted; existing snapshot retained: ${error.message}`);
+  process.exitCode = 1;
 }
-
-main();

@@ -38,8 +38,9 @@ describe('下载资产与外链(spec §2.4)', () => {
     expect(zhHtml).toContain(`${release.tag} · ${zh.download.minSdk} · ${release.date.slice(0, 10)} 发布`);
     expect(enHtml).toContain(`${release.tag} · ${en.download.minSdk} · released ${release.date.slice(0, 10)}`);
   });
-  it('「在线体验提供完整功能,无需安装。」串 pin(迁自 page.index:170,spec §10)', () => {
-    expect(zhHtml).toContain('在线体验提供完整功能,无需安装。');
+  it('online trial explains platform capability boundaries', () => {
+    expect(zhHtml).toContain(zh.download.trial);
+    expect(zhHtml).not.toContain('在线体验提供完整功能');
     expect(enHtml).toContain(en.download.trial);
   });
 });

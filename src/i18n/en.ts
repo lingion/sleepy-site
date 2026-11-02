@@ -8,15 +8,15 @@ export const en: SiteCopy = {
   meta: {
     title: 'Sleepy — open-source timetable, built free',
     description: (rows: number) =>
-      `${rows} direct academic-system connections. Data stays on the device; source fully open. An open-source Android timetable maintained by one person.`,
+      `${rows} school catalog entries with individual import status. A local-first, open-source Android timetable.`,
   },
   hero: {
     slogan: 'Built open. Feels free.',
-    sub: 'An open-source Android timetable: three views, direct academic-system connections, home-screen widgets. Timetable data lives only on this device and passes through no server.',
+    sub: 'An open-source Android timetable with three views, course editing, academic import and home-screen widgets. Timetables are stored locally; online imports contact the selected service.',
     ctaDownload: 'Download for Android',
     ctaTrial: 'Try it online',
     deviceCaption: 'Week view app screenshot',
-    ribbon: { schools: 'direct academic connections', license: 'GPL-3.0 open source', privacy: 'Data stays on device' },
+    ribbon: { schools: 'catalog entries', license: 'GPL-3.0 open source', privacy: 'Data stays on device' },
   },
   views: {
     heading: 'Three views, each in its place',
@@ -29,11 +29,24 @@ export const en: SiteCopy = {
     groupLabel: 'View switcher',
     captionSuffix: ' view screenshot',
   },
+  released: {
+    heading: 'Editing, appearance and your data',
+    version: 'Android {tag} · released {date}',
+    source: 'View this release’s source',
+    items: {
+      editing: { title: 'Change one occurrence, then undo', body: 'Adjust a single class occurrence, drag courses and add a class from an empty slot. Hold at the edge for 500 milliseconds to turn the page. Undo and redo keep 5 steps by default, configurable in Labs. History stays in process memory and is lost on restart.' },
+      appearance: { title: 'Themes and editing references', body: 'Material 3 Expressive motion, liquid glass, dynamic themes and three course-color modes. Ghost sliders mark the original value before adjustment; period headers align with times. App dynamic colors require Android 12; themed icons require Android 13. The glass shader uses API 33, and this release still has known issues on older devices; rendering varies by device. Five UI languages are available: Simplified Chinese, Traditional Chinese, English, Japanese and Spanish.' },
+      exchange: { title: 'Import, share and back up', body: 'Import WakeUP offline JSON, share text or online tokens. Online tokens contact a third-party service. Native sharing exports sleepy-v1 text; WakeUp-compatible JSON and ICS calendar export are separate options. Backups preserve data for restoration and migration.' },
+      widgets: { title: 'Five widget families', body: 'Week grid, week list, today, next two days and week view form five families with 13 XML variants. OriginOS home-screen widgets are standard AppWidget, separate from Atomic Island reminders. Vendor reminder features depend on the system, permissions and background policy.' },
+      privacy: { title: 'Local timetables, network when needed', body: 'Manage timetables offline without a Sleepy account. School credentials may be needed for academic import. Online tokens, academic requests, holidays, version checks and downloads use the network. You initiate file sharing and backups.' },
+      console: { title: 'Opt-in diagnostics', body: 'The authenticated loopback debug console is off by default. It has read/write access and can modify timetable data; enable it only when you understand the operations. iOS releases come from a separate repository, whose documentation defines their features and availability.' },
+    },
+  },
   connect: {
     heading: 'Direct academic connections',
-    body: 'Pick your school, sign in, and the timetable is written straight to this device. When a system changes, the maintainer updates the adapter and the sync path stays available.',
+    body: 'Check the catalog status, then sign in with your school account to import. Even configured entries can be affected by school-system changes, captchas or network restrictions. A listing is not an import guarantee.',
     imageAlt: 'Academic import panel app screenshot',
-    chipLabel: (rows: number) => `${rows} direct connections`,
+    chipLabel: (rows: number) => `${rows} configured entries`,
   },
   schools: {
     heading: 'Catalog and search',
@@ -89,7 +102,7 @@ export const en: SiteCopy = {
     heading: 'Download Sleepy',
     cta: 'Download for Android',
     versionLine: (tag: string, date: string) => `${tag} · released ${date}`,
-    universalNote: 'The Universal package fits every architecture; choose it when the device type is unknown.',
+    universalNote: 'The universal package includes the release’s supported architectures; choose it if you are unsure which ABI to use.',
     recommended: 'Recommended',
     downloadAria: (abi: string, size: string) => `Download ${abi} (${size})`,
     abiNotes: {
@@ -103,7 +116,7 @@ export const en: SiteCopy = {
     storeReserved: 'Store listing in the works',
     storeBadgeCn: 'App Market',
     deviceCaption: 'Grid view app screenshot',
-    trial: 'The online trial provides full functionality without installation.',
+    trial: 'Try the web timetable without installation. Academic import, home-screen widgets and system reminders depend on each platform’s implementation.',
     iosTitle: 'Download for iOS (TestFlight)',
     iosNote: 'Currently the only official release channel. Join the public beta via Apple TestFlight.',
     iosBadgeAlt: 'Download on the App Store',
@@ -114,7 +127,7 @@ export const en: SiteCopy = {
     story: 'Sleepy is designed and maintained by one person: features are built local-first, the source is fully public, and auditing or self-publishing is welcome.',
     reachOut: 'For adapter issues, file a GitHub issue first; when that is inconvenient, a group message gets the same follow-up.',
     privacyHeading: 'Privacy is an architecture question',
-    privacyBody: 'Timetable data lives only on this device and passes through no server; backup and migration files stay in your own hands.',
+    privacyBody: 'Timetables are stored locally, with backup and migration files under your control. No Sleepy account is needed; academic import may require school credentials. Academic systems, WakeUP online tokens, holidays and version checks use the network when invoked. No analytics or crash-reporting SDK is bundled.',
     licenseHeading: 'GPL-3.0',
     licenseBody: 'The source is fully public — audit it, change it, ship your own build; every commit in the repository is readable.',
     communityHeading: 'Community',
@@ -146,7 +159,8 @@ export const en: SiteCopy = {
     noJs: 'With JavaScript disabled the full list stays readable.',
   },
   homeSchoolCard: {
-    count: '{rows} direct academic connections · {types} protocols — type a school name to confirm coverage.',
+    count: '{rows} catalog entries · {types} protocols — search for individual import status.',
+    status: '{configured} configured · {unverified} unverified · {pending} pending. Configuration does not guarantee successful import at every school.',
     cta: 'Find my school',
   },
   schoolsPage: {

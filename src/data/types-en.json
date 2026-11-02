@@ -1,5 +1,12 @@
 {
   "_comment": "EN labels for jw protocol type keys (spec 4.1). Canonical zh semantics: sleepy repo JwProtocol.kt displayName()/KDoc. ASCII-only, contract test enforced. Underscore keys are exempt from the type gate.",
+  "jw_home": "Academic portal entry (catalog registration)",
+  "sg_asset": "Shiguang import script",
+  "suda_post": "Soochow Univ. (POST form)",
+  "south_soft": "South Soft academic system",
+  "qz_crazy": "QZ / Qiangzhi (variant)",
+  "hniu": "HNIU academic system",
+  "nwpu_post": "Northwestern Polytechnical Univ. (POST form)",
   "nuit": "NUIT (Nanjing Univ. of Info. Tech. self-built)",
   "wisedu": "Wisedu (Chaoxing EAMS JSON API)",
   "kust": "KUST (Kunming Univ. of Sci. Tech. legacy)",

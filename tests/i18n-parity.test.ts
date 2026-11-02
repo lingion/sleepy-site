@@ -39,8 +39,8 @@ describe('en/zh 键树同形(组件 props 全覆盖)', () => {
 });
 
 describe('协议 EN 标签表(spec §4.1)', () => {
-  it('数据里全部在用协议都有 EN 标签', () => {
-    const types = [...new Set(schools.map((s) => s.type))];
+  it('all nonempty catalog protocol keys have English labels', () => {
+    const types = [...new Set(schools.map((s) => s.type).filter((type): type is string => Boolean(type)))];
     for (const ty of types) expect(typesEn, `type ${ty}`).toHaveProperty(ty);
   });
   it('EN 标签不含中文(专有名词拉丁化)', () => {

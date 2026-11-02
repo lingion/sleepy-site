@@ -9,7 +9,7 @@ import importL from '../../assets/screenshots/20-import-light.png';
 import importD from '../../assets/screenshots/20-import-dark.png';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
-import { rowCount } from '../../lib/schools-view';
+import { configuredCount } from '../../lib/schools-view';
 
 interface Props {
   copy?: SiteCopy;
@@ -36,7 +36,7 @@ const t = c.connect;
         />
         <span class="connect__mask" aria-hidden="true"></span>
       </div>
-      <figcaption class="connect__chip site-chip">{t.chipLabel(rowCount)}</figcaption>
+      <figcaption class="connect__chip site-chip">{t.chipLabel(configuredCount)}</figcaption>
     </figure>
   </div>
 </section>

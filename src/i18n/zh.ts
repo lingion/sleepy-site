@@ -7,16 +7,16 @@ export const zh = {
     title: 'Sleepy — 开源课表,构建无壳,自由自在',
     // 计数派生闸(§15):条数不当校数说(§4.1),现值由页面层传入
     description: (rows: number) =>
-      `${rows} 条教务直连,数据仅存本机,源码完整公开。一个人维护的开源 Android 课表。`,
+      `${rows} 条学校目录记录,逐条标明接入状态。本地优先、源码公开的 Android 课表。`,
   },
   hero: {
     slogan: '构建无壳,自由自在',
-    sub: '开源 Android 课表:三视图、教务直连、桌面组件。课表数据仅存于本机,不经任何服务器。',
+    sub: '开源 Android 课表:三视图、课程编辑、教务导入与桌面组件。课表保存在本机,联网导入按所选服务发起请求。',
     ctaDownload: '下载 Android',
     ctaTrial: '在线体验',
     deviceCaption: '周视图应用截图',
     // ribbon = 不对称佐证条:派生大数字领头 + 单位短语,两事实跟随
-    ribbon: { schools: '条教务直连', license: 'GPL-3.0 开源', privacy: '数据留存本机' },
+    ribbon: { schools: '条目录记录', license: 'GPL-3.0 开源', privacy: '数据留存本机' },
   },
   views: {
     heading: '三视图,各得其所',
@@ -30,12 +30,25 @@ export const zh = {
     groupLabel: '视图切换',
     captionSuffix: '视图截图',
   },
+  released: {
+    heading: '编辑、外观与数据流转',
+    version: 'Android {tag} · {date} 发布',
+    source: '查看此版本源码',
+    items: {
+      editing: { title: '调整这一次,也能撤回', body: '支持单次课程调整、拖动排课与空格快速加课;拖到边缘停留 500 毫秒可翻页。多步撤回与重做默认保留 5 步,可在实验室配置。历史只在进程内保存,重启后不会保留。' },
+      appearance: { title: '主题与编辑参考', body: 'Material 3 Expressive 动效、液态玻璃、动态主题与三种课程配色。幽灵滑杆标出调整前的原始值,节次表头与时间对齐。应用动态取色从 Android 12 起,主题图标从 Android 13 起;玻璃着色器使用 API 33,正式版旧设备仍有已知问题,不同设备效果有差异。界面支持简体中文、繁体中文、英文、日文与西班牙文。' },
+      exchange: { title: '导入、分享与备份', body: '支持 WakeUP 离线 JSON、分享文本与在线口令导入,在线口令需要访问第三方服务。原生分享导出使用 sleepy-v1 文本,另有 WakeUp 兼容 JSON 与 ICS 日历导出;备份用于保存和迁移数据。' },
+      widgets: { title: '五类桌面组件', body: '周网格、周列表、今日、未来两天与周视图共五个家族,包含 13 种 XML 变体。OriginOS 桌面显示属于标准 AppWidget,与原子岛提醒不同;厂商提醒能力取决于系统、权限和后台策略。' },
+      privacy: { title: '本地课表,按需联网', body: '课表管理可离线使用,无需 Sleepy 账号。学校登录信息按教务导入需要提供;在线口令、教务请求、节假日、版本检查和下载会联网。文件分享与备份由你发起。' },
+      console: { title: '主动启用的诊断接口', body: '本机回环调试控制台默认关闭,启用后需要认证,具有读写能力并可修改课表数据。仅在了解操作影响时启用。iOS 由独立仓库发布,功能与可用版本以该仓库说明为准。' },
+    },
+  },
   connect: {
     heading: '教务直连',
-    body: '选定学校登录,课表直接写入本机。教务系统改版,由维护者跟进适配,同步链路持续可用。',
+    body: '先查目录状态,再用学校账号登录教务系统导入。已配置条目仍可能受学校改版、验证码或网络限制影响;收录不代表导入成功保证。',
     imageAlt: '教务导入应用截图',
     // 派生数字 chip(§4 M3:卡缘 assist-chip「N 条直连」;条数不当校数说,§4.1)
-    chipLabel: (rows: number) => `${rows} 条直连`,
+    chipLabel: (rows: number) => `${rows} 条已配置记录`,
   },
   schools: {
     heading: '收录与检索',
@@ -91,7 +104,7 @@ export const zh = {
     heading: '下载 Sleepy',
     cta: '下载 Android',
     versionLine: (tag: string, date: string) => `${tag} · ${date} 发布`,
-    universalNote: 'Universal 包适配全部架构,不确定设备时优先选择它。',
+    universalNote: 'Universal 包包含本版本支持的架构,不确定应选哪种 ABI 时可使用。',
     recommended: '推荐',
     downloadAria: (abi: string, size: string) => `下载 ${abi}(${size})`,
     abiNotes: {
@@ -105,7 +118,7 @@ export const zh = {
     storeReserved: '商店上架准备中',
     storeBadgeCn: '应用商店',
     deviceCaption: '网格视图应用截图',
-    trial: '在线体验提供完整功能,无需安装。',
+    trial: '在线体验无需安装,用于预览网页版课表;教务导入、桌面组件与系统提醒等能力以各平台实现为准。',
     iosTitle: 'iOS 版下载（TestFlight）',
     iosNote: '目前唯一合法上线途径。通过 Apple 官方 TestFlight 参与公测。',
     iosBadgeAlt: '在 App Store 下载',
@@ -116,7 +129,7 @@ export const zh = {
     story: 'Sleepy 由一个人设计与维护:功能以本地优先为前提实现,代码完整公开,接受审计与自行分发。',
     reachOut: '适配问题优先通过 GitHub issue 反馈;不便提交时,群内留言同样会被跟进。',
     privacyHeading: '隐私是架构问题',
-    privacyBody: '课表数据仅存于本机,不经任何服务器;备份与迁移文件由你自己保管。',
+    privacyBody: '课表保存在本机,备份与迁移文件由你保管。Sleepy 无需注册账号;教务导入可能需要学校账号。教务、WakeUP 在线口令、节假日和版本检查会按功能联网,不内置统计或崩溃上报 SDK。',
     licenseHeading: 'GPL-3.0',
     licenseBody: '源码完整公开,可以审查、修改、自行发布;仓库中每一个 commit 均可查阅。',
     communityHeading: '社区',
@@ -152,7 +165,8 @@ export const zh = {
   // v5 四页键组(spec §4 文案 + 数字纪律:占位 {rows}/{types}/{shown}/{total}/{tag}/{minSdk}/{date} 由渲染端替换)
   homeSchoolCard: {
     // 计数派生闸(§15/§4.1):带协议条目数不当校数说(同录多入口、跨校区计数)
-    count: '{rows} 条教务直连 · {types} 种协议,输入校名即可确认收录。',
+    count: '{rows} 条目录记录 · {types} 种协议,输入校名查看接入状态。',
+    status: '{configured} 条已配置 · {unverified} 条未验证 · {pending} 条待接入。配置状态不等于逐校实机成功保证。',
     cta: '查找我的学校',
   },
   schoolsPage: {
