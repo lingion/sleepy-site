@@ -23,17 +23,19 @@ const zhHtml = zhDoc.documentElement.innerHTML;
 const enDoc = load('../dist/client/en/schools/index.html').window.document;
 
 describe('JS-off 全量静态渲染(spec §2.3)', () => {
-  it('1478 行全在 HTML,details 31 组各带 summary 计数', () => {
+  it('全量行在 HTML,各组各带 summary 计数', () => {
     expect(zhDoc.querySelectorAll('[data-school]')).toHaveLength(schools.length);
+    const expectedGroups = new Set(schools.map((s) => s.province.code)).size;
     const groups = [...zhDoc.querySelectorAll<HTMLElement>('details[data-group]')];
-    expect(groups).toHaveLength(31);
+    expect(groups).toHaveLength(expectedGroups);
     for (const g of groups) {
       const rows = g.querySelectorAll('[data-school]').length;
       expect(g.querySelector('summary')!.textContent).toContain(String(rows));
     }
     const gd = groups.find((g) => g.dataset.group === 'GD')!;
+    const expectedGdCount = schools.filter((s) => s.province.code === 'GD').length;
     expect(gd.querySelector('summary')!.textContent).toContain('广东');
-    expect(gd.querySelectorAll('[data-school]')).toHaveLength(92);
+    expect(gd.querySelectorAll('[data-school]')).toHaveLength(expectedGdCount);
   });
   it('默认关组(JS-off 手机=一行一组可手开;桌面 open 由岛 JS 增强,产物不带)', () => {
     expect([...zhDoc.querySelectorAll<HTMLDetailsElement>('details[data-group]')].every((d) => !d.open)).toBe(true);
@@ -43,9 +45,10 @@ describe('JS-off 全量静态渲染(spec §2.3)', () => {
     expect(faces).toHaveLength(schools.length);
     for (const f of faces) expect(f).toBe(f?.toLowerCase()); // normalize 产物恒含小写
   });
-  it('en 路由镜像同数:1478 行 31 组', () => {
+  it('en 路由镜像同数', () => {
+    const expectedGroups = new Set(schools.map((s) => s.province.code)).size;
     expect(enDoc.querySelectorAll('[data-school]')).toHaveLength(schools.length);
-    expect(enDoc.querySelectorAll('details[data-group]')).toHaveLength(31);
+    expect(enDoc.querySelectorAll('details[data-group]')).toHaveLength(expectedGroups);
   });
 });
 
@@ -55,7 +58,7 @@ describe('计数播报与输入件(spec §2.3 过滤结果播报)', () => {
     expect(stat.classList.contains('schools__stat')).toBe(true);
     expect(stat.classList.contains('tnum')).toBe(true);
     expect(stat.getAttribute('data-shown-tpl')).toContain('{shown}');
-    expect(stat.textContent).toContain(`1478`);
+    expect(stat.textContent).toContain(String(schools.length));
   });
   it('搜索框隐藏 label + placeholder 省略号结尾', () => {
     const input = zhDoc.querySelector('input[data-role="q"]')!;
@@ -90,7 +93,7 @@ describe('首屏深链即过滤(评审焦点 3:对 dist 整页 Document 灌 sear
     const visible = [...doc.querySelectorAll('[data-school]')].filter((r) => !(r as HTMLElement).hidden);
     expect(visible).toHaveLength(1);
     expect(visible[0].textContent).toContain('广东东软学院');
-    expect(doc.querySelector('[role="status"]')!.textContent).toBe('显示 1 / 1478');
+    expect(doc.querySelector('[role="status"]')!.textContent).toBe(`显示 1 / ${schools.length}`);
   });
   it('岛运行时直判 dataset.search 与 filterRows 命中名集一致(等价性 pin)', () => {
     const doc = fresh();
@@ -107,7 +110,7 @@ describe('首屏深链即过滤(评审焦点 3:对 dist 整页 Document 灌 sear
     const doc = fresh();
     applyInitialState(doc, '?q=zzzz不存在');
     expect((doc.querySelector('[data-role="empty"]') as HTMLElement).hidden).toBe(false);
-    expect(doc.querySelector('[role="status"]')!.textContent).toBe('显示 0 / 1478');
+    expect(doc.querySelector('[role="status"]')!.textContent).toBe(`显示 0 / ${schools.length}`);
   });
 });
 

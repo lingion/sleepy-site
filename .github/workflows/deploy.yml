@@ -9,6 +9,8 @@ on:
   schedule:
     - cron: '0 18 * * *' # UTC 18:00 = CST 02:00,夜间刷 release/教务快照
   workflow_dispatch: {}
+  repository_dispatch:
+    types: [upstream-release, sync-data]
 
 concurrency:
   group: deploy-pages
