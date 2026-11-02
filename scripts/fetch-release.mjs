@@ -1,14 +1,18 @@
 // Release 资产拉取 — spec §4.2 防腐烂执行体
-// 契约: GitHub API latest(有 GITHUB_TOKEN 走认证,绕 CF/匿名 60/hr)→ src/data/release.json
+// Default to the reviewed product tag; --tag latest is an explicit refresh choice.
 // 失败分级(spec §5): releases 腐烂不可装绿 → 拉取失败 exit 1;
 //   唯一例外 = 显式 --offline(本地开发用,读仓内快照 + 打 BUILD_META 警告;CI 禁用此旗标)。
 // 烘入 BUILD_TIME: 每次成功拉取/离线快照都写 builtAt,footer meta 展示(tag+time 可见腐烂信号)。
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 
 const OUT = fileURLToPath(new URL('../src/data/release.json', import.meta.url));
-const API = 'https://api.github.com/repos/lingion/sleepy/releases/latest';
+const PRODUCT = JSON.parse(readFileSync(new URL('../src/data/product-release.json', import.meta.url), 'utf8'));
+export function releaseApiUrl(tag = PRODUCT.tag) {
+  if (tag !== 'latest' && !/^v\d+\.\d+\.\d+$/.test(tag)) throw new Error(`Invalid release tag: ${tag}`);
+  return `https://api.github.com/repos/lingion/sleepy/releases/${tag === 'latest' ? 'latest' : `tags/${tag}`}`;
+}
 const ABI = ['app-arm64-v8a-release.apk', 'app-armeabi-v7a-release.apk', 'app-x86_64-release.apk', 'app-universal-release.apk'];
 
 export function validate(rel) {
@@ -39,7 +43,8 @@ export function releaseFromApi(json) {
     date: json.published_at ?? json.publishedAt ?? json.created_at ?? json.createdAt,
     assets: assets
       .filter((a) => ABI.includes(a.name))
-      .map((a) => ({ name: a.name, url: dl(a), size: a.size })),
+      .map((a) => ({ name: a.name, url: dl(a), size: a.size,
+        ...(/^sha256:[0-9a-f]{64}$/.test(a.digest ?? '') ? { sha256: a.digest.slice(7) } : {}) })),
     sha256sumsUrl: sums ? dl(sums) : null,
     builtAt: new Date().toISOString(),
   };
@@ -47,6 +52,9 @@ export function releaseFromApi(json) {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const offline = process.argv.includes('--offline');
+  const tagIndex = process.argv.indexOf('--tag');
+  const selectedTag = tagIndex >= 0 ? process.argv[tagIndex + 1] : PRODUCT.tag;
+  const apiUrl = releaseApiUrl(selectedTag);
   let rel;
   if (offline) {
     rel = JSON.parse(readFileSync(OUT, 'utf8'));
@@ -57,14 +65,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
     let rawJson = null;
     try {
-      const res = await fetch(API, { headers, signal: AbortSignal.timeout(10_000) });
+      const res = await fetch(apiUrl, { headers, signal: AbortSignal.timeout(10_000) });
       if (res.ok) rawJson = await res.json();
     } catch {
-      // 容错:回退到 gh cli
+      // Preserve the CLI fallback while keeping the same explicit version.
     }
     if (!rawJson) {
       try {
-        const ghOut = execSync('gh release view --repo lingion/sleepy --json tagName,publishedAt,assets', {
+        const endpoint = selectedTag === 'latest' ? 'releases/latest' : `releases/tags/${selectedTag}`;
+        const ghOut = execFileSync('gh', ['api', `repos/lingion/sleepy/${endpoint}`], {
           encoding: 'utf8',
           stdio: ['pipe', 'pipe', 'ignore'],
         });
