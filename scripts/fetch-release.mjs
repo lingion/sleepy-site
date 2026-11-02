@@ -5,6 +5,7 @@
 // 烘入 BUILD_TIME: 每次成功拉取/离线快照都写 builtAt,footer meta 展示(tag+time 可见腐烂信号)。
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 
 const OUT = fileURLToPath(new URL('../src/data/release.json', import.meta.url));
 const API = 'https://api.github.com/repos/lingion/sleepy/releases/latest';
@@ -54,18 +55,26 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   } else {
     const headers = { Accept: 'application/vnd.github+json' };
     if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-    let res;
+    let rawJson = null;
     try {
-      res = await fetch(API, { headers, signal: AbortSignal.timeout(20_000) });
-    } catch (err) {
-      console.error(`[fetch-release] API 网络失败: ${err.message} — 下载页腐烂不可装绿,exit 1(spec §4.2/§5)`);
-      process.exit(1);
+      const res = await fetch(API, { headers, signal: AbortSignal.timeout(10_000) });
+      if (res.ok) rawJson = await res.json();
+    } catch {
+      // 容错:回退到 gh cli
     }
-    if (!res.ok) {
-      console.error(`[fetch-release] API HTTP ${res.status} — exit 1(禁烘旧 tag 装绿)`);
-      process.exit(1);
+    if (!rawJson) {
+      try {
+        const ghOut = execSync('gh release view --repo lingion/sleepy --json tagName,publishedAt,assets', {
+          encoding: 'utf8',
+          stdio: ['pipe', 'pipe', 'ignore'],
+        });
+        rawJson = JSON.parse(ghOut);
+      } catch (err) {
+        console.error(`[fetch-release] API 与 gh CLI 均失败: ${err.message} — 下载页腐烂不可装绿,exit 1(spec §4.2/§5)`);
+        process.exit(1);
+      }
     }
-    rel = releaseFromApi(await res.json());
+    rel = releaseFromApi(rawJson);
   }
   const errs = validate(rel);
   if (errs.length) {

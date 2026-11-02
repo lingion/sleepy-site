@@ -40,5 +40,12 @@
   "umooc": "UMOOC platform form",
   "scau": "SCAU portal (authserver form)",
   "ecupl": "ECUPL portal (Struts form)",
-  "thu": "Tsinghua self-built (zhjwxk)"
+  "thu": "Tsinghua self-built (zhjwxk)",
+  "jw_home": "Portal registration (unverified home entry)",
+  "sg_asset": "Shiguang script runner (shiguang_warehouse)",
+  "suda_post": "Soochow Univ. (POST HTML)",
+  "south_soft": "SouthSoft (grad school HTML)",
+  "qz_crazy": "QZ / Qiangzhi (iEAS2.1)",
+  "hniu": "HNIU (Hunan Univ. of Info. Tech.)",
+  "nwpu_post": "NWPU grad school (POST HTML)"
 }

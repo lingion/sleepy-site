@@ -13,7 +13,7 @@
     "check": "astro check",
     "test": "vitest run",
     "tokens": "node scripts/gen-tokens.mjs",
-    "data": "node scripts/fetch-release.mjs && node scripts/build-schools.mjs && node scripts/build-faq.mjs"
+    "data": "node scripts/fetch-release.mjs && node scripts/fetch-schools.mjs && node scripts/build-schools.mjs && node scripts/build-faq.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

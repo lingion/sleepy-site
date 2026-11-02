@@ -154,6 +154,27 @@
     { "p": "喀什", "code": "XJ", "level": "city", "cityEn": "Kashgar" },
     { "p": "石河子", "code": "XJ", "level": "city", "cityEn": "Shihezi" },
     { "p": "西藏", "code": "XZ", "level": "province" },
-    { "p": "拉萨", "code": "XZ", "level": "city", "cityEn": "Lhasa" }
+    { "p": "拉萨", "code": "XZ", "level": "city", "cityEn": "Lhasa" },
+    { "p": "安庆", "code": "AH", "level": "city", "cityEn": "Anqing" },
+    { "p": "常德", "code": "HN", "level": "city", "cityEn": "Changde" },
+    { "p": "赤峰", "code": "NM", "level": "city", "cityEn": "Chifeng" },
+    { "p": "朝阳", "code": "LN", "level": "city", "cityEn": "Chaoyang" },
+    { "p": "德宏", "code": "YN", "level": "city", "cityEn": "Dehong" },
+    { "p": "佛山", "code": "GD", "level": "city", "cityEn": "Foshan" },
+    { "p": "哈密", "code": "XJ", "level": "city", "cityEn": "Hami" },
+    { "p": "湖州", "code": "ZJ", "level": "city", "cityEn": "Huzhou" },
+    { "p": "晋中", "code": "SX", "level": "city", "cityEn": "Jinzhong" },
+    { "p": "酒泉", "code": "GS", "level": "city", "cityEn": "Jiuquan" },
+    { "p": "丽江", "code": "YN", "level": "city", "cityEn": "Lijiang" },
+    { "p": "陇南", "code": "GS", "level": "city", "cityEn": "Longnan" },
+    { "p": "漯河", "code": "HA", "level": "city", "cityEn": "Luohe" },
+    { "p": "牡丹江", "code": "HL", "level": "city", "cityEn": "Mudanjiang" },
+    { "p": "曲靖", "code": "YN", "level": "city", "cityEn": "Qujing" },
+    { "p": "顺德", "code": "GD", "level": "city", "cityEn": "Shunde" },
+    { "p": "武威", "code": "GS", "level": "city", "cityEn": "Wuwei" },
+    { "p": "无锡", "code": "JS", "level": "city", "cityEn": "Wuxi" },
+    { "p": "新乡", "code": "HA", "level": "city", "cityEn": "Xinxiang" },
+    { "p": "杨凌", "code": "SN", "level": "city", "cityEn": "Yangling" },
+    { "p": "淄博", "code": "SD", "level": "city", "cityEn": "Zibo" }
   ]
 }
