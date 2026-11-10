@@ -187,7 +187,7 @@ export const en: SiteCopy = {
   },
   downloadPage: {
     heading: 'Download Sleepy',
-    metaDescription: "Sleepy's official download center: Android APK links by device architecture, sha256 checksums, installation steps, and a web version to try online — free and open source.",
+    metaDescription: "Sleepy's download center: Android APK files from GitHub or the project mirror, SHA-256 checksums, installation steps, iOS TestFlight and the web app.",
     versionLine: '{tag} · {minSdk} · released {date}',
     recommended: 'Recommended',
     universalNote: 'Choose universal when the device architecture is unknown.',
@@ -203,7 +203,7 @@ export const en: SiteCopy = {
     moreLinks: { releases: 'All past releases', repo: 'Source repository', sponsor: 'Sponsor the project', issues: 'Report issues' },
     storeReserved: 'Store listing in the works',
     iosTitle: 'Download for iOS (TestFlight)',
-    iosNote: 'Currently the only official release channel. Join the public beta via Apple TestFlight to experience the latest version.',
+    iosNote: 'Join the public beta through Apple TestFlight to try Sleepy for iOS.',
     iosBadgeAlt: 'Download on the App Store',
     iosBadgeAria: 'Download Sleepy for iOS on the App Store (TestFlight public beta)',
   },
@@ -220,7 +220,7 @@ export const en: SiteCopy = {
   // v5 404 页(spec §2.6-7:正面陈述零致歉 + 四页链接 + zh 主 en 尾)
   notFound: {
     heading: 'This page is not in the catalog',
-    sub: 'The site has four pages — home, school lookup, download center, FAQ. Pick one below to continue.',
+    sub: 'This page may have moved. Use one of the links below to continue.',
     home: 'Home',
     schools: 'School lookup',
     download: 'Download center',
