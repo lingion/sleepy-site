@@ -25,22 +25,22 @@ describe('在线体验链单源 = /preview', () => {
       }
     };
     walk(faq);
-    const trial = hrefs.filter((h) => h.includes('qdp.qzz.io') || h === PREVIEW_URL);
+    const trial = hrefs.filter((h) => h.includes('sleepy.qdp.qzz.io') || h.replace(/\/$/, '') === PREVIEW_URL);
     expect(trial.length).toBeGreaterThanOrEqual(2); // zh + en 至少各一
-    for (const h of trial) expect(h).toBe(PREVIEW_URL);
+    for (const h of trial) expect(h.replace(/\/$/, '')).toBe(PREVIEW_URL);
   });
 
   it('llms.txt 的 web trial 行指向 preview 且老域名绝迹', () => {
     const txt = readFileSync(new URL('../public/llms.txt', import.meta.url), 'utf8');
     expect(txt).toContain(PREVIEW_URL);
-    expect(txt).not.toContain('qdp.qzz.io');
+    expect(txt).not.toContain('sleepy.qdp.qzz.io');
   });
 
   it('FAQ 两处源快照(中英)同样迁移,防 npm run data 回灌老链', () => {
     const zhMd = readFileSync(new URL('../fixtures/FAQ.md', import.meta.url), 'utf8');
     const enMd = readFileSync(new URL('../scripts/faq-en.md', import.meta.url), 'utf8');
-    expect(zhMd).not.toContain('qdp.qzz.io');
-    expect(enMd).not.toContain('qdp.qzz.io');
+    expect(zhMd).not.toContain('sleepy.qdp.qzz.io');
+    expect(enMd).not.toContain('sleepy.qdp.qzz.io');
     expect(zhMd).toContain(PREVIEW_URL);
     expect(enMd).toContain(PREVIEW_URL);
   });
