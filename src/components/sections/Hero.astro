@@ -49,6 +49,19 @@ const t = c.hero;
   </div>
 </section>
 
+<script>
+  const demo = document.querySelector<HTMLIFrameElement>('[data-timetable-demo]');
+  if (demo) {
+    const syncTheme = () => {
+      const target = new URL(demo.src);
+      target.searchParams.set('theme', document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+      if (target.href !== demo.src) demo.src = target.href;
+    };
+    syncTheme();
+    new MutationObserver(syncTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+</script>
+
 <style>
   .hero {
     position: relative;
