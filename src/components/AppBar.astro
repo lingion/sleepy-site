@@ -130,21 +130,31 @@ const dlHref = `${home}download/`;
     color: var(--md-sys-color-on-surface);
     text-decoration: none;
     flex-shrink: 0;
+    min-block-size: 44px;
+    border-radius: var(--md-sys-shape-corner-full);
+    padding-inline: 8px;
+    margin-inline-start: -8px;
   }
   /* 锚点组(spec §4:Text 档文字链;≤840px 隐藏) */
   .appbar__anchors {
     display: flex;
     align-items: center;
-    gap: calc(var(--site-unit) * 5);
+    gap: calc(var(--site-unit) * 1);
     margin-inline-start: auto;
   }
   .appbar__anchor {
     font: var(--md-sys-typescale-label-large);
     color: var(--md-sys-color-on-surface-variant);
     text-decoration: none;
-    padding-block: calc(var(--site-unit) * 2);
-    transition: color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    padding: 8px 14px;
+    border-radius: var(--md-sys-shape-corner-full);
+    transition: color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized), background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
   }
+  .appbar :is(a, button) { -webkit-tap-highlight-color: transparent; }
+  .appbar__anchor[aria-current='page'] { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
   @media (hover: hover) and (pointer: fine) {
     .appbar__anchor:hover {
       color: var(--md-sys-color-on-surface);
@@ -224,13 +234,15 @@ const dlHref = `${home}download/`;
     display: grid;
     border-block-start: 1px solid var(--md-sys-color-outline-variant);
     background: var(--md-sys-color-surface-container);
-    padding-block: calc(var(--site-unit) * 2);
+    padding: 8px 12px;
+    gap: 4px;
   }
   .appbar__menu-panel[hidden] { display: none; }
   .appbar__menu-link {
     color: var(--md-sys-color-on-surface);
     text-decoration: none;
-    padding: calc(var(--site-unit) * 3) calc(var(--site-unit) * 6);
+    padding: 12px 20px;
+    border-radius: var(--md-sys-shape-corner-full);
     min-block-size: 44px; /* 触屏目标 ≥44(站点纪律) */
     display: flex;
     align-items: center;
@@ -238,6 +250,7 @@ const dlHref = `${home}download/`;
   .appbar__menu-dl {
     color: var(--md-sys-color-primary);
   }
+  .appbar__menu-link[aria-current='page'] { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
   @media (max-width: 1000px) {
     .appbar__anchors { display: none; }
     .appbar__menu { display: inline-flex; }
