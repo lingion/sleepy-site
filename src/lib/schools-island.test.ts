@@ -27,7 +27,7 @@ describe('writeUrlState(空值省参)', () => {
     expect(writeUrlState({ q: '', province: '', type: '', expandAll: true })).toBe('');
   });
   it('三参顺序定死 p→t→q', () => {
-    expect(writeUrlState({ q: '东软', province: 'GD', type: 'nuit', expandAll: false })).toBe('?p=GD&t=nuit&q=东软');
+    expect(writeUrlState({ q: '东软', province: 'GD', type: 'nuit', expandAll: false })).toBe('?p=GD&t=nuit&q=%E4%B8%9C%E8%BD%AF');
   });
   it('parse∘write round-trip 保态', () => {
     const s = { q: '东软', province: 'GD', type: 'nuit', expandAll: false };

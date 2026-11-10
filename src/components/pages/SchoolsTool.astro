@@ -1,344 +1,177 @@
 ---
-// v5 /schools/ 学校查找页主体 — plan Task 4 / spec §2.3
-// 台账从主页 #schools 段离页:全量行静态渲染(SEO 完整、JS-off 可读),岛只管 URL 态 ⇄ 过滤
-// 类名裁决(终审 I10):schools__* 前缀沿用,scoped CSS 自持,global.css 零新类
 import PageHeader from '../PageHeader.astro';
 import typesEn from '../../data/types-en.json';
 import { repoUrl } from '../../i18n/ui';
 import type { SiteCopy } from '../../i18n/zh';
 import { searchFace } from '../../lib/search';
-import {
-  catalogUpdatedAt,
-  provincesOrdered,
-  rowCount,
-  schools,
-  typeCount,
-  typesOrdered,
-} from '../../lib/schools-view';
+import { catalogUpdatedAt, provincesOrdered, rowCount, schools, typesOrdered } from '../../lib/schools-view';
 
-interface Props {
-  copy: SiteCopy['schoolsPage'];
-  lang: 'zh' | 'en';
-}
+interface Props { copy: SiteCopy['schoolsPage']; lang: 'zh' | 'en' }
 const { copy: t, lang } = Astro.props;
-const countLine = lang === 'en'
-  ? `${rowCount} universities supported for direct timetable import across ${typeCount} academic protocols.`
-  : `收录 ${rowCount} 所高校教务直连，涵盖 ${typeCount} 种教务协议。`;
-const statusSuffix = (status: string) => {
-  const isUnverified = status === 'unverified' || status === 'grad_unverified';
-  if (!isUnverified) return '';
-  return lang === 'en' ? ' · Unverified' : ' · 待验证';
-};
-const typeLabel = (ty: string) => (lang === 'en' ? ((typesEn as Record<string, string>)[ty] ?? ty) : ty);
-const groups = provincesOrdered().map((p) => ({
-  ...p,
-  label: lang === 'en' ? p.en : p.zh,
-  rows: schools.filter((s) => s.province.code === p.code),
-}));
+const en = lang === 'en';
+const groups = provincesOrdered().map(province => ({ ...province, label: en ? province.en : province.zh, rows: schools.filter(school => school.province.code === province.code) }));
+const typeLabel = (type: string) => en ? (typesEn as Record<string, string>)[type] ?? type : type;
 const adaptationUrl = `${repoUrl}/issues/new?template=school_adaptation.yml`;
-const shown0 = t.countShown.replace('{shown}', String(rowCount)).replace('{total}', String(rowCount));
-// Task 9 特征 chip(spec §3-2):未选 leading = 省定位针/协议连接点,已选 leading = check(12px inline SVG,CSS 显隐)
-const CHIP_CHECK =
-  '<svg class="chip-check" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const CHIP_PIN =
-  '<svg class="chip-lead" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 14s5-4.5 5-8A5 5 0 0 1 3 6c0 3.5 5 8 5 8Z" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="6" r="1.8" fill="currentColor"/></svg>';
-const CHIP_NODE =
-  '<svg class="chip-lead" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="2.4" fill="currentColor"/><path d="M8 1v3.4M8 11.6V15M1 8h3.4M11.6 8H15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+const progress = en ? 'Showing {shown} of {matched} matches' : '已显示 {shown} / {matched} 所';
 ---
 
-<section class="schools-page" data-prototype="tool-island">
+<section class="schools-page">
   <div class="site-col">
-    <PageHeader title={t.heading} description={t.sub}>
-      <span slot="meta" class="tnum">{countLine}</span>
-    </PageHeader>
-
-    <div class="schools__island reveal" style="--reveal-i: 0;">
-      <p class="schools__stat site-chip tnum" role="status" data-shown-tpl={t.countShown}>{shown0}</p>
-
+    <PageHeader title={t.heading} description={t.sub} />
+    <div class="schools__filters js-only">
       <div class="schools__toolbar">
-        <label class="schools__search js-only">
-          <span class="visually-hidden">{t.searchLabel}</span>
-          <input
-            class="site-field"
-            type="search"
-            name="q"
-            spellcheck="false"
-            data-role="q"
-            placeholder={t.placeholder}
-            autocomplete="off"
-          />
+        <label class="schools__search">
+          <span class="t-label-large">{t.searchLabel}</span>
+          <input class="site-field" type="search" name="q" spellcheck="false" data-role="q" placeholder={t.placeholder} autocomplete="off" aria-controls="school-results" />
         </label>
-        <div class="schools__foldbtns">
-          <button type="button" class="site-button site-button--text" data-role="expand">{t.expandAll}</button>
-          <button type="button" class="site-button site-button--text" data-role="collapse" hidden>{t.collapseAll}</button>
-        </div>
+        <label class="schools__province">
+          <span class="t-label-large">{t.provinceLabel}</span>
+          <select class="site-select" name="province" data-role="province" aria-label={t.provinceAria} aria-controls="school-results">
+            <option value="">{en ? 'All regions' : '全部地区'}</option>
+            {groups.map(group => <option value={group.code}>{group.label}</option>)}
+          </select>
+        </label>
       </div>
-
-      <div class="schools__chipbar" role="group" aria-label={t.provinceAria}>
-        <button type="button" class="site-chip" data-province="" aria-pressed="true"><Fragment set:html={CHIP_CHECK} />{lang === 'en' ? 'All' : '全部'}</button>
-        {groups.map((g) => (
-          <button type="button" class="site-chip" data-province={g.code} aria-pressed="false"><Fragment set:html={CHIP_PIN} /><Fragment set:html={CHIP_CHECK} />{g.label}</button>
-        ))}
-      </div>
-      <div class="schools__chipbar" role="group" aria-label={t.typeAria}>
-        <button type="button" class="site-chip" data-type="" aria-pressed="true"><Fragment set:html={CHIP_CHECK} />{lang === 'en' ? 'All' : '全部'}</button>
-        {typesOrdered().map((ty) => (
-          <button type="button" class="site-chip" data-type={ty} aria-pressed="false"><Fragment set:html={CHIP_NODE} /><Fragment set:html={CHIP_CHECK} />{typeLabel(ty)}</button>
-        ))}
-      </div>
-
-      <div class="schools__groups" data-role="groups" tabindex="0" aria-label={t.heading}>
-        {groups.map((g) => (
-          <details class="schools__group" data-group={g.code}>
-            <summary class="t-title-small schools__summary">
-              {g.label} <span class="t-label-small schools__count">{g.rows.length}</span>
-            </summary>
-            <ul class="schools__list">
-              {g.rows.map((s) => (
-                <li
-                  class="schools__row t-body-small"
-                  data-school
-                  data-province={g.code}
-                  data-type={s.type}
-                  data-catalog-id={s.catalogId}
-                  data-status={s.status}
-                  data-search={searchFace(s)}
-                >
-                  {s.name}{s.type ? ` · ${typeLabel(s.type)}` : ''}{statusSuffix(s.status)}
-                </li>
-              ))}
-            </ul>
-          </details>
-        ))}
-      </div>
-
-      <p class="t-body-medium schools__empty" data-role="empty" hidden>
-        {t.emptyTitle}{' '}
-        <a href={adaptationUrl}>{t.emptyCta}</a>
-      </p>
-
-      <p class="t-body-small schools__foot">
-        {t.footUpdated} {catalogUpdatedAt} · {t.footNote} · <a href={adaptationUrl}>{t.emptyCta}</a>
-        <noscript> · {lang === 'en' ? 'The full list stays readable with JavaScript off.' : '禁用 JavaScript 时全量清单照常可读。'}</noscript>
-      </p>
+      <details class="schools__advanced" data-school-advanced>
+        <summary>{en ? 'More filters' : '更多筛选'}</summary>
+        <label class="schools__protocol">
+          <span class="t-label-large">{t.typeLabel}</span>
+          <select class="site-select" name="protocol" data-role="type" aria-label={t.typeAria} aria-controls="school-results">
+            <option value="">{en ? 'All academic systems' : '全部教务系统'}</option>
+            {typesOrdered().map(type => <option value={type}>{typeLabel(type)}</option>)}
+          </select>
+        </label>
+      </details>
     </div>
+
+    <div class="schools__result-head">
+      <h2 class="t-title-large">{en ? 'School directory' : '学校名录'}</h2>
+      <p class="schools__stat t-body-medium tnum" role="status" aria-live="polite" data-shown-tpl={t.countShown}>{t.countShown.replace('{matched}', String(rowCount))}</p>
+      <button class="site-button site-button--text" type="button" data-role="reset" hidden>{en ? 'Reset filters' : '重置筛选'}</button>
+    </div>
+    <div class="schools__groups" data-role="groups" id="school-results">
+      {groups.map(group => <details class="schools__group" data-group={group.code}>
+        <summary class="schools__summary t-title-medium">{group.label}<span class="schools__count tnum">{group.rows.length}</span></summary>
+        <ul class="schools__list">
+          {group.rows.map(school => {
+            const unverified = school.status === 'unverified' || school.status === 'grad_unverified';
+            return <li class="schools__row" data-school data-province={group.code} data-type={school.type} data-catalog-id={school.catalogId} data-status={school.status} data-search={searchFace(school)}>
+              <div class="schools__identity"><span class="schools__name t-title-medium">{school.name}</span><span class="schools__meta t-body-small">{group.label}</span></div>
+              <span class="schools__status t-label-medium" data-unverified={unverified || undefined}>{unverified ? (en ? 'Unverified' : '待验证') : (en ? 'Configured' : '已适配')}</span>
+            </li>;
+          })}
+        </ul>
+      </details>)}
+    </div>
+    <div class="schools__empty" data-role="empty" hidden>
+      <h3 class="t-title-large">{en ? 'No matching schools' : '没有找到匹配的学校'}</h3>
+      <p>{en ? 'Try a shorter school name or remove the region and system filters.' : '可以缩短校名，或重置地区与教务系统后再试。'}</p>
+      <a class="site-button site-button--tonal" href={adaptationUrl}>{t.emptyCta}</a>
+    </div>
+    <div class="schools__pagination js-only">
+      <p class="t-body-small tnum" data-progress-tpl={progress}></p>
+      <button class="site-button site-button--outlined" type="button" data-role="more" hidden>{en ? 'Show more schools' : '显示更多学校'}</button>
+    </div>
+    <footer class="schools__foot">
+      <p class="t-body-small">{t.footUpdated} <time>{catalogUpdatedAt}</time> · {t.footNote}</p>
+      <p class="t-body-medium">{t.emptyTitle}</p>
+      <a class="site-button site-button--text" href={adaptationUrl}>{t.emptyCta}</a>
+      <noscript><p>{en ? 'Open a region to browse the complete directory.' : '展开地区即可浏览完整学校名录。'}</p></noscript>
+    </footer>
   </div>
 </section>
 
 <script>
-  // 单岛 ≤6KB(spec §2.3):URL 态初始化、input/chip 重过滤、focus=s 一次性聚焦、展开/收起不写 URL、popstate 回退
-  import { applyInitialState, parseUrlState } from '../../lib/schools-island';
-
+  import { applyInitialState, parseUrlState, schoolPageSize } from '../../lib/schools-island';
   const page = document.querySelector<HTMLElement>('.schools-page');
   if (page) {
-    const input = page.querySelector<HTMLInputElement>('input[data-role="q"]')!;
-    const expand = page.querySelector<HTMLButtonElement>('button[data-role="expand"]')!;
-    const collapse = page.querySelector<HTMLButtonElement>('button[data-role="collapse"]')!;
-    const details = [...page.querySelectorAll<HTMLDetailsElement>('details[data-group]')];
-    const chips = [...page.querySelectorAll<HTMLButtonElement>('.site-chip[data-province], .site-chip[data-type]')];
-
-    const setParam = (name: string, value: string): string => {
-      const search = new URLSearchParams(location.search);
-      if (value) search.set(name, value);
-      else search.delete(name);
-      const s = search.toString();
-      return s ? `?${s}` : '';
+    const input = page.querySelector<HTMLInputElement>('[data-role="q"]')!;
+    const province = page.querySelector<HTMLSelectElement>('[data-role="province"]')!;
+    const type = page.querySelector<HTMLSelectElement>('[data-role="type"]')!;
+    const advanced = page.querySelector<HTMLDetailsElement>('[data-school-advanced]')!;
+    const groups = [...page.querySelectorAll<HTMLDetailsElement>('[data-group]')];
+    const more = page.querySelector<HTMLButtonElement>('[data-role="more"]')!;
+    let limit = schoolPageSize;
+    const render = () => {
+      applyInitialState(document, location.search, limit);
+      for (const group of groups) group.open = !group.hidden;
+      if (parseUrlState(location.search).type) advanced.open = true;
     };
-    const refresh = (search: string, push: boolean) => {
-      applyInitialState(document, search);
-      history[push ? 'pushState' : 'replaceState'](null, '', `${location.pathname}${search}`);
+    const change = (key: string, value: string, push: boolean) => {
+      const params = new URLSearchParams(location.search);
+      if (value) params.set(key, value); else params.delete(key);
+      const query = params.toString();
+      history[push ? 'pushState' : 'replaceState'](null, '', `${location.pathname}${query ? `?${query}` : ''}`);
+      limit = schoolPageSize;
+      render();
     };
-
-    // 首屏:focus=s 先于 apply 消费(主页入口卡落地,终审 I2)—— 剥参后 URL 只剩可分享四态
     const initial = new URLSearchParams(location.search);
     if (initial.get('focus') === 's') {
       initial.delete('focus');
+      history.replaceState(null, '', `${location.pathname}${initial.size ? `?${initial}` : ''}`);
       input.focus();
-      history.replaceState(null, '', `${location.pathname}${initial.toString() ? `?${initial}` : ''}`);
     }
-    applyInitialState(document, location.search);
-    // 深链首屏 chip 按压态同步(aria-pressed 是唯一样式/状态源,禁 .is-active)
-    const st = parseUrlState(location.search);
-    for (const c of chips) {
-      const key = 'province' in c.dataset ? 'province' : 'type';
-      c.setAttribute('aria-pressed', String(c.dataset[key] === st[key]));
-    }
-
-    // 桌面(>840px)全组直铺;≤840px 保持默认折叠(手机一行一组)
-    if (matchMedia('(min-width: 841px)').matches) {
-      for (const d of details) d.open = true;
-      expand.hidden = true;
-      collapse.hidden = false;
-    }
-
-    input.addEventListener('input', () => refresh(setParam('q', input.value.trim()), false)); // q 逐字 replaceState,不入历史噪音
-    page.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      const chip = target.closest<HTMLButtonElement>('.site-chip[data-province], .site-chip[data-type]');
-      if (chip) {
-        const key = 'province' in chip.dataset ? 'province' : 'type';
-        const bar = chip.parentElement!;
-        for (const c of bar.querySelectorAll<HTMLButtonElement>('.site-chip')) {
-          c.setAttribute('aria-pressed', String(c === chip));
-        }
-        refresh(setParam(key === 'province' ? 'p' : 't', chip.dataset[key] ?? ''), true);
-        if (key === 'province' && chip.dataset.province) {
-          const g = details.find((d) => d.dataset.group === chip.dataset.province);
-          if (g) {
-            g.open = true;
-            g.scrollIntoView({ block: 'nearest' });
-          }
-        }
-        return;
-      }
-      if (target.closest('button[data-role="expand"]')) {
-        for (const d of details) d.open = true;
-        expand.hidden = true;
-        collapse.hidden = false;
-      } else if (target.closest('button[data-role="collapse"]')) {
-        for (const d of details) d.open = false;
-        collapse.hidden = true;
-        expand.hidden = false;
-      }
+    render();
+    page.dataset.enhanced = "";
+    input.addEventListener('input', () => change('q', input.value, false));
+    province.addEventListener('change', () => change('p', province.value, true));
+    type.addEventListener('change', () => change('t', type.value, true));
+    page.querySelector('[data-role="reset"]')!.addEventListener('click', () => {
+      history.pushState(null, '', location.pathname);
+      limit = schoolPageSize;
+      render();
+      input.focus();
     });
-    window.addEventListener('popstate', () => {
-      applyInitialState(document, location.search);
-      const s = parseUrlState(location.search);
-      for (const c of chips) {
-        const key = 'province' in c.dataset ? 'province' : 'type';
-        c.setAttribute('aria-pressed', String(c.dataset[key] === s[key]));
-      }
+    more.addEventListener('click', () => {
+      const before = new Set(page.querySelectorAll('[data-school]:not([hidden])'));
+      limit += schoolPageSize;
+      render();
+      const firstNew = [...page.querySelectorAll<HTMLElement>('[data-school]:not([hidden])')].find(row => !before.has(row));
+      if (firstNew) { firstNew.tabIndex = -1; firstNew.focus(); }
     });
+    window.addEventListener('popstate', () => { limit = schoolPageSize; render(); });
   }
 </script>
 
 <style>
-  .schools-page { padding-block: clamp(2.5rem, 7vw, 5rem) clamp(4rem, 8vw, 7rem); }
-  /* 工具岛布局沿用 v4 §4 M4 岛卡;类名 schools__* 承接 global.a11y 闸(§10) */
-  .schools__head {
-    margin-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 6);
-  }
-  .schools__sub {
-    color: var(--md-sys-color-on-surface-variant);
-    margin-block-start: calc(var(--site-unit) * 2);
-    max-width: 56ch;
-  }
-  .schools__countline {
-    color: var(--md-sys-color-on-surface-variant);
-    margin-block-start: calc(var(--site-unit) * 2);
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-  .schools__island {
-    background: var(--md-sys-color-surface-container);
-    border-radius: var(--md-sys-shape-corner-xl);
-    padding: calc(var(--site-unit) * 8);
-  }
-  .schools__stat {
-    display: inline-block;
-    margin-block-end: calc(var(--site-unit) * 6);
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-  .schools__toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: calc(var(--site-unit) * 3);
-    margin-block-end: calc(var(--site-unit) * 4);
-  }
-  .schools__search {
-    display: block;
-    flex: 1 1 260px;
-    min-inline-size: 0;
-    max-inline-size: 420px;
-  }
-  .schools__search input {
-    inline-size: 100%;
-  }
-  .schools__chipbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(var(--site-unit) * 2);
-    margin-block-end: calc(var(--site-unit) * 3);
-  }
-  .visually-hidden {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-  }
-  .schools__groups {
-    margin-block-start: calc(var(--site-unit) * 6);
-    display: grid;
-    gap: calc(var(--site-unit) * 2);
-    /* 桌面段内滚动(spec §2.3:70vh,≤840px 取消嵌套滚动——触屏嵌套劫持整页) */
-  }
-  @media (min-width: 841px) {
-    .schools__groups {
-      max-block-size: 70vh;
-      overflow-y: auto;
-      padding-inline-end: calc(var(--site-unit) * 2);
-      overscroll-behavior: contain;
-    }
-  }
-  .schools__group {
-    /* 大列表渲染闸(Web Interface Guidelines 合规通道):零 JS、JS-off 无损、SEO 完整 */
-    content-visibility: auto;
-    contain-intrinsic-size: auto 40px;
-  }
-  .schools__summary {
-    color: var(--md-sys-color-primary);
-    cursor: pointer;
-    touch-action: manipulation;
-    padding-block: calc(var(--site-unit) * 1.5);
-    position: sticky;
-    inset-block-start: 0;
-    background: var(--md-sys-color-surface-container);
-    list-style: none;
-    min-block-size: 44px;
-    display: flex;
-    align-items: center;
-  }
-  .schools__summary::-webkit-details-marker {
-    display: none;
-  }
-  .schools__summary::before {
-    content: '▸ ';
-  }
-  .schools__group[open] > .schools__summary::before {
-    content: '▾ ';
-  }
-  .schools__count {
-    color: var(--md-sys-color-on-surface-variant);
-    margin-inline-start: calc(var(--site-unit) * 2);
-  }
-  .schools__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: calc(var(--site-unit) * 1);
-    padding-block: calc(var(--site-unit) * 1) calc(var(--site-unit) * 3);
-  }
-  .schools__row {
-    color: var(--md-sys-color-on-surface-variant);
-    font: var(--md-sys-typescale-body-medium);
-    line-height: 1.65;
-    padding-block: calc(var(--site-unit) * 1.5);
-  }
-  .schools__empty {
-    margin-block-start: calc(var(--site-unit) * 6);
-  }
-  .schools__foot {
-    margin-block-start: calc(var(--site-unit) * 6);
-    color: var(--md-sys-color-on-surface-variant);
-  }
-  .schools__foldbtns .site-button--text {
-    touch-action: manipulation;
-  }
+  .schools-page { padding-block: clamp(40px, 7vw, 80px) 80px; }
+  .schools__filters, .schools__pagination { display: none; }
+  .schools-page[data-enhanced] .schools__filters, .schools-page[data-enhanced] .schools__pagination { display: grid; }
+  .schools__filters { padding: clamp(20px, 4vw, 32px); border-radius: var(--md-sys-shape-corner-xl); background: var(--md-sys-color-surface-container-low); }
+  .schools__toolbar { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 24px; align-items: end; }
+  .schools__search, .schools__province, .schools__protocol { display: grid; gap: 12px; min-inline-size: 0; }
+  .schools__search input, .schools__province select, .schools__protocol select { inline-size: 100%; min-inline-size: 0; min-block-size: 56px; border-radius: var(--md-sys-shape-corner-large); font-size: 16px; background-color: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); }
+  .site-select { border: 1px solid var(--md-sys-color-outline); padding: 12px 16px; font-family: inherit; }
+  .schools__advanced { margin-block-start: 16px; }
+  .schools__advanced summary { display: inline-flex; align-items: center; gap: 12px; min-block-size: 44px; padding: 8px 16px; margin-inline-start: -16px; border-radius: var(--md-sys-shape-corner-full); color: var(--md-sys-color-primary); cursor: pointer; touch-action: manipulation; font: var(--md-sys-typescale-label-large); list-style: none; }
+  .schools__advanced summary::-webkit-details-marker { display: none; }
+  .schools__advanced summary::after { content: ''; inline-size: 7px; block-size: 7px; border-inline-end: 2px solid; border-block-end: 2px solid; transform: rotate(45deg); margin-block-end: 4px; }
+  .schools__advanced[open] summary::after { transform: rotate(225deg); margin-block-end: -4px; }
+  .schools__advanced summary:active { background: color-mix(in srgb, currentColor 10%, transparent); }
+  .schools__protocol { padding-block-start: 12px; max-inline-size: 560px; }
+  .schools__result-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; margin-block: 40px 16px; }
+  .schools__stat { color: var(--md-sys-color-on-surface-variant); }
+  .schools__result-head button { margin-inline-start: auto; }
+  .schools__groups { min-inline-size: 0; }
+  .schools__group { content-visibility: auto; contain-intrinsic-size: auto 64px; }
+  .schools__summary { display: flex; align-items: center; gap: 12px; min-block-size: 56px; padding: 12px 4px; cursor: pointer; touch-action: manipulation; color: var(--md-sys-color-primary); }
+  .schools__count { font: var(--md-sys-typescale-label-medium); color: var(--md-sys-color-on-surface-variant); }
+  .schools__list { list-style: none; padding: 0; margin: 0; }
+  .schools__row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 20px 8px; border-block-end: 1px solid var(--md-sys-color-outline-variant); }
+  .schools__identity { display: grid; gap: 8px; min-inline-size: 0; }
+  .schools__name { line-height: 1.5; }
+  .schools__meta { color: var(--md-sys-color-on-surface-variant); overflow-wrap: anywhere; line-height: 1.6; }
+  .schools__status { flex-shrink: 0; padding: 6px 12px; border-radius: var(--md-sys-shape-corner-full); background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+  .schools__status[data-unverified] { background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface-variant); }
+  .schools__empty { display: grid; justify-items: start; gap: 16px; padding-block: 32px; }
+  .schools__empty p { color: var(--md-sys-color-on-surface-variant); line-height: 1.8; }
+  .schools__pagination { display: grid; justify-items: center; gap: 16px; margin-block: 32px 48px; color: var(--md-sys-color-on-surface-variant); }
+  .schools__foot { display: grid; justify-items: start; gap: 12px; padding-block-start: 24px; border-block-start: 1px solid var(--md-sys-color-outline-variant); color: var(--md-sys-color-on-surface-variant); }
+  .schools-page[data-enhanced] .schools__summary { display: none; }
   @media (max-width: 600px) {
-    .schools__island { padding: calc(var(--site-unit) * 5); }
-    .schools__search { max-inline-size: none; flex-basis: 100%; }
+    .schools__toolbar { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .schools__row { align-items: start; gap: 12px; padding: 20px 0; }
+    .schools__status { font-size: 12px; padding: 6px 8px; margin-block-start: 2px; }
+    .schools__result-head { margin-block-start: 32px; }
   }
 </style>
