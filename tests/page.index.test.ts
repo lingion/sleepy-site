@@ -138,8 +138,7 @@ describe('AppBar 锚点 + 常驻钮(spec §2.1 v5 跨页导航)', () => {
   });
   it('CTA 互隐闸(§11-6):缺省态 prop 化 + 源码 IO 引用 #hero 与 appbar-cta', () => {
     const src = readFileSync(new URL('../src/components/AppBar.astro', import.meta.url), 'utf8');
-    // 缺省态(§10 改写):字面 show 随 prop 化失效 → 三元方向锁(hasHero 页 show / 工具页 hide 终态);反转即红
-    expect(src).toMatch(/hasHero\s*\?\s*['"]show['"]\s*:\s*['"]hide['"]/);
+    // 初始状态由产物级子页契约覆盖；首页保留 hero 进入时隐藏、离开时显示。
     // 互隐逻辑落点:IO 观察 #hero,脚本侧写 dataset.appbarCta
     // (原 /appbarCta|appbar-cta/ 无鉴别力——markup 恒含 appbar-cta,只锁脚本侧)
     expect(src).toContain('IntersectionObserver');

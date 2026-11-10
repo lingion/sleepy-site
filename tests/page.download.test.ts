@@ -1,6 +1,6 @@
 // v5 /download/ 产物闸(plan Task 5 Step 1)— dist/client/download/index.html 级 DOM 验收
 // 出口归位(spec §2.4):四 ABI + 校验 + 安装 + 架构小表 + 在线体验 + 商店占位 + 更多链
-// CTA 纪律(§11-6 / 终审 F3):main 域零 Filled、AppBar CTA hide 态、恰一主钮 = universal Elevated
+// main 域以 universal Elevated 为主下载；顶栏在所有子页保留下载入口。
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { JSDOM } from 'jsdom';
@@ -49,9 +49,6 @@ describe('CTA 纪律(§11-6 多页化延伸 / 终审 F3)', () => {
   it('main 域零 .site-button--filled(AppBar hide 态类名保留 → 域限定)', () => {
     expect(zhDoc.querySelectorAll('main .site-button--filled').length).toBe(0);
     expect(enDoc.querySelectorAll('main .site-button--filled').length).toBe(0);
-  });
-  it('AppBar CTA 本页恒隐:hasHero 缺省 → data-appbar-cta=hide', () => {
-    expect(zhDoc.querySelector('#appbar [data-appbar-cta]')?.getAttribute('data-appbar-cta')).toBe('hide');
   });
   it('恰一枚主钮 [data-dl-primary] 且指向 universal APK', () => {
     const primaries = zhDoc.querySelectorAll('[data-dl-primary]');
