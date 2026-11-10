@@ -6,9 +6,9 @@ import DocumentNav from '../DocumentNav.astro';
 interface Props { lang: 'zh' | 'en' }
 const { lang } = Astro.props;
 const t = lang === 'zh'
-  ? { heading: '更新说明', intro: '每一次更新，都留有记录。以下完整保留正式发布中的英文与中文说明。', source: '在 GitHub 查看', download: '下载这个版本', toc: '本次更新' }
-  : { heading: 'Release notes', intro: 'A record of every change. The complete English and Chinese notes from the official release.', source: 'View on GitHub', download: 'Download this version', toc: 'In this release' };
-const html = renderReleaseNotes(release.body);
+  ? { heading: '更新说明', intro: '每一次更新，都留有记录。以下是正式发布中的完整中文说明。', source: '在 GitHub 查看', download: '下载这个版本', toc: '本次更新' }
+  : { heading: 'Release notes', intro: 'A record of every change. The complete English notes from the official release.', source: 'View on GitHub', download: 'Download this version', toc: 'In this release' };
+const html = renderReleaseNotes(release.body, lang);
 const outline = [...html.matchAll(/<h[23] id="([^"]+)">([\s\S]*?)<\/h[23]>/g)].map(match => ({
   href: `#${match[1]}`, label: match[1] === 'release-english' ? 'English' : match[1] === 'release-chinese' ? '中文' : match[2].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&'),
 }));
