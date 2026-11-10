@@ -23,7 +23,7 @@ function upstreamTarget(pathname: string, search: string): string {
   return UPSTREAM_ORIGIN + upstreamPath + search;
 }
 
-function copyHeaders(source: Headers): Headers {
+function copyHeaders(source: Headers, cacheControl = 'no-cache'): Headers {
   const headers = new Headers(source);
   headers.delete('content-length');
   headers.delete('transfer-encoding');
@@ -32,7 +32,7 @@ function copyHeaders(source: Headers): Headers {
   headers.set('X-Frame-Options', 'SAMEORIGIN');
   const csp = headers.get('Content-Security-Policy')?.replace(/(?:^|;)\s*frame-ancestors[^;]*/gi, '') ?? '';
   headers.set('Content-Security-Policy', `${csp}${csp ? '; ' : ''}frame-ancestors 'self'`);
-  headers.set('Cache-Control', 'no-cache');
+  headers.set('Cache-Control', cacheControl);
   return headers;
 }
 
@@ -56,8 +56,21 @@ export const onRequest = async (context: PagesRequestContext): Promise<Response>
   });
 
   const contentType = upstream.headers.get('content-type') ?? '';
+  // Vite changes these eight-character content hashes with the bytes. Keep the
+  // shell, service worker and unversioned public files revalidating so a release
+  // immediately supplies its new asset URLs.
+  const immutableAsset = upstream.status === 200
+    && /^(?:GET|HEAD)$/.test(context.request.method)
+    && /^\/preview\/assets\/[^/]+-[\w-]{8}\.(?:js|css)$/.test(url.pathname)
+    && /^(?:text\/(?:javascript|css)|application\/javascript)(?:;|$)/i.test(contentType);
+  const cacheControl = immutableAsset ? 'public, max-age=31536000, immutable' : 'no-cache';
   if (!contentType.includes('text/html') && !contentType.includes('text/css')) {
     // 非文本资源与 API 响应: 字节透传, 不重编码。
+    if (immutableAsset) {
+      const headers = new Headers(upstream.headers);
+      headers.set('Cache-Control', cacheControl);
+      return new Response(upstream.body, { status: upstream.status, statusText: upstream.statusText, headers });
+    }
     return upstream;
   }
 
@@ -81,6 +94,6 @@ export const onRequest = async (context: PagesRequestContext): Promise<Response>
   return new Response(body, {
     status: upstream.status,
     statusText: upstream.statusText,
-    headers: copyHeaders(upstream.headers),
+    headers: copyHeaders(upstream.headers, cacheControl),
   });
 };

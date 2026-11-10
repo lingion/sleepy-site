@@ -25,6 +25,31 @@ function makeCtx(pathname: string, upstream: Response) {
 }
 
 describe('preview path reverse proxy', () => {
+  it.each([
+    ['/preview/assets/index--68mSLd5.js', 'text/javascript', 'export const value = 1'],
+    ['/preview/assets/AppearancePage-DK_31Xpr.js', 'application/javascript', 'export default 1'],
+    ['/preview/assets/index-D1zZHPqw.css', 'text/css', 'body{color:red}'],
+  ])('keeps successful content-addressed %s in the browser cache', async (path, type, body) => {
+    const { ctx } = makeCtx(path, new Response(body, { headers: { 'content-type': type, 'cache-control': 'public, max-age=0, must-revalidate' } }));
+    const response = await onRequest(ctx as never);
+    expect(response.headers.get('cache-control')).toBe('public, max-age=31536000, immutable');
+    expect(await response.text()).toBe(body);
+  });
+
+  it.each([
+    ['/preview/assets/index.js', 'text/javascript', 200],
+    ['/preview/assets/sleepy-logo.png', 'image/png', 200],
+    ['/preview/assets/missing-AbCd1234.js', 'text/html', 200],
+    ['/preview/assets/index-AbCd1234.js', 'text/javascript', 404],
+    ['/preview/assets/index-AbCd1234.js', 'text/javascript', 500],
+    ['/preview/sw.js', 'text/javascript', 200],
+    ['/preview/manifest.webmanifest', 'application/manifest+json', 200],
+  ])('never makes mutable files or failed responses immutable: %s (%s, %i)', async (path, type, status) => {
+    const { ctx } = makeCtx(path, new Response('body', { status, headers: { 'content-type': type, 'cache-control': 'no-cache' } }));
+    const response = await onRequest(ctx as never);
+    expect(response.headers.get('cache-control')).toBe('no-cache');
+  });
+
   it('allows the official same-origin embed and refreshes HTML instead of caching an old app shell', async () => {
     const { ctx } = makeCtx('/preview/?demo=1&embed=1', new Response('<html><head></head></html>', {
       headers: { 'content-type': 'text/html', 'x-frame-options': 'DENY',
