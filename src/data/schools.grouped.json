@@ -116,7 +116,7 @@
   },
   {
     "name": "安徽工业大学",
-    "type": "qz",
+    "type": "qz_ahut",
     "sortKey": "A",
     "sortKeyFull": "anhuigongyedaxue",
     "aliases": [],
@@ -364,7 +364,7 @@
   },
   {
     "name": "北京林业大学",
-    "type": "qz_br",
+    "type": "qz_bjfu",
     "sortKey": "B",
     "sortKeyFull": "beijinglinyedaxue",
     "aliases": [],
@@ -1735,7 +1735,7 @@
   },
   {
     "name": "华东理工大学",
-    "type": "qz",
+    "type": "qz_ecust",
     "sortKey": "H",
     "sortKeyFull": "huadongligongdaxue",
     "aliases": [],
@@ -2739,7 +2739,7 @@
   },
   {
     "name": "南京理工大学",
-    "type": "qz",
+    "type": "qz_njust",
     "sortKey": "N",
     "sortKeyFull": "nanjingligongdaxue",
     "aliases": [],
@@ -2870,6 +2870,20 @@
     "sortKeyFull": "nantongdaxue",
     "aliases": [],
     "catalogId": "N_南通大学",
+    "status": "supported",
+    "province": {
+      "code": "JS",
+      "zh": "江苏",
+      "en": "Jiangsu"
+    }
+  },
+  {
+    "name": "南通理工学院（2023届及之后）",
+    "type": "zf_new",
+    "sortKey": "N",
+    "sortKeyFull": "nantongligongxueyuanjiejizhihou",
+    "aliases": [],
+    "catalogId": "wakeup:2ed7b2bf334e49518042",
     "status": "supported",
     "province": {
       "code": "JS",
@@ -5037,7 +5051,7 @@
   {
     "name": "北京邮电大学新教务（VPN）",
     "type": "qz_with_node",
-    "sortKey": "*",
+    "sortKey": "B",
     "sortKeyFull": "beijingyoudiandaxuexinjiaowu",
     "aliases": [
       "bupt"
@@ -5045,15 +5059,15 @@
     "catalogId": "*_北京邮电大学新教务（VPN）",
     "status": "supported",
     "province": {
-      "code": "OTHER",
-      "zh": "其它",
-      "en": "Other"
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
     }
   },
   {
     "name": "北京邮电大学新教务（WebVPN）",
     "type": "qz_with_node",
-    "sortKey": "*",
+    "sortKey": "B",
     "sortKeyFull": "beijingyoudiandaxuexinjiaowu",
     "aliases": [
       "bupt"
@@ -5061,9 +5075,9 @@
     "catalogId": "*_北京邮电大学新教务（WebVPN）",
     "status": "supported",
     "province": {
-      "code": "OTHER",
-      "zh": "其它",
-      "en": "Other"
+      "code": "BJ",
+      "zh": "北京",
+      "en": "Beijing"
     }
   },
   {
@@ -5250,7 +5264,7 @@
   },
   {
     "name": "安徽工程大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "A",
     "sortKeyFull": "anhuigongchengdaxue",
     "aliases": [],
@@ -5432,7 +5446,7 @@
   },
   {
     "name": "安徽理工大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "A",
     "sortKeyFull": "anhuiligongdaxue",
     "aliases": [],
@@ -5502,7 +5516,7 @@
   },
   {
     "name": "安徽商贸职业技术学院",
-    "type": "jw_home",
+    "type": "login_xbellsoft",
     "sortKey": "A",
     "sortKeyFull": "anhuishangmaozhiyejishuxueyuan",
     "aliases": [],
@@ -5642,7 +5656,7 @@
   },
   {
     "name": "安徽新闻出版职业技术学院",
-    "type": "jw_home",
+    "type": "login_xbellsoft",
     "sortKey": "A",
     "sortKeyFull": "anhuixinwenchubanzhiyejishuxueyuan",
     "aliases": [],
@@ -5684,7 +5698,7 @@
   },
   {
     "name": "安徽医科大学",
-    "type": "classic_eams",
+    "type": "xsyu_shuwei",
     "sortKey": "A",
     "sortKeyFull": "anhuiyikedaxue",
     "aliases": [],
@@ -5838,7 +5852,7 @@
   },
   {
     "name": "安庆医药高等专科学校",
-    "type": "jw_home",
+    "type": "login_xbellsoft",
     "sortKey": "A",
     "sortKeyFull": "anqingyiyaogaodengzhuankexuexiao",
     "aliases": [],
@@ -5978,7 +5992,7 @@
   },
   {
     "name": "白城医学高等专科学校",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "B",
     "sortKeyFull": "baichengyixuegaodengzhuankexuexiao",
     "aliases": [],
@@ -6384,7 +6398,7 @@
   },
   {
     "name": "北京电影学院",
-    "type": "jw_home",
+    "type": "bfa",
     "sortKey": "B",
     "sortKeyFull": "beijingdianyingxueyuan",
     "aliases": [],
@@ -6398,7 +6412,7 @@
   },
   {
     "name": "北京电影学院 - 研究生",
-    "type": "jw_home",
+    "type": "bfa_post",
     "sortKey": "B",
     "sortKeyFull": "beijingdianyingxueyuanyanjiusheng",
     "aliases": [],
@@ -6566,7 +6580,7 @@
   },
   {
     "name": "北京交通职业技术学院",
-    "type": "jw_home",
+    "type": "xytc",
     "sortKey": "B",
     "sortKeyFull": "beijingjiaotongzhiyejishuxueyuan",
     "aliases": [],
@@ -6678,7 +6692,7 @@
   },
   {
     "name": "北京科技大学",
-    "type": "jw_home",
+    "type": "qz_ustb",
     "sortKey": "B",
     "sortKeyFull": "beijingkejidaxue",
     "aliases": [],
@@ -6860,7 +6874,7 @@
   },
   {
     "name": "北京师范大学-香港浸会大学联合国际学院",
-    "type": "jw_home",
+    "type": "uic",
     "sortKey": "B",
     "sortKeyFull": "beijingshifandaxuexianggangjinhuidaxuelianheguojixueyuan",
     "aliases": [],
@@ -7322,7 +7336,7 @@
   },
   {
     "name": "City University of Hong Kong",
-    "type": "jw_home",
+    "type": "cityu",
     "sortKey": "C",
     "sortKeyFull": "",
     "aliases": [],
@@ -7420,7 +7434,7 @@
   },
   {
     "name": "长安大学",
-    "type": "classic_eams",
+    "type": "xatu_shuwei",
     "sortKey": "C",
     "sortKeyFull": "changandaxue",
     "aliases": [],
@@ -7448,7 +7462,7 @@
   },
   {
     "name": "长安大学 - 研究生",
-    "type": "jw_home",
+    "type": "zju_post",
     "sortKey": "C",
     "sortKeyFull": "changandaxueyanjiusheng",
     "aliases": [],
@@ -7476,7 +7490,7 @@
   },
   {
     "name": "长春财经学院",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "C",
     "sortKeyFull": "changchuncaijingxueyuan",
     "aliases": [],
@@ -7490,7 +7504,7 @@
   },
   {
     "name": "长春电子科技学院",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "C",
     "sortKeyFull": "changchundianzikejixueyuan",
     "aliases": [],
@@ -7574,7 +7588,7 @@
   },
   {
     "name": "长春健康职业学院",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "C",
     "sortKeyFull": "changchunjiankangzhiyexueyuan",
     "aliases": [],
@@ -7658,7 +7672,7 @@
   },
   {
     "name": "长春师范大学",
-    "type": "jw_home",
+    "type": "cnu",
     "sortKey": "C",
     "sortKeyFull": "changchunshifandaxue",
     "aliases": [],
@@ -7868,7 +7882,7 @@
   },
   {
     "name": "长江大学文理学院",
-    "type": "classic_eams",
+    "type": "shuwei_m",
     "sortKey": "C",
     "sortKeyFull": "changjiangdaxuewenlixueyuan",
     "aliases": [],
@@ -8190,7 +8204,7 @@
   },
   {
     "name": "常州大学怀德学院",
-    "type": "jw_home",
+    "type": "changzhou",
     "sortKey": "C",
     "sortKeyFull": "changzhoudaxuehuaidexueyuan",
     "aliases": [],
@@ -8302,7 +8316,7 @@
   },
   {
     "name": "巢湖学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "C",
     "sortKeyFull": "chaohuxueyuan",
     "aliases": [],
@@ -8442,7 +8456,7 @@
   },
   {
     "name": "成都工业职业技术学院",
-    "type": "classic_eams",
+    "type": "xatu_shuwei",
     "sortKey": "C",
     "sortKeyFull": "chengdugongyezhiyejishuxueyuan",
     "aliases": [],
@@ -8624,7 +8638,7 @@
   },
   {
     "name": "成都信息工程大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "C",
     "sortKeyFull": "chengduxinxigongchengdaxue",
     "aliases": [],
@@ -8680,7 +8694,7 @@
   },
   {
     "name": "成都职业技术学院",
-    "type": "jw_home",
+    "type": "aic",
     "sortKey": "C",
     "sortKeyFull": "chengduzhiyejishuxueyuan",
     "aliases": [],
@@ -8778,7 +8792,7 @@
   },
   {
     "name": "池州学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "C",
     "sortKeyFull": "chizhouxueyuan",
     "aliases": [],
@@ -9002,7 +9016,7 @@
   },
   {
     "name": "重庆对外经贸学院",
-    "type": "jw_home",
+    "type": "ccibe",
     "sortKey": "C",
     "sortKeyFull": "chongqingduiwaijingmaoxueyuan",
     "aliases": [],
@@ -9338,7 +9352,7 @@
   },
   {
     "name": "重庆科创职业学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "C",
     "sortKeyFull": "chongqingkechuangzhiyexueyuan",
     "aliases": [],
@@ -9352,7 +9366,7 @@
   },
   {
     "name": "重庆科技大学",
-    "type": "classic_eams",
+    "type": "uestc_shuwei",
     "sortKey": "C",
     "sortKeyFull": "chongqingkejidaxue",
     "aliases": [],
@@ -9674,7 +9688,7 @@
   },
   {
     "name": "重庆邮电大学",
-    "type": "jw_home",
+    "type": "cqupt",
     "sortKey": "C",
     "sortKeyFull": "chongqingyoudiandaxue",
     "aliases": [],
@@ -9856,7 +9870,7 @@
   },
   {
     "name": "朝阳师范高等专科学校",
-    "type": "jw_home",
+    "type": "xhtd",
     "sortKey": "C",
     "sortKeyFull": "zhaoyangshifangaodengzhuankexuexiao",
     "aliases": [],
@@ -9926,7 +9940,7 @@
   },
   {
     "name": "大连海事大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "D",
     "sortKeyFull": "dalianhaishidaxue",
     "aliases": [],
@@ -10612,7 +10626,7 @@
   },
   {
     "name": "恩施职业技术学院",
-    "type": "jw_home",
+    "type": "hbmzu",
     "sortKey": "E",
     "sortKeyFull": "enshizhiyejishuxueyuan",
     "aliases": [],
@@ -10654,7 +10668,7 @@
   },
   {
     "name": "防灾科技学院",
-    "type": "jw_home",
+    "type": "cidp",
     "sortKey": "F",
     "sortKeyFull": "fangzaikejixueyuan",
     "aliases": [],
@@ -10710,7 +10724,7 @@
   },
   {
     "name": "佛山职业技术学院（推荐）",
-    "type": "qz",
+    "type": "qz_fspt",
     "sortKey": "F",
     "sortKeyFull": "foshanzhiyejishuxueyuantuijian",
     "aliases": [],
@@ -10724,7 +10738,7 @@
   },
   {
     "name": "复旦大学",
-    "type": "jw_home",
+    "type": "shuwei_m",
     "sortKey": "F",
     "sortKeyFull": "fudandaxue",
     "aliases": [],
@@ -10738,7 +10752,7 @@
   },
   {
     "name": "复旦大学个人数据中心",
-    "type": "jw_home",
+    "type": "fdu",
     "sortKey": "F",
     "sortKeyFull": "fudandaxuegerenshujuzhongxin",
     "aliases": [],
@@ -10752,7 +10766,7 @@
   },
   {
     "name": "复旦大学个人数据中心 - 研究生",
-    "type": "jw_home",
+    "type": "fdu",
     "sortKey": "F",
     "sortKeyFull": "fudandaxuegerenshujuzhongxinyanjiusheng",
     "aliases": [],
@@ -10766,7 +10780,7 @@
   },
   {
     "name": "复旦大学 - 研究生",
-    "type": "jw_home",
+    "type": "fdu",
     "sortKey": "F",
     "sortKeyFull": "fudandaxueyanjiusheng",
     "aliases": [],
@@ -10990,7 +11004,7 @@
   },
   {
     "name": "福建体育职业技术学院",
-    "type": "jw_home",
+    "type": "fstvc",
     "sortKey": "F",
     "sortKeyFull": "fujiantiyuzhiyejishuxueyuan",
     "aliases": [],
@@ -11088,7 +11102,7 @@
   },
   {
     "name": "抚顺师范高等专科学校",
-    "type": "jw_home",
+    "type": "xhtd",
     "sortKey": "F",
     "sortKeyFull": "fushunshifangaodengzhuankexuexiao",
     "aliases": [],
@@ -11298,7 +11312,7 @@
   },
   {
     "name": "福州软件职业技术学院",
-    "type": "jw_home",
+    "type": "fstvc",
     "sortKey": "F",
     "sortKeyFull": "fuzhouruanjianzhiyejishuxueyuan",
     "aliases": [],
@@ -11382,7 +11396,7 @@
   },
   {
     "name": "福州职业技术学院",
-    "type": "jw_home",
+    "type": "fstvc",
     "sortKey": "F",
     "sortKeyFull": "fuzhouzhiyejishuxueyuan",
     "aliases": [],
@@ -11760,7 +11774,7 @@
   },
   {
     "name": "赣州师范高等专科学校",
-    "type": "jw_home",
+    "type": "aic",
     "sortKey": "G",
     "sortKeyFull": "ganzhoushifangaodengzhuankexuexiao",
     "aliases": [],
@@ -11830,7 +11844,7 @@
   },
   {
     "name": "广东白云学院",
-    "type": "kingo_new",
+    "type": "gdbyxy",
     "sortKey": "G",
     "sortKeyFull": "guangdongbaiyunxueyuan",
     "aliases": [],
@@ -11900,7 +11914,7 @@
   },
   {
     "name": "广东第二师范学院",
-    "type": "jw_home",
+    "type": "gdei",
     "sortKey": "G",
     "sortKeyFull": "guangdongdiershifanxueyuan",
     "aliases": [],
@@ -11942,7 +11956,7 @@
   },
   {
     "name": "广东环境保护工程职业学院",
-    "type": "wisedu",
+    "type": "buaa",
     "sortKey": "G",
     "sortKeyFull": "guangdonghuanjingbaohugongchengzhiyexueyuan",
     "aliases": [],
@@ -12292,7 +12306,7 @@
   },
   {
     "name": "广东女子职业技术学院",
-    "type": "jw_home",
+    "type": "aic",
     "sortKey": "G",
     "sortKeyFull": "guangdongnvzizhiyejishuxueyuan",
     "aliases": [],
@@ -12418,7 +12432,7 @@
   },
   {
     "name": "广东省外语艺术职业学院",
-    "type": "jw_home",
+    "type": "gdei",
     "sortKey": "G",
     "sortKeyFull": "guangdongshengwaiyuyishuzhiyexueyuan",
     "aliases": [],
@@ -12824,7 +12838,7 @@
   },
   {
     "name": "广西工业职业技术学院",
-    "type": "jw_home",
+    "type": "gxic",
     "sortKey": "G",
     "sortKeyFull": "guangxigongyezhiyejishuxueyuan",
     "aliases": [],
@@ -12866,7 +12880,7 @@
   },
   {
     "name": "广西交通职业技术学院",
-    "type": "jw_home",
+    "type": "changzhou",
     "sortKey": "G",
     "sortKeyFull": "guangxijiaotongzhiyejishuxueyuan",
     "aliases": [],
@@ -13076,7 +13090,7 @@
   },
   {
     "name": "广西师范大学",
-    "type": "jw_home",
+    "type": "gxnu",
     "sortKey": "G",
     "sortKeyFull": "guangxishifandaxue",
     "aliases": [],
@@ -13090,7 +13104,7 @@
   },
   {
     "name": "广西师范大学漓江学院",
-    "type": "jw_home",
+    "type": "gxnu",
     "sortKey": "G",
     "sortKeyFull": "guangxishifandaxuelijiangxueyuan",
     "aliases": [],
@@ -13174,7 +13188,7 @@
   },
   {
     "name": "广西信息职业技术学院",
-    "type": "jw_home",
+    "type": "gdei",
     "sortKey": "G",
     "sortKeyFull": "guangxixinxizhiyejishuxueyuan",
     "aliases": [],
@@ -13440,7 +13454,7 @@
   },
   {
     "name": "广州大学华软软件学院",
-    "type": "jw_home",
+    "type": "seig",
     "sortKey": "G",
     "sortKeyFull": "guangzhoudaxuehuaruanruanjianxueyuan",
     "aliases": [],
@@ -13454,7 +13468,7 @@
   },
   {
     "name": "广州大学 - 研究生",
-    "type": "jw_home",
+    "type": "gzhuyjs",
     "sortKey": "G",
     "sortKeyFull": "guangzhoudaxueyanjiusheng",
     "aliases": [],
@@ -13496,7 +13510,7 @@
   },
   {
     "name": "广州工商学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "G",
     "sortKeyFull": "guangzhougongshangxueyuan",
     "aliases": [],
@@ -13720,7 +13734,7 @@
   },
   {
     "name": "广州软件学院",
-    "type": "jw_home",
+    "type": "seig",
     "sortKey": "G",
     "sortKeyFull": "guangzhouruanjianxueyuan",
     "aliases": [],
@@ -13902,7 +13916,7 @@
   },
   {
     "name": "桂林电子科技大学",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "G",
     "sortKeyFull": "guilindianzikejidaxue",
     "aliases": [],
@@ -13958,7 +13972,7 @@
   },
   {
     "name": "桂林理工大学 - 研究生",
-    "type": "jw_home",
+    "type": "hrbeu_post",
     "sortKey": "G",
     "sortKeyFull": "guilinligongdaxueyanjiusheng",
     "aliases": [],
@@ -14140,7 +14154,7 @@
   },
   {
     "name": "贵州财经大学",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "G",
     "sortKeyFull": "guizhoucaijingdaxue",
     "aliases": [],
@@ -14784,7 +14798,7 @@
   },
   {
     "name": "哈尔滨工业大学（深圳）",
-    "type": "jw_home",
+    "type": "hitsz",
     "sortKey": "H",
     "sortKeyFull": "haerbingongyedaxueshenzhen",
     "aliases": [],
@@ -14798,7 +14812,7 @@
   },
   {
     "name": "哈尔滨工业大学（深圳） - 研究生",
-    "type": "jw_home",
+    "type": "hitsz",
     "sortKey": "H",
     "sortKeyFull": "haerbingongyedaxueshenzhenyanjiusheng",
     "aliases": [],
@@ -14812,7 +14826,7 @@
   },
   {
     "name": "哈尔滨工业大学（威海）",
-    "type": "jw_home",
+    "type": "hit",
     "sortKey": "H",
     "sortKeyFull": "haerbingongyedaxueweihai",
     "aliases": [],
@@ -14952,7 +14966,7 @@
   },
   {
     "name": "哈尔滨体育学院 - 研究生",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "H",
     "sortKeyFull": "haerbintiyuxueyuanyanjiusheng",
     "aliases": [],
@@ -15022,7 +15036,7 @@
   },
   {
     "name": "哈尔滨职业技术大学",
-    "type": "jw_home",
+    "type": "hitsz",
     "sortKey": "H",
     "sortKeyFull": "haerbinzhiyejishudaxue",
     "aliases": [],
@@ -15036,7 +15050,7 @@
   },
   {
     "name": "哈尔滨职业技术学院",
-    "type": "jw_home",
+    "type": "hitsz",
     "sortKey": "H",
     "sortKeyFull": "haerbinzhiyejishuxueyuan",
     "aliases": [],
@@ -15456,7 +15470,7 @@
   },
   {
     "name": "韩山师范学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "H",
     "sortKeyFull": "hanshanshifanxueyuan",
     "aliases": [],
@@ -16156,7 +16170,7 @@
   },
   {
     "name": "鹤壁职业技术学院",
-    "type": "jw_home",
+    "type": "shuwei_m",
     "sortKey": "H",
     "sortKeyFull": "hebizhiyejishuxueyuan",
     "aliases": [],
@@ -16282,7 +16296,7 @@
   },
   {
     "name": "合肥幼儿师范高等专科学校",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "H",
     "sortKeyFull": "hefeiyouershifangaodengzhuankexuexiao",
     "aliases": [],
@@ -16450,7 +16464,7 @@
   },
   {
     "name": "黑龙江建筑职业技术学院",
-    "type": "jw_home",
+    "type": "hit",
     "sortKey": "H",
     "sortKeyFull": "heilongjiangjianzhuzhiyejishuxueyuan",
     "aliases": [],
@@ -16786,7 +16800,7 @@
   },
   {
     "name": "河南测绘职业学院",
-    "type": "jw_home",
+    "type": "shuwei_m",
     "sortKey": "H",
     "sortKeyFull": "henancehuizhiyexueyuan",
     "aliases": [],
@@ -16926,7 +16940,7 @@
   },
   {
     "name": "河南广播电视大学",
-    "type": "classic_eams",
+    "type": "shuwei_m",
     "sortKey": "H",
     "sortKeyFull": "henanguangbodianshidaxue",
     "aliases": [],
@@ -17038,7 +17052,7 @@
   },
   {
     "name": "河南开放大学",
-    "type": "classic_eams",
+    "type": "shuwei_m",
     "sortKey": "H",
     "sortKeyFull": "henankaifangdaxue",
     "aliases": [],
@@ -17108,7 +17122,7 @@
   },
   {
     "name": "河南理工大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "H",
     "sortKeyFull": "henanligongdaxue",
     "aliases": [],
@@ -18018,7 +18032,7 @@
   },
   {
     "name": "湖北城市建设职业技术学院",
-    "type": "jw_home",
+    "type": "aic",
     "sortKey": "H",
     "sortKeyFull": "hubeichengshijianshezhiyejishuxueyuan",
     "aliases": [],
@@ -18368,7 +18382,7 @@
   },
   {
     "name": "湖北生物科技职业学院",
-    "type": "jw_home",
+    "type": "aic",
     "sortKey": "H",
     "sortKeyFull": "hubeishengwukejizhiyexueyuan",
     "aliases": [],
@@ -18522,7 +18536,7 @@
   },
   {
     "name": "湖北幼儿师范高等专科学校",
-    "type": "jw_home",
+    "type": "buaa",
     "sortKey": "H",
     "sortKeyFull": "hubeiyouershifangaodengzhuankexuexiao",
     "aliases": [],
@@ -18718,7 +18732,7 @@
   },
   {
     "name": "湖南财经工业职业技术学院",
-    "type": "jw_home",
+    "type": "xytc",
     "sortKey": "H",
     "sortKeyFull": "hunancaijinggongyezhiyejishuxueyuan",
     "aliases": [],
@@ -19740,7 +19754,7 @@
   },
   {
     "name": "江苏财会职业学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "J",
     "sortKeyFull": "jiangsucaikuaizhiyexueyuan",
     "aliases": [],
@@ -19950,7 +19964,7 @@
   },
   {
     "name": "江苏开放大学",
-    "type": "jw_home",
+    "type": "nuist",
     "sortKey": "J",
     "sortKeyFull": "jiangsukaifangdaxue",
     "aliases": [],
@@ -20487,7 +20501,7 @@
     "sortKeyFull": "jiangxikejishifandaxue",
     "aliases": [],
     "catalogId": "moe:4136011318",
-    "status": "unverified",
+    "status": "supported",
     "province": {
       "code": "JX",
       "zh": "江西",
@@ -20524,7 +20538,7 @@
   },
   {
     "name": "江西农业大学",
-    "type": "jw_home",
+    "type": "jxau",
     "sortKey": "J",
     "sortKeyFull": "jiangxinongyedaxue",
     "aliases": [],
@@ -20790,7 +20804,7 @@
   },
   {
     "name": "江西应用科技学院",
-    "type": "jw_home",
+    "type": "gdei",
     "sortKey": "J",
     "sortKeyFull": "jiangxiyingyongkejixueyuan",
     "aliases": [],
@@ -21056,7 +21070,7 @@
   },
   {
     "name": "吉林大学新研究生管理系统2022 - 研究生",
-    "type": "jw_home",
+    "type": "jlu_post",
     "sortKey": "J",
     "sortKeyFull": "jilindaxuexinyanjiushengguanlixitongyanjiusheng",
     "aliases": [],
@@ -21140,7 +21154,7 @@
   },
   {
     "name": "吉林化工大学",
-    "type": "jw_home",
+    "type": "jlict_qz_old",
     "sortKey": "J",
     "sortKeyFull": "jilinhuagongdaxue",
     "aliases": [],
@@ -21322,7 +21336,7 @@
   },
   {
     "name": "吉林铁道职业技术大学",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "J",
     "sortKeyFull": "jilintiedaozhiyejishudaxue",
     "aliases": [],
@@ -22064,7 +22078,7 @@
   },
   {
     "name": "康复大学",
-    "type": "jw_home",
+    "type": "hitsz",
     "sortKey": "K",
     "sortKeyFull": "kangfudaxue",
     "aliases": [],
@@ -22666,7 +22680,7 @@
   },
   {
     "name": "辽东学院",
-    "type": "jw_home",
+    "type": "buaa",
     "sortKey": "L",
     "sortKeyFull": "liaodongxueyuan",
     "aliases": [],
@@ -22778,7 +22792,7 @@
   },
   {
     "name": "辽宁工程技术大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "L",
     "sortKeyFull": "liaoninggongchengjishudaxue",
     "aliases": [],
@@ -22820,7 +22834,7 @@
   },
   {
     "name": "辽宁轨道交通职业学院",
-    "type": "jw_home",
+    "type": "buaa",
     "sortKey": "L",
     "sortKeyFull": "liaoningguidaojiaotongzhiyexueyuan",
     "aliases": [],
@@ -22833,8 +22847,22 @@
     }
   },
   {
+    "name": "辽宁轨道交通职业学院 1",
+    "type": "lngd",
+    "sortKey": "L",
+    "sortKeyFull": "liaoningguidaojiaotongzhiyexueyuan",
+    "aliases": [],
+    "catalogId": "wakeup:943a145aa0e81bda7c57",
+    "status": "unverified",
+    "province": {
+      "code": "LN",
+      "zh": "辽宁",
+      "en": "Liaoning"
+    }
+  },
+  {
     "name": "辽宁何氏医学院",
-    "type": "jw_home",
+    "type": "shuwei_m",
     "sortKey": "L",
     "sortKeyFull": "liaoningheshiyixueyuan",
     "aliases": [],
@@ -22932,7 +22960,7 @@
   },
   {
     "name": "辽宁科技学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "L",
     "sortKeyFull": "liaoningkejixueyuan",
     "aliases": [],
@@ -23016,7 +23044,7 @@
   },
   {
     "name": "辽宁师范大学",
-    "type": "shuwei_json",
+    "type": "shuwei_m",
     "sortKey": "L",
     "sortKeyFull": "liaoningshifandaxue",
     "aliases": [],
@@ -23044,7 +23072,7 @@
   },
   {
     "name": "辽宁师范大学 - 研究生",
-    "type": "jw_home",
+    "type": "hrbeu_post",
     "sortKey": "L",
     "sortKeyFull": "liaoningshifandaxueyanjiusheng",
     "aliases": [],
@@ -23072,7 +23100,7 @@
   },
   {
     "name": "辽宁石化职业技术学院",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "L",
     "sortKeyFull": "liaoningshihuazhiyejishuxueyuan",
     "aliases": [],
@@ -23156,7 +23184,7 @@
   },
   {
     "name": "辽宁职业学院",
-    "type": "jw_home",
+    "type": "aic",
     "sortKey": "L",
     "sortKeyFull": "liaoningzhiyexueyuan",
     "aliases": [],
@@ -23170,7 +23198,7 @@
   },
   {
     "name": "辽宁中医药大学杏林学院",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "L",
     "sortKeyFull": "liaoningzhongyiyaodaxuexinglinxueyuan",
     "aliases": [],
@@ -23212,7 +23240,7 @@
   },
   {
     "name": "辽阳职业技术学院",
-    "type": "jw_home",
+    "type": "lz",
     "sortKey": "L",
     "sortKeyFull": "liaoyangzhiyejishuxueyuan",
     "aliases": [],
@@ -23730,7 +23758,7 @@
   },
   {
     "name": "泸州医疗器械职业学院",
-    "type": "jw_home",
+    "type": "gdei",
     "sortKey": "L",
     "sortKeyFull": "luzhouyiliaoqixiezhiyexueyuan",
     "aliases": [],
@@ -23828,7 +23856,7 @@
   },
   {
     "name": "马鞍山学院",
-    "type": "classic_eams",
+    "type": "shuwei_m",
     "sortKey": "M",
     "sortKeyFull": "maanshanxueyuan",
     "aliases": [],
@@ -24108,7 +24136,7 @@
   },
   {
     "name": "闽南科技学院",
-    "type": "qz",
+    "type": "qz_2024",
     "sortKey": "M",
     "sortKeyFull": "minnankejixueyuan",
     "aliases": [],
@@ -24500,7 +24528,7 @@
   },
   {
     "name": "南京财经大学",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "N",
     "sortKeyFull": "nanjingcaijingdaxue",
     "aliases": [],
@@ -24682,7 +24710,7 @@
   },
   {
     "name": "南京农业大学",
-    "type": "jw_home",
+    "type": "qz_single_node",
     "sortKey": "N",
     "sortKeyFull": "nanjingnongyedaxue",
     "aliases": [],
@@ -24724,7 +24752,7 @@
   },
   {
     "name": "南京审计大学",
-    "type": "jw_home",
+    "type": "nau",
     "sortKey": "N",
     "sortKeyFull": "nanjingshenjidaxue",
     "aliases": [],
@@ -24738,7 +24766,7 @@
   },
   {
     "name": "南京审计大学金审学院",
-    "type": "jw_home",
+    "type": "nau",
     "sortKey": "N",
     "sortKeyFull": "nanjingshenjidaxuejinshenxueyuan",
     "aliases": [],
@@ -24766,7 +24794,7 @@
   },
   {
     "name": "南京师范大学泰州学院",
-    "type": "jw_home",
+    "type": "nnutc",
     "sortKey": "N",
     "sortKeyFull": "nanjingshifandaxuetaizhouxueyuan",
     "aliases": [],
@@ -24892,7 +24920,7 @@
   },
   {
     "name": "南京艺术学院",
-    "type": "jw_home",
+    "type": "nua",
     "sortKey": "N",
     "sortKeyFull": "nanjingyishuxueyuan",
     "aliases": [],
@@ -25017,22 +25045,8 @@
     }
   },
   {
-    "name": "南通理工学院（2023届及之后）",
-    "type": "zf_new",
-    "sortKey": "N",
-    "sortKeyFull": "nantongligongxueyuanjiejizhihou",
-    "aliases": [],
-    "catalogId": "wakeup:2ed7b2bf334e49518042",
-    "status": "unverified",
-    "province": {
-      "code": "JS",
-      "zh": "江苏",
-      "en": "Jiangsu"
-    }
-  },
-  {
     "name": "南通师范高等专科学校",
-    "type": "jw_home",
+    "type": "nuist",
     "sortKey": "N",
     "sortKeyFull": "nantongshifangaodengzhuankexuexiao",
     "aliases": [],
@@ -25074,7 +25088,7 @@
   },
   {
     "name": "南阳理工学院",
-    "type": "jw_home",
+    "type": "nyist",
     "sortKey": "N",
     "sortKeyFull": "nanyangligongxueyuan",
     "aliases": [],
@@ -25172,7 +25186,7 @@
   },
   {
     "name": "内蒙古财经大学",
-    "type": "jw_home",
+    "type": "shuwei_m",
     "sortKey": "N",
     "sortKeyFull": "neimenggucaijingdaxue",
     "aliases": [],
@@ -26208,12 +26222,12 @@
   },
   {
     "name": "青岛大学",
-    "type": "qz",
+    "type": "sg_asset",
     "sortKey": "Q",
     "sortKeyFull": "qingdaodaxue",
     "aliases": [],
     "catalogId": "moe:4137011065",
-    "status": "unverified",
+    "status": "supported",
     "province": {
       "code": "SD",
       "zh": "山东",
@@ -26348,7 +26362,7 @@
   },
   {
     "name": "青岛农业大学",
-    "type": "sg_asset",
+    "type": "qz_bjfu",
     "sortKey": "Q",
     "sortKeyFull": "qingdaonongyedaxue",
     "aliases": [],
@@ -26516,7 +26530,7 @@
   },
   {
     "name": "青海民族大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "Q",
     "sortKeyFull": "qinghaiminzudaxue",
     "aliases": [],
@@ -26684,7 +26698,7 @@
   },
   {
     "name": "齐齐哈尔医学院",
-    "type": "jw_home",
+    "type": "qmu",
     "sortKey": "Q",
     "sortKeyFull": "qiqihaeryixueyuan",
     "aliases": [],
@@ -27622,7 +27636,7 @@
   },
   {
     "name": "山东商业职业技术学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "S",
     "sortKeyFull": "shandongshangyezhiyejishuxueyuan",
     "aliases": [],
@@ -27748,7 +27762,7 @@
   },
   {
     "name": "山东体育学院",
-    "type": "jw_home",
+    "type": "sdpei",
     "sortKey": "S",
     "sortKeyFull": "shandongtiyuxueyuan",
     "aliases": [],
@@ -28014,7 +28028,7 @@
   },
   {
     "name": "上海出版印刷高等专科学校",
-    "type": "jw_home",
+    "type": "aic",
     "sortKey": "S",
     "sortKeyFull": "shanghaichubanyinshuagaodengzhuankexuexiao",
     "aliases": [],
@@ -28028,7 +28042,7 @@
   },
   {
     "name": "上海电机学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "S",
     "sortKeyFull": "shanghaidianjixueyuan",
     "aliases": [],
@@ -28098,7 +28112,7 @@
   },
   {
     "name": "上海对外经贸大学",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "S",
     "sortKeyFull": "shanghaiduiwaijingmaodaxue",
     "aliases": [],
@@ -28140,7 +28154,7 @@
   },
   {
     "name": "上海工程技术大学",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "S",
     "sortKeyFull": "shanghaigongchengjishudaxue",
     "aliases": [],
@@ -28154,7 +28168,7 @@
   },
   {
     "name": "上海工程技术大学高等职业技术学院",
-    "type": "jw_home",
+    "type": "simc",
     "sortKey": "S",
     "sortKeyFull": "shanghaigongchengjishudaxuegaodengzhiyejishuxueyuan",
     "aliases": [],
@@ -28168,7 +28182,7 @@
   },
   {
     "name": "上海工程技术大学（自动导入时间）",
-    "type": "eams5",
+    "type": "sues",
     "sortKey": "S",
     "sortKeyFull": "shanghaigongchengjishudaxuezidongdaorushijian",
     "aliases": [],
@@ -28238,7 +28252,7 @@
   },
   {
     "name": "上海海关学院",
-    "type": "jw_home",
+    "type": "shcc",
     "sortKey": "S",
     "sortKeyFull": "shanghaihaiguanxueyuan",
     "aliases": [],
@@ -28280,7 +28294,7 @@
   },
   {
     "name": "上海建桥学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "S",
     "sortKeyFull": "shanghaijianqiaoxueyuan",
     "aliases": [],
@@ -28294,7 +28308,7 @@
   },
   {
     "name": "上海交通大学医学院",
-    "type": "jw_home",
+    "type": "shsmu",
     "sortKey": "S",
     "sortKeyFull": "shanghaijiaotongdaxueyixueyuan",
     "aliases": [],
@@ -28364,7 +28378,7 @@
   },
   {
     "name": "上海科技大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "S",
     "sortKeyFull": "shanghaikejidaxue",
     "aliases": [],
@@ -28378,7 +28392,7 @@
   },
   {
     "name": "上海科技大学（旧） - 研究生",
-    "type": "jw_home",
+    "type": "shtu_post",
     "sortKey": "S",
     "sortKeyFull": "shanghaikejidaxuejiuyanjiusheng",
     "aliases": [],
@@ -28392,7 +28406,7 @@
   },
   {
     "name": "上海科技大学（新） - 研究生",
-    "type": "jw_home",
+    "type": "shtu_post_2024",
     "sortKey": "S",
     "sortKeyFull": "shanghaikejidaxuexinyanjiusheng",
     "aliases": [],
@@ -28406,7 +28420,7 @@
   },
   {
     "name": "上海科技大学 - 研究生",
-    "type": "jw_home",
+    "type": "shtu_post_2024",
     "sortKey": "S",
     "sortKeyFull": "shanghaikejidaxueyanjiusheng",
     "aliases": [],
@@ -28574,7 +28588,7 @@
   },
   {
     "name": "上海杉达学院",
-    "type": "jw_home",
+    "type": "shuwei_m",
     "sortKey": "S",
     "sortKeyFull": "shanghaishandaxueyuan",
     "aliases": [],
@@ -28630,7 +28644,7 @@
   },
   {
     "name": "上海市高级技工学校",
-    "type": "jw_home",
+    "type": "simc",
     "sortKey": "S",
     "sortKeyFull": "shanghaishigaojijigongxuexiao",
     "aliases": [],
@@ -28672,7 +28686,7 @@
   },
   {
     "name": "上海视觉艺术学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "S",
     "sortKeyFull": "shanghaishijueyishuxueyuan",
     "aliases": [],
@@ -28742,7 +28756,7 @@
   },
   {
     "name": "上海外国语大学贤达经济人文学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "S",
     "sortKeyFull": "shanghaiwaiguoyudaxuexiandajingjirenwenxueyuan",
     "aliases": [],
@@ -28896,7 +28910,7 @@
   },
   {
     "name": "商丘工学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "S",
     "sortKeyFull": "shangqiugongxueyuan",
     "aliases": [],
@@ -29498,7 +29512,7 @@
   },
   {
     "name": "陕西科技大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "S",
     "sortKeyFull": "shanxikejidaxue",
     "aliases": [],
@@ -29526,7 +29540,7 @@
   },
   {
     "name": "陕西理工大学",
-    "type": "classic_eams",
+    "type": "xatu_shuwei",
     "sortKey": "S",
     "sortKeyFull": "shanxiligongdaxue",
     "aliases": [],
@@ -29736,7 +29750,7 @@
   },
   {
     "name": "陕西学前师范学院",
-    "type": "jw_home",
+    "type": "shuwei_m",
     "sortKey": "S",
     "sortKeyFull": "shanxixueqianshifanxueyuan",
     "aliases": [],
@@ -30086,7 +30100,7 @@
   },
   {
     "name": "沈阳化工大学 - 研究生",
-    "type": "jw_home",
+    "type": "hrbeu_post",
     "sortKey": "S",
     "sortKeyFull": "shenyanghuagongdaxueyanjiusheng",
     "aliases": [],
@@ -30534,7 +30548,7 @@
   },
   {
     "name": "首都师范大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "S",
     "sortKeyFull": "shoudushifandaxue",
     "aliases": [],
@@ -30660,7 +30674,7 @@
   },
   {
     "name": "四川城市职业学院",
-    "type": "jw_home",
+    "type": "vatuu",
     "sortKey": "S",
     "sortKeyFull": "sichuanchengshizhiyexueyuan",
     "aliases": [],
@@ -31010,7 +31024,7 @@
   },
   {
     "name": "四川师范大学",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "S",
     "sortKeyFull": "sichuanshifandaxue",
     "aliases": [],
@@ -31584,7 +31598,7 @@
   },
   {
     "name": "苏州大学应用技术学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "S",
     "sortKeyFull": "suzhoudaxueyingyongjishuxueyuan",
     "aliases": [],
@@ -32004,7 +32018,7 @@
   },
   {
     "name": "泰州职业技术学院",
-    "type": "jw_home",
+    "type": "changzhou",
     "sortKey": "T",
     "sortKeyFull": "taizhouzhiyejishuxueyuan",
     "aliases": [],
@@ -32284,7 +32298,7 @@
   },
   {
     "name": "天津大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "T",
     "sortKeyFull": "tianjindaxue",
     "aliases": [],
@@ -32452,7 +32466,7 @@
   },
   {
     "name": "天津理工大学中环信息学院",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "T",
     "sortKeyFull": "tianjinligongdaxuezhonghuanxinxixueyuan",
     "aliases": [],
@@ -32480,7 +32494,7 @@
   },
   {
     "name": "天津农学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "T",
     "sortKeyFull": "tianjinnongxueyuan",
     "aliases": [],
@@ -32760,7 +32774,7 @@
   },
   {
     "name": "天津中德应用技术大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "T",
     "sortKeyFull": "tianjinzhongdeyingyongjishudaxue",
     "aliases": [],
@@ -32914,7 +32928,7 @@
   },
   {
     "name": "同济大学 - 研究生",
-    "type": "jw_home",
+    "type": "tju",
     "sortKey": "T",
     "sortKeyFull": "tongjidaxueyanjiusheng",
     "aliases": [],
@@ -33096,7 +33110,7 @@
   },
   {
     "name": "皖南医学院",
-    "type": "jw_home",
+    "type": "login_xbellsoft",
     "sortKey": "W",
     "sortKeyFull": "wannanyixueyuan",
     "aliases": [],
@@ -33810,7 +33824,7 @@
   },
   {
     "name": "武汉学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "W",
     "sortKeyFull": "wuhanxueyuan",
     "aliases": [],
@@ -33824,7 +33838,7 @@
   },
   {
     "name": "武汉音乐学院",
-    "type": "qz",
+    "type": "qz_2024",
     "sortKey": "W",
     "sortKeyFull": "wuhanyinyuexueyuan",
     "aliases": [],
@@ -34104,7 +34118,7 @@
   },
   {
     "name": "武夷学院",
-    "type": "qz",
+    "type": "qz_2024",
     "sortKey": "W",
     "sortKeyFull": "wuyixueyuan",
     "aliases": [],
@@ -34230,7 +34244,7 @@
   },
   {
     "name": "厦门华厦学院",
-    "type": "qz",
+    "type": "qz_2024",
     "sortKey": "X",
     "sortKeyFull": "xiamenhuashaxueyuan",
     "aliases": [],
@@ -34426,7 +34440,7 @@
   },
   {
     "name": "香港城市大学",
-    "type": "jw_home",
+    "type": "cityu",
     "sortKey": "X",
     "sortKeyFull": "xianggangchengshidaxue",
     "aliases": [],
@@ -34440,7 +34454,7 @@
   },
   {
     "name": "香港城市大學",
-    "type": "jw_home",
+    "type": "cityu",
     "sortKey": "X",
     "sortKeyFull": "xianggangchengshidaxue",
     "aliases": [],
@@ -34524,7 +34538,7 @@
   },
   {
     "name": "西安工程大学",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "X",
     "sortKeyFull": "xiangongchengdaxue",
     "aliases": [],
@@ -34566,7 +34580,7 @@
   },
   {
     "name": "西安工业大学",
-    "type": "classic_eams",
+    "type": "xatu_shuwei",
     "sortKey": "X",
     "sortKeyFull": "xiangongyedaxue",
     "aliases": [],
@@ -34594,7 +34608,7 @@
   },
   {
     "name": "湘潭医卫职业技术学院",
-    "type": "jw_home",
+    "type": "aic",
     "sortKey": "X",
     "sortKeyFull": "xiangtanyiweizhiyejishuxueyuan",
     "aliases": [],
@@ -34664,7 +34678,7 @@
   },
   {
     "name": "西安航空学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "X",
     "sortKeyFull": "xianhangkongxueyuan",
     "aliases": [],
@@ -34734,7 +34748,7 @@
   },
   {
     "name": "西安交通大学 - 研究生",
-    "type": "jw_home",
+    "type": "xjtu_post",
     "sortKey": "X",
     "sortKeyFull": "xianjiaotongdaxueyanjiusheng",
     "aliases": [],
@@ -34874,7 +34888,7 @@
   },
   {
     "name": "仙桃职业学院",
-    "type": "kingo_new",
+    "type": "aic",
     "sortKey": "X",
     "sortKeyFull": "xiantaozhiyexueyuan",
     "aliases": [],
@@ -34930,7 +34944,7 @@
   },
   {
     "name": "西安外国语大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "X",
     "sortKeyFull": "xianwaiguoyudaxue",
     "aliases": [],
@@ -35098,7 +35112,7 @@
   },
   {
     "name": "西北工业大学",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "X",
     "sortKeyFull": "xibeigongyedaxue",
     "aliases": [],
@@ -35126,7 +35140,7 @@
   },
   {
     "name": "西北工业大学（浏览器登录）",
-    "type": "shuwei_json",
+    "type": "shuwei_new",
     "sortKey": "X",
     "sortKeyFull": "xibeigongyedaxueliulanqidenglu",
     "aliases": [],
@@ -35308,7 +35322,7 @@
   },
   {
     "name": "西南大学 - 研究生",
-    "type": "jw_home",
+    "type": "zju_post",
     "sortKey": "X",
     "sortKeyFull": "xinandaxueyanjiusheng",
     "aliases": [],
@@ -35322,7 +35336,7 @@
   },
   {
     "name": "西南科技大学",
-    "type": "jw_home",
+    "type": "swust",
     "sortKey": "X",
     "sortKeyFull": "xinankejidaxue",
     "aliases": [],
@@ -35378,7 +35392,7 @@
   },
   {
     "name": "西南医科大学",
-    "type": "qz",
+    "type": "qz_single_node",
     "sortKey": "X",
     "sortKeyFull": "xinanyikedaxue",
     "aliases": [],
@@ -35826,7 +35840,7 @@
   },
   {
     "name": "新疆医科大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "X",
     "sortKeyFull": "xinjiangyikedaxue",
     "aliases": [],
@@ -36008,7 +36022,7 @@
   },
   {
     "name": "信阳学院",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "X",
     "sortKeyFull": "xinyangxueyuan",
     "aliases": [],
@@ -36442,7 +36456,7 @@
   },
   {
     "name": "阳光学院",
-    "type": "jw_home",
+    "type": "ygu",
     "sortKey": "Y",
     "sortKeyFull": "yangguangxueyuan",
     "aliases": [],
@@ -37072,7 +37086,7 @@
   },
   {
     "name": "永州职业技术学院",
-    "type": "jw_home",
+    "type": "yzzy",
     "sortKey": "Y",
     "sortKeyFull": "yongzhouzhiyejishuxueyuan",
     "aliases": [],
@@ -37408,7 +37422,7 @@
   },
   {
     "name": "云南机电职业技术学院",
-    "type": "jw_home",
+    "type": "buaa",
     "sortKey": "Y",
     "sortKeyFull": "yunnanjidianzhiyejishuxueyuan",
     "aliases": [],
@@ -38472,7 +38486,7 @@
   },
   {
     "name": "浙江交通职业技术学院",
-    "type": "jw_home",
+    "type": "ztvtit",
     "sortKey": "Z",
     "sortKeyFull": "zhejiangjiaotongzhiyejishuxueyuan",
     "aliases": [],
@@ -38822,7 +38836,7 @@
   },
   {
     "name": "浙江邮电职业技术学院",
-    "type": "jw_home",
+    "type": "zptc",
     "sortKey": "Z",
     "sortKeyFull": "zhejiangyoudianzhiyejishuxueyuan",
     "aliases": [],
@@ -38976,7 +38990,7 @@
   },
   {
     "name": "郑州大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "Z",
     "sortKeyFull": "zhengzhoudaxue",
     "aliases": [],
@@ -39424,7 +39438,7 @@
   },
   {
     "name": "郑州信息科技职业学院",
-    "type": "classic_eams",
+    "type": "shuwei_m",
     "sortKey": "Z",
     "sortKeyFull": "zhengzhouxinxikejizhiyexueyuan",
     "aliases": [],
@@ -39732,7 +39746,7 @@
   },
   {
     "name": "中国人民警察大学",
-    "type": "jw_home",
+    "type": "cppu",
     "sortKey": "Z",
     "sortKeyFull": "zhongguorenminjingchadaxue",
     "aliases": [],
@@ -39872,7 +39886,7 @@
   },
   {
     "name": "中国政法大学",
-    "type": "shuwei_json",
+    "type": "xatu_shuwei",
     "sortKey": "Z",
     "sortKeyFull": "zhongguozhengfadaxue",
     "aliases": [],
@@ -39886,7 +39900,7 @@
   },
   {
     "name": "中国政法大学 - 研究生",
-    "type": "jw_home",
+    "type": "cupl_post",
     "sortKey": "Z",
     "sortKeyFull": "zhongguozhengfadaxueyanjiusheng",
     "aliases": [],

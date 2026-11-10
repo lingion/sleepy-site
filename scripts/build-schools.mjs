@@ -33,6 +33,13 @@ const grouped = inUseSchools.map(s => {
 const typeCount = new Set(grouped.map(s => s.type).filter(Boolean)).size;
 const configuredCount = statusCounts.supported + statusCounts.grad_supported;
 const unverifiedCount = statusCounts.unverified + statusCounts.grad_unverified;
+// Keep reviewed protocol names and give newly released machine identifiers a readable
+// ASCII label without requiring a manual website patch for every Android adapter.
+const labels = read('../src/data/types-en.json');
+for (const type of new Set(grouped.map(s => s.type).filter(Boolean))) {
+  labels[type] ??= type.replaceAll('_', ' ');
+}
+writeFileSync(new URL('../src/data/types-en.json', import.meta.url), JSON.stringify(labels, null, 2) + '\n');
 writeFileSync(new URL('../src/data/schools.grouped.json', import.meta.url), JSON.stringify(grouped, null, 2) + '\n');
 writeFileSync(new URL('../src/data/schools.snapshot.json', import.meta.url), JSON.stringify({ ...snapshot,
   rowCount: grouped.length, typeCount, configuredCount, unverifiedCount, statusCounts }, null, 2) + '\n');

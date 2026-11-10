@@ -1,8 +1,8 @@
 {
-  "ref": "v1.0.63",
-  "sourceSha": "b16aa84d11c250acdf644cd8b7812ab27d03dc6a",
+  "ref": "v1.0.64",
+  "sourceSha": "77b878fd5c8903a3f201ea938b3b152de4c4fbc0",
   "sourcePath": "app/src/main/assets/schools.json",
-  "releasedAt": "2026-11-01",
+  "releasedAt": "2026-11-09",
   "citySourcePath": "app/src/main/assets/school_cities.json",
   "provinceBySchool": {
     "三峡大学": "HB",
@@ -602,6 +602,7 @@
     "南通大学杏林学院": "JS",
     "南通师范高等专科学校": "JS",
     "南通理工学院": "JS",
+    "南通理工学院（2023届及之后）": "JS",
     "南通科技职业学院": "JS",
     "南通职业大学": "JS",
     "厦门东海职业技术学院": "FJ",
@@ -2657,15 +2658,14 @@
     "长春东方职业学院": "JL",
     "中南财经政法大学 - 研究生": "HB"
   },
-  "rowCount": 2880,
-  "typeCount": 48,
-  "configuredCount": 352,
-  "unverifiedCount": 2528,
-  "pendingCount": 1260,
+  "rowCount": 2881,
+  "typeCount": 116,
+  "configuredCount": 355,
+  "unverifiedCount": 2526,
   "statusCounts": {
-    "supported": 350,
+    "supported": 353,
     "grad_supported": 2,
-    "unverified": 2480,
+    "unverified": 2478,
     "grad_unverified": 48
   }
 }

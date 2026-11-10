@@ -4,6 +4,7 @@
 name: deploy
 
 on:
+  pull_request:
   push:
     branches: [main]
   schedule:
@@ -53,7 +54,14 @@ jobs:
           npm run build
           npm test
 
+      - name: Prevent an older build from replacing a newer release
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/verify-latest.mjs
+
       - name: Deploy gate (凭据未就位则明确失败,不静默跳过)
+        if: github.event_name != 'pull_request'
         env:
           CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -64,6 +72,7 @@ jobs:
           fi
 
       - name: Deploy to Cloudflare Pages (wrangler 锁 devDependency,禁全局最新版)
+        if: github.event_name != 'pull_request'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
