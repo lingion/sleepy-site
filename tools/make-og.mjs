@@ -4,7 +4,9 @@
 // 无运行期图像依赖(satori/sharp 已否——plan 裁决)。重跑幂等:同文案 = 同图。
 // 文案真源 = src/i18n/{zh,en}.ts 的 meta + 各页 heading/sub(与站点同步改版)。
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -74,15 +76,21 @@ function pageHtml(slug, lang) {
 
 mkdirSync(TMP, { recursive: true });
 mkdirSync(OUT, { recursive: true });
+const profile = mkdtempSync(join(tmpdir(), 'sleepy-og-chrome-'));
+try {
 for (const slug of Object.keys(PAGES)) {
   for (const lang of ['zh', 'en']) {
     const f = `${TMP}/${slug}-${lang}.html`;
     writeFileSync(f, pageHtml(slug, lang));
     execFileSync(CHROME, [
       '--headless=new', '--no-sandbox', '--disable-gpu', '--hide-scrollbars', '--default-background-color=00000000',
+      `--user-data-dir=${profile}`,
       `--screenshot=${OUT}/${slug}-${lang}.png`, '--window-size=1200,630', pathToFileURL(f).href,
     ], { stdio: ['ignore', 'ignore', 'pipe'], timeout: 30000 });
     console.log(`Rendered og/${slug}-${lang}.png`);
   }
 }
+} finally {
 rmSync(TMP, { recursive: true, force: true });
+rmSync(profile, { recursive: true, force: true });
+}
