@@ -1,0 +1,45 @@
+---
+import release from '../../data/release.json';
+import { renderReleaseNotes } from '../../lib/release-notes';
+interface Props { lang: 'zh' | 'en' }
+const { lang } = Astro.props;
+const t = lang === 'zh'
+  ? { heading: '更新说明', intro: '完整同步自 Sleepy 正式发布，包含英文和中文说明。', source: '查看 GitHub 发布', download: '下载这个版本' }
+  : { heading: 'Release notes', intro: 'The complete official Sleepy release notes, in English and Chinese.', source: 'View release on GitHub', download: 'Download this version' };
+const html = renderReleaseNotes(release.body);
+---
+<section class="site-section release-page" aria-labelledby="release-title" data-release-tag={release.tag}>
+  <div class="site-col">
+    <header class="release-page__header">
+      <h1 class="t-headline-large" id="release-title">{t.heading}</h1>
+      <p class="t-title-large tnum">Sleepy {release.tag}</p>
+      <time datetime={release.date}>{new Date(release.date).toISOString().slice(0, 10)} UTC</time>
+      <p class="t-body-large">{t.intro}</p>
+      <nav aria-label={t.heading}>
+        <a href={lang === 'zh' ? '/download/' : '/en/download/'}>{t.download}</a>
+        <a href={release.url}>{t.source}</a>
+      </nav>
+    </header>
+    <article class="release-prose" set:html={html} />
+  </div>
+</section>
+<style>
+  .release-page { padding-block: 64px 96px; }
+  .release-page__header { display: grid; gap: 16px; margin-block-end: 48px; }
+  .release-page__header time, .release-page__header p { color: var(--md-sys-color-on-surface-variant); }
+  .release-page__header nav { display: flex; flex-wrap: wrap; gap: 16px 32px; }
+  .release-page a, .release-prose :global(a) { color: var(--md-sys-color-primary); }
+  .release-prose { max-inline-size: 78ch; font: var(--md-sys-typescale-body-large); line-height: 1.75; overflow-wrap: anywhere; }
+  .release-prose :global(h2) { font: var(--md-sys-typescale-headline-medium); margin-block: 64px 24px; }
+  .release-prose :global(h3) { font: var(--md-sys-typescale-title-large); margin-block: 40px 20px; }
+  .release-prose :global(h4) { font: var(--md-sys-typescale-title-medium); margin-block: 32px 16px; }
+  .release-prose :global(p), .release-prose :global(ul), .release-prose :global(ol) { margin-block: 16px; }
+  .release-prose :global(li) { margin-block: 12px; }
+  .release-prose :global(ul), .release-prose :global(ol) { padding-inline-start: 24px; }
+  .release-prose :global(blockquote) { margin: 24px 0; padding-inline-start: 20px; border-inline-start: 3px solid var(--md-sys-color-primary); color: var(--md-sys-color-on-surface-variant); }
+  .release-prose :global(pre) { overflow: auto; padding: 20px; background: var(--md-sys-color-surface-container); border-radius: 12px; }
+  .release-prose :global(table) { display: block; overflow: auto; border-collapse: collapse; }
+  .release-prose :global(th), .release-prose :global(td) { padding: 12px; border: 1px solid var(--md-sys-color-outline-variant); }
+  .release-prose :global(img) { max-inline-size: 100%; block-size: auto; }
+  .release-prose :global([id]) { scroll-margin-top: 96px; }
+</style>

@@ -10,16 +10,6 @@ import { site, repoUrl } from '../i18n/ui';
 import { zh } from '../i18n/zh';
 import { en } from '../i18n/en';
 import release from '../data/release.json';
-import { getImage } from 'astro:assets';
-import heroShotLight from '../assets/screenshots/01-week-light.png';
-
-// LCP preload(T3/T5,spec §2.6-8):hero 前景图 = 01-week 周视图(C1 首图不变量)。
-// 参数必须与 Hero.astro 的 <Shot> 完全一致
-// (同 widths/sizes/width/height → 同 transform hash → preload 命中浏览器缓存,零重复请求)。
-// preloadHero 开关:仅两主页传 true;getImage 同条件化(非主页不产生构建期图像处理)。
-const HERO_WIDTHS = [420, 840];
-const HERO_SIZES = '(max-width: 840px) 88vw, 440px';
-
 interface Props {
   lang: 'zh' | 'en';
   title: string;
@@ -31,9 +21,7 @@ interface Props {
   /** 绝对 URL;缺省 = site + '/og/home-' + lang + '.png'(Task 8 OG 产出后各路由显式传) */
   ogImage?: string;
   ogImageAlt?: string;
-  /** 缺省 false;仅两主页传 true(spec §2.6-8:工具页/FAQ/404 禁背死 preload) */
-  preloadHero?: boolean;
-  /** 缺省 false;两主页显式 true —— AppBar CTA 缺省态分支的输入,与 preloadHero 独立(终审 I2) */
+  /** Homepages opt into the app-bar download visibility behavior. */
   hasHero?: boolean;
   /** 缺省不发;主页传 SoftwareApplication 对象(Task 8 接线) */
   jsonLd?: object;
@@ -43,12 +31,12 @@ interface Props {
   noindex?: boolean;
 }
 
-const { lang, title, description, path, mirror, ogImage, ogImageAlt, preloadHero, hasHero, jsonLd, rssLink, noindex } =
+const { lang, title, description, path, mirror, ogImage, ogImageAlt, hasHero, jsonLd, rssLink, noindex } =
   Astro.props;
 const copy = lang === 'zh' ? zh : en;
 const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
 const build = `${release.tag} · ${release.builtAt?.slice(0, 10) ?? ''}`;
-const ogImg = ogImage ?? `${site}/og/home-${lang}.png`;
+const ogImg = `${ogImage ?? `${site}/og/home-${lang}.png`}?v=${release.tag}`;
 // 站级实体图(SEO 极致批次 S3a):WebSite + Organization 铺全部可收录页,
 // 品牌搜索与知识面板的稳定锚;noindex 页(404)不发。页面级图经 jsonLd prop 另发。
 const siteGraph = {
@@ -75,15 +63,6 @@ const siteGraph = {
     },
   ],
 };
-const heroImg = preloadHero
-  ? await getImage({
-      src: heroShotLight,
-      widths: HERO_WIDTHS,
-      sizes: HERO_SIZES,
-      width: heroShotLight.width,
-      height: heroShotLight.height,
-    })
-  : null;
 ---
 
 <!doctype html>
@@ -132,19 +111,6 @@ const heroImg = preloadHero
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <meta name="theme-color" content="#0F0D15" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#FDF8FF" media="(prefers-color-scheme: light)" />
-
-    {/* LCP preload(T3):hero 前景图最早发现。imagesrcset+imagesizes 与 img 一致,
-        浏览器按 srcset 选档预载,命中同一 transform hash 的缓存条目,零重复下载。
-        preloadHero=false(工具页/FAQ/404)整块不产出——背着死 preload 违反 §0 基线(spec §2.6-8)。 */}
-    {heroImg && (
-      <link
-        rel="preload"
-        as="image"
-        href={heroImg.src}
-        imagesrcset={heroImg.srcSet.attribute}
-        imagesizes={HERO_SIZES}
-      />
-    )}
 
     {/* FOUC 守卫(spec §1):首帧前读 localStorage 定 data-theme,无首屏闪变。
         is:inline = 不打包不延迟,这是唯一允许的内联脚本。 */}

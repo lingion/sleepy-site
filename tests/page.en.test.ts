@@ -35,9 +35,9 @@ describe('/en/ hreflang 互指(spec §1)', () => {
 });
 
 describe('/en/ 结构镜像(v5 八段)', () => {
-  const ids = ['hero', 'views', 'released', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
+  const ids = ['hero', 'views', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
   const PROTO: Record<string, string> = {
-    hero: 'split', views: 'showcase', released: 'release-notes', connect: 'edit-split', schoolCard: 'entry-card',
+    hero: 'split', views: 'showcase', connect: 'edit-split', schoolCard: 'entry-card',
     reminders: 'pinned', gallery: 'full-bleed-band', trust: 'narration', download: 'tonal-band',
   };
   it('八段依序 + data-prototype 同 zh 页', () => {
@@ -50,15 +50,12 @@ describe('/en/ 结构镜像(v5 八段)', () => {
     expect(blobs.length).toBe(1);
     expect(blobs[0].getAttribute('data-blob')).toBe('0');
   });
-  it('C1 首图 = 01-week(与 zh 同构)', () => {
-    expect([...doc.querySelectorAll('img')][0].getAttribute('src')).toContain('01-week');
-  });
-  it('LCP:high=1 / low=1 / preload=1 且 preload href = 高优先图 src(T3)', () => {
-    expect(doc.querySelectorAll('img[fetchpriority="high"]').length).toBe(1);
-    expect(doc.querySelectorAll('img[fetchpriority="low"]').length).toBe(1);
-    const preload = doc.querySelector('head link[rel="preload"][as="image"]');
-    expect(preload).not.toBeNull();
-    expect(preload?.getAttribute('href')).toBe(doc.querySelector('img[fetchpriority="high"]')?.getAttribute('src'));
+  it('embeds the same interactive demo with English accessible copy', () => {
+    const frame = doc.querySelector('#hero iframe[data-timetable-demo]');
+    expect(frame?.getAttribute('title')).toBe(en.hero.demoTitle);
+    expect(frame?.getAttribute('src')).toContain('demo=1&embed=1');
+    expect(doc.querySelector('#hero img')).toBeNull();
+    expect(doc.querySelector('link[rel="preload"][as="image"]')).toBeNull();
   });
   it('AppBar 4 导航项(en 前缀绝对路径)+ data-appbar-cta', () => {
     for (const h of ['/en/#views', '/en/schools/', '/en/faq/', '/en/#reminders']) {

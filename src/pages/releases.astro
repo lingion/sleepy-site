@@ -1,0 +1,8 @@
+---
+import Base from '../layouts/Base.astro';
+import ReleaseNotes from '../components/pages/ReleaseNotes.astro';
+import release from '../data/release.json';
+---
+<Base lang="zh" title={`Sleepy ${release.tag} 更新说明`} description={`Sleepy ${release.tag} 的完整双语更新说明。`} path="/releases/" mirror="/en/releases/" ogImage="https://sleepy.is-my.app/og/releases-zh.png" rssLink="https://sleepy.is-my.app/rss.xml">
+  <ReleaseNotes lang="zh" />
+</Base>

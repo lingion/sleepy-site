@@ -83,6 +83,10 @@ const zhUI = lang === 'zh';
       <header class="faq__head">
         <h1 class="t-headline-large">{t.heading}</h1>
         <p class="t-body-medium faq__sub">{t.sub}</p>
+        <p class="t-body-medium faq__sub">
+          {lang === 'zh' ? '问答内容保留其核对日期，最新版本的完整变更请查看' : 'This FAQ retains its editorial review date. For current changes, see the'}
+          {' '}<a href={lang === 'zh' ? '/releases/' : '/en/releases/'}>{lang === 'zh' ? '更新说明' : 'release notes'}</a>{lang === 'zh' ? '。' : '.'}
+        </p>
       </header>
 
       {

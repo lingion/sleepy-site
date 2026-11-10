@@ -18,7 +18,7 @@ export async function GET(context) {
       {
         title: `Sleepy ${release.tag}`,
         pubDate: new Date(release.date),
-        link: `${site}/download/`,
+        link: `${site}/releases/`,
         description: [
           `Sleepy ${release.tag} · ${new Date(release.date).toISOString().slice(0, 10)} 发布。`,
           `通用 APK:${universal?.name ?? 'app-universal-release.apk'}。`,
