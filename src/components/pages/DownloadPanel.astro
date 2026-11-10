@@ -1,7 +1,8 @@
 ---
 import PageHeader from '../PageHeader.astro';
+import IosDownload from '../IosDownload.astro';
 import release from '../../data/release.json';
-import { repoUrl, sponsorUrl, onlineTrialUrl, iosTestFlightUrl, iosRepoUrl } from '../../i18n/ui';
+import { repoUrl, sponsorUrl, onlineTrialUrl, iosRepoUrl } from '../../i18n/ui';
 import { downloadUrl } from '../../lib/download-source';
 import type { DownloadSource } from '../../lib/download-source';
 import type { SiteCopy } from '../../i18n/zh';
@@ -10,7 +11,8 @@ interface Props { copy: SiteCopy['downloadPage']; lang: 'zh' | 'en' }
 const { copy: t, lang } = Astro.props;
 const en = lang === 'en';
 const source: DownloadSource = en ? 'github' : 'mirror';
-const dl = en ? (await import('../../i18n/en')).en.download : (await import('../../i18n/zh')).zh.download;
+const siteCopy = en ? (await import('../../i18n/en')).en : (await import('../../i18n/zh')).zh;
+const dl = siteCopy.download;
 const abiOf = (name: string) => name.replace(/^app-|-release\.apk$/g, '');
 const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 const universal = release.assets.find(asset => asset.name.includes('universal'))!;
@@ -22,7 +24,6 @@ const sources = [
 ];
 const statusMirror = en ? 'Files will download from gh.qdp.qzz.io.' : '当前通过 gh.qdp.qzz.io 下载安装包和校验文件。';
 const statusGithub = en ? 'Files will download from github.com.' : '当前通过 github.com 下载安装包和校验文件。';
-const badgeSrc = en ? '/badges/download-on-the-app-store-en.svg' : '/badges/download-on-the-app-store-zh.svg';
 ---
 
 <section class="download-page" data-download-panel data-default-source={source}>
@@ -69,9 +70,7 @@ const badgeSrc = en ? '/badges/download-on-the-app-store-en.svg' : '/badges/down
       <aside class="download-page__platforms" aria-label={en ? 'Other platforms' : '其他平台'}>
         <section class="download-platform" aria-labelledby="dl-ios">
           <h2 id="dl-ios" class="t-headline-small">iOS</h2>
-          <span class="download-platform__label t-label-large">TestFlight</span>
-          <p>{t.iosNote}</p>
-          <a class="apple-store-badge-link" href={iosTestFlightUrl} target="_blank" rel="noopener noreferrer" aria-label={t.iosBadgeAria}><img class="apple-store-badge" src={badgeSrc} alt={t.iosBadgeAlt} width={en ? 120 : 109} height="40" loading="lazy" decoding="async" /></a>
+          <IosDownload copy={siteCopy.iosDownload} lang={lang} />
           <a class="download-platform__source t-body-small" href={iosRepoUrl}>{en ? 'iOS source code' : 'iOS 源码'}</a>
         </section>
         <section class="download-platform" aria-labelledby="dl-web">
@@ -163,9 +162,6 @@ const badgeSrc = en ? '/badges/download-on-the-app-store-en.svg' : '/badges/down
   .download-page__platforms { display: grid; gap: 24px; min-inline-size: 0; }
   .download-platform { padding: clamp(20px, 4vw, 32px); background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-xl); display: grid; justify-items: start; gap: 16px; }
   .download-platform p { font: var(--md-sys-typescale-body-medium); line-height: 1.8; color: var(--md-sys-color-on-surface-variant); }
-  .download-platform__label { margin-block-start: -8px; color: var(--md-sys-color-primary); }
-  .apple-store-badge-link { display: inline-flex; align-items: center; min-block-size: 44px; border-radius: 8px; }
-  .apple-store-badge { display: block; block-size: 40px; inline-size: auto; }
   .download-platform__source { display: inline-flex; align-items: center; min-block-size: 44px; }
   .download-help { max-inline-size: 760px; margin-block: 64px 32px; }
   .download-help h2 { margin-block-end: 24px; }

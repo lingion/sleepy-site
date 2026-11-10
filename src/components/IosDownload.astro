@@ -1,0 +1,38 @@
+---
+import { iosAppStoreUrl, iosTestFlightUrl } from '../i18n/ui';
+import type { SiteCopy } from '../i18n/zh';
+
+interface Props { copy: SiteCopy['iosDownload']; lang: 'zh' | 'en' }
+const { copy: t, lang } = Astro.props;
+---
+
+<div class="ios-download" data-ios-download>
+  <div class="ios-download__actions">
+    <a class="apple-store-badge-link" href={iosAppStoreUrl} target="_blank" rel="noopener noreferrer" aria-label={t.storeAria}>
+      <img class="apple-store-badge" src={`/badges/download-on-the-app-store-${lang}.svg`} alt={t.storeAlt} width={lang === 'en' ? 120 : 109} height="40" loading="lazy" decoding="async" />
+    </a>
+    <a class="ios-download__testflight" href={iosTestFlightUrl} target="_blank" rel="noopener noreferrer" aria-label={t.testFlightAria}>
+      <img src="/badges/testflight.jpg" alt="" aria-hidden="true" width="28" height="28" loading="lazy" decoding="async" />
+      <span>{t.testFlightLabel}</span>
+    </a>
+  </div>
+  <p class="ios-download__note t-body-small">{t.note}</p>
+</div>
+
+<style>
+  .ios-download { display: grid; gap: 12px; min-inline-size: 0; }
+  .ios-download__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+  .ios-download a { touch-action: manipulation; text-decoration: none; }
+  .apple-store-badge-link { display: inline-flex; align-items: center; min-block-size: 48px; border-radius: 8px; }
+  .apple-store-badge { display: block; block-size: 40px; inline-size: auto; }
+  .ios-download__testflight { display: inline-flex; align-items: center; gap: 8px; min-block-size: 48px; padding: 8px 16px; border: 1px solid color-mix(in srgb, currentColor 40%, transparent); border-radius: var(--md-sys-shape-corner-full); color: inherit; font: var(--md-sys-typescale-label-large); }
+  .ios-download__testflight img { display: block; flex-shrink: 0; border-radius: 6px; }
+  .ios-download__note { max-inline-size: 60ch; line-height: 1.8; color: inherit; }
+  .ios-download a:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
+  .ios-download__testflight:active { background: color-mix(in srgb, currentColor 12%, transparent); }
+  .apple-store-badge-link:active { opacity: .8; }
+  @media (hover: hover) and (pointer: fine) {
+    .ios-download__testflight:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+    .apple-store-badge-link:hover { opacity: .88; }
+  }
+</style>

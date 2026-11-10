@@ -10,6 +10,13 @@ export const en: SiteCopy = {
     description: (rows: number) =>
       `${rows} universities and schools supported for direct timetable import. A local-first, open-source Android timetable.`,
   },
+  iosDownload: {
+    storeAlt: 'Download on the App Store',
+    storeAria: 'Download the Sleepy iOS release on the App Store',
+    testFlightLabel: 'Install with TestFlight',
+    testFlightAria: 'Install the Sleepy iOS beta with Apple TestFlight',
+    note: 'Available on the App Store outside mainland China. The mainland China release is still under review; install with TestFlight there.',
+  },
   hero: {
     slogan: 'Built open. Feels free.',
     sub: 'An open-source Android timetable with three views, course editing, academic import and home-screen widgets. Timetables are stored locally; online imports contact the selected service.',
@@ -120,10 +127,6 @@ export const en: SiteCopy = {
     storeBadgeCn: 'App Market',
     deviceCaption: 'Grid view app screenshot',
     trial: 'Try the web timetable without installation. Academic import, home-screen widgets and system reminders depend on each platform’s implementation.',
-    iosTitle: 'Download for iOS (TestFlight)',
-    iosNote: 'Currently the only official release channel. Join the public beta via Apple TestFlight.',
-    iosBadgeAlt: 'Download on the App Store',
-    iosBadgeAria: 'Download Sleepy for iOS on the App Store (TestFlight public beta)',
   },
   trust: {
     heading: 'Who makes this',
@@ -187,7 +190,7 @@ export const en: SiteCopy = {
   },
   downloadPage: {
     heading: 'Download Sleepy',
-    metaDescription: "Sleepy's download center: Android APK files from GitHub or the project mirror, SHA-256 checksums, installation steps, iOS TestFlight and the web app.",
+    metaDescription: "Sleepy's download center: Android APK files from GitHub or the project mirror, SHA-256 checksums, installation steps, iOS App Store and TestFlight downloads, and the web app.",
     versionLine: '{tag} · {minSdk} · released {date}',
     recommended: 'Recommended',
     universalNote: 'Choose universal when the device architecture is unknown.',
@@ -202,10 +205,6 @@ export const en: SiteCopy = {
     moreTitle: 'More',
     moreLinks: { releases: 'All past releases', repo: 'Source repository', sponsor: 'Sponsor the project', issues: 'Report issues' },
     storeReserved: 'Store listing in the works',
-    iosTitle: 'Download for iOS (TestFlight)',
-    iosNote: 'Join the public beta through Apple TestFlight to try Sleepy for iOS.',
-    iosBadgeAlt: 'Download on the App Store',
-    iosBadgeAria: 'Download Sleepy for iOS on the App Store (TestFlight public beta)',
   },
   faqPage: {
     heading: 'FAQ',
