@@ -152,6 +152,7 @@ export const zh = {
     navLabel: '区块导航',
   },
   footer: {
+    licenses: '开源许可与致谢',
     // app 用 'App'(纯拉丁):中文 '应用' 撞真实校名「广州应用科技学院」子串 = EN 泄漏闸红(§15)
     app: 'App',
     dl: '下载 Android',

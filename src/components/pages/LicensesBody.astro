@@ -1,0 +1,108 @@
+---
+import credits from '../../data/licenses.json';
+
+interface Props { lang: 'zh' | 'en' }
+const { lang } = Astro.props;
+const english = lang === 'en';
+const copy = english ? {
+  title: 'Open source licenses and acknowledgements',
+  intro: 'The people, projects and source materials behind Sleepy.',
+  license: 'License', contributors: 'Contributors', sources: 'Sources and references',
+  history: 'Earlier acknowledgements', schools: 'School projects',
+  notice: 'Original licenses and notices', full: 'Full earlier statement',
+  research: 'Research references do not imply code reuse or integration. Third party material retains its own license and attribution.',
+  unresolved: 'Earlier reviews also named these projects without identifying a unique repository:',
+  unverified: 'Historical link not confirmed at the recorded audit.',
+  download: 'Download the complete source inventory',
+} : {
+  title: '开源许可与致谢', intro: '感谢为 Sleepy 提供代码、素材和公开资料的作者与维护者。',
+  license: '许可证', contributors: '贡献者', sources: '来源与研究参考',
+  history: '历史致谢', schools: '按学校致谢', notice: '许可与声明原文',
+  full: '历史完整声明', research: '调研参考不表示复用源码或已经集成。第三方源码、素材和数据保留各自的许可与署名。',
+  unresolved: '原调研还记录了以下简称，但没有足够信息确定具体仓库：',
+  unverified: '记录的核对日期未确认此历史链接。',
+  download: '下载完整来源清单',
+};
+const locale = english ? 'values-en' : 'values';
+const legacy = credits.legacy.locales[locale];
+const labels = credits.labels[locale];
+---
+
+<article class="site-col credits">
+  <header>
+    <h1>{copy.title}</h1>
+    <p>{copy.intro}</p>
+    <nav aria-label={copy.title}>
+      <a href="#license">{copy.license}</a>
+      <a href="#contributors">{copy.contributors}</a>
+      <a href="#sources">{copy.sources}</a>
+      <a href="#history">{copy.history}</a>
+    </nav>
+  </header>
+  <section id="license" aria-labelledby="license-heading">
+    <h2 id="license-heading">{copy.license}</h2>
+    <p>{legacy.license_gpl_body}</p>
+    <p>{labels.notice}</p>
+    <h3>{copy.notice}</h3>
+    <ul>
+      <li><a href="/licenses/notices/Sleepy-GPL-3.0.txt">Sleepy GPL-3.0</a></li>
+      {credits.manifest.notices.map(notice => <li><a href={`/licenses/notices/${notice.path}`}>{notice.path}</a></li>)}
+    </ul>
+  </section>
+  <section id="contributors" aria-labelledby="contributors-heading">
+    <h2 id="contributors-heading">{copy.contributors}</h2>
+    <ul class="contributors">
+      {credits.legacy.contributors.map(entry => <li><a href={`https://github.com/${entry.id.slice('contributor-'.length)}`}>{entry.title}</a></li>)}
+    </ul>
+  </section>
+  <section id="sources" aria-labelledby="sources-heading">
+    <h2 id="sources-heading">{copy.sources}</h2>
+    <p>{copy.research}</p>
+    <p><a href="/licenses/inventory.json" download>{copy.download}</a></p>
+    {credits.manifest.groups.map((group, index) => <details open={index === 0}>
+      <summary>{labels.groups[index]}</summary>
+      <ul class="sources">
+        {credits.manifest.entries.filter(entry => entry.group === group).map(entry => <li>
+          <a href={entry.url}>{entry.project}</a>
+          <p>{entry.author} — {entry.license}</p>
+          <p>{entry.usage}</p>
+          {entry.verification.status === 'unverified' && <p>{copy.unverified}</p>}
+        </li>)}
+      </ul>
+    </details>)}
+    <p>{copy.unresolved} {credits.manifest.unresolved_names.join(', ')}{english ? '.' : '。'}</p>
+  </section>
+  <section id="history" aria-labelledby="history-heading">
+    <h2 id="history-heading">{copy.history}</h2>
+    {credits.legacy.foundational.map(entry => <details>
+      <summary>{entry.title}</summary>
+      <p>{entry.meta}</p><p class="preserve-lines">{entry.usage}</p>
+    </details>)}
+    <h3>{copy.schools}</h3>
+    {credits.legacy.schools.map(entry => <details>
+      <summary>{entry.title}</summary><p class="preserve-lines">{entry.usage}</p>
+    </details>)}
+    <details><summary>{copy.full}</summary><p class="preserve-lines">{legacy.about_license_body}</p>
+      {'additional_history' in legacy && <p class="preserve-lines">{legacy.additional_history}</p>}
+    </details>
+  </section>
+</article>
+
+<style>
+  .credits { padding-block: clamp(2rem, 6vw, 5rem); max-width: 58rem; overflow-wrap: anywhere; }
+  header, section { margin-block-end: 3rem; }
+  h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.3; font-weight: 600; }
+  h2 { margin-block: 0 1rem; }
+  h3 { margin-block-start: 1.5rem; }
+  p, li { line-height: 1.7; }
+  p { margin-block: .5rem; }
+  a { color: var(--md-sys-color-primary); text-underline-offset: .2em; }
+  nav, .contributors { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; }
+  .contributors { list-style: none; padding: 0; }
+  section { scroll-margin-top: 6rem; }
+  details { border-block-end: 1px solid var(--md-sys-color-outline-variant); padding-block: 1rem; }
+  summary { cursor: pointer; font-weight: 600; padding-block: .25rem; }
+  .sources { list-style: none; padding: 0; }
+  .sources li { margin-block: 1.5rem; }
+  .preserve-lines { white-space: pre-wrap; }
+</style>

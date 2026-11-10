@@ -1,5 +1,5 @@
 ---
-// footer — v5 spec §2.1 瘦身:五链 = 站内三链(/download /schools /faq)+ 开源仓库外链 + 语言 + build 行。
+// Footer links include downloads, schools, FAQ, licenses, the repository and language switching.
 // 原 App/Community 双列的外溢链接(releases/latest、在线体验、赞助、Issues、QQ 群)全部归位 /download/ 页(spec §2.4);
 // 站内链绝对路径形式随 lang 加前缀(多页化:任意页面点击恒指对应语言页)。
 // 文案走 copy.footer 键树(zh/en 同形,禁内联 ternary 硬编码——泄漏闸只 walk zh.ts);
@@ -33,6 +33,7 @@ const home = lang === 'zh' ? '/' : '/en/';
       <a href={`${home}schools/`}>{c.appbar.anchors.schools}</a>
       <a href={`${home}faq/`}>{t.faq}</a>
       <a href={`${home}releases/`}>{c.appbar.anchors.releases}</a>
+      <a href={`${home}licenses/`}>{t.licenses}</a>
       <a href={repoUrl}>{t.repo}</a>
       <a class="footer__lang" href={mirror}>{lang === 'zh' ? 'EN' : '中文'}</a>
     </nav>
