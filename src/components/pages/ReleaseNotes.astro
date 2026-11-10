@@ -16,6 +16,8 @@ const html = renderReleaseNotes(release.body);
       <time datetime={release.date}>{new Date(release.date).toISOString().slice(0, 10)} UTC</time>
       <p class="t-body-large">{t.intro}</p>
       <nav aria-label={t.heading}>
+        <a href="#release-english" lang="en">English</a>
+        {html.includes('id="release-chinese"') && <a href="#release-chinese" lang="zh-CN">中文</a>}
         <a href={lang === 'zh' ? '/download/' : '/en/download/'}>{t.download}</a>
         <a href={release.url}>{t.source}</a>
       </nav>

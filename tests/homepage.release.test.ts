@@ -17,7 +17,7 @@ describe('dedicated complete release notes', () => {
       const notes = page(`${prefix}releases/`);
       expect(notes.querySelector('[data-release-tag]')?.getAttribute('data-release-tag')).toBe(release.tag);
       const article = notes.querySelector('.release-prose')!;
-      const renderedIds = new Set([...article.querySelectorAll('[id]')].map(el => el.id));
+      const renderedIds = new Set([...article.querySelectorAll('a[id]')].map(el => el.id));
       const expectedIds = [...release.body.matchAll(/<a id="([^"]+)"/g)].map(match => match[1]);
       expect([...renderedIds].sort()).toEqual(expectedIds.sort());
       expect(article.textContent).toContain('Liquid Glass');
@@ -38,6 +38,6 @@ describe('dedicated complete release notes', () => {
     const html = renderReleaseNotes('<script>alert(1)</script><iframe src="https://bad.example"></iframe>\n<a id="evidence"></a>\n[bad](javascript:alert(1))\n# Heading');
     expect(html).not.toMatch(/<script|<iframe|javascript:/);
     expect(html).toContain('id="evidence"');
-    expect(html).toContain('<h2>Heading</h2>');
+    expect(html).toContain('<h2 id="release-english">Heading</h2>');
   });
 });
