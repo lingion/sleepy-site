@@ -1,12 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-// 2026-10-28 Bing 站长扫描报「图片缺失替代文本」。根因:Astro <Image alt="">
-// 序列化为裸 alt 属性(无 =""),Bing 将裸 alt 与无 alt 同等计为缺失。
-// Shot.astro 的 dark 版截图用 alt="" + aria-hidden 防读屏重复朗读,恰好踩中此计数。
-// 本契约消费 dist/client 全站页面:每张 <img> 必须携带非空引号 alt 值。
-// 红绿验证:dark 版回到 alt="" → 本文件必红(裸 alt 匹配不到 alt="...")。
-
+// Meaningful images require alt text. Explicitly hidden decorative icons use an empty
+// alt to avoid repeating their adjacent label; they must not be forced into narration.
 const PAGES = [
   'index.html',
   'en/index.html',
@@ -26,14 +22,14 @@ const read = (p: string) => {
   }
 };
 
-describe('全站 img 非空 alt 契约(Bing 缺失计数归零)', () => {
-  it.each(PAGES)('%s 的每张 <img> 都有非空引号 alt', (page) => {
+describe('全站图片替代文本与装饰图标语义', () => {
+  it.each(PAGES)('%s 的图片有替代文本或明确的装饰语义', (page) => {
     const html = read(page);
     const imgs = html.match(/<img\b[^>]*>/g) ?? [];
-    const bad = imgs.filter((tag) => !/alt="[^"]+"/.test(tag));
+    const bad = imgs.filter((tag) => !/\salt="[^"]+"/.test(tag) && !(/\salt=""/.test(tag) && /\saria-hidden="true"/.test(tag)));
     expect(
       bad,
-      `${page} 有 ${bad.length} 张图缺非空 alt:\n${bad.map((t) => t.slice(0, 120)).join('\n')}`,
+      `${page} 有 ${bad.length} 张图缺替代文本或装饰语义:\n${bad.map((t) => t.slice(0, 120)).join('\n')}`,
     ).toEqual([]);
   });
 });

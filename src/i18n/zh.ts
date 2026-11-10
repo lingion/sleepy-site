@@ -9,6 +9,13 @@ export const zh = {
     description: (rows: number) =>
       `收录 ${rows} 所学校教务直连。本地优先、源码公开的 Android 课表。`,
   },
+  iosDownload: {
+    storeAlt: '在 App Store 下载',
+    storeAria: '在 App Store 下载 Sleepy iOS 正式版',
+    testFlightLabel: '通过 TestFlight 安装',
+    testFlightAria: '通过 Apple TestFlight 安装 Sleepy iOS 公测版',
+    note: '中国大陆以外的 App Store 均已上线。中国大陆区仍在审核中，可通过 TestFlight 安装。',
+  },
   hero: {
     slogan: '构建无壳,自由自在',
     sub: '开源 Android 课表:三视图、课程编辑、教务导入与桌面组件。课表保存在本机,联网导入按所选服务发起请求。',
@@ -122,10 +129,6 @@ export const zh = {
     storeBadgeCn: '应用商店',
     deviceCaption: '网格视图应用截图',
     trial: '在线体验无需安装,用于预览网页版课表;教务导入、桌面组件与系统提醒等能力以各平台实现为准。',
-    iosTitle: 'iOS 版下载（TestFlight）',
-    iosNote: '目前唯一合法上线途径。通过 Apple 官方 TestFlight 参与公测。',
-    iosBadgeAlt: '在 App Store 下载',
-    iosBadgeAria: '在 App Store 下载 Sleepy iOS 版（TestFlight 公测）',
   },
   trust: {
     heading: '谁在做这个',
@@ -193,7 +196,7 @@ export const zh = {
   },
   downloadPage: {
     heading: '下载 Sleepy',
-    metaDescription: 'Sleepy 官方下载中心：支持项目镜像与 GitHub 原站下载 Android APK，提供 iOS 公测入口、文件校验与安装说明。',
+    metaDescription: 'Sleepy 官方下载中心：支持项目镜像与 GitHub 原站下载 Android APK，提供 iOS App Store 正式版与 TestFlight 公测入口、文件校验与安装说明。',
     versionLine: '{tag} · {minSdk} · {date} 发布',
     recommended: '推荐',
     universalNote: '不确定手机架构时选择 universal。',
@@ -208,10 +211,6 @@ export const zh = {
     moreTitle: '更多',
     moreLinks: { releases: '全部历史版本', repo: '源码仓库', sponsor: '赞助项目', issues: '反馈问题' },
     storeReserved: '商店上架准备中',
-    iosTitle: 'iOS 版下载（TestFlight）',
-    iosNote: '通过 Apple TestFlight 参与公测，体验 iOS 版 Sleepy。',
-    iosBadgeAlt: '在 App Store 下载',
-    iosBadgeAria: '在 App Store 下载 Sleepy iOS 版（TestFlight 公测）',
   },
   faqPage: {
     heading: '常见问答',

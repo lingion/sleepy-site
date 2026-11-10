@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { site } from '../src/i18n/ui';
+import { site, iosAppStoreUrl, iosTestFlightUrl } from '../src/i18n/ui';
 
 // GEO/分发面批次(2026-10-27):llms.txt 声称的机读源必须真实可达(线上实测
 // /faq.json 曾返回 404 假 200 —— 声称必有实物是信任基石,AI 抓取验证失败
@@ -38,6 +38,20 @@ describe('released product machine surface', () => {
     const txt = read('../public/llms.txt');
     for (const value of [product.tag, product.commit, product.publishedAt, product.reviewedAt, product.sourceUrl]) expect(txt).toContain(value);
     expect(txt).not.toMatch(/SOP|Co-Authored-By|lingion@hrbeu|sleepy\.is-my\.app.*password/i);
+  });
+  it('machine documents preserve distinct iOS channels and the mainland review status', () => {
+    for (const path of ['../public/llms.txt', '../dist/client/llms.txt']) {
+      const txt = read(path);
+      expect(txt).toContain(iosAppStoreUrl);
+      expect(txt).toContain(iosTestFlightUrl);
+      expect(txt).toContain('outside mainland China');
+      expect(txt).toContain('still under review');
+    }
+    const faq = JSON.parse(read('../dist/client/faq.json'));
+    expect(faq.updatedAt).toBe('2026-11-10');
+    const platform = faq.sections.flatMap((section: any) => section.items).find((item: any) => item.id === 'sec-2-q-4');
+    expect(JSON.stringify(platform.a)).toContain(iosAppStoreUrl);
+    expect(JSON.stringify(platform.a)).toContain(iosTestFlightUrl);
   });
   it('OG generator derives release and status counts rather than old constants', () => {
     const generator = read('../tools/make-og.mjs');

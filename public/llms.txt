@@ -24,6 +24,10 @@ Sleepy is an independent, GPL-3.0, local-first university timetable app maintain
 - https://sleepy.is-my.app/faq/ and /en/faq/: reviewed bilingual FAQ, with its separate editorial date. New release behavior is documented in the release notes. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
 - Web trial: https://sleepy.is-my.app/preview
 - Android source: https://github.com/lingion/sleepy. Project index: https://github.com/lingion/sleepy/blob/main/llms.txt.
-- iOS source: https://github.com/lingion/sleepy-ios. Public beta: https://testflight.apple.com/join/SxymmDzf.
+- iOS source: https://github.com/lingion/sleepy-ios. App Store release: https://apps.apple.com/app/id6827001840, available outside mainland China. The mainland China release is still under review; use TestFlight there: https://testflight.apple.com/join/SxymmDzf. Store and beta versions are independent; GitHub is the source repository, not an iOS update channel.
+- App Store and TestFlight availability was reviewed on 2026-11-10, separately from the Android release snapshot.
+- Android download source: choose the project mirror (https://gh.qdp.qzz.io) or original GitHub files on https://sleepy.is-my.app/download/. Both provide the same release files; verify with the published SHA-256 manifest.
+- Open-source licenses and credits: https://sleepy.is-my.app/licenses/ and /en/licenses/.
+- Privacy policy: https://sleepy.is-my.app/privacy/ and /en/privacy/.
 
 No Sleepy account is required. Academic import may need school credentials. Local storage does not mean every feature operates without a network. Refer to the released source and complete notes for version-specific behavior.

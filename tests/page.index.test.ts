@@ -397,16 +397,7 @@ describe('M8 下载单出口 + CTA 纪律(spec §2.2 / §10 行 5-6)', () => {
     expect(link).not.toBeNull();
     expect(link!.textContent).toContain('其他架构与校验');
   });
-  it('iOS TestFlight 官方公测在 #download 段 + 官方 Apple Badge 规范', () => {
-    const a = doc.querySelector('#download a[href="https://testflight.apple.com/join/SxymmDzf"]');
-    expect(a, '主页 TestFlight 链接存在').not.toBeNull();
-    expect(a?.getAttribute('target')).toBe('_blank');
-    const img = a?.querySelector('img');
-    expect(img?.getAttribute('src')).toBe('/badges/download-on-the-app-store-zh.svg');
-    expect(img?.getAttribute('alt')).toBe(zh.download.iosBadgeAlt);
-    expect(img?.getAttribute('height')).toBe('40');
-    expect(doc.getElementById('download')?.textContent).toContain('目前唯一合法上线途径');
-  });
+
   it('下载入口保持 Elevated 层级(§10 行 6)', () => {
     expect(doc.querySelector('#download .site-button--elevated')).not.toBeNull();
     expect(doc.querySelector('#download.download--tonal')).not.toBeNull();
