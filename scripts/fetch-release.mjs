@@ -1,5 +1,5 @@
 // Release 资产拉取 — spec §4.2 防腐烂执行体
-// Default to the reviewed product tag; --tag latest is an explicit refresh choice.
+// Resolve the latest stable release by default; explicit tags are for local inspection.
 // 失败分级(spec §5): releases 腐烂不可装绿 → 拉取失败 exit 1;
 //   唯一例外 = 显式 --offline(本地开发用,读仓内快照 + 打 BUILD_META 警告;CI 禁用此旗标)。
 // 烘入 BUILD_TIME: 每次成功拉取/离线快照都写 builtAt,footer meta 展示(tag+time 可见腐烂信号)。
@@ -8,8 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 
 const OUT = fileURLToPath(new URL('../src/data/release.json', import.meta.url));
-const PRODUCT = JSON.parse(readFileSync(new URL('../src/data/product-release.json', import.meta.url), 'utf8'));
-export function releaseApiUrl(tag = PRODUCT.tag) {
+export function releaseApiUrl(tag = 'latest') {
   if (tag !== 'latest' && !/^v\d+\.\d+\.\d+$/.test(tag)) throw new Error(`Invalid release tag: ${tag}`);
   return `https://api.github.com/repos/lingion/sleepy/releases/${tag === 'latest' ? 'latest' : `tags/${tag}`}`;
 }
@@ -18,11 +17,12 @@ const ABI = ['app-arm64-v8a-release.apk', 'app-armeabi-v7a-release.apk', 'app-x8
 export function validate(rel) {
   const errs = [];
   if (!rel.tag || !/^v\d+\.\d+\.\d+$/.test(rel.tag)) errs.push(`tag 异常: ${rel.tag}`);
+  if (!rel.date || !Number.isFinite(Date.parse(rel.date))) errs.push('Release publication date missing');
   if (!Array.isArray(rel.assets) || rel.assets.length !== 4) errs.push(`资产应为 4 ABI,实得 ${rel.assets?.length}`);
   else {
     for (const a of rel.assets) {
       if (!ABI.includes(a.name)) errs.push(`未知资产名: ${a.name}`);
-      if (!/^https/.test(a.url)) errs.push(`资产 url 非绝对: ${a.name}`);
+      if (!/^https:\/\//.test(a.url)) errs.push(`资产 url 非绝对: ${a.name}`);
       if (typeof a.size !== 'number' || a.size <= 0) errs.push(`资产 size 异常: ${a.name}`);
     }
     const missing = ABI.filter((n) => !rel.assets.some((a) => a.name === n));
@@ -41,9 +41,13 @@ export function releaseFromApi(json) {
   return {
     tag: json.tag_name ?? json.tagName,
     date: json.published_at ?? json.publishedAt ?? json.created_at ?? json.createdAt,
+    id: json.id,
+    url: json.html_url ?? json.url,
+    name: json.name ?? json.tag_name ?? json.tagName,
+    body: json.body ?? '',
     assets: assets
       .filter((a) => ABI.includes(a.name))
-      .map((a) => ({ name: a.name, url: dl(a), size: a.size,
+      .map((a) => ({ name: a.name, url: dl(a), size: a.size, ...(a.id ? { id: a.id } : {}),
         ...(/^sha256:[0-9a-f]{64}$/.test(a.digest ?? '') ? { sha256: a.digest.slice(7) } : {}) })),
     sha256sumsUrl: sums ? dl(sums) : null,
     builtAt: new Date().toISOString(),
@@ -53,7 +57,7 @@ export function releaseFromApi(json) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const offline = process.argv.includes('--offline');
   const tagIndex = process.argv.indexOf('--tag');
-  const selectedTag = tagIndex >= 0 ? process.argv[tagIndex + 1] : PRODUCT.tag;
+  const selectedTag = tagIndex >= 0 ? process.argv[tagIndex + 1] : 'latest';
   const apiUrl = releaseApiUrl(selectedTag);
   let rel;
   if (offline) {
@@ -83,7 +87,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         process.exit(1);
       }
     }
+    if (rawJson.draft || rawJson.prerelease) throw new Error('Only published stable releases may update production');
     rel = releaseFromApi(rawJson);
+    if (!rel.body.trim()) throw new Error('Release notes are required');
+    const commit = JSON.parse(execFileSync('gh', ['api', `repos/lingion/sleepy/commits/${rel.tag}`], {
+      encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], timeout: 60000,
+    }));
+    if (!/^[0-9a-f]{40}$/.test(commit.sha)) throw new Error('Invalid release source SHA');
+    rel.sourceSha = commit.sha;
   }
   const errs = validate(rel);
   if (errs.length) {

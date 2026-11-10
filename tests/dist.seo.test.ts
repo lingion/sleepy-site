@@ -89,6 +89,7 @@ const ROUTES: { slug: string; file: string; zh: string; en: string }[] = [
   { slug: 'home', file: '', zh: '/', en: '/en/' },
   { slug: 'schools', file: 'schools/', zh: '/schools/', en: '/en/schools/' },
   { slug: 'download', file: 'download/', zh: '/download/', en: '/en/download/' },
+  { slug: 'releases', file: 'releases/', zh: '/releases/', en: '/en/releases/' },
   { slug: 'faq', file: 'faq/', zh: '/faq/', en: '/en/faq/' },
 ]
 
@@ -117,7 +118,7 @@ describe('OG 分享图(spec §2.6-1:8 枚存在 + 各页绝对 URL 指本页对�
       })
       it(`${r.slug} ${lang} og:image / twitter:image = 绝对 URL 指本页图`, () => {
         const head = routeDoc(r.file, lang).querySelector('head')!
-        const expectOg = `${site}/og/${r.slug}-${lang}.png`
+        const expectOg = `${site}/og/${r.slug}-${lang}.png?v=${release.tag}`
         expect(head.querySelector('meta[property="og:image"]')!.getAttribute('content')).toBe(expectOg)
         expect(head.querySelector('meta[name="twitter:image"]')!.getAttribute('content')).toBe(expectOg)
       })
@@ -162,7 +163,7 @@ describe('robots + RSS(spec §2.6-4/6)', () => {
     const dom = new JSDOM(xml, { contentType: 'text/xml' })
     const items = [...dom.window.document.querySelectorAll('item')]
     expect(items.length).toBeGreaterThanOrEqual(1)
-    expect(items[0].querySelector('link')!.textContent).toContain('/download/')
+    expect(items[0].querySelector('link')!.textContent).toContain('/releases/')
     expect(items[0].querySelector('title')!.textContent).toContain(release.tag)
     expect(items[0].querySelector('pubDate')!.textContent).toBeTruthy()
   })
@@ -176,7 +177,7 @@ describe('sitemap i18n(spec §2.6-5:恰 8 路由 + 双语 alternate + 零 404)',
   const dom = new JSDOM(xml, { contentType: 'text/xml' })
   it('恰 8 <loc> 且全路由齐,404 绝迹', () => {
     const locs = [...dom.window.document.querySelectorAll('url > loc')].map((n) => n.textContent)
-    expect(locs.length).toBe(8)
+    expect(locs.length).toBe(ROUTES.length * 2)
     const all = [...ROUTES].flatMap((r) => [r.zh, r.en])
     for (const p of all) expect(locs, p).toContain(site + p)
     expect(xml).not.toContain('404')

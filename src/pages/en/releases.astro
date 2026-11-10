@@ -1,0 +1,8 @@
+---
+import Base from '../../layouts/Base.astro';
+import ReleaseNotes from '../../components/pages/ReleaseNotes.astro';
+import release from '../../data/release.json';
+---
+<Base lang="en" title={`Sleepy ${release.tag} release notes`} description={`Complete English and Chinese release notes for Sleepy ${release.tag}.`} path="/en/releases/" mirror="/releases/" ogImage="https://sleepy.is-my.app/og/releases-en.png" rssLink="https://sleepy.is-my.app/rss.xml">
+  <ReleaseNotes lang="en" />
+</Base>

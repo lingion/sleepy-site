@@ -5,10 +5,10 @@ import { execFileSync } from 'node:child_process';
 import { buildGeoIndex, classifyProvince } from '../src/lib/geo.ts';
 
 const snapshotUrl = new URL('../src/data/schools.snapshot.json', import.meta.url);
-const previous = JSON.parse(readFileSync(snapshotUrl, 'utf8'));
+const release = JSON.parse(readFileSync(new URL('../src/data/release.json', import.meta.url), 'utf8'));
 const args = process.argv.slice(2);
 if (args.length && (args.length !== 2 || args[0] !== '--ref')) throw new Error('Usage: fetch-schools.mjs [--ref <release-tag>]');
-const ref = args[1] ?? previous.ref;
+const ref = args[1] ?? release.tag;
 if (!/^v\d+\.\d+\.\d+$/.test(ref ?? '')) throw new Error('A release tag is required');
 
 async function getApi(path) {
@@ -45,7 +45,8 @@ async function readSource(path, sourceSha) {
 }
 
 try {
-  const commit = await getApi(`commits/${encodeURIComponent(ref)}`);
+  const commit = ref === release.tag && release.sourceSha
+    ? { sha: release.sourceSha } : await getApi(`commits/${encodeURIComponent(ref)}`);
   const sourceSha = commit.sha;
   if (!/^[0-9a-f]{40}$/.test(sourceSha)) throw new Error('Invalid source commit SHA');
   const sourcePath = 'app/src/main/assets/schools.json';
@@ -62,8 +63,8 @@ try {
     const codes = values.map(city => classifyProvince(city, idx)?.code);
     if (codes.length && codes.every(code => code && code === codes[0])) provinceBySchool[name] = codes[0];
   }
-  const release = await getApi(`releases/tags/${encodeURIComponent(ref)}`);
-  const releasedAt = release.published_at?.slice(0, 10);
+  const publication = ref === release.tag ? release : await getApi(`releases/tags/${encodeURIComponent(ref)}`);
+  const releasedAt = (publication.date ?? publication.published_at)?.slice(0, 10);
   if (!releasedAt) throw new Error('Release publication date missing');
   // Validate every input before replacing either tracked snapshot. Keep all statuses.
   writeFileSync(new URL('../fixtures/schools.json', import.meta.url), JSON.stringify(schools, null, 2) + '\n');

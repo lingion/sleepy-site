@@ -23,7 +23,11 @@ npm run data         # 教务数据管线(release 快照 + schools 分组)
 
 ## 部署
 
-构建与部署走 GitHub Actions(`.github/workflows/deploy.yml`)：push main 自动发布到 Cloudflare Pages。nightly 刷新产品基线指定版本的 release 元数据，并从已审查的学校与 FAQ 快照重新生成页面；不会自动吸收 Android main 的未发布功能。学校与 FAQ 更新需要显式刷新、翻译和审查。仓库需配置 secrets:`CLOUDFLARE_API_TOKEN`(Pages Edit 权限)与 `CLOUDFLARE_ACCOUNT_ID`。站点域名写在 `astro.config.mjs` 的 `site` 与 `src/i18n/ui.ts` 的 canonical 两处,换域同改。
+构建与部署走 GitHub Actions（`.github/workflows/deploy.yml`）。Sleepy 主仓库正式 Release 完成后发送 `upstream-release` 跨仓库事件，立即排队重建；push main、手动执行与 nightly 负责日常改版和补偿刷新。`npm run data` 仅解析一次最新正式 Release，再以其不可变源码 SHA 更新学校目录。版本信息、四份 APK 链接和 SHA-256、完整双语说明、RSS、`release.json`、`llms.txt` 与所有分享图在同一构建中生成、验证和部署，构建失败时线上保持上一份完整部署。部署前再次核对上游 Release，阻止旧构建覆盖新版本。FAQ 保留自己的人工核对日期，不自动冒充新版文档。
+
+完整更新说明位于 `/releases/` 和 `/en/releases/`，不放在首页。首页主视觉是 `/preview/?demo=1&embed=1` 的 sleepy-web 演示，使用独立数据库与设置空间，可切周和操作示例课程；完整网页版入口仍为 `/preview`。
+
+主仓库工作流 `.github/workflows/sync-sleepy-site.yml` 同时监听正式 Release 工作流成功结束及手动发布、编辑事件。这样由 GITHUB_TOKEN 创建的 Release 也能触发同步。主仓库需要 `SLEEPY_SITE_DISPATCH_TOKEN`（可调用 `lingion/sleepy-site` repository dispatch）；本站需要 `CLOUDFLARE_API_TOKEN` 和 `CLOUDFLARE_ACCOUNT_ID`。部署使用现有 sleepy-site Pages 项目。
 
 ## 目录
 

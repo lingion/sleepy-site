@@ -5,7 +5,6 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/sections/Hero.astro';
 import Views from '../components/sections/Views.astro';
-import ReleasedFeatures from '../components/sections/ReleasedFeatures.astro';
 import Connect from '../components/sections/Connect.astro';
 import SchoolsCard from '../components/sections/SchoolsCard.astro';
 import Reminders from '../components/sections/Reminders.astro';
@@ -28,14 +27,12 @@ const jsonLd = softwareApplicationJsonLd('zh');
   description={zh.meta.description(rowCount)}
   path="/"
   mirror="/en/"
-  preloadHero
   hasHero
   jsonLd={jsonLd}
   rssLink={`${site}/rss.xml`}
 >
   <Hero />
   <Views />
-  <ReleasedFeatures />
   <Connect />
   <SchoolsCard />
   <Reminders />

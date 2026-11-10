@@ -25,7 +25,6 @@ const PROTOTYPE: Record<string, string> = {
   hero: 'split',
   views: 'showcase',
   connect: 'edit-split',
-  released: 'release-notes',
   schoolCard: 'entry-card',
   reminders: 'pinned',
   gallery: 'full-bleed-band',
@@ -34,7 +33,7 @@ const PROTOTYPE: Record<string, string> = {
 };
 
 describe('homepage section order including released capabilities', () => {
-  const ids = ['hero', 'views', 'released', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
+  const ids = ['hero', 'views', 'connect', 'schoolCard', 'reminders', 'gallery', 'trust', 'download'];
   it('main 直系 section = 八段依序,各带 data-prototype', () => {
     const secs = [...doc.querySelectorAll('main > section')];
     expect(secs.map((s) => s.id)).toEqual(ids);
@@ -55,19 +54,6 @@ describe('homepage section order including released capabilities', () => {
   });
 });
 
-describe('released capability copy stays visible in both languages', () => {
-  it('each homepage renders all release topics in the declared order', () => {
-    const enDoc = new JSDOM(readFileSync(new URL('../dist/client/en/index.html', import.meta.url), 'utf8')).window.document;
-    for (const page of [doc, enDoc]) {
-      const topics = [...page.querySelectorAll('#released [data-release-topic]')];
-      expect(topics.map(el => el.getAttribute('data-release-topic'))).toEqual(['editing', 'appearance', 'exchange', 'widgets', 'privacy', 'console']);
-      for (const item of topics) expect(item.querySelector('dd')?.textContent?.length).toBeGreaterThan(30);
-      const content = page.querySelector('#released')?.textContent ?? '';
-      for (const term of ['500', 'Material 3 Expressive', 'sleepy-v1', 'Android 12', 'Android 13', 'OriginOS']) expect(content).toContain(term);
-    }
-  });
-});
-
 describe('blob 3→1(spec §13 R1)', () => {
   it('[data-blob] 恰一 = data-blob="0" 且在 #hero', () => {
     const blobs = [...doc.querySelectorAll('[data-blob]')];
@@ -77,30 +63,25 @@ describe('blob 3→1(spec §13 R1)', () => {
   });
 });
 
-describe('C1 首图不变量 + LCP 链路(spec §3 C1 / §6 LCP / T3)', () => {
-  it('文档序第一张 img 的 src 含 01-week', () => {
-    const first = [...doc.querySelectorAll('img')][0];
-    expect(first).toBeDefined();
-    expect(first.getAttribute('src')).toContain('01-week');
+describe('homepage interactive timetable replaces the first screenshot', () => {
+  it('loads exactly one titled demo in the hero, before the other product sections', () => {
+    const frame = doc.querySelector('#hero iframe[data-timetable-demo]');
+    expect(frame).not.toBeNull();
+    expect(doc.querySelectorAll('iframe').length).toBe(1);
+    const url = new URL(frame!.getAttribute('src')!);
+    expect(url.pathname).toBe('/preview/');
+    expect(url.searchParams.get('demo')).toBe('1');
+    expect(url.searchParams.get('embed')).toBe('1');
+    expect(frame!.getAttribute('title')).toBe(zh.hero.demoTitle);
+    expect(frame!.getAttribute('loading')).toBe('eager');
+    expect(doc.querySelector('#hero img')).toBeNull();
+    expect(doc.querySelector('link[rel="preload"][as="image"]')).toBeNull();
   });
-  it('全站恰一 img[fetchpriority="high"](仅 hero 前景 light 版)', () => {
-    expect(doc.querySelectorAll('img[fetchpriority="high"]').length).toBe(1);
-    expect(doc.querySelectorAll('img[fetchpriority="low"]').length).toBe(1);
-  });
-  it('hero 高优先图 = 01-week + eager + srcset + 固有尺寸占位', () => {
-    const high = doc.querySelector('img[fetchpriority="high"]')!;
-    expect(high.getAttribute('src')).toContain('01-week');
-    expect(high.getAttribute('loading')).toBe('eager');
-    expect(high.getAttribute('srcset'), 'srcset 非空').toBeTruthy();
-    expect(Number(high.getAttribute('width'))).toBeGreaterThan(0);
-    expect(Number(high.getAttribute('height'))).toBeGreaterThan(0);
-  });
-  it('head 预载 hero 最优档,且 preload href/srcset 与高优先图同 hash(T3:preload 必命中)', () => {
-    const preload = doc.querySelector('head link[rel="preload"][as="image"]')!;
-    expect(preload).toBeTruthy();
-    const high = doc.querySelector('img[fetchpriority="high"]')!;
-    expect(preload.getAttribute('href')).toBe(high.getAttribute('src'));
-    expect(preload.getAttribute('imagesrcset')).toBe(high.getAttribute('srcset'));
+  it('provides a new-tab alternative without allowing embedded top navigation', () => {
+    const link = doc.querySelector('.hero__demo-caption a');
+    expect(link?.getAttribute('href')).toContain('?demo=1');
+    expect(link?.getAttribute('target')).toBe('_blank');
+    expect(doc.querySelector('#hero iframe')?.getAttribute('sandbox')).not.toContain('allow-top-navigation');
   });
 });
 
@@ -166,15 +147,15 @@ describe('AppBar 锚点 + 常驻钮(spec §2.1 v5 跨页导航)', () => {
     expect(panel?.hasAttribute('hidden'), '面板缺省 hidden').toBe(true);
     // 链接 = 锚点组同源 href 不变量(4 导航项 + 下载),禁两套 URL 漂移
     const hrefs = [...panel!.querySelectorAll('a')].map((a) => a.getAttribute('href'));
-    expect(hrefs).toEqual(['/#views', '/schools/', '/faq/', '/#reminders', '/download/']);
+    expect(hrefs).toEqual(['/#views', '/schools/', '/faq/', '/#reminders', '/releases/', '/download/']);
     // 源码锁:≤840px 媒体查询内钮接管显示(删了 CSS 显示规则 → 钮恒 display:none → 此锁红)
     const src = readFileSync(new URL('../src/components/AppBar.astro', import.meta.url), 'utf8');
-    const mq = src.match(/@media\s*\(max-width:\s*840px\)\s*\{[\s\S]*?\n\s*\}/)?.[0] ?? '';
+    const mq = src.match(/@media\s*\(max-width:\s*1000px\)\s*\{[\s\S]*?\n\s*\}/)?.[0] ?? '';
     expect(mq, '≤840px 媒体查询存在').not.toBe('');
     expect(mq).toMatch(/\.appbar__menu\s*\{\s*display:\s*inline-flex/);
     // disclosure 脚本三收合面:链接点击 / Escape / 升档回桌面(matchMedia change)
     expect(src).toMatch(/key\s*===\s*['"]Escape['"]/);
-    expect(src).toMatch(/min-width:\s*841px/);
+    expect(src).toMatch(/min-width:\s*1001px/);
     expect(src).toMatch(/closest\(['"]a['"]\)/);
     // aria-label 随开合切换(打开 ⇄ 关闭),双语 prop 化
     expect(src).toMatch(/data-label-open/);
@@ -439,15 +420,9 @@ describe('a11y/SEO 基线(保留项)', () => {
 });
 
 describe('Task 10 mobile 剖面缺陷锁(Lighthouse home/schools 复测归零项)', () => {
-  it('hero 图盒比例钉 img 本体(移动 CLS 0.41→0):aspect-ratio + 零 100% 高 + 零 display(块级化归 Shot)', () => {
-    const src = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
-    const rule = src.match(/:global\(#hero \.hero__device img\)\s*\{([^}]*)\}/s)?.[1] ?? '';
-    expect(rule, 'img 规则存在').not.toBe('');
-    expect(rule).toContain('aspect-ratio: 1080 / 2048');
-    expect(rule).toContain('block-size: auto');
-    expect(rule).not.toContain('block-size: 100%');
-    // 2026-10-25 双显事故:display 声明曾在此(1,1,1)压过 Shot 主题规则;块级化已迁 Shot
-    expect(rule).not.toMatch(/display\s*:/);
+  it('reserves the live demo height before its app loads', () => {
+    const source = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
+    expect(source).toContain('block-size: clamp(580px, 72vh, 760px)');
   });
   it('pane lead = on-surface 不降级 variant(dim 叠色对比闸:三占二恒 ×.55)', () => {
     const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');

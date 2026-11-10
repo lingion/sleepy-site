@@ -20,7 +20,7 @@ describe('validate 防腐烂闸(spec §4.2)', () => {
   });
   it('仓内快照 release.json 本身必须通过校验(快照腐烂 = 测试红)', () => {
     expect(validate(snapshot)).toEqual([]);
-    expect(snapshot.tag).toBe('v1.0.63');
+    expect(snapshot.tag).toMatch(/^v\d+\.\d+\.\d+$/);
     expect(snapshot.assets.map((a) => a.name).sort()).toEqual(
       ['app-arm64-v8a-release.apk', 'app-armeabi-v7a-release.apk', 'app-universal-release.apk', 'app-x86_64-release.apk'].sort(),
     );
@@ -28,8 +28,8 @@ describe('validate 防腐烂闸(spec §4.2)', () => {
 });
 
 describe('release source selection', () => {
-  it('pins the default product version but supports explicit latest refresh', () => {
-    expect(releaseApiUrl()).toBe('https://api.github.com/repos/lingion/sleepy/releases/tags/v1.0.63');
+  it('defaults to latest and accepts an explicit stable tag', () => {
+    expect(releaseApiUrl()).toBe('https://api.github.com/repos/lingion/sleepy/releases/latest');
     expect(releaseApiUrl('latest')).toBe('https://api.github.com/repos/lingion/sleepy/releases/latest');
     expect(releaseApiUrl('v1.0.64')).toContain('/tags/v1.0.64');
     expect(() => releaseApiUrl('../main')).toThrow();

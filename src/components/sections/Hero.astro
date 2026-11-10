@@ -1,14 +1,8 @@
 ---
-// M1 Hero(v4 spec §4/§5.1/§6-1~3):非对称 split 55/45 · display-large 400 字重 · Filled XL + Text 双 CTA
-// C1:右列 = 01-week 周视图完整图(文档序第一张 img);屏幕本体无设备框,裁后自然比例 contain,
-//     容器 aspect-ratio 钉死防 CLS,直绘零动效(LCP)。R2 批准:≤840px 整图下置首屏外(DOM 末位)。
-// ribbon 不对称:派生大数字 display-small + tabular-nums 领头,两事实跟随(§15:直连条数与 M4 同源派生)。
-// blob 全站唯一一处(§13 R1):仅此 variant 0。
+// Layout invariant: copy comes first; the live timetable occupies the original main visual.
+// Mobile stacks the same order without changing the existing page sections.
 import Blob from '../Blob.astro';
-import Shot from '../Shot.astro';
-import weekLight from '../../assets/screenshots/01-week-light.png';
-import weekDark from '../../assets/screenshots/01-week-dark.png';
-import { onlineTrialUrl, repoUrl } from '../../i18n/ui';
+import { onlineTrialUrl, demoUrl, repoUrl } from '../../i18n/ui';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
 import { rowCount } from '../../lib/schools-view';
@@ -39,18 +33,34 @@ const t = c.hero;
       </p>
     </div>
     <div class="hero__device">
-      <Shot
-        light={weekLight}
-        dark={weekDark}
-        widths={[420, 840]}
-        sizes="(max-width: 840px) 88vw, 440px"
-        alt={t.deviceCaption}
+      <iframe
+        src={demoUrl}
+        title={t.demoTitle}
         loading="eager"
-        priority
-      />
+        sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-downloads"
+        referrerpolicy="strict-origin-when-cross-origin"
+        data-timetable-demo
+      ></iframe>
+      <div class="hero__demo-caption">
+        <span>{t.demoHint}</span>
+        <a href={`${onlineTrialUrl}/?demo=1`} target="_blank" rel="noopener noreferrer">{t.demoOpen}</a>
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+  const demo = document.querySelector<HTMLIFrameElement>('[data-timetable-demo]');
+  if (demo) {
+    const syncTheme = () => {
+      const target = new URL(demo.src);
+      target.searchParams.set('theme', document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+      if (target.href !== demo.src) demo.src = target.href;
+    };
+    syncTheme();
+    new MutationObserver(syncTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+</script>
 
 <style>
   .hero {
@@ -61,7 +71,7 @@ const t = c.hero;
   }
   .hero__grid {
     display: grid;
-    grid-template-columns: 55fr 45fr;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 1fr);
     align-items: center;
     gap: calc(var(--site-unit) * 10);
   }
@@ -123,8 +133,6 @@ const t = c.hero;
   .hero__ribbon-fact {
     font: var(--md-sys-typescale-body-medium);
   }
-  /* 屏幕本体(C3/§5.4):无设备框;1px 描边 + 容器底跳出,无影(§11-2 elevated 唯一归 M5);
-     容器按裁后资产自然比例钉死(1080×2048),完整显示零裁拉 */
   .hero__device {
     border-radius: var(--md-sys-shape-corner-xl);
     padding: calc(var(--site-unit) * 3);
@@ -132,19 +140,26 @@ const t = c.hero;
     border: 1px solid var(--md-sys-color-outline-variant);
     /* 比例钉死移入 img 本体(下条规则):双处钉 = padding 差一步的错位高度 */
   }
-  /* Shot 子组件渲染的 img 不带本组件 scope → :global(Gallery 同法)。
-     img 自带 aspect-ratio(= 裁后资产 1080×2048 自然比,两变体同尺寸):
-     图字节到达前盒已按 100%宽 × 比例预留高度 —— 首帧零跳(CLS 闸,
-     Lighthouse mobile 实测 span→block 位移 0.4 归因于隐变体后知尺寸);
-     块级化归 Shot 自持(2026-10-25 双显事故):本规则禁声明 display——
-     带 #hero 的特异性 (1,1,1) 会压过 Shot 主题切换规则,双图同显 */
-  :global(#hero .hero__device img) {
-    border-radius: calc(var(--site-unit) * 3);
+  .hero__device { min-inline-size: 0; }
+  .hero__device iframe {
+    display: block;
     inline-size: 100%;
-    block-size: auto;
-    aspect-ratio: 1080 / 2048;
-    object-fit: contain;
+    block-size: clamp(580px, 72vh, 760px);
+    border: 0;
+    border-radius: calc(var(--site-unit) * 3);
+    background: var(--md-sys-color-surface);
   }
+  .hero__demo-caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px 16px;
+    padding: 12px 4px 0;
+    font: var(--md-sys-typescale-body-small);
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  .hero__demo-caption a { color: var(--md-sys-color-primary); padding-block: 8px; }
   /* §6-1~2:hero 一次性入场编排(全站唯二 @keyframes = rise/fade,零循环);图列直绘零动效 */
   @keyframes rise {
     from { opacity: 0; transform: translateY(24px); }

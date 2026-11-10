@@ -28,6 +28,11 @@ function copyHeaders(source: Headers): Headers {
   headers.delete('content-length');
   headers.delete('transfer-encoding');
   headers.delete('content-encoding');
+  // The official homepage embeds this app; permit its own origin only.
+  headers.set('X-Frame-Options', 'SAMEORIGIN');
+  const csp = headers.get('Content-Security-Policy')?.replace(/(?:^|;)\s*frame-ancestors[^;]*/gi, '') ?? '';
+  headers.set('Content-Security-Policy', `${csp}${csp ? '; ' : ''}frame-ancestors 'self'`);
+  headers.set('Cache-Control', 'no-cache');
   return headers;
 }
 

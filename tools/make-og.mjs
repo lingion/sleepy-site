@@ -4,13 +4,15 @@
 // 无运行期图像依赖(satori/sharp 已否——plan 裁决)。重跑幂等:同文案 = 同图。
 // 文案真源 = src/i18n/{zh,en}.ts 的 meta + 各页 heading/sub(与站点同步改版)。
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync, rmSync, existsSync, readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${ROOT}/public/og`;
 const TMP = `${ROOT}/.og-tmp`;
-const CHROME = process.env.CHROME_BIN ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME = process.env.CHROME_BIN ?? (process.platform === 'darwin' ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : '/usr/bin/google-chrome');
 if (!existsSync(CHROME)) {
   console.error(`找不到 Chrome:${CHROME}\n设 CHROME_BIN 指向本机 Chrome 可执行文件。`);
   process.exit(1);
@@ -30,16 +32,20 @@ const PAGES = {
   },
   schools: {
     // Verified breakdown: catalog.configuredCount configured, catalog.unverifiedCount unverified, catalog.pendingCount pending
-    zh: { eyebrow: '学校查找', title: '收录与检索', sub: `收录 ${catalog.rowCount} 所高校教务直连 · 涵盖 48 种教务协议` },
-    en: { eyebrow: 'School lookup', title: 'Coverage & search', sub: `${catalog.rowCount} universities supported · 48 academic protocols` },
+    zh: { eyebrow: '学校查找', title: '收录与检索', sub: `收录 ${catalog.rowCount} 所高校教务直连 · 涵盖 ${catalog.typeCount} 种教务协议` },
+    en: { eyebrow: 'School lookup', title: 'Coverage & search', sub: `${catalog.rowCount} universities supported · ${catalog.typeCount} academic protocols` },
   },
   download: {
     zh: { eyebrow: '下载中心', title: '下载 Sleepy', sub: `${version} · 通用 APK · 全架构与校验和` },
     en: { eyebrow: 'Download', title: 'Get Sleepy', sub: `${version} · universal APK · all ABIs and checksums` },
   },
+  releases: {
+    zh: { eyebrow: '更新说明', title: 'Sleepy 的新变化', sub: `${version} · 完整双语发布说明` },
+    en: { eyebrow: 'Release notes', title: 'What changed in Sleepy', sub: `${version} · complete bilingual notes` },
+  },
   faq: {
-    zh: { eyebrow: '常见问答', title: '有疑问,先查这里', sub: `${release.tag} 功能、导入、组件与隐私边界` },
-    en: { eyebrow: 'FAQ', title: 'Questions, answered', sub: `${release.tag} features, imports, widgets and privacy` },
+    zh: { eyebrow: '常见问答', title: '有疑问,先查这里', sub: '功能、导入、组件与隐私边界' },
+    en: { eyebrow: 'FAQ', title: 'Questions, answered', sub: 'Features, imports, widgets and privacy' },
   },
 };
 
@@ -70,15 +76,21 @@ function pageHtml(slug, lang) {
 
 mkdirSync(TMP, { recursive: true });
 mkdirSync(OUT, { recursive: true });
+const profile = mkdtempSync(join(tmpdir(), 'sleepy-og-chrome-'));
+try {
 for (const slug of Object.keys(PAGES)) {
   for (const lang of ['zh', 'en']) {
     const f = `${TMP}/${slug}-${lang}.html`;
     writeFileSync(f, pageHtml(slug, lang));
     execFileSync(CHROME, [
-      '--headless=new', '--disable-gpu', '--hide-scrollbars', '--default-background-color=00000000',
+      '--headless=new', '--no-sandbox', '--disable-gpu', '--hide-scrollbars', '--default-background-color=00000000',
+      `--user-data-dir=${profile}`,
       `--screenshot=${OUT}/${slug}-${lang}.png`, '--window-size=1200,630', pathToFileURL(f).href,
-    ], { stdio: 'inherit' });
+    ], { stdio: ['ignore', 'ignore', 'pipe'], timeout: 30000 });
     console.log(`Rendered og/${slug}-${lang}.png`);
   }
 }
+} finally {
 rmSync(TMP, { recursive: true, force: true });
+rmSync(profile, { recursive: true, force: true });
+}

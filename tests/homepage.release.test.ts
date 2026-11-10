@@ -1,38 +1,43 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { zh } from '../src/i18n/zh';
-import { en } from '../src/i18n/en';
+import { JSDOM } from 'jsdom';
+import release from '../src/data/release.json';
+import product from '../src/data/product-release.json';
+import catalog from '../src/data/schools.snapshot.json';
+import { renderReleaseNotes } from '../src/lib/release-notes';
 
-const source = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8');
+const page = (path: string) => new JSDOM(readFileSync(new URL(`../dist/client/${path}index.html`, import.meta.url), 'utf8')).window.document;
 
-describe('released Android homepage coverage', () => {
-  const topics = ['editing', 'appearance', 'exchange', 'widgets', 'privacy', 'console'] as const;
-  for (const [lang, copy] of [['zh', zh], ['en', en]] as const) {
-    it(`${lang}: covers the same released capabilities with their limits`, () => {
-      const released = copy.released;
-      expect(released).toBeDefined();
-      expect(Object.keys(released.items)).toEqual(topics);
-      const text = Object.values(released.items).map(item => `${item.title} ${item.body}`).join(' ');
-      for (const term of ['500', 'Material 3 Expressive', 'Android 13', 'Android 12', 'sleepy-v1', 'WakeUP', 'JSON', 'ICS', '13', 'OriginOS']) expect(text).toContain(term);
-      expect(copy.download.trial).not.toMatch(/提供完整功能|provides full functionality/);
-      expect(copy.hero.sub).not.toMatch(/不经任何服务器|passes through no server/);
+describe('dedicated complete release notes', () => {
+  for (const prefix of ['', 'en/']) {
+    it(`${prefix || 'zh'}: keeps the notes off home and links the dedicated page`, () => {
+      const home = page(prefix);
+      expect(home.querySelector('#released')).toBeNull();
+      expect(home.querySelector(`nav a[href="/${prefix}releases/"]`)).not.toBeNull();
+      const notes = page(`${prefix}releases/`);
+      expect(notes.querySelector('[data-release-tag]')?.getAttribute('data-release-tag')).toBe(release.tag);
+      const article = notes.querySelector('.release-prose')!;
+      const renderedIds = new Set([...article.querySelectorAll('a[id]')].map(el => el.id));
+      const expectedIds = [...release.body.matchAll(/<a id="([^"]+)"/g)].map(match => match[1]);
+      expect([...renderedIds].sort()).toEqual(expectedIds.sort());
+      expect(article.textContent).toContain('Liquid Glass');
+      expect(article.textContent).toContain('液态玻璃');
+      expect(article.textContent!.length).toBeGreaterThan(10000);
     });
   }
-  it('renders release coverage in both homepages between views and import', () => {
-    for (const path of ['../src/pages/index.astro', '../src/pages/en/index.astro']) {
-      const page = source(path);
-      expect(page).toContain('ReleasedFeatures');
-      expect(page.indexOf('<Views')).toBeLessThan(page.indexOf('<ReleasedFeatures'));
-      expect(page.indexOf('<ReleasedFeatures')).toBeLessThan(page.indexOf('<Connect'));
-    }
-    const section = source('../src/components/sections/ReleasedFeatures.astro');
-    expect(section).toContain('Object.entries(t.items)');
-    expect(section).toContain('{item.body}');
-    expect(section).toContain('product.publishedAt');
+  it('keeps download, product, public metadata and catalog on the same immutable release', () => {
+    const live = JSON.parse(readFileSync(new URL('../public/release.json', import.meta.url), 'utf8'));
+    expect(product.tag).toBe(release.tag);
+    expect(catalog.ref).toBe(release.tag);
+    expect(catalog.sourceSha).toBe(release.sourceSha);
+    expect(product.commit).toBe(release.sourceSha);
+    expect(live.assets).toEqual(release.assets);
+    expect(live.body).toBe(release.body);
   });
-  it('machine index pins release provenance and correct privacy/platform boundaries', () => {
-    const text = source('../public/llms.txt');
-    for (const term of ['v1.0.63', 'b16aa84d', '2026-11-01T17:06:44Z', 'sleepy-v1', '500', 'read/write', '352', '2528', '1260']) expect(text).toContain(term);
-    expect(text).not.toMatch(/feature-aligned with Android|current builds are unsigned|No account, email, phone number, or student number is required/);
+  it('renders Markdown without allowing executable release content', () => {
+    const html = renderReleaseNotes('<script>alert(1)</script><iframe src="https://bad.example"></iframe>\n<a id="evidence"></a>\n[bad](javascript:alert(1))\n# Heading');
+    expect(html).not.toMatch(/<script|<iframe|javascript:/);
+    expect(html).toContain('id="evidence"');
+    expect(html).toContain('<h2 id="release-english">Heading</h2>');
   });
 });

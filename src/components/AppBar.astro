@@ -26,6 +26,7 @@ const anchors = [
   { href: `${home}schools/`, label: c.appbar.anchors.schools },
   { href: `${home}faq/`, label: c.appbar.anchors.faq },
   { href: `${home}#reminders`, label: c.appbar.anchors.reminders },
+  { href: `${home}releases/`, label: c.appbar.anchors.releases },
 ];
 const dlHref = `${home}download/`;
 ---
@@ -233,7 +234,7 @@ const dlHref = `${home}download/`;
   .appbar__menu-dl {
     color: var(--md-sys-color-primary);
   }
-  @media (max-width: 840px) {
+  @media (max-width: 1000px) {
     .appbar__anchors { display: none; }
     .appbar__menu { display: inline-flex; }
   }
@@ -267,7 +268,7 @@ const dlHref = `${home}download/`;
         menuBtn.focus();
       }
     });
-    matchMedia('(min-width: 841px)').addEventListener('change', (ev) => {
+    matchMedia('(min-width: 1001px)').addEventListener('change', (ev) => {
       if (ev.matches) setOpen(false);
     });
   }

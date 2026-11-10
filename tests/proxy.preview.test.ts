@@ -25,6 +25,18 @@ function makeCtx(pathname: string, upstream: Response) {
 }
 
 describe('preview path reverse proxy', () => {
+  it('allows the official same-origin embed and refreshes HTML instead of caching an old app shell', async () => {
+    const { ctx } = makeCtx('/preview/?demo=1&embed=1', new Response('<html><head></head></html>', {
+      headers: { 'content-type': 'text/html', 'x-frame-options': 'DENY',
+        'content-security-policy': "default-src 'self'; frame-ancestors 'none'; script-src 'self'" },
+    }));
+    const response = await onRequest(ctx as never);
+    expect(response.headers.get('x-frame-options')).toBe('SAMEORIGIN');
+    expect(response.headers.get('content-security-policy')).toContain("frame-ancestors 'self'");
+    expect(response.headers.get('content-security-policy')).not.toContain("frame-ancestors 'none'");
+    expect(response.headers.get('content-security-policy')).toContain("script-src 'self'");
+    expect(response.headers.get('cache-control')).toBe('no-cache');
+  });
   beforeEach(() => {
     vi.unstubAllGlobals();
   });
