@@ -13,7 +13,7 @@
 
 ```sh
 npm install          # registry 已锁 npmmirror(.npmrc)
-npm run dev          # http://localhost:4321
+npm run dev -- --background # http://localhost:4321；使用 astro dev stop 停止
 npm run build        # 产物 dist/(Cloudflare Pages 直接托管)
 npm run check        # astro check 类型闸
 npm run test         # vitest 测试
@@ -29,6 +29,10 @@ npm run data         # 教务数据管线(release 快照 + schools 分组)
 
 主仓库工作流 `.github/workflows/sync-sleepy-site.yml` 同时监听正式 Release 工作流成功结束及手动发布、编辑事件。这样由 GITHUB_TOKEN 创建的 Release 也能触发同步。主仓库需要 `SLEEPY_SITE_DISPATCH_TOKEN`（可调用 `lingion/sleepy-site` repository dispatch）；本站需要 `CLOUDFLARE_API_TOKEN` 和 `CLOUDFLARE_ACCOUNT_ID`。部署使用现有 sleepy-site Pages 项目。
 
+## iOS 安装渠道
+
+中国大陆以外的 [App Store](https://apps.apple.com/app/id6827001840) 均已上线，中国大陆区仍在审核中，可使用 [TestFlight](https://testflight.apple.com/join/SxymmDzf)。首页和下载页分别展示官方 App Store 徽章及 TestFlight 专用图标，使用共享组件和双语文案。正式商店、公测与 Android 独立发布，不能互相推断功能或版本号。布局、来源和渠道约束见 [iOS 安装入口](docs/ios-distribution.md)。
+
 ## 目录
 
 - `src/` 页面组件与文案(中英双语在 `src/i18n/` 单点维护)
@@ -39,13 +43,13 @@ npm run data         # 教务数据管线(release 快照 + schools 分组)
 
 ## 产品事实与快照
 
-当前产品基线由 `src/data/product-release.json` 记录 Android 发布 tag、源码 SHA、发布时间和审查日期。`schools.snapshot.json` 记录学校源快照及归组证据，普通页面构建不联网重取学校目录。4140 条目录分为已配置、未验证和待接入，数量不等于逐校在线验证。
+当前产品基线由 `src/data/product-release.json` 记录 Android 发布 tag、源码 SHA、发布时间和审查日期。`schools.snapshot.json` 记录学校源快照及归组证据，普通页面构建不联网重取学校目录。原始目录分为已配置、未验证和待接入，官网仅展示前两类。总数、已配置和未验证数量均取快照字段，不等于逐校在线验证。
 
 中文 FAQ 在 `fixtures/FAQ.md`，英文在 `scripts/faq-en.md`，生成 `src/data/faq.json` 后同时用于页面、机器 JSON 和 FAQPage 结构化数据。中文主稿与 Android 仓库 `FAQ.md` 保持一致；翻译必须逐节逐问对应。
 
 ```sh
-node scripts/fetch-release.mjs --tag v1.0.63
-# 只有明确更新产品基线时才选其他 tag 或 latest。
+node scripts/sync-data.mjs
+# 将最新正式 Release 的不可变源码与资产作为同一份快照更新。
 node scripts/fetch-faq.mjs --source /path/to/reviewed/FAQ.md
 node scripts/build-faq.mjs
 node scripts/build-schools.mjs
