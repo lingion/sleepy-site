@@ -10,6 +10,7 @@ import { site, repoUrl } from '../i18n/ui';
 import { zh } from '../i18n/zh';
 import { en } from '../i18n/en';
 import release from '../data/release.json';
+import { THEME_TOKENS } from '../lib/timetable-theme';
 interface Props {
   lang: 'zh' | 'en';
   title: string;
@@ -114,13 +115,22 @@ const siteGraph = {
 
     {/* FOUC 守卫(spec §1):首帧前读 localStorage 定 data-theme,无首屏闪变。
         is:inline = 不打包不延迟,这是唯一允许的内联脚本。 */}
-    <script is:inline>
+    <script is:inline define:vars={{ themeTokens: THEME_TOKENS }}>
       (() => {
         document.documentElement.classList.add('js');
         try {
           const stored = localStorage.getItem('sleepy-theme');
           const dark = stored === 'dark' || (!stored && matchMedia('(prefers-color-scheme: dark)').matches);
           document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+          const saved = JSON.parse(localStorage.getItem('sleepy-timetable-theme') || 'null');
+          if (saved?.type === 'sleepy:theme' && saved.version === 1 && ['light', 'dark'].includes(saved.mode)) {
+            const mode = dark ? 'dark' : 'light';
+            const colors = saved.schemes?.[mode];
+            if (colors && Object.entries(colors).every(([key, value]) => themeTokens.includes(key) && typeof value === 'string' && /^#[\da-f]{6}$/i.test(value))) {
+              for (const [key, value] of Object.entries(colors)) document.documentElement.style.setProperty('--md-sys-color-' + key, value);
+              if (typeof saved.palette === 'string') document.documentElement.dataset.palette = saved.palette;
+            }
+          }
         } catch {
           document.documentElement.setAttribute('data-theme', 'light');
         }
@@ -146,6 +156,7 @@ const siteGraph = {
       <span>{copy.footer.backToTop}</span>
     </button>
     <script>
+      import { applyTimetableTheme, readTimetableTheme } from '../lib/timetable-theme';
       // 主题开关(lightbox 岛在 T6;此处只做 FOUC 之后的持久化 toggle)
       const root = document.documentElement;
       // 滚动揭示:IntersectionObserver 单例,DOM 序=揭示序(§2.4/§8 不变量)
@@ -165,6 +176,10 @@ const siteGraph = {
       }
       window.siteToggleTheme = () => {
         const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        try {
+          const palette = readTimetableTheme(JSON.parse(localStorage.getItem('sleepy-timetable-theme') || 'null'));
+          if (palette) { applyTimetableTheme(window, palette, next); return next; }
+        } catch {}
         root.setAttribute('data-theme', next);
         try {
           localStorage.setItem('sleepy-theme', next);

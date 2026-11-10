@@ -105,12 +105,13 @@ describe('回顶浮标(右下浮现,滚过一屏出现)', () => {
     });
   }
   it('浮标行为随页内联产出(scroll 阈值显隐 + scrollTo 归顶)', () => {
-    // Astro 把 <script> 编译为页内 <script type="module">(非独立 .js chunk),
-    // 契约须按页断言 —— 产物实测锚点。
+    // Astro may hoist shared imports into module chunks; inspect the scripts actually loaded by this page.
     const html = read('../dist/client/index.html');
     expect(html).toContain('data-back-to-top');
-    expect(html).toMatch(/scrollTo\(\s*\{\s*top:\s*0/);
-    expect(html).toMatch(/innerHeight/); // 阈值 = 一屏(NN/g:短页不浮出)
+    const chunks = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(match => read('../dist/client' + match[1]));
+    const scripts = [html, ...chunks].join('\n');
+    expect(scripts).toMatch(/scrollTo\(\s*\{\s*top:\s*0/);
+    expect(scripts).toMatch(/innerHeight/); // 阈值 = 一屏(NN/g:短页不浮出)
   });
   it('浮标箭头几何正确(单 path 上箭头,杆顶不越箭头尖)', () => {
     // 缺陷回归锁(2026-10-27 报障「箭头出问题」):旧实现双 path 拼接——
