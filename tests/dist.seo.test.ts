@@ -91,12 +91,19 @@ const ROUTES: { slug: string; file: string; zh: string; en: string; og?: string 
   { slug: 'download', file: 'download/', zh: '/download/', en: '/en/download/' },
   { slug: 'releases', file: 'releases/', zh: '/releases/', en: '/en/releases/' },
   { slug: 'faq', file: 'faq/', zh: '/faq/', en: '/en/faq/' },
+  { slug: 'privacy', file: 'privacy/', zh: '/privacy/', en: '/en/privacy/', og: 'home' },
   { slug: 'licenses', file: 'licenses/', zh: '/licenses/', en: '/en/licenses/', og: 'home' },
 ]
 
 // 路由产物定位:en 前缀仅看语言(zh home file='' → root;en home → en/)
-const routeDoc = (file: string, lang: 'zh' | 'en') =>
-  new JSDOM(read(`../dist/client/${lang === 'en' ? 'en/' : ''}${file}index.html`)).window.document
+// Each built route is immutable during this suite. Reuse its parsed document
+// across metadata assertions instead of reparsing the complete school catalog.
+const routeDocuments = new Map<string, Document>([['', zhDoc], ['en/', enDoc]])
+const routeDoc = (file: string, lang: 'zh' | 'en') => {
+  const path = `${lang === 'en' ? 'en/' : ''}${file}`
+  if (!routeDocuments.has(path)) routeDocuments.set(path, new JSDOM(read(`../dist/client/${path}index.html`)).window.document)
+  return routeDocuments.get(path)!
+}
 
 describe('hreflang 矩阵(spec §2.6-2:8 路由各双指本页对)', () => {
   for (const r of ROUTES) {
