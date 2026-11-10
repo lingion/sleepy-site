@@ -149,6 +149,7 @@ export const en: SiteCopy = {
     navLabel: 'Section navigation',
   },
   footer: {
+    licenses: 'Licenses and credits',
     app: 'App',
     dl: 'Download for Android',
     trial: 'Try online',

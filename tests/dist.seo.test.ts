@@ -85,12 +85,13 @@ describe('en 主页语言链回归守卫(mirror 值不变,终审 I4)', () => {
 
 // ===== Task 8:分发基建产物闸(spec §2.6 全 8 项) =====
 
-const ROUTES: { slug: string; file: string; zh: string; en: string }[] = [
+const ROUTES: { slug: string; file: string; zh: string; en: string; og?: string }[] = [
   { slug: 'home', file: '', zh: '/', en: '/en/' },
   { slug: 'schools', file: 'schools/', zh: '/schools/', en: '/en/schools/' },
   { slug: 'download', file: 'download/', zh: '/download/', en: '/en/download/' },
   { slug: 'releases', file: 'releases/', zh: '/releases/', en: '/en/releases/' },
   { slug: 'faq', file: 'faq/', zh: '/faq/', en: '/en/faq/' },
+  { slug: 'licenses', file: 'licenses/', zh: '/licenses/', en: '/en/licenses/', og: 'home' },
 ]
 
 // 路由产物定位:en 前缀仅看语言(zh home file='' → root;en home → en/)
@@ -113,12 +114,12 @@ describe('hreflang 矩阵(spec §2.6-2:8 路由各双指本页对)', () => {
 describe('OG 分享图(spec §2.6-1:8 枚存在 + 各页绝对 URL 指本页对应图)', () => {
   for (const r of ROUTES) {
     for (const lang of ['zh', 'en'] as const) {
-      it(`public/og/${r.slug}-${lang}.png 存在`, () => {
-        expect(existsSync(new URL(`../public/og/${r.slug}-${lang}.png`, import.meta.url)), r.slug + '-' + lang).toBe(true)
+      it(`public/og/${r.og ?? r.slug}-${lang}.png 存在`, () => {
+        expect(existsSync(new URL(`../public/og/${r.og ?? r.slug}-${lang}.png`, import.meta.url)), r.slug + '-' + lang).toBe(true)
       })
       it(`${r.slug} ${lang} og:image / twitter:image = 绝对 URL 指本页图`, () => {
         const head = routeDoc(r.file, lang).querySelector('head')!
-        const expectOg = `${site}/og/${r.slug}-${lang}.png?v=${release.tag}`
+        const expectOg = `${site}/og/${r.og ?? r.slug}-${lang}.png?v=${release.tag}`
         expect(head.querySelector('meta[property="og:image"]')!.getAttribute('content')).toBe(expectOg)
         expect(head.querySelector('meta[name="twitter:image"]')!.getAttribute('content')).toBe(expectOg)
       })
@@ -172,13 +173,13 @@ describe('robots + RSS(spec §2.6-4/6)', () => {
   })
 })
 
-describe('sitemap i18n(spec §2.6-5:恰 8 路由 + 双语 alternate + 零 404)', () => {
+describe('sitemap 双语页面和 alternate', () => {
   const xml = read('../dist/client/sitemap-0.xml')
   const dom = new JSDOM(xml, { contentType: 'text/xml' })
-  it('恰 8 <loc> 且全路由齐,404 绝迹', () => {
+  it('包含全部公开页面，排除 404', () => {
     const locs = [...dom.window.document.querySelectorAll('url > loc')].map((n) => n.textContent)
-    expect(locs.length).toBe(ROUTES.length * 2)
     const all = [...ROUTES].flatMap((r) => [r.zh, r.en])
+    expect(locs.length).toBe(all.length)
     for (const p of all) expect(locs, p).toContain(site + p)
     expect(xml).not.toContain('404')
   })
