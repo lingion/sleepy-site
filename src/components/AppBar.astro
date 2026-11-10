@@ -61,7 +61,7 @@ const dlHref = `${home}download/`;
     <nav class="appbar__anchors" aria-label={c.appbar.navLabel}>
       {
         anchors.map((a) => (
-          <a class="appbar__anchor" href={a.href}>{a.label}</a>
+          <a class="appbar__anchor" href={a.href} aria-current={Astro.url.pathname === a.href ? 'page' : undefined}>{a.label}</a>
         ))
       }
     </nav>
@@ -97,7 +97,7 @@ const dlHref = `${home}download/`;
   <nav class="appbar__menu-panel" id="appbar-menu" aria-label={c.appbar.navLabel} hidden>
     {
       anchors.map((a) => (
-        <a class="appbar__menu-link t-title-small" href={a.href}>{a.label}</a>
+        <a class="appbar__menu-link t-title-small" href={a.href} aria-current={Astro.url.pathname === a.href ? 'page' : undefined}>{a.label}</a>
       ))
     }
     <a class="appbar__menu-link appbar__menu-dl t-title-small" href={dlHref}>{c.appbar.ctaDownload}</a>
@@ -172,13 +172,17 @@ const dlHref = `${home}download/`;
     visibility: hidden;
   }
   .appbar__lang {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+    justify-content: center;
+    border-radius: var(--md-sys-shape-corner-full);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
   }
   .appbar__theme {
-    inline-size: 40px;
-    block-size: 40px;
+    inline-size: 44px;
+    block-size: 44px;
     border-radius: var(--md-sys-shape-corner-full);
     border: none;
     background: transparent;
@@ -200,8 +204,8 @@ const dlHref = `${home}download/`;
   /* 汉堡钮:桌面恒隐(锚点组在场),≤840px 接管锚点组的导航职责 */
   .appbar__menu {
     display: none;
-    inline-size: 40px;
-    block-size: 40px;
+    inline-size: 44px;
+    block-size: 44px;
     border-radius: var(--md-sys-shape-corner-full);
     border: none;
     background: transparent;

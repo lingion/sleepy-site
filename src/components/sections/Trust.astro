@@ -9,7 +9,9 @@ import { qqGroup, sponsorUrl, repoUrl, faqUrl } from '../../i18n/ui';
 interface Props {
   copy?: SiteCopy;
 }
-const t = (Astro.props.copy ?? zh).trust;
+const copy = Astro.props.copy ?? zh;
+const t = copy.trust;
+const home = Astro.url.pathname.startsWith('/en/') ? '/en/' : '/';
 ---
 
 <section class="site-section" id="trust" data-prototype="narration" aria-labelledby="trust-title">
@@ -23,6 +25,7 @@ const t = (Astro.props.copy ?? zh).trust;
       <div class="trust__main site-card reveal" style="--reveal-i: 3;">
         <h3 class="t-title-large">{t.privacyHeading}</h3>
         <p class="t-body-medium">{t.privacyBody}</p>
+        <a class="site-button site-button--text" href={`${home}privacy/`}>{copy.footer.privacy}</a>
       </div>
       {/* 次行:开源/降为行式列表(§4 M7「1 主 2 次」非等权) */}
       <ul class="trust__rows" data-reveal-group="m7-rows">

@@ -34,6 +34,7 @@ const home = lang === 'zh' ? '/' : '/en/';
       <a href={`${home}faq/`}>{t.faq}</a>
       <a href={`${home}releases/`}>{c.appbar.anchors.releases}</a>
       <a href={`${home}licenses/`}>{t.licenses}</a>
+      <a href={`${home}privacy/`}>{t.privacy}</a>
       <a href={repoUrl}>{t.repo}</a>
       <a class="footer__lang" href={mirror}>{lang === 'zh' ? 'EN' : '中文'}</a>
     </nav>
@@ -54,10 +55,11 @@ const home = lang === 'zh' ? '/' : '/en/';
   .footer__inner {
     padding-block: calc(var(--site-unit) * 16) calc(var(--site-unit) * 8);
   }
+  .footer__links a { display: inline-flex; align-items: center; min-block-size: 44px; }
   .footer__links {
     display: flex;
     flex-wrap: wrap;
-    gap: calc(var(--site-unit) * 6);
+    gap: calc(var(--site-unit) * 2) calc(var(--site-unit) * 6);
   }
   .footer a {
     color: var(--md-sys-color-on-surface-variant);

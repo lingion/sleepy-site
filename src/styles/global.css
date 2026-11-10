@@ -145,6 +145,9 @@ html[data-theme='dark'] .shot__dark {
 a {
   color: var(--md-sys-color-primary);
   text-decoration-color: color-mix(in srgb, var(--md-sys-color-primary) 40%, transparent);
+  text-underline-offset: .2em;
+  text-decoration-thickness: .075em;
+  overflow-wrap: anywhere;
 }
 
 ::selection {
@@ -212,6 +215,10 @@ h1, h2, h3, h4 { text-wrap: balance; }
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-block-size: 48px;
+  max-inline-size: 100%;
+  text-align: center;
   gap: calc(var(--site-unit) * 2);
 }
 
@@ -353,6 +360,17 @@ h1, h2, h3, h4 { text-wrap: balance; }
   outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 2px;
 }
+
+/* One interaction language across document links, tools and marketing controls. */
+:is(button, input, summary, .site-button, .site-chip) { touch-action: manipulation; }
+:is(button, input, summary, a) { -webkit-tap-highlight-color: color-mix(in srgb, var(--md-sys-color-primary) 16%, transparent); }
+:is(button, input, summary, a):focus-visible { outline-width: 3px; }
+summary:focus-visible { outline-offset: -3px; border-radius: var(--md-sys-shape-corner-medium); }
+:is(button, .site-button):disabled { cursor: not-allowed; opacity: .5; transform: none; }
+.site-chip { min-block-size: 44px; }
+.site-field { min-block-size: 52px; font-size: 16px; }
+main { min-inline-size: 0; }
+main :is(h1, h2, h3, h4, article[id]) { scroll-margin-top: 100px; }
 
 /* —— State layer(v4 §12 细节批,2026-10-23 需求增补;M3 交互指纹,纯 CSS 无 ripple)——
    hover 档包桌面闸(触屏无粘滞 hover);active 档不包(触屏按压接管)。
