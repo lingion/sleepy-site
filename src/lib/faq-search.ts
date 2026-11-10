@@ -14,7 +14,11 @@ export function filterFaq(doc: Document, query: string, hash = ''): number {
   for (const section of doc.querySelectorAll<HTMLElement>('[data-faq-section]')) {
     section.hidden = !section.querySelector('[data-faq-item]:not([hidden])');
     const link = doc.querySelector<HTMLElement>(`[data-toc-link][href="#${section.id}"]`);
-    if (link) link.hidden = section.hidden;
+    if (link) {
+      link.hidden = section.hidden;
+      const item = link.closest('li');
+      if (item) item.hidden = section.hidden;
+    }
   }
   const status = doc.querySelector<HTMLElement>('[data-faq-count]');
   if (status) status.textContent = status.dataset.faqCount!.replace('{count}', String(count));
