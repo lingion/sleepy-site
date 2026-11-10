@@ -3,7 +3,7 @@ export const THEME_TOKENS = [
   'primary', 'on-primary', 'primary-container', 'on-primary-container',
   'secondary', 'on-secondary', 'secondary-container', 'on-secondary-container',
   'tertiary', 'on-tertiary', 'tertiary-container', 'on-tertiary-container',
-  'background', 'on-background', 'surface', 'on-surface', 'surface-variant', 'on-surface-variant',
+  'background', 'on-background', 'surface', 'on-surface', 'surface-bright', 'surface-variant', 'on-surface-variant',
   'surface-container-lowest', 'surface-container-low', 'surface-container', 'surface-container-high', 'surface-container-highest',
   'outline', 'outline-variant', 'scrim', 'error', 'on-error', 'error-container', 'on-error-container',
 ] as const;
