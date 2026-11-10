@@ -1,318 +1,196 @@
 ---
-// v5 /download/ 下载中心页主体 — plan Task 5 / spec §2.4
-// 纯出口页:全页唯一 Elevated 主钮(§11-6 彩色容器上禁 Filled 叠 tonal)、零 reveal 编排(spec §5 工具页)、
-// 行样式复制迁移自 v4 Download.astro(旧段本体 Task 7 处理);架构引导三行小表 = spec §9 默认加
+import PageHeader from '../PageHeader.astro';
 import release from '../../data/release.json';
 import { repoUrl, sponsorUrl, onlineTrialUrl, iosTestFlightUrl, iosRepoUrl } from '../../i18n/ui';
+import { downloadUrl } from '../../lib/download-source';
+import type { DownloadSource } from '../../lib/download-source';
 import type { SiteCopy } from '../../i18n/zh';
 
-interface Props {
-  copy: SiteCopy['downloadPage'];
-  lang: 'zh' | 'en';
-}
+interface Props { copy: SiteCopy['downloadPage']; lang: 'zh' | 'en' }
 const { copy: t, lang } = Astro.props;
-// v4 三件套原样迁移(Download.astro:19-22)
+const en = lang === 'en';
+const source: DownloadSource = en ? 'github' : 'mirror';
+const dl = en ? (await import('../../i18n/en')).en.download : (await import('../../i18n/zh')).zh.download;
 const abiOf = (name: string) => name.replace(/^app-|-release\.apk$/g, '');
 const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-const date = release.date.slice(0, 10);
-// ABI 注记与 minSdk/trial 仍归 download 键组(页面文案不复制第二份)
-const dl = lang === 'zh' ? (await import('../../i18n/zh')).zh.download : (await import('../../i18n/en')).en.download;
+const universal = release.assets.find(asset => asset.name.includes('universal'))!;
 const notes = dl.abiNotes as Record<string, string>;
-const versionLine = t.versionLine.replace('{tag}', release.tag).replace('{minSdk}', dl.minSdk).replace('{date}', date);
-const universal = release.assets.find((a) => a.name.includes('universal'))!;
-const zhUI = lang === 'zh';
-const badgeSrc = zhUI ? '/badges/download-on-the-app-store-zh.svg' : '/badges/download-on-the-app-store-en.svg';
-const badgeWidth = zhUI ? 109 : 120;
+const versionLine = t.versionLine.replace('{tag}', release.tag).replace('{minSdk}', dl.minSdk).replace('{date}', release.date.slice(0, 10));
+const sources = [
+  { value: 'mirror', name: en ? 'Mirror' : '镜像下载', domain: 'gh.qdp.qzz.io', note: en ? 'Project mirror' : '项目镜像' },
+  { value: 'github', name: 'GitHub', domain: 'github.com', note: en ? 'Original release' : '原始发布源' },
+];
+const statusMirror = en ? 'Files will download from gh.qdp.qzz.io.' : '当前通过 gh.qdp.qzz.io 下载安装包和校验文件。';
+const statusGithub = en ? 'Files will download from github.com.' : '当前通过 github.com 下载安装包和校验文件。';
+const badgeSrc = en ? '/badges/download-on-the-app-store-en.svg' : '/badges/download-on-the-app-store-zh.svg';
 ---
 
-<section class="download-page" data-prototype="tool-quiet">
+<section class="download-page" data-download-panel data-default-source={source}>
   <div class="site-col">
+    <PageHeader title={t.heading} description={en ? 'Choose your platform and download source. Your timetable stays with you.' : '选择适合你的平台和下载方式，把课表带在身边。'}>
+      <p slot="meta" class="download-page__versionline tnum">{versionLine}</p>
+    </PageHeader>
     <div class="download-page__grid">
-    <div class="download-page__package">
-    <header class="download-page__head page-heading">
-      <h1 class="t-headline-large">{t.heading}</h1>
-      <p class="t-body-medium download-page__versionline tnum">
-        <a href="https://github.com/lingion/sleepy/releases/latest">GitHub Releases</a>
-        · {versionLine}
-      </p>
-      <p class="download-page__primary">
-        <a class="site-button site-button--elevated download-page__cta-xl" data-dl-primary href={universal.url} download rel="download" aria-label={`${dl.downloadAria('universal', mb(universal.size))}`}>
-          {dl.cta}
-        </a>
-      </p>
-    </header>
-
-    <ul class="download-page__list">
-      {
-        release.assets.map((a) => {
-          const abi = abiOf(a.name);
-          const size = mb(a.size);
-          const isRec = abi === 'universal';
-          return (
-            <li>
-              <a class="download-page__row" data-abi-row data-abi={abi} data-rec={isRec || undefined} href={a.url} download rel="download" aria-label={dl.downloadAria(abi, size)}>
-                <span class="download-page__row-main">
-                  <span class="download-page__row-name">
-                    {abi}
-                    {isRec && <span class="download-page__row-badge">{t.recommended}</span>}
-                  </span>
-                  <span class="download-page__row-note">{notes[abi]}</span>
-                </span>
-                <span class="download-page__row-side">
-                  <span class="download-page__row-size">{size}</span>
-                  <svg class="download-page__row-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-                    <path d="M11 4h2v9.15l3.6-3.6 1.4 1.45-5.5 5.5-5.5-5.5 1.4-1.45 3.6 3.6z" fill="currentColor" /><path d="M4 18h16v2H4z" fill="currentColor" />
-                  </svg>
-                </span>
-              </a>
-            </li>
-          );
-        })
-      }
-    </ul>
-    <p class="t-body-small download-page__note">{t.universalNote}</p>
-
-    </div>
-    <div class="download-page__support">
-    <section class="download-page__block download-page__ios" aria-labelledby="dl-ios">
-      <h2 class="t-title-medium" id="dl-ios">{t.iosTitle}</h2>
-      <p class="t-body-small">{t.iosNote}</p>
-      <div class="download-page__apple-wrap">
-        <a
-          class="apple-store-badge-link"
-          href={iosTestFlightUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={t.iosBadgeAria}
-        >
-          <img
-            class="apple-store-badge"
-            src={badgeSrc}
-            alt={t.iosBadgeAlt}
-            width={badgeWidth}
-            height="40"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-      </div>
-    </section>
-
-    <section class="download-page__block" aria-labelledby="dl-verify">
-      <h2 class="t-title-medium" id="dl-verify">{t.verifyTitle}</h2>
-      <p class="t-body-small">{t.verifyNote}</p>
-      <p class="t-body-small"><a href={release.sha256sumsUrl}>{t.otherArchLink}</a></p>
-    </section>
-
-    <section class="download-page__block" aria-labelledby="dl-install">
-      <h2 class="t-title-medium" id="dl-install">{t.installTitle}</h2>
-      <ol class="download-page__steps">
-        {t.installSteps.map((s) => <li class="t-body-small">{s}</li>)}
-      </ol>
-    </section>
-
-    <section class="download-page__block" aria-labelledby="dl-arch">
-      <h2 class="t-title-medium" id="dl-arch">{t.archTitle}</h2>
-      <table class="download-page__arch" data-arch-table>
-        <tbody>
-          <tr><th scope="row">arm64-v8a</th><td>{zhUI ? '绝大多数 2020 年后机型' : 'Most phones since 2020'}</td></tr>
-          <tr><th scope="row">armeabi-v7a</th><td>{zhUI ? '32 位老设备' : 'Older 32-bit devices'}</td></tr>
-          <tr><th scope="row">x86_64</th><td>{zhUI ? '模拟器' : 'Emulators'}</td></tr>
-        </tbody>
-      </table>
-      <p class="t-body-small">{t.archNote}</p>
-    </section>
-
-    <section class="download-page__block" aria-labelledby="dl-trial">
-      <h2 class="t-title-medium" id="dl-trial">{t.trialTitle}</h2>
-      <p class="t-body-small">
-        <a data-role="trial" href={onlineTrialUrl} target="_blank" rel="noopener noreferrer">{dl.trial}</a>
-      </p>
-    </section>
-
-    <div class="download-page__stores">
-      <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>Google Play</span>
-      <span class="store-badge" data-store-disabled aria-disabled="true" title={t.storeReserved}>{dl.storeBadgeCn}</span>
+      <section class="download-page__package" aria-labelledby="dl-android">
+        <header class="download-page__platform"><h2 id="dl-android" class="t-headline-medium">Android</h2><span class="t-label-large">{release.tag}</span></header>
+        <fieldset class="download-source">
+          <legend class="t-title-medium">{en ? 'Download source' : '下载来源'}</legend>
+          <div class="download-source__options">
+            {sources.map(option => <label class="download-source__option">
+              <input type="radio" name="download-source" value={option.value} checked={source === option.value} aria-describedby="download-source-help" />
+              <span class="download-source__text"><strong>{option.name}</strong><span translate="no">{option.domain}</span><small>{option.note}</small></span>
+            </label>)}
+          </div>
+          <p id="download-source-help" class="download-source__help t-body-small">{en ? 'Both sources serve the GitHub release files. If one connection fails, try the other.' : '两种来源提供同一份 GitHub 发布文件，连接不畅时可切换。'}</p>
+        </fieldset>
+        <div class="download-page__primary">
+          <div><h3 class="t-title-large">{en ? 'Universal APK' : 'Android 通用版'}</h3><p class="t-body-medium">{t.universalNote}</p></div>
+          <a class="site-button site-button--elevated download-page__cta-xl" data-dl-primary data-download-official={universal.url} href={downloadUrl(universal.url, source)} download aria-label={`${en ? 'Download Android' : '下载 Android'} universal (${mb(universal.size)})`}>{en ? 'Download Android' : '下载 Android'}<span class="tnum">{mb(universal.size)}</span></a>
+          <p class="download-source__status t-body-small" role="status" aria-live="polite" data-download-status data-mirror={statusMirror} data-github={statusGithub}>{source === 'mirror' ? statusMirror : statusGithub}</p>
+        </div>
+        <details class="download-page__architectures">
+          <summary>{en ? 'Downloads for specific architectures' : '选择其他设备架构'}</summary>
+          <ul class="download-page__list">
+            {release.assets.map(asset => {
+              const abi = abiOf(asset.name);
+              return <li><a class="download-page__row" data-abi-row data-abi={abi} data-rec={abi === 'universal' || undefined} data-download-official={asset.url} href={downloadUrl(asset.url, source)} download aria-label={dl.downloadAria(abi, mb(asset.size))}>
+                <span class="download-page__row-main"><span class="download-page__row-name" translate="no">{abi}</span><span class="download-page__row-note">{notes[abi]}</span></span>
+                <span class="download-page__row-size tnum">{mb(asset.size)}<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 4v12m-5-5 5 5 5-5M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+              </a></li>;
+            })}
+          </ul>
+        </details>
+        <p class="download-page__release-link t-body-small"><a href={release.url}>{en ? 'Release notes on GitHub' : '在 GitHub 查看本版说明'}</a></p>
+        <noscript>
+          <p>{en ? 'JavaScript is off. Choose a direct link below:' : 'JavaScript 已关闭，可直接选择下方下载链接：'}</p>
+          <ul>{[...release.assets, { name: 'sha256sums.txt', url: release.sha256sumsUrl }].map(asset => <li>{asset.name}: <a href={downloadUrl(asset.url, 'mirror')}>{en ? 'Mirror' : '镜像'}</a> / <a href={asset.url}>GitHub</a></li>)}</ul>
+        </noscript>
+      </section>
+      <aside class="download-page__platforms" aria-label={en ? 'Other platforms' : '其他平台'}>
+        <section class="download-platform" aria-labelledby="dl-ios">
+          <h2 id="dl-ios" class="t-headline-small">iOS</h2>
+          <span class="download-platform__label t-label-large">TestFlight</span>
+          <p>{t.iosNote}</p>
+          <a class="apple-store-badge-link" href={iosTestFlightUrl} target="_blank" rel="noopener noreferrer" aria-label={t.iosBadgeAria}><img class="apple-store-badge" src={badgeSrc} alt={t.iosBadgeAlt} width={en ? 120 : 109} height="40" loading="lazy" decoding="async" /></a>
+          <a class="download-platform__source t-body-small" href={iosRepoUrl}>{en ? 'iOS source code' : 'iOS 源码'}</a>
+        </section>
+        <section class="download-platform" aria-labelledby="dl-web">
+          <h2 id="dl-web" class="t-headline-small">{en ? 'Web' : '网页版'}</h2>
+          <p>{dl.trial}</p>
+          <a class="site-button site-button--outlined" data-role="trial" href={onlineTrialUrl} target="_blank" rel="noopener noreferrer">{en ? 'Open web app' : '打开网页版'}</a>
+        </section>
+      </aside>
     </div>
 
-    <section class="download-page__block" aria-labelledby="dl-more">
-      <h2 class="t-title-medium" id="dl-more">{t.moreTitle}</h2>
-      <ul class="download-page__more">
-        <li><a href="https://github.com/lingion/sleepy/releases">{t.moreLinks.releases}</a></li>
-        <li><a href={repoUrl}>{t.moreLinks.repo}</a></li>
-        <li><a href={iosRepoUrl}>{zhUI ? 'iOS 源码仓库' : 'iOS source repository'}</a></li>
-        <li><a href={sponsorUrl}>{t.moreLinks.sponsor}</a></li>
-        <li><a href={`${repoUrl}/issues`}>{t.moreLinks.issues}</a></li>
-      </ul>
+    <section class="download-help" aria-labelledby="dl-help">
+      <h2 id="dl-help" class="t-headline-small">{en ? 'Installation and file checks' : '安装与文件校验'}</h2>
+      <details open><summary>{t.installTitle}</summary><div class="download-help__body"><ol>{t.installSteps.map(step => <li>{step}</li>)}</ol><a href={en ? '/en/faq/#sec-2' : '/faq/#sec-2'}>{en ? 'Installation FAQ' : '查看安装常见问题'}</a></div></details>
+      <details><summary>{t.verifyTitle}</summary><div class="download-help__body"><p>{t.verifyNote}</p><a data-download-official={release.sha256sumsUrl} href={downloadUrl(release.sha256sumsUrl, source)} download>{en ? 'Download SHA-256 checksums' : '下载 SHA-256 校验文件'}</a></div></details>
+      <details><summary>{t.archTitle}</summary><div class="download-help__body"><table data-arch-table><tbody>
+        <tr><th scope="row">arm64-v8a</th><td>{en ? 'Most recent Android phones' : '近年的 Android 手机'}</td></tr>
+        <tr><th scope="row">armeabi-v7a</th><td>{en ? 'Older 32-bit devices' : '32 位老设备'}</td></tr>
+        <tr><th scope="row">x86_64</th><td>{en ? 'Emulators' : '模拟器'}</td></tr>
+      </tbody></table><p>{t.archNote}</p></div></details>
     </section>
-    </div>
-    </div>
+    <nav class="download-page__more" aria-label={t.moreTitle}>
+      <a href={`${repoUrl}/releases`}>{t.moreLinks.releases}</a><a href={repoUrl}>{t.moreLinks.repo}</a><a href={sponsorUrl}>{t.moreLinks.sponsor}</a><a href={`${repoUrl}/issues`}>{t.moreLinks.issues}</a>
+    </nav>
   </div>
 </section>
 
+<script>
+  import { applyDownloadSource } from '../../lib/download-source';
+  import type { DownloadSource } from '../../lib/download-source';
+  const panel = document.querySelector<HTMLElement>('[data-download-panel]');
+  if (panel) {
+    const query = new URLSearchParams(location.search);
+    const selected = query.get('source');
+    const initial = (selected === 'mirror' || selected === 'github' ? selected : panel.dataset.defaultSource) as DownloadSource;
+    applyDownloadSource(panel, initial);
+    panel.addEventListener('change', event => {
+      const input = event.target as HTMLInputElement;
+      if (input.name !== 'download-source' || !['mirror', 'github'].includes(input.value)) return;
+      applyDownloadSource(panel, input.value as DownloadSource);
+      const params = new URLSearchParams(location.search);
+      params.set('source', input.value);
+      history.replaceState(null, '', `${location.pathname}?${params}${location.hash}`);
+    });
+    addEventListener('popstate', () => {
+      const source = new URLSearchParams(location.search).get('source');
+      applyDownloadSource(panel, source === 'mirror' || source === 'github' ? source : panel.dataset.defaultSource as DownloadSource);
+    });
+  }
+</script>
+
 <style>
-  .download-page {
-    background: var(--md-sys-color-surface);
-    color: var(--md-sys-color-on-surface);
-    padding-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 14);
-  }
-  .download-page :is(h1, h2) {
-    color: var(--md-sys-color-on-primary-container);
-  }
-  .download-page__head {
-    display: grid;
-    gap: calc(var(--site-unit) * 2);
-  }
-  .download-page__versionline {
-    color: var(--md-sys-color-on-primary-container);
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-  .download-page__versionline a { color: inherit; }
-  .download-page__primary { margin-block: calc(var(--site-unit) * 4); }
-  .download-page__cta-xl {
-    font-size: 16px;
-    padding: 14px 32px;
-    text-decoration: none;
-  }
-  .download-page__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: calc(var(--site-unit) * 2);
-    max-inline-size: 560px;
-  }
-  /* 行样式 = v4 Download 段逐值迁移(55% 底 / 78% rec 底 / hover+active blend 三档);
-     源码闸 global.a11y :323-329 此刻仍读 Download.astro,Task 7 同 commit 改读本文件 */
-  .download-page__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: calc(var(--site-unit) * 4);
-    padding: calc(var(--site-unit) * 3.5) calc(var(--site-unit) * 5);
-    border-radius: var(--md-sys-shape-corner-medium);
-    background: color-mix(in srgb, var(--md-sys-color-surface) 55%, var(--md-sys-color-primary-container));
-    color: var(--md-sys-color-on-primary-container);
-    text-decoration: none;
-    transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .download-page__row:hover {
-      background: color-mix(in srgb, var(--md-sys-color-surface) 75%, var(--md-sys-color-primary-container));
-    }
-  }
-  .download-page__row:active {
-    background: color-mix(in srgb, currentColor 10%, color-mix(in srgb, var(--md-sys-color-surface) 55%, var(--md-sys-color-primary-container)));
-  }
-  .download-page__row:focus-visible {
-    outline: 2px solid var(--md-sys-color-on-primary-container);
-    outline-offset: 2px;
-  }
-  .download-page__row[data-rec] {
-    background: color-mix(in srgb, var(--md-sys-color-surface) 78%, var(--md-sys-color-primary-container));
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .download-page__row[data-rec]:hover {
-      background: color-mix(in srgb, var(--md-sys-color-surface) 90%, var(--md-sys-color-primary-container));
-    }
-  }
-  .download-page__row[data-rec]:active {
-    background: color-mix(in srgb, currentColor 10%, color-mix(in srgb, var(--md-sys-color-surface) 78%, var(--md-sys-color-primary-container)));
-  }
-  .download-page__row-main { display: grid; gap: 2px; min-width: 0; }
-  .download-page__row-name {
-    display: inline-flex;
-    align-items: center;
-    gap: calc(var(--site-unit) * 2);
-    font: var(--md-sys-typescale-title-small);
-  }
-  .download-page__row-badge {
-    font: var(--md-sys-typescale-label-small);
-    padding: 2px 8px;
-    border-radius: var(--md-sys-shape-corner-full);
-    background: var(--md-sys-color-primary);
-    color: var(--md-sys-color-on-primary);
-  }
-  .download-page__row-note {
-    font: var(--md-sys-typescale-body-small);
-    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 78%, var(--md-sys-color-primary-container));
-  }
-  .download-page__row-side { display: inline-flex; align-items: center; gap: calc(var(--site-unit) * 4); flex-shrink: 0; }
-  .download-page__row-size {
-    font: var(--md-sys-typescale-body-small);
-    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 78%, var(--md-sys-color-primary-container));
-    font-variant-numeric: lining-nums tabular-nums;
-  }
-  .download-page__row-icon { display: block; }
-  .download-page__note {
-    margin-block: calc(var(--site-unit) * 3) calc(var(--site-unit) * 8);
-    color: color-mix(in srgb, var(--md-sys-color-on-primary-container) 82%, var(--md-sys-color-primary-container));
-  }
-  .download-page__block { margin-block-end: calc(var(--site-unit) * 8); display: grid; gap: calc(var(--site-unit) * 2); }
-  .download-page__apple-wrap {
-    display: flex;
-    align-items: center;
-    margin-block-start: calc(var(--site-unit) * 1);
-  }
-  .apple-store-badge-link {
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
-  }
-  .apple-store-badge-link:hover {
-    opacity: 0.88;
-  }
-  .apple-store-badge-link:focus-visible {
-    outline: 2px solid var(--md-sys-color-on-primary-container);
-    outline-offset: 3px;
-  }
-  .apple-store-badge {
-    display: block;
-    height: 40px;
-    width: auto;
-  }
-  .download-page__steps { margin: 0; padding-inline-start: 1.4em; display: grid; gap: 4px; }
-  .download-page__arch { border-collapse: collapse; margin: 0; }
-  .download-page__arch th, .download-page__arch td {
-    text-align: start;
-    padding: 4px 16px 4px 0;
-    font: var(--md-sys-typescale-body-small);
-    font-weight: 400;
-  }
-  .download-page__arch th { font-weight: 600; white-space: nowrap; }
-  .download-page__stores { display: flex; gap: calc(var(--site-unit) * 3); margin-block-end: calc(var(--site-unit) * 8); }
-  .store-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: calc(var(--site-unit) * 2) calc(var(--site-unit) * 4);
-    border-radius: var(--md-sys-shape-corner-small);
-    border: 1px solid color-mix(in srgb, var(--md-sys-color-on-primary-container) 30%, transparent);
-    background: transparent;
-    color: var(--md-sys-color-on-primary-container);
-    opacity: 0.55;
-    font: var(--md-sys-typescale-label-medium);
-  }
-  .download-page__more { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-  .download-page a:not(.site-button) { color: var(--md-sys-color-primary); }
-  .download-page a.download-page__row { color: var(--md-sys-color-on-primary-container); }
-  .download-page__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--site-unit) * 10); align-items: start; }
+  .download-page { padding-block: clamp(40px, 7vw, 80px) 80px; }
+  .download-page__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: start; }
   .download-page__package { min-inline-size: 0; padding: clamp(20px, 4vw, 32px); border-radius: var(--md-sys-shape-corner-xl); background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
-  .download-page__support { min-inline-size: 0; }
-  .download-page__head { margin-block-end: calc(var(--site-unit) * 6); }
-  .download-page__head h1 { font: var(--md-sys-typescale-display-medium); font-size: clamp(32px, 4vw, 45px); line-height: 1.2; }
-  .download-page__support h2 { color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-title-large); }
-  .download-page__support .t-body-small { font: var(--md-sys-typescale-body-medium); line-height: 1.75; }
+  .download-page__platform { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-block-end: 28px; }
+  .download-page[data-source] .download-source { display: block; }
+  .download-source { display: none; border: 0; padding: 0; margin: 0; min-inline-size: 0; }
+  .download-source legend { margin-block-end: 16px; }
+  .download-source__options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .download-source__option { position: relative; display: flex; align-items: start; gap: 12px; padding: 20px 16px; border: 2px solid transparent; border-radius: var(--md-sys-shape-corner-large); background: color-mix(in srgb, var(--md-sys-color-surface) 72%, var(--md-sys-color-primary-container)); color: var(--md-sys-color-on-surface); cursor: pointer; touch-action: manipulation; }
+  .download-source__option:has(:checked) { border-color: var(--md-sys-color-primary); background: var(--md-sys-color-surface); }
+  .download-source__option:has(:focus-visible) { outline: 3px solid var(--md-sys-color-primary); outline-offset: 3px; }
+  .download-source__option input { margin: 3px 0 0; inline-size: 20px; block-size: 20px; flex-shrink: 0; accent-color: var(--md-sys-color-primary); }
+  .download-source__text { display: grid; gap: 8px; min-inline-size: 0; }
+  .download-source__text strong { font: var(--md-sys-typescale-title-medium); }
+  .download-source__text :is(span, small) { font: var(--md-sys-typescale-body-small); line-height: 1.5; overflow-wrap: anywhere; color: var(--md-sys-color-on-surface-variant); }
+  .download-source__help { margin-block-start: 16px; line-height: 1.7; }
+  .download-page__primary { display: grid; gap: 16px; padding-block: 32px 24px; }
+  .download-page__primary h3 { margin-block-end: 8px; }
+  .download-page__primary p { line-height: 1.7; }
+  .download-page__cta-xl { inline-size: 100%; justify-content: center; flex-wrap: wrap; gap: 12px; min-block-size: 56px; padding: 16px 24px; font-size: 16px; text-decoration: none; }
+  .download-page__cta-xl span { font: var(--md-sys-typescale-label-large); }
+  .download-source__status { min-block-size: 2.8em; overflow-wrap: anywhere; }
+  .download-page__architectures { border-block-start: 1px solid color-mix(in srgb, currentColor 24%, transparent); }
+  .download-page__architectures summary, .download-help summary { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; min-block-size: 60px; cursor: pointer; font: var(--md-sys-typescale-title-medium); list-style: none; }
+  :is(.download-page__architectures, .download-help) summary::-webkit-details-marker { display: none; }
+  :is(.download-page__architectures, .download-help) summary::after { content: ''; inline-size: 8px; block-size: 8px; border-inline-end: 2px solid; border-block-end: 2px solid; transform: rotate(45deg); flex-shrink: 0; margin-inline: 4px; }
+  :is(.download-page__architectures, .download-help) details[open] > summary::after, .download-page__architectures[open] > summary::after { transform: rotate(225deg); }
+  .download-page__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .download-page__row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; border-radius: var(--md-sys-shape-corner-medium); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); text-decoration: none; }
+  .download-page__row:active { background: color-mix(in srgb, currentColor 10%, var(--md-sys-color-surface)); }
+  .download-source__option:active { background: color-mix(in srgb, currentColor 10%, var(--md-sys-color-surface)); }
+  .download-page__row-main { display: grid; gap: 4px; min-inline-size: 0; }
+  .download-page__row-name { font: var(--md-sys-typescale-title-small); }
+  .download-page__row-note { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); line-height: 1.5; }
+  .download-page__row-size { display: flex; align-items: center; gap: 12px; flex-shrink: 0; font: var(--md-sys-typescale-body-small); }
+  .download-page__release-link { margin-block-start: 20px; }
+  .download-page__package a:not(.site-button, .download-page__row) { color: inherit; }
+  .download-page__platforms { display: grid; gap: 24px; min-inline-size: 0; }
+  .download-platform { padding: clamp(20px, 4vw, 32px); background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-xl); display: grid; justify-items: start; gap: 16px; }
+  .download-platform p { font: var(--md-sys-typescale-body-medium); line-height: 1.8; color: var(--md-sys-color-on-surface-variant); }
+  .download-platform__label { margin-block-start: -8px; color: var(--md-sys-color-primary); }
+  .apple-store-badge-link { display: inline-flex; align-items: center; min-block-size: 44px; border-radius: 8px; }
+  .apple-store-badge { display: block; block-size: 40px; inline-size: auto; }
+  .download-platform__source { display: inline-flex; align-items: center; min-block-size: 44px; }
+  .download-help { max-inline-size: 760px; margin-block: 64px 32px; }
+  .download-help h2 { margin-block-end: 24px; }
+  .download-help details { border-block-end: 1px solid var(--md-sys-color-outline-variant); }
+  .download-help__body { display: grid; gap: 20px; padding-block: 0 24px; color: var(--md-sys-color-on-surface-variant); line-height: 1.8; }
+  .download-help__body ol { padding-inline-start: 24px; display: grid; gap: 12px; }
+  .download-help__body table { border-collapse: collapse; inline-size: 100%; font-size: 14px; }
+  .download-help__body th, .download-help__body td { text-align: start; vertical-align: top; padding: 8px 16px 8px 0; }
+  .download-page__more { display: flex; flex-wrap: wrap; gap: 8px 24px; }
   .download-page__more a { display: inline-flex; align-items: center; min-block-size: 44px; }
-  .download-page__stores { flex-wrap: wrap; }
-  .download-page__row-name { flex-wrap: wrap; }
-  @media (min-width: 900px) {
-    .download-page__grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: calc(var(--site-unit) * 14); }
-    .download-page__package { position: sticky; top: 96px; }
+  @media (hover: hover) and (pointer: fine) {
+    .download-page__row:hover { background: color-mix(in srgb, currentColor 8%, var(--md-sys-color-surface)); }
+    .download-source__option:hover { border-color: var(--md-sys-color-primary); }
   }
-  @media (max-width: 840px) {
-    .download-page__cta-xl { inline-size: 100%; justify-content: center; }
-    .download-page__list { max-inline-size: none; }
+  @media (min-width: 900px) { .download-page__grid { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 32px; } }
+  @media (max-width: 600px) {
+    .download-source__option { padding: 16px 12px; gap: 8px; }
+    .download-source__text small { display: none; }
+  }
+  @media (max-width: 400px) {
+    .download-source__options { grid-template-columns: minmax(0, 1fr); }
+    .download-source__option { padding: 16px; }
+    .download-source__text { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .download-source__text small { display: none; }
+    .download-page__row { padding: 16px 12px; gap: 8px; }
+    .download-page__row-size { gap: 4px; }
   }
 </style>
