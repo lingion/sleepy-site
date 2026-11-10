@@ -10,7 +10,7 @@ const zhMd = readFileSync(new URL('../fixtures/FAQ.md', import.meta.url), 'utf8'
 const enMd = readFileSync(new URL('./faq-en.md', import.meta.url), 'utf8');
 
 describe('parseFaq 结构闸(快照实测现值)', () => {
-  it('FAQ.md 解析 = 9 节剔除相关链接后 8 节 · 43 问 · 代码块 2 枚', () => {
+  it('FAQ.md 解析 = 9 节剔除相关链接后 8 节 · 54 问 · 代码块 2 枚', () => {
     const secs = parseFaq(zhMd);
     const items = secs.flatMap((s) => s.items);
     expect(items.length).toBe(54);
@@ -52,7 +52,7 @@ describe('zh/en 配对闸', () => {
     const zhItems = parseFaq(zhMd).flatMap((s) => s.items);
     expect(() => assertPairing(zhItems, zhItems.slice(1))).toThrow(/条数不一致/);
   });
-  it('仓内 faq-en.md 与快照现值恰配对(43=43,离线构建可复现)', () => {
+  it('仓内 faq-en.md 与快照现值恰配对(54=54,离线构建可复现)', () => {
     const zhItems = parseFaq(zhMd).flatMap((s) => s.items);
     const enItems = parseFaq(enMd).flatMap((s) => s.items);
     expect(() => assertPairing(zhItems, enItems)).not.toThrow();
@@ -60,9 +60,14 @@ describe('zh/en 配对闸', () => {
 });
 
 describe('released FAQ coverage', () => {
-  it('preserves the official TestFlight entry without inferring Android feature parity', () => {
-    for (const text of [zhMd, enMd]) expect(text).toContain('https://testflight.apple.com/join/SxymmDzf');
-    expect(zhMd).toContain('不能据 Android v1.0.63 推断');
+  it('preserves both iOS channels and regional availability without inferring Android parity', () => {
+    for (const text of [zhMd, enMd]) {
+      expect(text).toContain('https://testflight.apple.com/join/SxymmDzf');
+      expect(text).toContain('https://apps.apple.com/app/id6827001840');
+    }
+    expect(zhMd).toContain('中国大陆区仍在审核中');
+    expect(enMd).toContain('mainland China release is still under review');
+    expect(zhMd).toContain('不能据 Android v1.0.64 推断');
     expect(enMd).toContain('does not establish complete feature parity');
     expect(zhMd).not.toContain('与 Android 版功能对齐');
   });
@@ -79,7 +84,8 @@ describe('released FAQ coverage', () => {
     const zh = parseFaq(zhMd).flatMap((s) => s.items);
     const en = parseFaq(enMd, 'en').flatMap((s) => s.items);
     const index = zh.findIndex((q) => q.q.zh === '多张课表的提醒会刷屏吗？');
-    expect(blocksToHtml(zh[index].a.zh)).toContain('所有课表合并为一条通知');
+    expect(blocksToHtml(zh[index].a.zh)).toContain('合并为一条');
+    expect(blocksToHtml(zh[index].a.zh)).toContain('首次手动切换会保存完整选择集合');
     expect(blocksToHtml(zh[index].a.zh)).toContain('[课表名]');
     expect(blocksToHtml(en[index].a.en)).toContain('one notification');
     const consoleIndex = zh.findIndex((q) => q.q.zh === '本机调试控制台是只读的吗？');
