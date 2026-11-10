@@ -56,12 +56,8 @@ describe('AppBar 跨页锚点(spec §2.1 绝对路径不变量)', () => {
   });
 });
 
-describe('AppBar CTA 缺省态 prop 化 + 语言链 mirror(源码方向锁)', () => {
+describe('AppBar 语言链 mirror', () => {
   const src = read('../src/components/AppBar.astro');
-  it('缺省态三元 hasHero ? show : hide(方向锁:反转即红)', () => {
-    expect(src).toMatch(/hasHero\s*\?\s*['"]show['"]\s*:\s*['"]hide['"]/);
-    expect(src).not.toMatch(/hasHero\s*\?\s*['"]hide['"]\s*:\s*['"]show['"]/);
-  });
   it('语言链读 mirror,单页假设 ternary 绝迹', () => {
     // 正闸:.appbar__lang 的 href 属性消费 mirror prop
     expect(src).toMatch(/class="site-chip appbar__lang[^"]*"\s+href=\{mirror\}/);

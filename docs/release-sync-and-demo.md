@@ -35,7 +35,7 @@ Release synchronization remains unchanged. A published release triggers a comple
 Completion conditions:
 
 1. Both homepages embed the complete original web app and open that same original URL in a new tab. Neither entry adds query parameters, sandbox restrictions or host theme rewriting.
-2. The fixed phone screen scales uniformly, the introduction stays before the preview, and all eight homepage sections retain their existing order. Complete upstream bilingual notes and evidence anchors remain on the dedicated release pages.
+2. The fixed phone screen scales uniformly, the introduction stays before the preview, and all eight homepage sections retain their existing order. Each dedicated release page shows the complete notes and evidence anchors for its interface language. The raw release snapshot retains both languages.
 3. Release synchronization and its validation continue to use one release tag and source commit. This change stays within sleepy-site and leaves sleepy-web and the Sleepy main repository untouched.
 
 The built-page contracts in `tests/page.index.test.ts` and `tests/page.en.test.ts` lock the original URL, absence of query parameters and sandbox, absence of URL theme rewriting, complete web app copy and hero position. The existing release tests retain the dedicated pages and synchronized release metadata. Build before running the page tests so they inspect the current implementation.

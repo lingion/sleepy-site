@@ -1,8 +1,7 @@
 ---
 // v5 AppBar(spec §2.1/§4):三段式 = 品牌标 / 4 枚导航文字链(Text 档,≤840px 隐藏)/ [下载]Filled S + 语言 + 主题
 // 滚动态 surface→surface-container tonal 升起(仅 background-color 150ms,无投影);高 64px
-// 互隐 IO(T6,spec §11-6):hero 在视口 → appbar CTA hide;离开 → show。缺省态 = hasHero ? show : hide
-// —— 工具页(无 hero)JS-off 即恒隐终态,消除「屏上恒见两枚 Filled」(spec §2.4 CTA 纪律)。
+// 首页 hero 在视口时隐藏顶栏下载，离开后显示。所有子页常驻下载入口，包含手机端和无脚本状态。
 // 锚点 href 不变量(spec §2.1):恒为绝对路径形式——锚点项 = 同语言主页锚点(/#views、/#reminders;
 // en 页 /en/#*);页面项 = /schools/、/faq/(en 页带 /en/ 前缀)。任意页面点击均回主页锚点。
 // label 走 appbar.anchors 键树(zh/en 同形,禁 ternary 硬编码);「学校名录/常见问答」四字形态防 EN 泄漏闸(§15)。
@@ -12,7 +11,7 @@ import type { SiteCopy } from '../i18n/zh';
 interface Props {
   lang: 'zh' | 'en';
   copy?: SiteCopy;
-  /** 两主页显式 true;缺省 false(工具页)→ CTA 缺省 hide + IO 不启用 */
+  /** 两主页显式 true；子页没有 hero，下载入口常驻。 */
   hasHero?: boolean;
   /** 本页双语对侧路径(Base 透传):语言链读它,单页硬编码假设废弃(终审 I4) */
   mirror?: string;
@@ -31,9 +30,9 @@ const anchors = [
 const dlHref = `${home}download/`;
 ---
 
-<header class="appbar" id="appbar">
+<header class="appbar" id="appbar" data-has-hero={hasHero ? 'true' : undefined}>
   <div class="appbar__inner site-col">
-    <a class="appbar__brand t-title-medium" href={lang === 'zh' ? '/' : '/en/'}>
+    <a class="appbar__brand t-title-medium" href={lang === 'zh' ? '/' : '/en/'} aria-label="Sleepy">
       <!-- 品牌标 = /favicon.svg 胶囊 logo 忠实转写(几何/色值逐字照抄源文件,禁反相禁改底;白底方块深浅主题均稳)
            2026-10-26 随 favicon.svg 同步: 图形按 iOS AppIcon 比例缩至 55%×60%(原 75%×81% 撑满) -->
       <svg width="24" height="24" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
@@ -56,7 +55,7 @@ const dlHref = `${home}download/`;
         <rect x="372.10" y="271.43" width="25.72" height="86.71" rx="12.49" fill="#C2C4D0"/>
         <rect x="328.75" y="238.36" width="25.72" height="144.76" rx="12.49" fill="#C2C4D0"/>
       </svg>
-      Sleepy
+      <span class="appbar__brand-name">Sleepy</span>
     </a>
     <nav class="appbar__anchors" aria-label={c.appbar.navLabel}>
       {
@@ -66,7 +65,7 @@ const dlHref = `${home}download/`;
       }
     </nav>
     <nav class="appbar__actions" aria-label={lang === 'zh' ? '页面操作' : 'Page actions'}>
-      <a class="site-button site-button--filled appbar__cta t-label-large" href={dlHref} data-appbar-cta={hasHero ? 'show' : 'hide'}>{c.appbar.ctaDownload}</a>
+      <a class="site-button site-button--filled appbar__cta t-label-large" href={dlHref} data-appbar-cta="show">{c.appbar.ctaDownload}</a>
       <a class="site-chip appbar__lang t-label-large" href={mirror}>{otherLabel}</a>
       <button
         class="appbar__theme"
@@ -167,8 +166,9 @@ const dlHref = `${home}download/`;
     flex-shrink: 0;
   }
   .appbar__cta {
-    /* Filled S 紧凑档(spec §4):高度压至 36,字号 label-large */
+    /* 顶栏紧凑间距，触控高度沿用站点按钮基类。 */
     padding: 6px 16px;
+    white-space: nowrap;
     text-decoration: none;
     /* 互隐过渡(T6):visibility 两态 + opacity 150ms(reduce 档 token 归零自动瞬切);
        禁 display:none —— 锚点/操作组横向布局会跳动 */
@@ -176,7 +176,7 @@ const dlHref = `${home}download/`;
       opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized),
       visibility var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
   }
-  /* hero 在视口内 → 钮隐(spec §11-6 任意视口至多一枚 Filled);缺省态 = hasHero ? show : hide */
+  /* 仅首页的 hero 观察器写入隐藏状态。 */
   .appbar__cta[data-appbar-cta='hide'] {
     opacity: 0;
     visibility: hidden;
@@ -256,8 +256,21 @@ const dlHref = `${home}download/`;
     .appbar__menu { display: inline-flex; }
   }
   @media (max-width: 480px) {
-    /* 下载入口保留在导航菜单中，避免顶栏为隐藏按钮预留宽度。 */
-    .appbar__cta { display: none; }
+    .appbar__inner { gap: calc(var(--site-unit) * 2); }
+    .appbar__actions { gap: var(--site-unit); }
+    .appbar__cta { padding-inline: 12px; }
+    .appbar__lang { inline-size: 44px; padding-inline: 0; }
+    .appbar[data-has-hero='true'] .appbar__cta { display: none; }
+  }
+  @media (max-width: 380px) {
+    .appbar:not([data-has-hero]) .appbar__inner { padding-inline: 8px; gap: var(--site-unit); }
+    .appbar:not([data-has-hero]) .appbar__brand-name { display: none; }
+    .appbar:not([data-has-hero]) .appbar__brand {
+      min-inline-size: 44px;
+      justify-content: center;
+      padding-inline: 0;
+      margin-inline-start: 0;
+    }
   }
 </style>
 
@@ -294,7 +307,7 @@ const dlHref = `${home}download/`;
     });
   }
   // CTA 互隐(T6,spec §11-6):hero 在视口 → 钮 hide;离开 → show。
-  // 非主页 markup 缺省即 hide 终态,无 #hero 时 IO 不启用(spec §2.4 CTA 纪律);
+  // 子页没有 #hero，保持常驻下载入口。
   // #hero 缺失(无 hero 页/构建异动)或旧内核无 IO → 保持缺省态,不崩。
   const cta = document.querySelector<HTMLElement>('[data-appbar-cta]');
   const hero = document.getElementById('hero');

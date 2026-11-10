@@ -55,3 +55,21 @@ describe('School, download and help journeys', () => {
     });
   }
 });
+
+describe('persistent subpage download action', () => {
+  const routes = ['', 'en/'].flatMap(prefix => ['download', 'schools', 'faq', 'releases', 'privacy', 'licenses'].map(name => `${prefix}${name}/`));
+  for (const route of [...routes, '404.html']) {
+    it(`${route}: exposes the localized download link before language, theme and menu controls`, () => {
+      const doc = route === '404.html'
+        ? new JSDOM(readFileSync(new URL('../dist/client/404.html', import.meta.url), 'utf8')).window.document
+        : page(route);
+      const actions = doc.querySelector('.appbar__actions')!;
+      const download = actions.firstElementChild!;
+      expect(download.getAttribute('href')).toBe(route.startsWith('en/') ? '/en/download/' : '/download/');
+      expect(download.getAttribute('data-appbar-cta')).toBe('show');
+      expect(download.textContent?.trim()).toBe(route.startsWith('en/') ? 'Download' : '下载');
+      expect(download.hasAttribute('hidden')).toBe(false);
+      expect([...actions.children].map(element => element.classList[0])).toEqual(['site-button', 'site-chip', 'appbar__theme', 'appbar__menu']);
+    });
+  }
+});

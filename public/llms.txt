@@ -7,7 +7,8 @@ Sleepy is an independent, GPL-3.0, local-first university timetable app maintain
 ## Current release
 
 - Release: https://github.com/lingion/sleepy/releases/tag/v1.0.64
-- Complete English and Chinese release notes: https://sleepy.is-my.app/releases/
+- Complete Chinese release notes: https://sleepy.is-my.app/releases/
+- Complete English release notes: https://sleepy.is-my.app/en/releases/
 - Machine-readable release notes, APK assets and SHA-256 digests: https://sleepy.is-my.app/release.json
 - Download: https://sleepy.is-my.app/download/
 - app-arm64-v8a-release.apk: https://github.com/lingion/sleepy/releases/download/v1.0.64/app-arm64-v8a-release.apk (SHA-256 fd0e20e19740eb7da862eabae681130d69696f5970c7afaf91473d128720f043)
@@ -20,7 +21,7 @@ Sleepy is an independent, GPL-3.0, local-first university timetable app maintain
 
 - https://sleepy.is-my.app/ and /en/: product overview and interactive demo timetable.
 - https://sleepy.is-my.app/schools/ and /en/schools/: 2881 school connections from v1.0.64 (77b878fd5c8903a3f201ea938b3b152de4c4fbc0). Listing does not guarantee a successful login at every school.
-- https://sleepy.is-my.app/releases/ and /en/releases/: complete upstream release notes, refreshed with the assets as one deployment.
+- https://sleepy.is-my.app/releases/ and /en/releases/: complete upstream notes in the page language only, refreshed with the assets as one deployment. The machine-readable release snapshot preserves the full bilingual original.
 - https://sleepy.is-my.app/faq/ and /en/faq/: reviewed bilingual FAQ, with its separate editorial date. New release behavior is documented in the release notes. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
 - Web trial: https://sleepy.is-my.app/preview
 - Android source: https://github.com/lingion/sleepy. Project index: https://github.com/lingion/sleepy/blob/main/llms.txt.
