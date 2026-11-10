@@ -14,9 +14,9 @@ export const zh = {
     sub: '开源 Android 课表:三视图、课程编辑、教务导入与桌面组件。课表保存在本机,联网导入按所选服务发起请求。',
     ctaDownload: '下载 Android',
     ctaTrial: '在线体验',
-    demoTitle: 'Sleepy 可操作的演示课表',
-    demoHint: '切换周次、点开课程，直接试试。',
-    demoOpen: '单独打开演示',
+    demoTitle: 'Sleepy 完整网页版',
+    demoHint: '完整网页版，保留原站界面与功能。',
+    demoOpen: '单独打开完整网页版',
     deviceCaption: '周视图应用截图',
     // ribbon = 不对称佐证条:派生大数字领头 + 单位短语,两事实跟随
     ribbon: { schools: '所学校直连', license: 'GPL-3.0 开源', privacy: '数据留存本机' },
