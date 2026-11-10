@@ -4,6 +4,10 @@ The homepage embeds the existing complete sleepy-web site and its original UI. B
 
 The original web app controls its own UI, features, navigation, theme, browser storage and settings. sleepy-site does not modify sleepy-web or provide an isolated, reduced or demo-specific version. Chinese and English captions both identify the complete web app.
 
+The app publishes its palette through the version 1 `sleepy:theme` message. The host accepts messages only from the embedded frame and its exact origin, validates both color schemes, and applies the selected mode without reloading the app. The supported palette includes `surface-bright`, which the Android v1.0.64 glass controls use. The same token list validates saved palettes before first paint and live updates, so changing modes, restoring the saved theme and using the site theme switch retain the same colors. Unknown tokens and non-hexadecimal colors remain invalid.
+
+用户要求内嵌课表切换主题后，整个官网同步切换。官网按内嵌应用发布的明暗模式和完整配色更新，并保存供后续页面恢复；这一过程不修改 iframe 地址、不重载应用。玻璃增加的 surface-bright 颜色字段与其他合法颜色一并校验，不能因旧白名单漏项而拒绝整条主题消息。
+
 The existing Material palette remains the visual source: primary #604BBF, on-primary #FFFFFF, primary-container #E6DEFF, on-surface-variant #48454E. Inter Variable and the existing Chinese system font remain unchanged.
 
 Layout invariants:
