@@ -16,6 +16,10 @@ describe('FAQ search and original anchors', () => {
     expect(visible(doc).map(item => item.id)).toEqual(expected.map(item => item.id));
     expect(visible(doc).every(item => item.querySelector<HTMLDetailsElement>('details')!.open)).toBe(true);
     expect([...doc.querySelectorAll<HTMLElement>('[data-faq-section]')].every(section => section.hidden === !section.querySelector('[data-faq-item]:not([hidden])'))).toBe(true);
+    for (const section of doc.querySelectorAll<HTMLElement>('[data-faq-section]')) {
+      const link = doc.querySelector<HTMLElement>(`[data-toc-link][href="#${section.id}"]`)!;
+      expect(link.closest<HTMLLIElement>('li')!.hidden).toBe(section.hidden);
+    }
   });
   it('shows an empty state, then restores all answers after clearing', () => {
     const doc = new JSDOM(html()).window.document;
@@ -25,6 +29,7 @@ describe('FAQ search and original anchors', () => {
     expect(visible(doc)).toHaveLength(54);
     expect(doc.querySelector<HTMLElement>('[data-faq-empty]')?.hidden).toBe(true);
     expect(doc.querySelector<HTMLButtonElement>('[data-faq-clear]')?.hidden).toBe(true);
+    expect([...doc.querySelectorAll<HTMLLIElement>('[data-document-nav] li')].every(item => !item.hidden)).toBe(true);
   });
   it('opens original question hashes on initial load and after a hash change', () => {
     const dom = new JSDOM(html(), {url: 'https://sleepy.is-my.app/faq/'});
