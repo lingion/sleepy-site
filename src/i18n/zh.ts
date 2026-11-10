@@ -19,7 +19,7 @@ export const zh = {
   hero: {
     slogan: '构建无壳,自由自在',
     sub: '开源 Android 课表:三视图、课程编辑、教务导入与桌面组件。课表保存在本机,联网导入按所选服务发起请求。',
-    ctaDownload: '下载 Android',
+    ctaDownload: '下载',
     ctaTrial: '在线体验',
     demoTitle: 'Sleepy 完整网页版',
     demoHint: '完整网页版，保留原站界面与功能。',
@@ -112,7 +112,7 @@ export const zh = {
   },
   download: {
     heading: '下载 Sleepy',
-    cta: '下载 Android',
+    cta: '下载',
     versionLine: (tag: string, date: string) => `${tag} · ${date} 发布`,
     universalNote: 'Universal 包包含本版本支持的架构,不确定应选哪种 ABI 时可使用。',
     recommended: '推荐',
@@ -159,7 +159,7 @@ export const zh = {
     licenses: '开源许可与致谢',
     // app 用 'App'(纯拉丁):中文 '应用' 撞真实校名「广州应用科技学院」子串 = EN 泄漏闸红(§15)
     app: 'App',
-    dl: '下载 Android',
+    dl: '下载',
     trial: '在线体验',
     repo: '源码仓库',
     community: '社区',

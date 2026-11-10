@@ -20,7 +20,7 @@ export const en: SiteCopy = {
   hero: {
     slogan: 'Built open. Feels free.',
     sub: 'An open-source Android timetable with three views, course editing, academic import and home-screen widgets. Timetables are stored locally; online imports contact the selected service.',
-    ctaDownload: 'Download for Android',
+    ctaDownload: 'Download',
     ctaTrial: 'Try it online',
     demoTitle: 'Full Sleepy web app',
     demoHint: 'Use the full web app with its original interface and features.',
@@ -110,7 +110,7 @@ export const en: SiteCopy = {
   },
   download: {
     heading: 'Download Sleepy',
-    cta: 'Download for Android',
+    cta: 'Download',
     versionLine: (tag: string, date: string) => `${tag} · released ${date}`,
     universalNote: 'The universal package includes the release’s supported architectures; choose it if you are unsure which ABI to use.',
     recommended: 'Recommended',
@@ -155,7 +155,7 @@ export const en: SiteCopy = {
     privacy: 'Privacy policy',
     licenses: 'Licenses and credits',
     app: 'App',
-    dl: 'Download for Android',
+    dl: 'Download',
     trial: 'Try online',
     repo: 'Source code',
     community: 'Community',
