@@ -26,6 +26,10 @@
   Cache-Control: public, max-age=0, must-revalidate
 /releases/*
   Cache-Control: public, max-age=0, must-revalidate
+/licenses/*
+  Cache-Control: public, max-age=0, must-revalidate
+/privacy/*
+  Cache-Control: public, max-age=0, must-revalidate
 /release.json
   Cache-Control: public, max-age=0, must-revalidate
 /faq/*

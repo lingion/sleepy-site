@@ -1,0 +1,54 @@
+{
+  "source": "https://sleepy.qdp.qzz.io/privacy",
+  "repository": "https://github.com/lingion/sleepy-web/blob/main/public/privacy.html",
+  "sourceBlob": "3f817ab5b5f59584c7143be12266eca7005cc70b",
+  "effectiveDate": "2026-10-18",
+  "scope": "Sleepy课程表 Android 应用（包名 com.lingion.sleepy）及其在线网页版",
+  "sections": [
+    {
+      "id": "s1",
+      "title": "一、总则",
+      "html": "<p class=\"body-large\">Sleepy 是一款开源课程表应用。我们的隐私设计原则是：<span class=\"emphasis\">不建立用户账号体系，不收集、不上传、不共享任何个人身份信息</span>。应用未集成任何第三方统计、推送、广告或崩溃上报 SDK。所有课表数据仅存储在你的设备本地。</p>"
+    },
+    {
+      "id": "s2",
+      "title": "二、我们不会收集的信息",
+      "html": "<ul class=\"body-large\">\n      <li>没有注册、登录或账号体系，我们不掌握你的姓名、手机号、邮箱或设备标识符；</li>\n      <li>不收集通讯录、短信、通话记录、照片库内容；</li>\n      <li>不植入任何数据采集 SDK，不存在后台数据上报服务；</li>\n      <li>课表、课程、成绩等内容永远只保存在设备本地数据库，不经过我们的服务器。</li>\n    </ul>"
+    },
+    {
+      "id": "s3",
+      "title": "三、应用权限与用途逐项说明",
+      "html": "<ul class=\"perm-list\">\n      <li>\n        \n        <div><div class=\"perm body-large\">网络访问</div>\n        <div class=\"perm-detail body-medium\">教务直连导入、节假日数据更新、版本更新检查</div>\n        <div class=\"perm-note body-small\">详见第五节联网行为清单</div></div>\n      </li>\n      <li>\n        \n        <div><div class=\"perm body-large\">位置权限（大致/精确）</div>\n        <div class=\"perm-detail body-medium\">在「教务导入-学校选择」中按你所在城市推荐附近学校</div>\n        <div class=\"perm-note body-small\">仅读取设备本机已有的定位结果并在本地用于匹配城市，不上传；拒绝后不影响任何功能，可手动选择城市</div></div>\n      </li>\n      <li>\n        \n        <div><div class=\"perm body-large\">日历（读取/写入）</div>\n        <div class=\"perm-detail body-medium\">将课表导出到系统日历；从系统日历导入日程</div>\n        <div class=\"perm-note body-small\">数据在本机应用间流转，不上传</div></div>\n      </li>\n      <li>\n        \n        <div><div class=\"perm body-large\">存储/媒体读取</div>\n        <div class=\"perm-detail body-medium\">导入课表文件（ICS、CSV、备份文件等）</div>\n        <div class=\"perm-note body-small\">仅读取你主动选择的文件</div></div>\n      </li>\n      <li>\n        \n        <div><div class=\"perm body-large\">通知</div>\n        <div class=\"perm-detail body-medium\">上课提醒、每日课程提醒</div>\n        <div class=\"perm-note body-small\">提醒内容完全由本地数据生成</div></div>\n      </li>\n      <li>\n        \n        <div><div class=\"perm body-large\">精确闹钟/后台运行相关（后台锁、自启动、忽略电池优化、通知策略）</div>\n        <div class=\"perm-detail body-medium\">保证上课提醒准时送达</div>\n        <div class=\"perm-note body-small\">不用于任何数据采集或后台上传</div></div>\n      </li>\n      <li>\n        \n        <div><div class=\"perm body-large\">安装应用（仅新版本引导）</div>\n        <div class=\"perm-detail body-medium\">检查到新版本后，引导你下载并安装更新包</div>\n        <div class=\"perm-note body-small\">下载行为需要你明确点击确认</div></div>\n      </li>\n    </ul>"
+    },
+    {
+      "id": "s4",
+      "title": "四、教务导入功能特别说明",
+      "html": "<p class=\"body-large\">「教务直连导入」允许应用内输入你所在学校教务系统的账号与密码，以抓取课表。对此我们承诺：</p>\n    <ul class=\"body-large\">\n      <li>账号口令仅在你设备内存与本机 WebView 会话中使用，<span class=\"emphasis\">发送目标只有你选择的学校教务服务器</span>；</li>\n      <li>账号口令不写入常规长期存储、不参与课表备份导出、不发送给开发方或任何第三方服务器；</li>\n      <li>仅当你<span class=\"emphasis\">主动触发「诊断采集」</span>（用于向开发者报告导入故障）时，会话快照会作为文件保存在本机应用私有目录，可一键清除，卸载即销毁；该文件不会被应用自动发送。</li>\n      <li>抓取到的课表仅保存在本机数据库。</li>\n    </ul>"
+    },
+    {
+      "id": "s5",
+      "title": "五、联网行为清单（完整、可复核）",
+      "html": "<ul class=\"body-large\">\n      <li>你主动使用的教务导入：访问对应学校的教务系统域名；</li>\n      <li>节假日/调休数据：公开 CDN <code>unpkg.com</code> 的开源节假日数据（仅日期数据，不含任何设备信息）；</li>\n      <li>版本更新检查：公开 <code>github.com</code> 仓库的发布页（仅版本号比对，不携带个人信息）；</li>\n      <li>「加入 QQ 群」等社区入口：拉起外部应用或打开官方群页面，由腾讯平台按其政策处理，与本应用无关。</li>\n    </ul>"
+    },
+    {
+      "id": "s6",
+      "title": "六、数据存储与删除",
+      "html": "<p class=\"body-large\">全部数据（课表、偏好、主题、导入配置）存储于设备本地数据库。删除方式：在应用内删除课表或数据，或卸载应用、清除应用数据，即刻全部删除，无任何服务端副本可供恢复。</p>"
+    },
+    {
+      "id": "s7",
+      "title": "七、未成年人保护",
+      "html": "<p class=\"body-large\">本应用不收集任何用户个人信息，适用于在校学生（含未成年人）。教务账号的使用应遵守你所在学校的规定，并建议在监护人知情下操作。</p>"
+    },
+    {
+      "id": "s8",
+      "title": "八、政策变更",
+      "html": "<p class=\"body-large\">若应用的数据处理行为发生变化，我们将更新本页面并在应用发布说明中同步告知。不会在未经通知的情况下实质性削弱本政策承诺。</p>"
+    },
+    {
+      "id": "s9",
+      "title": "九、联系我们",
+      "html": "<p class=\"body-large\">本应用为开源项目，源码公开可审计：<a href=\"https://github.com/lingion/sleepy\">https://github.com/lingion/sleepy</a>。对本政策有任何疑问，可通过仓库 Issue 或开发者社区 QQ 群（1063407652）联系我们。</p>"
+    }
+  ]
+}

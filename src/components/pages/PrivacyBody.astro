@@ -1,0 +1,36 @@
+---
+import policy from '../../data/privacy.json';
+import sanitizeHtml from 'sanitize-html';
+import PageHeader from '../PageHeader.astro';
+import DocumentNav from '../DocumentNav.astro';
+interface Props { lang: 'zh' | 'en' }
+const { lang } = Astro.props;
+const en = lang === 'en';
+const headings = ['Overview', 'Information we do not collect', 'Permissions and their purpose', 'Academic import', 'Network activity', 'Storage and deletion', 'Younger users', 'Policy changes', 'Contact'];
+const date = new Intl.DateTimeFormat(en ? 'en' : 'zh-CN', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(policy.effectiveDate));
+---
+<div class="site-col document-page">
+  <PageHeader title={en ? 'Privacy policy' : '隐私政策'} description={en ? 'How Sleepy handles local data, permissions and network access. The published Chinese policy is reproduced in full below.' : '了解课表数据保存在何处、权限用来做什么，以及哪些功能需要联网。以下保留已公布的政策原文。'}>
+    <span slot="meta">{en ? 'Effective ' : '生效日期：'}<time datetime={policy.effectiveDate}>{date}</time></span>
+    <a slot="actions" class="site-button site-button--outlined" href={policy.source}>{en ? 'View original policy' : '查看政策原始页面'}</a>
+  </PageHeader>
+  <div class="document-grid">
+    <DocumentNav label={en ? 'On this page' : '本页内容'} links={policy.sections.map((section, i) => ({ href: `#${section.id}`, label: en ? headings[i] : section.title.replace(/^[一二三四五六七八九]、/, '') }))} />
+    <article class="document-body privacy-policy" lang="zh-CN">
+      <p class="document-callout">适用范围：{policy.scope}</p>
+      {policy.sections.map(section => <section id={section.id} aria-labelledby={`${section.id}-title`}>
+        <h2 id={`${section.id}-title`}>{section.title}</h2>
+        <div set:html={sanitizeHtml(section.html, { allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, '*': ['class'] } })} />
+      </section>)}
+    </article>
+  </div>
+</div>
+<style>
+  .privacy-policy > p { margin-block-end: calc(var(--site-unit) * 12); }
+  .privacy-policy :global(p) { margin-block: calc(var(--site-unit) * 4); }
+  .privacy-policy :global(.perm-list) { list-style: none; padding: 0; }
+  .privacy-policy :global(.perm-list > li) { padding: calc(var(--site-unit) * 5) calc(var(--site-unit) * 6); background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-large); }
+  .privacy-policy :global(.perm) { font: var(--md-sys-typescale-title-medium); margin-block-end: calc(var(--site-unit) * 2); }
+  .privacy-policy :global(.perm-detail), .privacy-policy :global(.perm-note) { color: var(--md-sys-color-on-surface-variant); }
+  .privacy-policy :global(code) { font-size: .875em; padding: calc(var(--site-unit) * 1) calc(var(--site-unit) * 2); border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface-container); overflow-wrap: anywhere; }
+</style>

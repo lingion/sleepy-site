@@ -1,47 +1,48 @@
 ---
 import release from '../../data/release.json';
 import { renderReleaseNotes } from '../../lib/release-notes';
+import PageHeader from '../PageHeader.astro';
+import DocumentNav from '../DocumentNav.astro';
 interface Props { lang: 'zh' | 'en' }
 const { lang } = Astro.props;
 const t = lang === 'zh'
-  ? { heading: '更新说明', intro: '完整同步自 Sleepy 正式发布，包含英文和中文说明。', source: '查看 GitHub 发布', download: '下载这个版本' }
-  : { heading: 'Release notes', intro: 'The complete official Sleepy release notes, in English and Chinese.', source: 'View release on GitHub', download: 'Download this version' };
+  ? { heading: '更新说明', intro: '每一次更新，都留有记录。以下完整保留正式发布中的英文与中文说明。', source: '在 GitHub 查看', download: '下载这个版本', toc: '本次更新' }
+  : { heading: 'Release notes', intro: 'A record of every change. The complete English and Chinese notes from the official release.', source: 'View on GitHub', download: 'Download this version', toc: 'In this release' };
 const html = renderReleaseNotes(release.body);
+const outline = [...html.matchAll(/<h[23] id="([^"]+)">([\s\S]*?)<\/h[23]>/g)].map(match => ({
+  href: `#${match[1]}`, label: match[1] === 'release-english' ? 'English' : match[1] === 'release-chinese' ? '中文' : match[2].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&'),
+}));
+const date = new Intl.DateTimeFormat(lang === 'zh' ? 'zh-CN' : 'en', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(release.date));
 ---
-<section class="site-section release-page" aria-labelledby="release-title" data-release-tag={release.tag}>
+<section class="document-page release-page" aria-labelledby="release-title" data-release-tag={release.tag}>
   <div class="site-col">
-    <header class="release-page__header">
-      <h1 class="t-headline-large" id="release-title">{t.heading}</h1>
-      <p class="t-title-large tnum">Sleepy {release.tag}</p>
-      <time datetime={release.date}>{new Date(release.date).toISOString().slice(0, 10)} UTC</time>
-      <p class="t-body-large">{t.intro}</p>
-      <nav aria-label={t.heading}>
-        <a href="#release-english" lang="en">English</a>
-        {html.includes('id="release-chinese"') && <a href="#release-chinese" lang="zh-CN">中文</a>}
-        <a href={lang === 'zh' ? '/download/' : '/en/download/'}>{t.download}</a>
-        <a href={release.url}>{t.source}</a>
-      </nav>
-    </header>
-    <article class="release-prose" set:html={html} />
+    <PageHeader id="release-title" title={t.heading} description={t.intro}>
+      <Fragment slot="meta"><span class="site-chip tnum">Sleepy {release.tag}</span><time datetime={release.date}>{date}</time></Fragment>
+      <Fragment slot="actions">
+        <a class="site-button site-button--filled" href={lang === 'zh' ? '/download/' : '/en/download/'}>{t.download}</a>
+        <a class="site-button site-button--outlined" href={release.url}>{t.source}</a>
+      </Fragment>
+    </PageHeader>
+    <div class="document-grid">
+      <DocumentNav label={t.toc} links={outline} />
+      <article class="release-prose document-body" set:html={html} />
+    </div>
   </div>
 </section>
 <style>
-  .release-page { padding-block: 64px 96px; }
-  .release-page__header { display: grid; gap: 16px; margin-block-end: 48px; }
-  .release-page__header time, .release-page__header p { color: var(--md-sys-color-on-surface-variant); }
-  .release-page__header nav { display: flex; flex-wrap: wrap; gap: 16px 32px; }
-  .release-page a, .release-prose :global(a) { color: var(--md-sys-color-primary); }
-  .release-prose { max-inline-size: 78ch; font: var(--md-sys-typescale-body-large); line-height: 1.75; overflow-wrap: anywhere; }
-  .release-prose :global(h2) { font: var(--md-sys-typescale-headline-medium); margin-block: 64px 24px; }
-  .release-prose :global(h3) { font: var(--md-sys-typescale-title-large); margin-block: 40px 20px; }
-  .release-prose :global(h4) { font: var(--md-sys-typescale-title-medium); margin-block: 32px 16px; }
-  .release-prose :global(p), .release-prose :global(ul), .release-prose :global(ol) { margin-block: 16px; }
-  .release-prose :global(li) { margin-block: 12px; }
-  .release-prose :global(ul), .release-prose :global(ol) { padding-inline-start: 24px; }
-  .release-prose :global(blockquote) { margin: 24px 0; padding-inline-start: 20px; border-inline-start: 3px solid var(--md-sys-color-primary); color: var(--md-sys-color-on-surface-variant); }
-  .release-prose :global(pre) { overflow: auto; padding: 20px; background: var(--md-sys-color-surface-container); border-radius: 12px; }
-  .release-prose :global(table) { display: block; overflow: auto; border-collapse: collapse; }
-  .release-prose :global(th), .release-prose :global(td) { padding: 12px; border: 1px solid var(--md-sys-color-outline-variant); }
+  .release-prose { font: var(--md-sys-typescale-body-large); line-height: 1.8; }
+  .release-prose :global(h2) { padding: calc(var(--site-unit) * 6); margin-block: calc(var(--site-unit) * 16) calc(var(--site-unit) * 8); border-radius: var(--md-sys-shape-corner-xl); background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+  .release-prose :global(h2:first-child) { margin-block-start: 0; }
+  .release-prose :global(h3) { margin-block: calc(var(--site-unit) * 12) calc(var(--site-unit) * 5); }
+  .release-prose :global(h4) { font: var(--md-sys-typescale-title-medium); margin-block: calc(var(--site-unit) * 8) calc(var(--site-unit) * 4); }
+  .release-prose :global(p), .release-prose :global(ul), .release-prose :global(ol) { margin-block: calc(var(--site-unit) * 4); }
+  .release-prose :global(li) { margin-block: calc(var(--site-unit) * 3); }
+  .release-prose :global(blockquote) { margin: calc(var(--site-unit) * 6) 0; padding: calc(var(--site-unit) * 5) calc(var(--site-unit) * 6); border-radius: var(--md-sys-shape-corner-large); background: var(--md-sys-color-surface-container-low); color: var(--md-sys-color-on-surface-variant); }
+  .release-prose :global(pre) { overflow: auto; padding: calc(var(--site-unit) * 5); background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-medium); font-size: .875rem; }
+  .release-prose :global(code) { overflow-wrap: anywhere; }
+  .release-prose :global(table) { display: block; max-inline-size: 100%; overflow: auto; border-collapse: collapse; }
+  .release-prose :global(th), .release-prose :global(td) { padding: calc(var(--site-unit) * 3); border-block-end: 1px solid var(--md-sys-color-outline-variant); text-align: start; }
+  .release-prose :global(th) { background: var(--md-sys-color-surface-container); }
   .release-prose :global(img) { max-inline-size: 100%; block-size: auto; }
-  .release-prose :global([id]) { scroll-margin-top: 96px; }
+  .release-prose :global([id]) { scroll-margin-top: 100px; }
 </style>

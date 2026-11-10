@@ -1,0 +1,27 @@
+---
+interface Props { label: string; links: { href: string; label: string }[] }
+const { label, links } = Astro.props;
+---
+<nav class="document-nav" aria-label={label} data-document-nav>
+  <p class="t-label-large">{label}</p>
+  <ul>{links.map(link => <li><a href={link.href}>{link.label}</a></li>)}</ul>
+</nav>
+<script>
+  for (const nav of document.querySelectorAll<HTMLElement>('[data-document-nav]')) {
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>('a')];
+    const sections = links.map(link => document.getElementById(link.hash.slice(1))).filter((el): el is HTMLElement => !!el);
+    if (!sections.length || !('IntersectionObserver' in window)) continue;
+    const activate = (id: string) => {
+      for (const link of links) {
+        if (link.hash === `#${id}`) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      }
+    };
+    const current = location.hash.slice(1);
+    activate(sections.some(section => section.id === current) ? current : sections[0].id);
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.isIntersecting) activate(entry.target.id);
+    }, { rootMargin: '-100px 0px -55% 0px' });
+    for (const section of sections) observer.observe(section);
+  }
+</script>
