@@ -64,7 +64,7 @@ describe('/en/ 结构镜像(v5 八段)', () => {
   it('keeps the original copy-first visual position', () => {
     const grid = doc.querySelector('#hero .hero__grid')!;
     expect([...grid.children].map((el) => el.className)).toEqual(['hero__copy', 'hero__device']);
-    expect(grid.querySelector('.hero__device > iframe')).not.toBeNull();
+    expect(grid.querySelector('.hero__device iframe')).not.toBeNull();
   });
   it('provides the same full original URL for opening a new tab', () => {
     const link = doc.querySelector('.hero__demo-caption a');

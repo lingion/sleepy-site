@@ -33,13 +33,17 @@ const t = c.hero;
       </p>
     </div>
     <div class="hero__device">
+      <div class="hero__screen" data-phone-screen>
       <iframe
         src={fullWebAppUrl}
         title={t.demoTitle}
         loading="eager"
         referrerpolicy="strict-origin-when-cross-origin"
         data-timetable-demo
+        width="402"
+        height="874"
       ></iframe>
+      </div>
       <div class="hero__demo-caption">
         <span>{t.demoHint}</span>
         <a href={fullWebAppUrl} target="_blank" rel="noopener noreferrer">{t.demoOpen}</a>
@@ -126,23 +130,31 @@ const t = c.hero;
     font: var(--md-sys-typescale-body-medium);
   }
   .hero__device {
-    box-sizing: border-box;
-    inline-size: min(100%, 416px);
-    justify-self: center;
-    border-radius: var(--md-sys-shape-corner-xl);
-    padding: calc(var(--site-unit) * 3);
-    background: var(--md-sys-color-surface-container-low);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    /* The screen stays a portrait 390 × 844 phone at every viewport width. */
+    inline-size: min(100%, 378px);
+    margin-inline: auto;
   }
   .hero__device { min-inline-size: 0; }
+  .hero__screen {
+    position: relative;
+    container-type: inline-size;
+    aspect-ratio: 1206 / 2622;
+    box-sizing: content-box;
+    border: 8px solid var(--md-sys-color-surface-container-highest);
+    border-radius: calc(var(--site-unit) * 11);
+    outline: 1px solid var(--md-sys-color-outline-variant);
+    background: var(--md-sys-color-surface);
+    overflow: clip;
+  }
   .hero__device iframe {
+    position: absolute;
+    inset: 0;
     display: block;
-    inline-size: 100%;
-    aspect-ratio: 390 / 844;
-    block-size: auto;
+    inline-size: 402px;
+    block-size: 874px;
+    max-inline-size: none;
     border: 0;
-    border-radius: calc(var(--site-unit) * 3);
+    transform-origin: top left;
+    transform: scale(calc(100cqw / 402px));
     background: var(--md-sys-color-surface);
   }
   .hero__demo-caption {
@@ -167,6 +179,7 @@ const t = c.hero;
     from { opacity: 0; }
   }
   :global(#hero [data-blob]) {
+    opacity: .14;
     animation: fade var(--md-sys-motion-duration-long2) var(--md-sys-motion-easing-emphasize-decelerate) 200ms both;
   }
   /* reduce 文字层:位移编排降纯 opacity 200ms 直现(200ms 写死——reduce 档 duration token 归零
@@ -193,8 +206,20 @@ const t = c.hero;
     }
     /* Explicit width reserves the phone before the app loads. */
     .hero__device {
-      inline-size: min(100%, 416px);
+      inline-size: min(100%, 378px);
       margin-inline: auto;
     }
   }
 </style>
+
+<script>
+  import { phoneScale } from '../../lib/phone-preview';
+  // Resize the visual uniformly while keeping the embedded app's viewport fixed.
+  const screen = document.querySelector<HTMLElement>('[data-phone-screen]');
+  const frame = screen?.querySelector<HTMLIFrameElement>('iframe');
+  if (screen && frame) {
+    const fit = (width: number) => { frame.style.transform = `scale(${phoneScale(width)})`; };
+    fit(screen.clientWidth);
+    if ('ResizeObserver' in window) new ResizeObserver(([entry]) => fit(entry.contentRect.width)).observe(screen);
+  }
+</script>
