@@ -1,5 +1,7 @@
 ---
 import credits from '../../data/licenses.json';
+import PageHeader from '../PageHeader.astro';
+import DocumentNav from '../DocumentNav.astro';
 
 interface Props { lang: 'zh' | 'en' }
 const { lang } = Astro.props;
@@ -28,43 +30,44 @@ const legacy = credits.legacy.locales[locale];
 const labels = credits.labels[locale];
 ---
 
-<article class="site-col credits">
-  <header>
-    <h1>{copy.title}</h1>
-    <p>{copy.intro}</p>
-    <nav aria-label={copy.title}>
-      <a href="#license">{copy.license}</a>
-      <a href="#contributors">{copy.contributors}</a>
-      <a href="#sources">{copy.sources}</a>
-      <a href="#history">{copy.history}</a>
-    </nav>
-  </header>
+<div class="site-col document-page credits">
+  <PageHeader title={copy.title} description={copy.intro}>
+    <span slot="meta" class="site-chip">GPL-3.0</span>
+    <a slot="actions" class="site-button site-button--tonal" href="/licenses/inventory.json" download>{copy.download}</a>
+  </PageHeader>
+  <div class="document-grid">
+    <DocumentNav label={english ? 'On this page' : '本页内容'} links={[
+      { href: '#license', label: copy.license },
+      { href: '#contributors', label: copy.contributors },
+      { href: '#sources', label: copy.sources },
+      { href: '#history', label: copy.history },
+    ]} />
+    <article class="document-body">
   <section id="license" aria-labelledby="license-heading">
     <h2 id="license-heading">{copy.license}</h2>
     <p>{legacy.license_gpl_body}</p>
     <p>{labels.notice}</p>
     <h3>{copy.notice}</h3>
-    <ul>
-      <li><a href="/licenses/notices/Sleepy-GPL-3.0.txt">Sleepy GPL-3.0</a></li>
-      {credits.manifest.notices.map(notice => <li><a href={`/licenses/notices/${notice.path}`}>{notice.path}</a></li>)}
+    <ul class="notice-list">
+      <li><a href="/licenses/notices/Sleepy-GPL-3.0.txt">Sleepy <span>GPL-3.0</span></a></li>
+      {credits.manifest.notices.map(notice => <li><a href={`/licenses/notices/${notice.path}`}>{notice.path.split('/').at(-1)?.replace(/\.(txt|md)$/, '')}</a></li>)}
     </ul>
   </section>
   <section id="contributors" aria-labelledby="contributors-heading">
     <h2 id="contributors-heading">{copy.contributors}</h2>
     <ul class="contributors">
-      {credits.legacy.contributors.map(entry => <li><a href={`https://github.com/${entry.id.slice('contributor-'.length)}`}>{entry.title}</a></li>)}
+      {credits.legacy.contributors.map(entry => <li><a class="site-chip" href={`https://github.com/${entry.id.slice('contributor-'.length)}`}>{entry.title}</a></li>)}
     </ul>
   </section>
   <section id="sources" aria-labelledby="sources-heading">
     <h2 id="sources-heading">{copy.sources}</h2>
     <p>{copy.research}</p>
-    <p><a href="/licenses/inventory.json" download>{copy.download}</a></p>
     {credits.manifest.groups.map((group, index) => <details open={index === 0}>
       <summary>{labels.groups[index]}</summary>
       <ul class="sources">
         {credits.manifest.entries.filter(entry => entry.group === group).map(entry => <li>
           <a href={entry.url}>{entry.project}</a>
-          <p>{entry.author} — {entry.license}</p>
+          <p class="source-meta">{entry.author} · {entry.license}</p>
           <p>{entry.usage}</p>
           {entry.verification.status === 'unverified' && <p>{copy.unverified}</p>}
         </li>)}
@@ -86,23 +89,24 @@ const labels = credits.labels[locale];
       {'additional_history' in legacy && <p class="preserve-lines">{legacy.additional_history}</p>}
     </details>
   </section>
-</article>
+    </article>
+  </div>
+</div>
 
 <style>
-  .credits { padding-block: clamp(2rem, 6vw, 5rem); max-width: 58rem; overflow-wrap: anywhere; }
-  header, section { margin-block-end: 3rem; }
-  h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.3; font-weight: 600; }
-  h2 { margin-block: 0 1rem; }
-  h3 { margin-block-start: 1.5rem; }
-  p, li { line-height: 1.7; }
-  p { margin-block: .5rem; }
-  a { color: var(--md-sys-color-primary); text-underline-offset: .2em; }
-  nav, .contributors { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; }
-  .contributors { list-style: none; padding: 0; }
-  section { scroll-margin-top: 6rem; }
-  details { border-block-end: 1px solid var(--md-sys-color-outline-variant); padding-block: 1rem; }
-  summary { cursor: pointer; font-weight: 600; padding-block: .25rem; }
+  .contributors, .notice-list { list-style: none; padding: 0; margin-block: calc(var(--site-unit) * 5); }
+  .contributors { display: flex; flex-wrap: wrap; gap: calc(var(--site-unit) * 3); }
+  .contributors li + li { margin: 0; }
+  .contributors a { text-decoration: none; }
+  .notice-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--site-unit) * 2); }
+  .notice-list li + li { margin: 0; }
+  .notice-list a { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: calc(var(--site-unit) * 2); min-block-size: 52px; padding: calc(var(--site-unit) * 4); background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-medium); font: var(--md-sys-typescale-label-large); text-decoration: none; }
+  .notice-list span { color: var(--md-sys-color-on-surface-variant); }
   .sources { list-style: none; padding: 0; }
-  .sources li { margin-block: 1.5rem; }
-  .preserve-lines { white-space: pre-wrap; }
+  .sources li { padding-block: calc(var(--site-unit) * 5); }
+  .sources li + li { border-block-start: 1px solid var(--md-sys-color-outline-variant); margin: 0; }
+  .sources li > a { font: var(--md-sys-typescale-title-medium); display: inline-block; padding-block: calc(var(--site-unit) * 2); }
+  .sources p { font: var(--md-sys-typescale-body-medium); line-height: 1.7; color: var(--md-sys-color-on-surface-variant); }
+  .source-meta { margin-block: calc(var(--site-unit) * 2); }
+  .preserve-lines { white-space: pre-wrap; font: var(--md-sys-typescale-body-medium); line-height: 1.8; }
 </style>
