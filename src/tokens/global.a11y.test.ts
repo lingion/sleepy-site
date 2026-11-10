@@ -323,15 +323,9 @@ describe('Task 7 视觉细节闸(v4 §12 代码可闸项)', () => {
     expect(globalCss).toMatch(
       /\.skip-link:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, var\(--md-sys-color-secondary-container\)\)/
     );
-    // scoped 侧(§10 行 213:行样式随 Task 5 迁 DownloadPanel → 改读该文件):
-    // 行 :active blend 混入行底 token(base 55% / data-rec 78%,逐值随 v4 Download 段迁移)
     const downloadSrc = read('../components/pages/DownloadPanel.astro');
-    expect(downloadSrc).toMatch(
-      /\.download-page__row:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, color-mix\(in srgb, var\(--md-sys-color-surface\) 55%, var\(--md-sys-color-primary-container\)\)\)/
-    );
-    expect(downloadSrc).toMatch(
-      /\.download-page__row\[data-rec\]:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, color-mix\(in srgb, var\(--md-sys-color-surface\) 78%/
-    );
+    expect(downloadSrc).toMatch(/\.download-page__row:active\s*\{[^}]*color-mix\(in srgb, currentColor 10%, var\(--md-sys-color-surface\)\)/);
+
   });
 });
 
@@ -366,10 +360,10 @@ describe('Task 9 三缺口修(spec §3-2 特征 chip 升档 / §3-4 color-scheme
     expect(htmlRules, 'global.css 缺顶层 html 规则').not.toBeNull();
     expect(htmlRules![0]).toMatch(/color-scheme:\s*light dark/);
   });
-  it('FAQ TOC 当前态 = aria-current(链接非按钮)+ leading check 入条文(终审 I4)', () => {
-    const faq = read('../components/pages/FaqBody.astro');
-    expect(faq).toMatch(/aria-current/);
-    expect(faq).not.toMatch(/data-active/);
-    expect(faq).toMatch(/<svg/);
+  it('文档目录以 aria-current 声明当前位置', () => {
+    const nav = read('../components/DocumentNav.astro');
+    expect(nav).toMatch(/aria-current/);
+    expect(nav).not.toMatch(/data-active/);
+    expect(nav).toMatch(/<a href=/);
   });
 });

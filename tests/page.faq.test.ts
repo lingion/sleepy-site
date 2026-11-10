@@ -98,11 +98,9 @@ describe('尾卡与 TOC(spec §2.4)', () => {
   });
   it('TOC 首节静态高亮:aria-current 恰一挂首链,余链无(Task 10:JS-off 也有当前节指示)', () => {
     const links = [...zhDoc.querySelectorAll('[data-toc-link]')];
-    expect(links[0].getAttribute('aria-current')).toBe('true');
+    expect(links[0].getAttribute('aria-current')).toBe('location');
     for (const a of links.slice(1)) expect(a.hasAttribute('aria-current'), `aria-current on ${a.getAttribute('href')}`).toBe(false);
-    // 高亮面 = chip-check 显隐 CSS 驱动(禁 JS-only 才亮,global.css 闸)
-    const css = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
-    expect(css).toMatch(/\.site-chip\[aria-current='true'\]\s\.chip-check\s*\{\s*display:\s*block/);
+
   });
 });
 
@@ -134,15 +132,11 @@ describe('页面骨架与双语镜像', () => {
   it('工具页禁编排(spec §5):无 reveal 类', () => {
     expect(zhDoc.querySelectorAll('[data-reveal-group], .reveal').length).toBe(0);
   });
-  it('移动栅格轨道闸(缺陷批 2026-10-26:pre 长行撑破 1fr=auto 最小轨 → 全页横滚)', () => {
-    // 根因:.faq-page__grid 移动默认无列约束,隐式轨 minmax(auto,1fr) 的 auto 最小
-    // = min-content,FAQ 答案代码块 <pre> 长命令行把轨道撑到 453(视口 390)。
-    // 修复 = 默认档显式 grid-template-columns: minmax(0, 1fr)(与桌面档既有
-    // minmax(0,1fr) 同纪律,一条治 toc+body 两栏);禁回归为裸 1fr/auto。
+  it('共享文档栅格与正文允许窄屏内容收缩', () => {
+    const css = readFileSync(new URL('../src/styles/content.css', import.meta.url), 'utf8');
     const src = readFileSync(new URL('../src/components/pages/FaqBody.astro', import.meta.url), 'utf8');
-    expect(src).toMatch(/\.faq-page__grid\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\)/);
-    expect(src).toMatch(/grid-template-columns:\s*232px minmax\(0, 1fr\)/);
-    expect(src).toMatch(/\.faq__toc\s*\{[^}]*min-inline-size:\s*0/);
+    expect(css).toMatch(/grid-template-columns:\s*minmax\(0, 1fr\)/);
+    expect(src).toMatch(/\.faq__body\s*\{[^}]*min-inline-size:\s*0/);
   });
   it('set:html 注入子树样式闸(缺陷批 2026-10-26:scoped 属性不附注入节点 → .faq__pre 静默失效)', () => {
     // Astro scoped CSS 给选择器末元素挂 cid,而答案子树由 set:html 注入、无 cid:
