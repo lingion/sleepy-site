@@ -238,6 +238,10 @@ const dlHref = `${home}download/`;
     .appbar__anchors { display: none; }
     .appbar__menu { display: inline-flex; }
   }
+  @media (max-width: 480px) {
+    /* 下载入口保留在导航菜单中，避免顶栏为隐藏按钮预留宽度。 */
+    .appbar__cta { display: none; }
+  }
 </style>
 
 <script>
