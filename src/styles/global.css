@@ -494,3 +494,9 @@ a:active {
   /* Task 9:chip 上色过渡归零(spec §5 动效纪律:reduce 下色彩切换直出) */
   .site-chip { transition: none; }
 }
+
+/* The embedded app owns the full site palette once a theme is selected. */
+:root[data-palette] {
+  --site-band-bg: var(--md-sys-color-surface-container-highest);
+  --site-band-fg: var(--md-sys-color-on-surface);
+}

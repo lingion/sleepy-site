@@ -40,4 +40,10 @@ const { variant } = Astro.props;
       linear-gradient(200deg, #4d60d0 0%, #8596ff 55%, #ccd2ff 100%);
     /* hue -15°=278.82° · stops 200° */
   }
+  /* A palette selected in the full app also recolors the signature light. */
+  :global(:root[data-palette]) .blob[data-variant='0'] {
+    background:
+      radial-gradient(60% 80% at 20% 30%, color-mix(in srgb, var(--md-sys-color-primary-container) 55%, transparent) 0%, transparent 70%),
+      linear-gradient(135deg, var(--md-sys-color-primary) 0%, var(--md-sys-color-secondary) 45%, var(--md-sys-color-tertiary-container) 80%, var(--md-sys-color-primary-container) 100%);
+  }
 </style>
