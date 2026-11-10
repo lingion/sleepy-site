@@ -125,14 +125,18 @@ const zhUI = lang === 'zh';
   /* 移动默认轨:minmax(0,1fr) 非裸 1fr——隐式轨 auto 最小=pre 长命令行 min-content,
      会撑破视口(2026-10-26 缺陷批:FAQ 移动端全页横滚)。桌面档在尾 media 覆盖 */
   .faq-page__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--site-unit) * 8); align-items: start; }
+  .faq__head h1 { font: var(--md-sys-typescale-display-medium); font-size: clamp(32px, 4vw, 45px); line-height: 1.2; }
   .faq__head { display: grid; gap: calc(var(--site-unit) * 2); margin-block-end: calc(var(--site-unit) * 6); }
   .faq__sub { color: var(--md-sys-color-on-surface-variant); }
-  .faq__section { margin-block-end: calc(var(--site-unit) * 10); scroll-margin-block-start: calc(var(--site-unit) * 10); }
+  .faq__section { margin-block-end: calc(var(--site-unit) * 10); scroll-margin-block-start: 100px; }
   .faq__section-title { margin-block-end: calc(var(--site-unit) * 3); }
   .faq__item {
     margin-block-end: calc(var(--site-unit) * 6);
-    scroll-margin-block-start: calc(var(--site-unit) * 10);
+    scroll-margin-block-start: 100px;
   }
+  .faq__section-title { color: var(--md-sys-color-primary); }
+  .faq__item { padding: calc(var(--site-unit) * 6); background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-large); }
+  .faq__a { font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
   .faq__q { margin-block-end: calc(var(--site-unit) * 2); }
   /* set:html 注入子树不附 scoped cid(2026-10-26 缺陷批):选择器末元素若落在注入
      节点上,整条规则静默失效——.faq__pre 的 overflow-x:auto 从未生效,长命令行
@@ -177,12 +181,12 @@ const zhUI = lang === 'zh';
     padding-block-end: 4px;
   }
   .faq__toc-list::-webkit-scrollbar { display: none; }
-  .faq__toc-link { text-decoration: none; white-space: nowrap; }
+  .faq__toc-link { min-block-size: 44px; text-decoration: none; white-space: nowrap; }
 
   /* 桌面:TOC sticky 左栏(spec §2.4) */
   @media (min-width: 900px) {
     .faq-page__grid { grid-template-columns: 232px minmax(0, 1fr); }
-    .faq__toc { position: sticky; top: calc(var(--site-unit) * 10); }
+    .faq__toc { position: sticky; top: 96px; }
     .faq__toc-list { display: grid; gap: calc(var(--site-unit) * 1); overflow: visible; }
     .faq__toc-link { display: block; text-align: start; }
   }

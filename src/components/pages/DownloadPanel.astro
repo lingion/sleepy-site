@@ -27,7 +27,9 @@ const badgeWidth = zhUI ? 109 : 120;
 
 <section class="download-page" data-prototype="tool-quiet">
   <div class="site-col">
-    <header class="download-page__head">
+    <div class="download-page__grid">
+    <div class="download-page__package">
+    <header class="download-page__head page-heading">
       <h1 class="t-headline-large">{t.heading}</h1>
       <p class="t-body-medium download-page__versionline tnum">
         <a href="https://github.com/lingion/sleepy/releases/latest">GitHub Releases</a>
@@ -70,6 +72,8 @@ const badgeWidth = zhUI ? 109 : 120;
     </ul>
     <p class="t-body-small download-page__note">{t.universalNote}</p>
 
+    </div>
+    <div class="download-page__support">
     <section class="download-page__block download-page__ios" aria-labelledby="dl-ios">
       <h2 class="t-title-medium" id="dl-ios">{t.iosTitle}</h2>
       <p class="t-body-small">{t.iosNote}</p>
@@ -141,14 +145,15 @@ const badgeWidth = zhUI ? 109 : 120;
         <li><a href={`${repoUrl}/issues`}>{t.moreLinks.issues}</a></li>
       </ul>
     </section>
+    </div>
+    </div>
   </div>
 </section>
 
 <style>
   .download-page {
-    background: var(--md-sys-color-primary-container);
-    color: var(--md-sys-color-on-primary-container);
-    border-block-start: 1px solid var(--md-sys-color-outline-variant);
+    background: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
     padding-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 14);
   }
   .download-page :is(h1, h2) {
@@ -290,7 +295,22 @@ const badgeWidth = zhUI ? 109 : 120;
     font: var(--md-sys-typescale-label-medium);
   }
   .download-page__more { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-  .download-page a { color: var(--md-sys-color-on-primary-container); }
+  .download-page a:not(.site-button) { color: var(--md-sys-color-primary); }
+  .download-page a.download-page__row { color: var(--md-sys-color-on-primary-container); }
+  .download-page__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--site-unit) * 10); align-items: start; }
+  .download-page__package { min-inline-size: 0; padding: clamp(20px, 4vw, 32px); border-radius: var(--md-sys-shape-corner-xl); background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+  .download-page__support { min-inline-size: 0; }
+  .download-page__head { margin-block-end: calc(var(--site-unit) * 6); }
+  .download-page__head h1 { font: var(--md-sys-typescale-display-medium); font-size: clamp(32px, 4vw, 45px); line-height: 1.2; }
+  .download-page__support h2 { color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-title-large); }
+  .download-page__support .t-body-small { font: var(--md-sys-typescale-body-medium); line-height: 1.75; }
+  .download-page__more a { display: inline-flex; align-items: center; min-block-size: 44px; }
+  .download-page__stores { flex-wrap: wrap; }
+  .download-page__row-name { flex-wrap: wrap; }
+  @media (min-width: 900px) {
+    .download-page__grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: calc(var(--site-unit) * 14); }
+    .download-page__package { position: sticky; top: 96px; }
+  }
   @media (max-width: 840px) {
     .download-page__cta-xl { inline-size: 100%; justify-content: center; }
     .download-page__list { max-inline-size: none; }

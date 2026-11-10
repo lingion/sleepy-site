@@ -2,6 +2,7 @@
 // v5 /schools/ 学校查找页主体 — plan Task 4 / spec §2.3
 // 台账从主页 #schools 段离页:全量行静态渲染(SEO 完整、JS-off 可读),岛只管 URL 态 ⇄ 过滤
 // 类名裁决(终审 I10):schools__* 前缀沿用,scoped CSS 自持,global.css 零新类
+import PageHeader from '../PageHeader.astro';
 import typesEn from '../../data/types-en.json';
 import { repoUrl } from '../../i18n/ui';
 import type { SiteCopy } from '../../i18n/zh';
@@ -47,11 +48,9 @@ const CHIP_NODE =
 
 <section class="schools-page" data-prototype="tool-island">
   <div class="site-col">
-    <header class="schools__head">
-      <h1 class="t-headline-large">{t.heading}</h1>
-      <p class="t-body-medium schools__sub">{t.sub}</p>
-      <p class="t-body-medium schools__countline tnum">{countLine}</p>
-    </header>
+    <PageHeader title={t.heading} description={t.sub}>
+      <span slot="meta" class="tnum">{countLine}</span>
+    </PageHeader>
 
     <div class="schools__island reveal" style="--reveal-i: 0;">
       <p class="schools__stat site-chip tnum" role="status" data-shown-tpl={t.countShown}>{shown0}</p>
@@ -62,6 +61,8 @@ const CHIP_NODE =
           <input
             class="site-field"
             type="search"
+            name="q"
+            spellcheck="false"
             data-role="q"
             placeholder={t.placeholder}
             autocomplete="off"
@@ -212,6 +213,7 @@ const CHIP_NODE =
 </script>
 
 <style>
+  .schools-page { padding-block: clamp(2.5rem, 7vw, 5rem) clamp(4rem, 8vw, 7rem); }
   /* 工具岛布局沿用 v4 §4 M4 岛卡;类名 schools__* 承接 global.a11y 闸(§10) */
   .schools__head {
     margin-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 6);
@@ -246,9 +248,12 @@ const CHIP_NODE =
   }
   .schools__search {
     display: block;
+    flex: 1 1 260px;
+    min-inline-size: 0;
+    max-inline-size: 420px;
   }
   .schools__search input {
-    inline-size: min(420px, 100%);
+    inline-size: 100%;
   }
   .schools__chipbar {
     display: flex;
@@ -291,6 +296,9 @@ const CHIP_NODE =
     inset-block-start: 0;
     background: var(--md-sys-color-surface-container);
     list-style: none;
+    min-block-size: 44px;
+    display: flex;
+    align-items: center;
   }
   .schools__summary::-webkit-details-marker {
     display: none;
@@ -315,7 +323,9 @@ const CHIP_NODE =
   }
   .schools__row {
     color: var(--md-sys-color-on-surface-variant);
-    padding-block: calc(var(--site-unit) * 0.5);
+    font: var(--md-sys-typescale-body-medium);
+    line-height: 1.65;
+    padding-block: calc(var(--site-unit) * 1.5);
   }
   .schools__empty {
     margin-block-start: calc(var(--site-unit) * 6);
@@ -326,5 +336,9 @@ const CHIP_NODE =
   }
   .schools__foldbtns .site-button--text {
     touch-action: manipulation;
+  }
+  @media (max-width: 600px) {
+    .schools__island { padding: calc(var(--site-unit) * 5); }
+    .schools__search { max-inline-size: none; flex-basis: 100%; }
   }
 </style>
