@@ -27,9 +27,9 @@ describe('下载资产与外链(spec §2.4)', () => {
   it('四 ABI 下载 URL 全在', () => {
     for (const a of release.assets) expect(zhHtml).toContain(a.url);
   });
-  it('sha256sumsUrl 在 + releases/latest 外链在', () => {
+  it('校验文件与本版正式发布页均可达', () => {
     expect(zhHtml).toContain(release.sha256sumsUrl);
-    expect(zhDoc.querySelector('a[href$="releases/latest"]')).not.toBeNull();
+    expect(zhDoc.querySelector(`a[href="${release.url}"]`)).not.toBeNull();
   });
   it('minSdk 文案在(迁自 v4 M8)', () => {
     expect(zhHtml).toContain(zh.download.minSdk);
@@ -57,7 +57,8 @@ describe('CTA 纪律(§11-6 多页化延伸 / 终审 F3)', () => {
     const primaries = zhDoc.querySelectorAll('[data-dl-primary]');
     expect(primaries).toHaveLength(1);
     const uni = release.assets.find((a) => a.name.includes('universal'))!;
-    expect(primaries[0].getAttribute('href')).toBe(uni.url);
+    expect(primaries[0].getAttribute('href')).toBe(uni.url.replace('github.com', 'gh.qdp.qzz.io'));
+    expect(primaries[0].getAttribute('data-download-official')).toBe(uni.url);
   });
   it('恰一行 [data-abi-row][data-rec] 且 = universal', () => {
     const rows = zhDoc.querySelectorAll('[data-abi-row]');
@@ -81,7 +82,7 @@ describe('信息区块(spec §2.4 六段)', () => {
     expect(a, 'zh TestFlight 链接存在').not.toBeNull();
     expect(a?.getAttribute('target')).toBe('_blank');
     expect(a?.getAttribute('rel')).toContain('noopener');
-    expect(zhHtml).toContain('目前唯一合法上线途径');
+    expect(zhHtml).toContain(zh.downloadPage.iosNote);
 
     const img = a?.querySelector('img');
     expect(img, 'Apple 徽章存在').not.toBeNull();
@@ -96,8 +97,12 @@ describe('信息区块(spec §2.4 六段)', () => {
     expect(imge?.getAttribute('alt')).toBe(en.downloadPage.iosBadgeAlt);
     expect(imge?.getAttribute('height')).toBe('40');
   });
-  it('商店占位 disabled ×2', () => {
-    expect(zhDoc.querySelectorAll('[data-store-disabled]')).toHaveLength(2);
+  it('无脚本仍可选择全部文件的两种来源', () => {
+    const noScript = zhDoc.querySelector('main noscript')!.innerHTML;
+    for (const url of [...release.assets.map(asset => asset.url), release.sha256sumsUrl]) {
+      expect(noScript).toContain(url);
+      expect(noScript).toContain(url.replace('github.com', 'gh.qdp.qzz.io'));
+    }
   });
   it('「如何确认手机架构」标题 + 三行小表 + 检测提示在', () => {
     expect(zhHtml).toContain(zh.downloadPage.archTitle);
@@ -149,8 +154,9 @@ describe('页面骨架与双语镜像', () => {
   it('工具页禁编排(spec §5):无 reveal 类', () => {
     expect(zhDoc.querySelectorAll('[data-reveal-group], .reveal').length).toBe(0);
   });
-  it('en 页 h1 与推荐徽标镜像', () => {
+  it('en 页标题与下载来源均可读', () => {
     expect(enDoc.querySelector('main h1')?.textContent).toBe(en.downloadPage.heading);
-    expect(enHtml).toContain(en.downloadPage.recommended);
+    expect(enDoc.querySelector('fieldset legend')?.textContent).toBe('Download source');
+    expect(enDoc.querySelector<HTMLInputElement>('input:checked')?.value).toBe('github');
   });
 });

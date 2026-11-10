@@ -379,12 +379,9 @@ describe('M6 画廊 band(spec §4 M6)', () => {
 });
 
 describe('M8 下载单出口 + CTA 纪律(spec §2.2 / §10 行 5-6)', () => {
-  const universal = release.assets.find((a) => a.name.includes('universal'))!;
-  it('恰一下载出口 = universal APK URL 进 #download 段', () => {
-    const html = doc.getElementById('download')?.innerHTML ?? '';
-    expect(html).toContain(universal.url);
-    const links = [...(doc.getElementById('download')?.querySelectorAll('a[href$=".apk"]') ?? [])];
-    expect(links.map((a) => a.getAttribute('href'))).toEqual([universal.url]);
+  it('Android 主操作进入站内下载页选择来源', () => {
+    expect(doc.querySelector('#download .download__cta-xl')?.getAttribute('href')).toBe('/download/');
+    expect(doc.querySelectorAll('#download a[href$=".apk"]')).toHaveLength(0);
   });
   it('四 ABI 全 URL / sha 链 / store 占位 / releases/latest 直链 / trial 链绝迹(§10:ABI/sha/store 段内 + releases/latest 段级 — 主页其余钮受 §2.2 CTA 不动保护)', () => {
     const html = doc.getElementById('download')?.innerHTML ?? '';
@@ -396,7 +393,7 @@ describe('M8 下载单出口 + CTA 纪律(spec §2.2 / §10 行 5-6)', () => {
     expect(html).not.toContain('https://sleepy.qdp.qzz.io'); // onlineTrialUrl 随体验链迁出
   });
   it('次行 Text 链「其他架构与校验 →」指 /download/(新去向)', () => {
-    const link = doc.querySelector('#download a[href="/download/"]');
+    const link = doc.querySelector('#download a.site-button--text[href="/download/"]');
     expect(link).not.toBeNull();
     expect(link!.textContent).toContain('其他架构与校验');
   });
@@ -410,13 +407,13 @@ describe('M8 下载单出口 + CTA 纪律(spec §2.2 / §10 行 5-6)', () => {
     expect(img?.getAttribute('height')).toBe('40');
     expect(doc.getElementById('download')?.textContent).toContain('目前唯一合法上线途径');
   });
-  it('主钮 = Elevated 档链 universal,tonal 绝迹;段零 Filled(§10 行 6)', () => {
+  it('下载入口保持 Elevated 层级(§10 行 6)', () => {
     expect(doc.querySelector('#download .site-button--elevated')).not.toBeNull();
     expect(doc.querySelector('#download.download--tonal')).not.toBeNull();
     expect(doc.querySelector('#download .site-button--tonal'), 'tonal 绝迹').toBeNull();
     expect(doc.querySelector('#download .site-button--filled'), 'download 段零 Filled').toBeNull();
     const primary = doc.querySelector('#download a.site-button--elevated')!;
-    expect(primary.getAttribute('href')).toBe(universal.url);
+    expect(primary.getAttribute('href')).toBe('/download/');
   });
   it('全页 Filled 仅 AppBar S + hero XL 两枚(§11-6,瘦身不破)', () => {
     expect(doc.querySelectorAll('.site-button--filled').length).toBe(2);

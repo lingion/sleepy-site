@@ -1,11 +1,7 @@
 ---
-// v5 /faq/ 页主体 — plan Task 6 / spec §2.4
-// 快照渲染器:src/data/faq.json(build-faq 管线产物,Task 3)→ HTML;set:html 面 = blocksToHtml 纯函数,
-// 文本全转义后输出(唯一内容源=仓内快照,无运行时注入面)。
-// 禁问句豁免面(终审 I10):FAQ 问句合法 = article 单元整体;框架文本(article 外)保持零「？」(global.a11y 同闸适用面)。
-// 「相关链接」节在 build 管线已按「无问空节剔除」规则消失(非点名),产物 8 节 = 页脚 8 锚。
-// TOC = 桌面 sticky 左栏 + 手机横滑 chip 条(复用现 .site-chip,升档统一 Task 9);高亮 = 原生 IntersectionObserver,color 150ms(spec §5)。
-// 尾卡「内容更新于」直读 faq.json.updatedAt(spec R4 腐烂可见化:横幅日期即快照声明,重跑 data 才会变)。
+// Full answers and original anchors remain in the static HTML.
+import PageHeader from '../PageHeader.astro';
+import DocumentNav from '../DocumentNav.astro';
 import faq from '../../data/faq.json';
 import { qqGroup, repoUrl } from '../../i18n/ui';
 import type { SiteCopy } from '../../i18n/zh';
@@ -58,156 +54,67 @@ const rendered = faq.sections.map((s, i) => ({
 const zhUI = lang === 'zh';
 ---
 
-<div class="faq-page" data-prototype="tool-quiet">
-  <div class="site-col faq-page__grid">
-    <nav class="faq__toc" aria-label={t.tocLabel} data-role="toc">
-      <p class="t-label-large faq__toc-title">{t.tocLabel}</p>
-      <ul class="faq__toc-list">
-        {
-          rendered.map((s, i) => (
-            <li>
-              <a class="site-chip faq__toc-link" data-toc-link href={`#${s.id}`} aria-current={i === 0 ? 'true' : undefined}>
-                {/* leading check = Task 9 chip 形(12px inline SVG,CSS 显隐);aria-current 标当前节 */}
-                <svg class="chip-check" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 8.5 6.5 12 13 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                {s.name}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
-    <div class="faq__body">
-      <header class="faq__head">
-        <h1 class="t-headline-large">{t.heading}</h1>
-        <p class="t-body-medium faq__sub">{t.sub}</p>
-        <p class="t-body-medium faq__sub">
-          {lang === 'zh' ? '问答内容保留其核对日期，最新版本的完整变更请查看' : 'This FAQ retains its editorial review date. For current changes, see the'}
-          {' '}<a href={lang === 'zh' ? '/releases/' : '/en/releases/'}>{lang === 'zh' ? '更新说明' : 'release notes'}</a>{lang === 'zh' ? '。' : '.'}
-        </p>
-      </header>
-
-      {
-        rendered.map((s) => (
-          <section class="faq__section" data-faq-section data-section={s.name} id={s.id}>
-            <h2 class="t-title-large faq__section-title">{s.name}</h2>
-            {s.items.map((it) => (
-              <article class="faq__item" data-faq-item id={it.id}>
-                <h3 class="t-title-medium faq__q">{it.q}</h3>
-                <div class="faq__a" set:html={it.body} />
-              </article>
-            ))}
-          </section>
-        ))
-      }
-
-      <footer class="faq__tail" aria-label={t.tailTitle}>
-        <p class="t-body-medium faq__tail-title">{t.tailTitle}</p>
-        <p class="t-body-small faq__tail-links">
-          <a href={`${repoUrl}/issues`} rel="noopener noreferrer" target="_blank">{t.tailIssues}</a>
-          {' · '}
-          <a href={`${repoUrl}/discussions`} rel="noopener noreferrer" target="_blank">{t.tailDiscussions}</a>
-          {' · '}
-          {zhUI ? 'QQ 群' : 'QQ group'} {qqGroup}
-        </p>
-        <p class="t-body-small faq__updated tnum">
-          {t.updatedPrefix} {faq.updatedAt}
-        </p>
-      </footer>
+<div class="faq-page document-page" data-faq-page>
+  <div class="site-col">
+    <PageHeader title={t.heading} description={t.sub} />
+    <div class="faq__search">
+      <label><span class="t-label-large">{zhUI ? '搜索常见问题' : 'Search questions and answers'}</span><input class="site-field" data-faq-search type="search" name="q" autocomplete="off" placeholder={zhUI ? '输入关键词，如导入、备份、安装…' : 'Try import, backup or installation…'} aria-controls="faq-results" /></label>
+      <div class="faq__search-status"><p class="t-body-small" role="status" aria-live="polite" data-faq-count={zhUI ? '找到 {count} 个问题' : '{count} questions found'}></p><button class="site-button site-button--text" data-faq-clear type="button" hidden>{zhUI ? '清空搜索' : 'Clear search'}</button></div>
+    </div>
+    <div class="document-grid">
+      <DocumentNav label={t.tocLabel} links={rendered.map(section => ({href: `#${section.id}`, label: section.name}))} />
+      <div class="faq__body" id="faq-results">
+        <p class="faq__review t-body-small">{zhUI ? '问答保留其核对日期，最新版本的变化请查看' : 'For changes since the FAQ review date, see the'}{' '}<a href={zhUI ? '/releases/' : '/en/releases/'}>{zhUI ? '更新说明' : 'release notes'}</a>{zhUI ? '。' : '.'}</p>
+        {rendered.map(section => <section class="faq__section" data-faq-section data-section={section.name} id={section.id}>
+          <h2 class="t-title-large faq__section-title">{section.name}</h2>
+          {section.items.map(item => <article class="faq__item" data-faq-item id={item.id}>
+            <details><summary><h3 class="t-title-medium faq__q">{item.q}</h3><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></summary><div class="faq__a" set:html={item.body} /></details>
+          </article>)}
+        </section>)}
+        <div class="faq__empty" data-faq-empty hidden><h2 class="t-title-large">{zhUI ? '没有找到匹配的问题' : 'No matching questions'}</h2><p>{zhUI ? '试试更短的关键词，或清空搜索浏览全部问答。' : 'Try a shorter keyword or clear the search to browse all answers.'}</p></div>
+        <footer class="faq__tail" aria-label={t.tailTitle}>
+          <h2 class="t-title-medium">{t.tailTitle}</h2>
+          <div class="faq__tail-links t-body-medium"><a href={`${repoUrl}/issues`} rel="noopener noreferrer" target="_blank">{t.tailIssues}</a><a href={`${repoUrl}/discussions`} rel="noopener noreferrer" target="_blank">{t.tailDiscussions}</a><span>{zhUI ? 'QQ 群' : 'QQ group'} {qqGroup}</span></div>
+          <p class="t-body-small faq__updated tnum">{t.updatedPrefix} {faq.updatedAt}</p>
+        </footer>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
-  .faq-page { padding-block: calc(var(--site-unit) * 10) calc(var(--site-unit) * 14); }
-  /* 移动默认轨:minmax(0,1fr) 非裸 1fr——隐式轨 auto 最小=pre 长命令行 min-content,
-     会撑破视口(2026-10-26 缺陷批:FAQ 移动端全页横滚)。桌面档在尾 media 覆盖 */
-  .faq-page__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--site-unit) * 8); align-items: start; }
-  .faq__head h1 { font: var(--md-sys-typescale-display-medium); font-size: clamp(32px, 4vw, 45px); line-height: 1.2; }
-  .faq__head { display: grid; gap: calc(var(--site-unit) * 2); margin-block-end: calc(var(--site-unit) * 6); }
-  .faq__sub { color: var(--md-sys-color-on-surface-variant); }
-  .faq__section { margin-block-end: calc(var(--site-unit) * 10); scroll-margin-block-start: 100px; }
-  .faq__section-title { margin-block-end: calc(var(--site-unit) * 3); }
-  .faq__item {
-    margin-block-end: calc(var(--site-unit) * 6);
-    scroll-margin-block-start: 100px;
-  }
-  .faq__section-title { color: var(--md-sys-color-primary); }
-  .faq__item { padding: calc(var(--site-unit) * 6); background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-large); }
-  .faq__a { font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
-  .faq__q { margin-block-end: calc(var(--site-unit) * 2); }
-  /* set:html 注入子树不附 scoped cid(2026-10-26 缺陷批):选择器末元素若落在注入
-     节点上,整条规则静默失效——.faq__pre 的 overflow-x:auto 从未生效,长命令行
-     overflow:visible 溢出文档(移动端全页横滚根因之二)。注入面样式一律经
-     .faq__a :global(...) 挂载;overflow-x:auto 恢复后 pre 的 min-width:auto 归零
-     (非 visible 滚动容器),grid 轨道不再被 min-content 顶破 */
-  .faq__a { display: grid; gap: calc(var(--site-unit) * 2); color: var(--md-sys-color-on-surface-variant); }
-  .faq__a :global(:is(p, ul, ol)) { margin-block: 0 calc(var(--site-unit) * 2); }
+  .faq__search { display: none; margin-block-end: 40px; padding: 24px; border-radius: var(--md-sys-shape-corner-xl); background: var(--md-sys-color-surface-container-low); }
+  .faq-page[data-enhanced] .faq__search { display: grid; gap: 8px; }
+  .faq__search label { display: grid; gap: 12px; }
+  .faq__search input { inline-size: 100%; min-inline-size: 0; min-block-size: 56px; border-radius: var(--md-sys-shape-corner-large); background: var(--md-sys-color-surface); }
+  .faq__search-status { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; min-block-size: 44px; color: var(--md-sys-color-on-surface-variant); }
+  .faq__body { min-inline-size: 0; max-inline-size: 72ch; }
+  .faq__review { line-height: 1.8; margin-block-end: 32px; color: var(--md-sys-color-on-surface-variant); }
+  .faq__section { margin-block-end: 40px; scroll-margin-block-start: 100px; }
+  .faq__section-title { margin-block-end: 20px; }
+  .faq__item { scroll-margin-block-start: 100px; margin-block-end: 12px; }
+  .faq__item details { border-radius: var(--md-sys-shape-corner-large); background: var(--md-sys-color-surface-container-low); overflow: clip; }
+  .faq__item summary { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px 24px; min-block-size: 64px; cursor: pointer; list-style: none; touch-action: manipulation; }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__q { line-height: 1.7; }
+  .faq__item summary svg { flex-shrink: 0; color: var(--md-sys-color-primary); }
+  .faq__item details[open] summary svg { transform: rotate(180deg); }
+  .faq__item summary:active { background: color-mix(in srgb, currentColor 10%, transparent); }
+  .faq__a { display: grid; gap: 12px; padding: 0 24px 24px; font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; color: var(--md-sys-color-on-surface-variant); }
+  /* set:html children do not receive Astro scoped attributes. */
+  .faq__a :global(:is(p, ul, ol)) { margin: 0; }
   .faq__a :global(a) { color: var(--md-sys-color-primary); }
-  .faq__a :global(.faq__pre) {
-    margin: 0;
-    padding: calc(var(--site-unit) * 3) calc(var(--site-unit) * 4);
-    border-radius: var(--md-sys-shape-corner-small);
-    background: var(--md-sys-color-surface-container);
-    color: var(--md-sys-color-on-surface);
-    overflow-x: auto;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 13px;
-    line-height: 1.6;
-  }
+  .faq__a :global(.faq__pre) { margin: 0; padding: 16px; border-radius: var(--md-sys-shape-corner-small); background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface); overflow-x: auto; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; line-height: 1.6; }
   .faq__a :global(.faq__list) { padding-inline-start: 1.4em; }
-  .faq__tail {
-    border-block-start: 1px solid var(--md-sys-color-outline-variant);
-    padding-block-start: calc(var(--site-unit) * 6);
-    display: grid;
-    gap: calc(var(--site-unit) * 2);
-  }
-  .faq__tail-links a { color: var(--md-sys-color-primary); }
+  .faq__empty { display: grid; gap: 16px; padding-block: 24px 48px; line-height: 1.8; }
+  .faq__tail { border-block-start: 1px solid var(--md-sys-color-outline-variant); padding-block-start: 24px; display: grid; gap: 16px; }
+  .faq__tail-links { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 24px; }
+  .faq__tail-links a { display: inline-flex; align-items: center; min-block-size: 44px; }
   .faq__updated { color: var(--md-sys-color-on-surface-variant); }
-
-  /* 手机(默认):TOC = 横滑 chip 条 */
-  .faq__toc { min-inline-size: 0; }
-  .faq__toc-title { margin-block-end: calc(var(--site-unit) * 2); }
-  .faq__toc-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: calc(var(--site-unit) * 2);
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-block-end: 4px;
-  }
-  .faq__toc-list::-webkit-scrollbar { display: none; }
-  .faq__toc-link { min-block-size: 44px; text-decoration: none; white-space: nowrap; }
-
-  /* 桌面:TOC sticky 左栏(spec §2.4) */
-  @media (min-width: 900px) {
-    .faq-page__grid { grid-template-columns: 232px minmax(0, 1fr); }
-    .faq__toc { position: sticky; top: 96px; }
-    .faq__toc-list { display: grid; gap: calc(var(--site-unit) * 1); overflow: visible; }
-    .faq__toc-link { display: block; text-align: start; }
-  }
+  @media (hover: hover) and (pointer: fine) { .faq__item summary:hover { background: color-mix(in srgb, currentColor 8%, transparent); } }
+  @media (max-width: 600px) { .faq__search { padding: 20px; } .faq__item summary { padding: 16px 20px; gap: 16px; } .faq__a { padding: 0 20px 20px; } }
 </style>
-
 <script>
-  // TOC 高亮 = 原生 IntersectionObserver,只切 aria-current(链接非按钮,终审 I4);色彩过渡 150ms(spec §5 工具页唯一动效)
-  const tocLinks = [...document.querySelectorAll<HTMLElement>('[data-toc-link]')];
-  const sections = [...document.querySelectorAll<HTMLElement>('[data-faq-section]')];
-  if (tocLinks.length && sections.length && 'IntersectionObserver' in window) {
-    const byId = new Map(tocLinks.map((a) => [a.getAttribute('href')!.slice(1), a]));
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          for (const a of tocLinks) a.removeAttribute('aria-current');
-          byId.get(e.target.id)?.setAttribute('aria-current', 'true');
-        }
-      },
-      { rootMargin: '-10% 0px -70% 0px', threshold: 0 }
-    );
-    for (const s of sections) io.observe(s);
-  }
+  import { enhanceFaq } from '../../lib/faq-search';
+  enhanceFaq(document);
 </script>
