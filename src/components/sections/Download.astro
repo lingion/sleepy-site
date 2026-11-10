@@ -1,6 +1,6 @@
 ---
 // M8 下载出口段(v5 瘦身,plan Task 7 / spec §2.2):主页单一转化出口
-// tonal 带底不变(全站唯一彩色大面);主钮 = Elevated 档直链 release.json universal APK(§11-6:Filled=2 不破)。
+// tonal 带底不变(全站唯一彩色大面);主钮 = Elevated 档进入站内下载页面选择来源(§11-6:Filled=2 不破)。
 // 原 ABI 行列表、sha 链、商店占位、体验链全部移出主页 → /download/ 面板(Task 5 已落地,行样式 blend 随 I11 定死迁 DownloadPanel)。
 // 次行 Text 链「其他架构与校验 →」指 /download/(§10 行 5 新去向);版本行 tag·日期 tnum(download.versionLine 函数形态)。
 import Shot from '../Shot.astro';
@@ -22,7 +22,6 @@ const t = c.download;
 const dp = c.downloadPage;
 const moreHref = lang === 'en' ? '/en/download/' : '/download/';
 const date = release.date.slice(0, 10);
-const universal = release.assets.find((a) => a.name.includes('universal'))!;
 const zhUI = lang === 'zh';
 const badgeSrc = zhUI ? '/badges/download-on-the-app-store-zh.svg' : '/badges/download-on-the-app-store-en.svg';
 const badgeWidth = zhUI ? 109 : 120;
@@ -35,7 +34,7 @@ const badgeWidth = zhUI ? 109 : 120;
       <p class="t-body-medium download__version tnum">{t.versionLine(release.tag, date)}</p>
       <div class="download__ctas">
         <p class="download__cta">
-          <a class="site-button site-button--elevated download__cta-xl" href={universal.url} download rel="download" aria-label={t.downloadAria('universal', `${(universal.size / 1024 / 1024).toFixed(1)} MB`)}>{t.cta}</a>
+          <a class="site-button site-button--elevated download__cta-xl" href={moreHref}>{t.cta}</a>
         </p>
         <div class="download__apple">
           <a

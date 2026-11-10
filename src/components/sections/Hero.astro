@@ -2,7 +2,7 @@
 // Layout invariant: copy comes first; the live timetable occupies the original main visual.
 // Mobile stacks the same order without changing the existing page sections.
 import Blob from '../Blob.astro';
-import { onlineTrialUrl, fullWebAppUrl, repoUrl } from '../../i18n/ui';
+import { onlineTrialUrl, fullWebAppUrl } from '../../i18n/ui';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
 import { rowCount } from '../../lib/schools-view';
@@ -10,9 +10,11 @@ import { rowCount } from '../../lib/schools-view';
 interface Props {
   /** 文案注入(T7 双语镜像):缺省 = zh */
   copy?: SiteCopy;
+  lang?: 'zh' | 'en';
 }
 const c = Astro.props.copy ?? zh;
 const t = c.hero;
+const downloadHref = Astro.props.lang === 'en' ? '/en/download/' : '/download/';
 ---
 
 <section class="hero site-section" id="hero" data-prototype="split" aria-labelledby="hero-title">
@@ -22,7 +24,7 @@ const t = c.hero;
       <h1 class="hero__slogan" id="hero-title">{t.slogan}</h1>
       <p class="t-body-large hero__sub">{t.sub}</p>
       <div class="hero__ctas">
-        <a class="site-button site-button--filled hero__cta-xl" href={`${repoUrl}/releases/latest`}>{t.ctaDownload}</a>
+        <a class="site-button site-button--filled hero__cta-xl" href={downloadHref}>{t.ctaDownload}</a>
         <a class="site-button site-button--text" href={onlineTrialUrl}>{t.ctaTrial}</a>
       </div>
       <p class="hero__ribbon tnum">
