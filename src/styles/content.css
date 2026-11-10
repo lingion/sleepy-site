@@ -1,0 +1,37 @@
+/* Shared Material document rhythm. Content keeps its original reading order. */
+.page-heading { display: grid; gap: calc(var(--site-unit) * 5); margin-block-end: calc(var(--site-unit) * 12); max-inline-size: 52rem; }
+.page-heading__meta:empty { display: none; }
+.page-heading__meta { display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--site-unit) * 3); color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-label-large); }
+.page-heading h1 { font: var(--md-sys-typescale-display-medium); font-size: clamp(2rem, 4.5vw, 2.8125rem); line-height: 1.2; letter-spacing: -.025em; max-inline-size: 22ch; }
+.page-heading > p { color: var(--md-sys-color-on-surface-variant); font: var(--md-sys-typescale-body-large); line-height: 1.75; max-inline-size: 64ch; text-wrap: pretty; }
+.page-heading__actions { display: flex; flex-wrap: wrap; gap: calc(var(--site-unit) * 3); padding-block-start: calc(var(--site-unit) * 2); }
+.document-page { padding-block: clamp(2.5rem, 7vw, 5rem) clamp(4rem, 8vw, 7rem); }
+.document-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: calc(var(--site-unit) * 10); align-items: start; }
+.document-nav { min-inline-size: 0; }
+.document-nav > p { color: var(--md-sys-color-on-surface-variant); margin-block-end: calc(var(--site-unit) * 3); }
+.document-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: calc(var(--site-unit) * 2); }
+.document-nav a { display: flex; align-items: center; min-block-size: 44px; padding: calc(var(--site-unit) * 3) calc(var(--site-unit) * 4); border-radius: var(--md-sys-shape-corner-medium); color: var(--md-sys-color-on-surface-variant); text-decoration: none; font: var(--md-sys-typescale-label-large); line-height: 1.5; }
+.document-nav a[aria-current] { color: var(--md-sys-color-on-secondary-container); background: var(--md-sys-color-secondary-container); }
+.document-body { min-inline-size: 0; max-inline-size: 72ch; overflow-wrap: anywhere; }
+.document-body > section { margin-block-end: calc(var(--site-unit) * 14); }
+.document-body h2 { font: var(--md-sys-typescale-headline-medium); margin-block-end: calc(var(--site-unit) * 5); }
+.document-body h3 { font: var(--md-sys-typescale-title-large); margin-block: calc(var(--site-unit) * 8) calc(var(--site-unit) * 4); }
+.document-body p, .document-body li { line-height: 1.8; }
+.document-body p + p { margin-block-start: calc(var(--site-unit) * 4); }
+.document-body [id] { scroll-margin-top: 100px; }
+.document-body :is(ul, ol) { padding-inline-start: calc(var(--site-unit) * 6); }
+.document-body li + li { margin-block-start: calc(var(--site-unit) * 3); }
+.document-body details { background: var(--md-sys-color-surface-container-low); border-radius: var(--md-sys-shape-corner-large); margin-block: calc(var(--site-unit) * 3); overflow: clip; }
+.document-body details > summary { cursor: pointer; padding: calc(var(--site-unit) * 5) calc(var(--site-unit) * 6); min-block-size: 56px; font: var(--md-sys-typescale-title-medium); line-height: 1.6; }
+.document-body details > summary::marker { color: var(--md-sys-color-primary); }
+.document-body details > :not(summary) { margin: 0 calc(var(--site-unit) * 6) calc(var(--site-unit) * 6); }
+.document-body details[open] > summary { color: var(--md-sys-color-primary); }
+.document-body details > summary:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.document-body details > summary:active { background: color-mix(in srgb, currentColor 10%, transparent); }
+.document-callout { padding: calc(var(--site-unit) * 6); border-radius: var(--md-sys-shape-corner-xl); background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+.document-callout a { color: inherit; }
+@media (min-width: 900px) {
+  .document-grid { grid-template-columns: 208px minmax(0, 1fr); gap: calc(var(--site-unit) * 14); }
+  .document-nav { position: sticky; inset-block-start: 96px; max-block-size: calc(100svh - 120px); overflow-y: auto; }
+  .document-nav ul { display: grid; gap: calc(var(--site-unit) * 1); }
+}
