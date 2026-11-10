@@ -443,7 +443,9 @@ describe('a11y/SEO 基线(保留项)', () => {
 describe('Task 10 mobile 剖面缺陷锁(Lighthouse home/schools 复测归零项)', () => {
   it('reserves the live demo height before its app loads', () => {
     const source = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
-    expect(source).toContain('block-size: clamp(580px, 72vh, 760px)');
+    expect(source).toContain('aspect-ratio: 390 / 844');
+    expect(source).toContain('inline-size: min(100%, 416px)');
+    expect(source).not.toContain('block-size: clamp(');
   });
   it('pane lead = on-surface 不降级 variant(dim 叠色对比闸:三占二恒 ×.55)', () => {
     const src = readFileSync(new URL('../src/components/sections/Views.astro', import.meta.url), 'utf8');
@@ -488,7 +490,7 @@ describe('Shot 流式窗口三件套兜底(CLS 0.4711 根因锁,2026-10-25 延�
     const dev = mq.match(/\.hero__device\s*\{([^}]*)\}/)?.[1] ?? '';
     // min(100%,420) 定宽 = 容器宽恒确定,脱离图加载;max-inline-size 回退(内容驱动塌缩)即红
     expect(dev, '.hero__device ≤840px 规则存在').not.toBe('');
-    expect(dev).toContain('inline-size: min(100%, 420px)');
+    expect(dev).toContain('inline-size: min(100%, 416px)');
     expect(dev).not.toMatch(/max-inline-size/);
   });
 });
