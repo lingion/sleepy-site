@@ -63,25 +63,46 @@ describe('blob 3→1(spec §13 R1)', () => {
   });
 });
 
-describe('homepage interactive timetable replaces the first screenshot', () => {
-  it('loads exactly one titled demo in the hero, before the other product sections', () => {
+describe('homepage embeds the complete original web app', () => {
+  it('loads exactly one titled full web app at the original URL without query parameters', () => {
     const frame = doc.querySelector('#hero iframe[data-timetable-demo]');
     expect(frame).not.toBeNull();
     expect(doc.querySelectorAll('iframe').length).toBe(1);
+    expect(frame!.getAttribute('src')).toBe('https://sleepy.is-my.app/preview/');
     const url = new URL(frame!.getAttribute('src')!);
     expect(url.pathname).toBe('/preview/');
-    expect(url.searchParams.get('demo')).toBe('1');
-    expect(url.searchParams.get('embed')).toBe('1');
+    expect(url.search).toBe('');
+    expect(url.hash).toBe('');
     expect(frame!.getAttribute('title')).toBe(zh.hero.demoTitle);
     expect(frame!.getAttribute('loading')).toBe('eager');
     expect(doc.querySelector('#hero img')).toBeNull();
     expect(doc.querySelector('link[rel="preload"][as="image"]')).toBeNull();
   });
-  it('provides a new-tab alternative without allowing embedded top navigation', () => {
+  it('preserves the copy-first hero layout and the original visual position', () => {
+    const grid = doc.querySelector('#hero .hero__grid')!;
+    expect([...grid.children].map((el) => el.className)).toEqual(['hero__copy', 'hero__device']);
+    expect(grid.querySelector('.hero__device > iframe')).not.toBeNull();
+  });
+  it('opens the same complete original URL in a new tab', () => {
     const link = doc.querySelector('.hero__demo-caption a');
-    expect(link?.getAttribute('href')).toContain('?demo=1');
+    expect(link?.getAttribute('href')).toBe('https://sleepy.is-my.app/preview/');
     expect(link?.getAttribute('target')).toBe('_blank');
-    expect(doc.querySelector('#hero iframe')?.getAttribute('sandbox')).not.toContain('allow-top-navigation');
+    expect(link?.getAttribute('rel')).toBe('noopener noreferrer');
+  });
+  it('allows the original web app to run without a sandbox restriction', () => {
+    const frame = doc.querySelector('#hero iframe')!;
+    expect(frame.hasAttribute('sandbox')).toBe(false);
+  });
+  it('leaves the web app URL and theme under the original app’s control', () => {
+    const source = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
+    expect(source).not.toMatch(/syncTheme|searchParams|MutationObserver/);
+    const scripts = [...doc.scripts].map((script) => script.textContent ?? '').join('\n');
+    expect(scripts).not.toMatch(/searchParams\s*\.\s*set\s*\(\s*['"`]theme['"`]/);
+  });
+  it('describes the full original web app in Chinese', () => {
+    expect(doc.querySelector('#hero iframe')?.getAttribute('title')).toBe('Sleepy 完整网页版');
+    expect(doc.querySelector('.hero__demo-caption')?.textContent).toContain('原站界面与功能');
+    expect(doc.querySelector('.hero__demo-caption a')?.textContent).toBe('单独打开完整网页版');
   });
 });
 

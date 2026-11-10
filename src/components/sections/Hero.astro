@@ -2,7 +2,7 @@
 // Layout invariant: copy comes first; the live timetable occupies the original main visual.
 // Mobile stacks the same order without changing the existing page sections.
 import Blob from '../Blob.astro';
-import { onlineTrialUrl, demoUrl, repoUrl } from '../../i18n/ui';
+import { onlineTrialUrl, fullWebAppUrl, repoUrl } from '../../i18n/ui';
 import { zh } from '../../i18n/zh';
 import type { SiteCopy } from '../../i18n/zh';
 import { rowCount } from '../../lib/schools-view';
@@ -34,33 +34,19 @@ const t = c.hero;
     </div>
     <div class="hero__device">
       <iframe
-        src={demoUrl}
+        src={fullWebAppUrl}
         title={t.demoTitle}
         loading="eager"
-        sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-downloads"
         referrerpolicy="strict-origin-when-cross-origin"
         data-timetable-demo
       ></iframe>
       <div class="hero__demo-caption">
         <span>{t.demoHint}</span>
-        <a href={`${onlineTrialUrl}/?demo=1`} target="_blank" rel="noopener noreferrer">{t.demoOpen}</a>
+        <a href={fullWebAppUrl} target="_blank" rel="noopener noreferrer">{t.demoOpen}</a>
       </div>
     </div>
   </div>
 </section>
-
-<script>
-  const demo = document.querySelector<HTMLIFrameElement>('[data-timetable-demo]');
-  if (demo) {
-    const syncTheme = () => {
-      const target = new URL(demo.src);
-      target.searchParams.set('theme', document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
-      if (target.href !== demo.src) demo.src = target.href;
-    };
-    syncTheme();
-    new MutationObserver(syncTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  }
-</script>
 
 <style>
   .hero {

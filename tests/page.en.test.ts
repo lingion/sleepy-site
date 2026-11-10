@@ -50,12 +50,42 @@ describe('/en/ 结构镜像(v5 八段)', () => {
     expect(blobs.length).toBe(1);
     expect(blobs[0].getAttribute('data-blob')).toBe('0');
   });
-  it('embeds the same interactive demo with English accessible copy', () => {
+  it('embeds the complete original web app at its unchanged URL with English accessible copy', () => {
     const frame = doc.querySelector('#hero iframe[data-timetable-demo]');
+    expect(doc.querySelectorAll('iframe').length).toBe(1);
     expect(frame?.getAttribute('title')).toBe(en.hero.demoTitle);
-    expect(frame?.getAttribute('src')).toContain('demo=1&embed=1');
+    expect(frame?.getAttribute('src')).toBe('https://sleepy.is-my.app/preview/');
+    const url = new URL(frame!.getAttribute('src')!);
+    expect(url.search).toBe('');
+    expect(url.hash).toBe('');
     expect(doc.querySelector('#hero img')).toBeNull();
     expect(doc.querySelector('link[rel="preload"][as="image"]')).toBeNull();
+  });
+  it('keeps the original copy-first visual position', () => {
+    const grid = doc.querySelector('#hero .hero__grid')!;
+    expect([...grid.children].map((el) => el.className)).toEqual(['hero__copy', 'hero__device']);
+    expect(grid.querySelector('.hero__device > iframe')).not.toBeNull();
+  });
+  it('provides the same full original URL for opening a new tab', () => {
+    const link = doc.querySelector('.hero__demo-caption a');
+    expect(link?.getAttribute('href')).toBe('https://sleepy.is-my.app/preview/');
+    expect(link?.getAttribute('target')).toBe('_blank');
+    expect(link?.getAttribute('rel')).toBe('noopener noreferrer');
+  });
+  it('runs the full original web app without sandbox restrictions', () => {
+    const frame = doc.querySelector('#hero iframe')!;
+    expect(frame.hasAttribute('sandbox')).toBe(false);
+  });
+  it('does not rewrite the web app URL when the host theme changes', () => {
+    const source = readFileSync(new URL('../src/components/sections/Hero.astro', import.meta.url), 'utf8');
+    expect(source).not.toMatch(/syncTheme|searchParams|MutationObserver/);
+    const scripts = [...doc.scripts].map((script) => script.textContent ?? '').join('\n');
+    expect(scripts).not.toMatch(/searchParams\s*\.\s*set\s*\(\s*['"`]theme['"`]/);
+  });
+  it('describes the full original web app in English', () => {
+    expect(doc.querySelector('#hero iframe')?.getAttribute('title')).toBe('Full Sleepy web app');
+    expect(doc.querySelector('.hero__demo-caption')?.textContent).toContain('original interface and features');
+    expect(doc.querySelector('.hero__demo-caption a')?.textContent).toBe('Open full web app in a new tab');
   });
   it('AppBar 4 导航项(en 前缀绝对路径)+ data-appbar-cta', () => {
     for (const h of ['/en/#views', '/en/schools/', '/en/faq/', '/en/#reminders']) {
