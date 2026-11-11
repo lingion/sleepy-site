@@ -35,16 +35,29 @@ const downloadHref = Astro.props.lang === 'en' ? '/en/download/' : '/download/';
       </p>
     </div>
     <div class="hero__device">
-      <div class="hero__screen" data-phone-screen>
+      <div class="hero__screen" data-phone-screen data-timetable-state="loading">
       <iframe
         src={fullWebAppUrl}
         title={t.demoTitle}
         loading="eager"
         referrerpolicy="strict-origin-when-cross-origin"
         data-timetable-demo
+        aria-busy="true"
+        aria-hidden="true"
+        inert
         width="402"
         height="874"
       ></iframe>
+      <div class="hero__loading" data-timetable-loading>
+        <span class="hero__loading-ring" aria-hidden="true"></span>
+        <span class="t-title-large" translate="no">Sleepy</span>
+        <p class="t-body-medium" role="status" aria-live="polite" aria-atomic="true" data-loading-status
+          data-loading={t.demoLoading} data-slow={t.demoSlow} data-error={t.demoError}>{t.demoLoading}</p>
+        <div class="hero__loading-actions" data-loading-actions hidden>
+          <button type="button" class="site-button site-button--tonal" data-loading-retry>{t.demoRetry}</button>
+          <a class="site-button site-button--text" href={fullWebAppUrl} target="_blank" rel="noopener noreferrer">{t.demoOpen}</a>
+        </div>
+      </div>
       </div>
       <div class="hero__demo-caption">
         <span>{t.demoHint}</span>
@@ -56,8 +69,13 @@ const downloadHref = Astro.props.lang === 'en' ? '/en/download/' : '/download/';
 
 <script>
   import { attachTimetableTheme } from '../../lib/timetable-theme';
+  import { attachTimetableLoading } from '../../lib/timetable-loading';
   const frame = document.querySelector<HTMLIFrameElement>('[data-timetable-demo]');
-  if (frame) attachTimetableTheme(window, frame);
+  const screen = frame?.closest<HTMLElement>('[data-phone-screen]');
+  if (frame && screen) {
+    attachTimetableTheme(window, frame);
+    attachTimetableLoading(window, frame, screen);
+  }
 </script>
 
 <style>
@@ -170,6 +188,40 @@ const downloadHref = Astro.props.lang === 'en' ? '/en/download/' : '/download/';
     color: var(--md-sys-color-on-surface-variant);
   }
   .hero__demo-caption a { color: var(--md-sys-color-primary); padding-block: 8px; }
+  .hero__loading { display: none; }
+  :global(html.js) .hero__loading {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--site-unit) * 4);
+    padding: calc(var(--site-unit) * 6);
+    background: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
+    text-align: center;
+  }
+  .hero__loading p { color: var(--md-sys-color-on-surface-variant); text-wrap: pretty; }
+  .hero__loading-ring {
+    inline-size: 40px;
+    block-size: 40px;
+    border: 3px solid var(--md-sys-color-secondary-container);
+    border-block-start-color: var(--md-sys-color-primary);
+    border-radius: var(--md-sys-shape-corner-full);
+    animation: timetable-loading 1s linear 5;
+  }
+  [data-timetable-state='slow'] .hero__loading-ring,
+  [data-timetable-state='error'] .hero__loading-ring { animation: none; }
+  .hero__loading-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: calc(var(--site-unit) * 2);
+  }
+  .hero__loading-actions .site-button { min-block-size: 44px; }
+  @keyframes timetable-loading { to { transform: rotate(1turn); } }
   /* §6-1~2:hero 一次性入场编排(全站唯二 @keyframes = rise/fade,零循环);图列直绘零动效 */
   @keyframes rise {
     from { opacity: 0; transform: translateY(24px); }
@@ -187,6 +239,7 @@ const downloadHref = Astro.props.lang === 'en' ? '/en/download/' : '/download/';
   /* reduce 文字层:位移编排降纯 opacity 200ms 直现(200ms 写死——reduce 档 duration token 归零
      不可引,同 global.css reveal 先例);delay 清零防拖尾超 §6-2 预算 */
   @media (prefers-reduced-motion: reduce) {
+    .hero__loading-ring { animation: none; }
     .hero__slogan,
     .hero__sub,
     .hero__ctas,
