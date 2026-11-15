@@ -7,6 +7,7 @@ import catalog from '../src/data/schools.snapshot.json';
 import { localizedReleaseNotes, renderReleaseNotes } from '../src/lib/release-notes';
 
 const page = (path: string) => new JSDOM(readFileSync(new URL(`../dist/client/${path}index.html`, import.meta.url), 'utf8')).window.document;
+const normalizeText = (text: string) => text.replace(/\s+/g, ' ').trim();
 
 describe('dedicated localized release notes', () => {
   for (const prefix of ['', 'en/']) {
@@ -27,7 +28,10 @@ describe('dedicated localized release notes', () => {
       expect(article.querySelector('h2')?.id).toBe(`release-${prefix ? 'english' : 'chinese'}`);
       const outline = [...notes.querySelectorAll<HTMLAnchorElement>('.document-nav a')];
       expect(outline.map(link => link.hash)).toEqual([...article.querySelectorAll('h2, h3')].map(heading => `#${heading.id}`));
-      expect(article.textContent!.length).toBeGreaterThan(10000);
+      // Compare the built article with the whole language document, regardless of release length.
+      const source = localizedReleaseNotes(release.body, language);
+      const expectedArticle = new JSDOM(renderReleaseNotes(source)).window.document.body;
+      expect(normalizeText(article.textContent!)).toBe(normalizeText(expectedArticle.textContent!));
     });
   }
   it('keeps download, product, public metadata and catalog on the same immutable release', () => {
