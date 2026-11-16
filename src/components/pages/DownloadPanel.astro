@@ -6,6 +6,7 @@ import { repoUrl, sponsorUrl, onlineTrialUrl, iosRepoUrl } from '../../i18n/ui';
 import { downloadUrl } from '../../lib/download-source';
 import type { DownloadSource } from '../../lib/download-source';
 import type { SiteCopy } from '../../i18n/zh';
+import { releaseDateLabel } from '../../lib/release-date.mjs';
 
 interface Props { copy: SiteCopy['downloadPage']; lang: 'zh' | 'en' }
 const { copy: t, lang } = Astro.props;
@@ -17,7 +18,7 @@ const abiOf = (name: string) => name.replace(/^app-|-release\.apk$/g, '');
 const mb = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 const universal = release.assets.find(asset => asset.name.includes('universal'))!;
 const notes = dl.abiNotes as Record<string, string>;
-const versionLine = t.versionLine.replace('{tag}', release.tag).replace('{minSdk}', dl.minSdk).replace('{date}', release.date.slice(0, 10));
+const versionLine = t.versionLine.replace('{tag}', release.tag).replace('{minSdk}', dl.minSdk).replace('{date}', releaseDateLabel(release.date, lang));
 const sources = [
   { value: 'mirror', name: en ? 'Mirror' : '镜像下载', domain: 'gh.qdp.qzz.io', note: en ? 'Project mirror' : '项目镜像' },
   { value: 'github', name: 'GitHub', domain: 'github.com', note: en ? 'Original release' : '原始发布源' },
@@ -34,6 +35,7 @@ const statusGithub = en ? 'Files will download from github.com.' : '当前通过
     <div class="download-page__grid">
       <section class="download-page__package" aria-labelledby="dl-android">
         <header class="download-page__platform"><h2 id="dl-android" class="t-headline-medium">Android</h2><span class="t-label-large">{release.tag}</span></header>
+        {release.tag === 'v1.0.65' && <p class="document-callout" data-upgrade-note>{en ? 'Upgrading from an older version? Remove the old 4×2 grid widget and add the new vertical seven-day or horizontal three-day widget. Back up your timetable before upgrading.' : '从旧版升级时，请移除旧 4×2 周网格，重新添加七天竖向或三天横向组件。升级前先保留一份课表备份。'}</p>}
         <fieldset class="download-source">
           <legend class="t-title-medium">{en ? 'Download source' : '下载来源'}</legend>
           <div class="download-source__options">

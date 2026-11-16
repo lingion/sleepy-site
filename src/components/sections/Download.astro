@@ -10,6 +10,7 @@ import release from '../../data/release.json';
 import { zh } from '../../i18n/zh';
 import IosDownload from '../IosDownload.astro';
 import type { SiteCopy } from '../../i18n/zh';
+import { releaseDateLabel } from '../../lib/release-date.mjs';
 
 interface Props {
   copy?: SiteCopy;
@@ -21,7 +22,7 @@ const lang = Astro.props.lang ?? 'zh';
 const t = c.download;
 const dp = c.downloadPage;
 const moreHref = lang === 'en' ? '/en/download/' : '/download/';
-const date = release.date.slice(0, 10);
+const date = releaseDateLabel(release.date, lang);
 ---
 
 <section class="site-section download--tonal" id="download" data-prototype="tonal-band" aria-labelledby="download-title">

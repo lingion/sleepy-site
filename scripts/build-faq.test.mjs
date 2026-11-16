@@ -10,10 +10,10 @@ const zhMd = readFileSync(new URL('../fixtures/FAQ.md', import.meta.url), 'utf8'
 const enMd = readFileSync(new URL('./faq-en.md', import.meta.url), 'utf8');
 
 describe('parseFaq 结构闸(快照实测现值)', () => {
-  it('FAQ.md 解析 = 9 节剔除相关链接后 8 节 · 54 问 · 代码块 2 枚', () => {
+  it('FAQ.md 解析 = 9 节剔除相关链接后 8 节 · 55 问 · 代码块 2 枚', () => {
     const secs = parseFaq(zhMd);
     const items = secs.flatMap((s) => s.items);
-    expect(items.length).toBe(54);
+    expect(items.length).toBe(55);
     expect(secs.find((s) => s.zh === '相关链接')).toBeUndefined(); // 无问空节整节剔除(解析器规则,非点名)
     expect(secs.length).toBe(8);
     expect(items.filter((i) => i.a.zh.some((b) => b.type === 'pre')).length).toBe(2);
@@ -37,6 +37,26 @@ describe('parseFaq 结构闸(快照实测现值)', () => {
     expect(items[1].id).toBe('sec-1-q-2');
     expect(items[items.length - 1].id).toBe('sec-8-q-4');
   });
+  it('adds screenshot conversion after the original import questions without moving old anchors', () => {
+    const sections = parseFaq(zhMd);
+    const originalQuestions = [
+      ['Sleepy 和 WakeUp 课程表是什么关系？', 'Sleepy 免费吗？有广告或内购吗？', '需要注册账号吗？', '会收集或上传数据吗？', '谁维护？在哪里反馈问题？', '如何支持这个项目？'],
+      ['支持什么 Android 版本？', '这份功能问答基于哪个版本核对？', '提供哪些 APK ABI？', '有 iOS、Windows 或网页版本吗？', '支持哪些界面语言？'],
+      ['我的学校不在名单里怎么办？', '学校目录有多少条？哪些已经配置？', '从目录里未验证的学校导入成功了，维护者怎么知道？', '教务导入如何工作？账号密码会被保存吗？', '支持哪些导入格式？', 'WakeUP 分享口令怎么导入？', '`sleepy-v1` 是什么？', '可以导出什么？', '可以导出到小爱课程表吗？', '可以直接写入系统日历吗？', '如何完整备份或换机？', '需要哪些权限？'],
+      ['能同时保存多张课表吗？', '同一时间有两门课会丢课吗？', '撤回能撤回什么？', '怎样只调整某一次课程？', '可以拖动课程、跨周移动和快速加课吗？', '节次时间可以自动计算吗？', '时间滑杆上的幽灵标记是什么？', '周视图能显示日期吗？', '长课间怎么显示？'],
+      ['有哪些小组件？', '为什么 OPPO / 一加 / ColorOS 桌面上的 widget 可能空白？', 'Widget 颜色和应用不一致怎么办？', 'vivo 原子岛和桌面小组件是一回事吗？'],
+      ['可以提前多少分钟提醒？', '课前提醒的横幅和流体云是什么关系？', 'OPPO / 一加 / realme 流体云已经接入了吗？', '多张课表的提醒会刷屏吗？', '每张课表的提醒开关在哪里？', '节假日、调休和上课勿扰怎么设置？', '提醒是云推送吗？', '关闭提醒后还会收到吗？'],
+      ['支持深色模式和系统动态色吗？', '能自定义主题颜色吗？', '课程颜色是怎么决定的？能跟随主题吗？', '选中主题卡片会改变卡片尺寸吗？', '液态玻璃和 Material 3 Expressive 动效支持哪些设备？', '支持 Android 13 主题图标吗？'],
+      ['如何编译？', '如何跑测试？', '本机调试控制台是只读的吗？', '如何贡献？'],
+    ];
+    expect(originalQuestions.flat()).toHaveLength(54);
+    originalQuestions.forEach((questions, section) => questions.forEach((question, index) => {
+      expect(sections[section].items[index].id).toBe(`sec-${section + 1}-q-${index + 1}`);
+      expect(sections[section].items[index].q.zh).toBe(question);
+    }));
+    expect(sections[2].items[12].id).toBe('sec-3-q-13');
+    expect(sections[2].items[12].q.zh).toBe('能从课表截图导入吗？Sleepy 会上传截图给 AI 吗？');
+  });
   it('渲染子集四类齐备:paragraph/list(ol+ul)/pre/行内 code+a', () => {
     const items = parseFaq(zhMd).flatMap((s) => s.items);
     const blocks = items.flatMap((i) => i.a.zh);
@@ -52,7 +72,7 @@ describe('zh/en 配对闸', () => {
     const zhItems = parseFaq(zhMd).flatMap((s) => s.items);
     expect(() => assertPairing(zhItems, zhItems.slice(1))).toThrow(/条数不一致/);
   });
-  it('仓内 faq-en.md 与快照现值恰配对(54=54,离线构建可复现)', () => {
+  it('仓内 faq-en.md 与快照现值恰配对(55=55,离线构建可复现)', () => {
     const zhItems = parseFaq(zhMd).flatMap((s) => s.items);
     const enItems = parseFaq(enMd).flatMap((s) => s.items);
     expect(() => assertPairing(zhItems, enItems)).not.toThrow();
@@ -65,9 +85,11 @@ describe('released FAQ coverage', () => {
       expect(text).toContain('https://testflight.apple.com/join/SxymmDzf');
       expect(text).toContain('https://apps.apple.com/app/id6827001840');
     }
-    expect(zhMd).toContain('中国大陆区仍在审核中');
-    expect(enMd).toContain('mainland China release is still under review');
-    expect(zhMd).toContain('不能据 Android v1.0.64 推断');
+    expect(zhMd).toContain('地区可用性、公测名额、实际版本与最低系统要求以所选渠道页面为准');
+    expect(enMd).toContain('Regional availability, beta capacity, installed versions and system requirements are authoritative on the selected channel page');
+    expect(zhMd).not.toContain('中国大陆区仍在审核中');
+    expect(enMd).not.toContain('mainland China release is still under review');
+    expect(zhMd).toContain('不能据 Android v1.0.65 推断');
     expect(enMd).toContain('does not establish complete feature parity');
     expect(zhMd).not.toContain('与 Android 版功能对齐');
   });
@@ -75,7 +97,7 @@ describe('released FAQ coverage', () => {
     const zh = parseFaq(zhMd, 'zh');
     const en = parseFaq(enMd, 'en');
     expect(() => assertSectionPairing(zh, en)).not.toThrow();
-    expect(zh.map((s) => s.items.length)).toEqual([6, 5, 12, 9, 4, 8, 6, 4]);
+    expect(zh.map((s) => s.items.length)).toEqual([6, 5, 13, 9, 4, 8, 6, 4]);
     const wrong = structuredClone(en);
     wrong[1].items.push(wrong[0].items.pop());
     expect(() => assertSectionPairing(zh, wrong)).toThrow();

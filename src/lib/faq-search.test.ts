@@ -25,8 +25,8 @@ describe('FAQ search and original anchors', () => {
     const doc = new JSDOM(html()).window.document;
     expect(filterFaq(doc, 'zzzzNoMatchingQuestion12345')).toBe(0);
     expect(doc.querySelector<HTMLElement>('[data-faq-empty]')?.hidden).toBe(false);
-    expect(filterFaq(doc, '')).toBe(54);
-    expect(visible(doc)).toHaveLength(54);
+    expect(filterFaq(doc, '')).toBe(55);
+    expect(visible(doc)).toHaveLength(55);
     expect(doc.querySelector<HTMLElement>('[data-faq-empty]')?.hidden).toBe(true);
     expect(doc.querySelector<HTMLButtonElement>('[data-faq-clear]')?.hidden).toBe(true);
     expect([...doc.querySelectorAll<HTMLLIElement>('[data-document-nav] li')].every(item => !item.hidden)).toBe(true);
@@ -45,6 +45,16 @@ describe('FAQ search and original anchors', () => {
     expect(dom.window.location.search).toBe('');
     expect(doc.getElementById(id)!.querySelector<HTMLDetailsElement>('details')!.open).toBe(true);
   });
+  it('preserves the old import anchors and makes the appended screenshot answer searchable', () => {
+    const doc = new JSDOM(html()).window.document;
+    expect(doc.getElementById('sec-3-q-12')?.querySelector('summary')?.textContent).toContain('需要哪些权限？');
+    expect(doc.getElementById('sec-4-q-1')?.querySelector('summary')?.textContent).toContain('能同时保存多张课表吗？');
+    const screenshot = doc.getElementById('sec-3-q-13')!;
+    expect(screenshot.querySelector('summary')?.textContent).toContain('能从课表截图导入吗？');
+    expect(filterFaq(doc, '截图')).toBeGreaterThan(0);
+    expect(screenshot.hidden).toBe(false);
+    expect(screenshot.querySelector<HTMLDetailsElement>('details')?.open).toBe(true);
+  });
   it('uses actual input, clear and history events to keep the URL and results together', () => {
     const dom = new JSDOM(html(), {url: 'https://sleepy.is-my.app/faq/?q=备份'});
     const doc = dom.window.document;
@@ -57,11 +67,11 @@ describe('FAQ search and original anchors', () => {
     expect(new URLSearchParams(dom.window.location.search).get('q')).toBe('导入');
     doc.querySelector<HTMLButtonElement>('[data-faq-clear]')!.click();
     expect(dom.window.location.search).toBe('');
-    expect(visible(doc)).toHaveLength(54);
+    expect(visible(doc)).toHaveLength(55);
     expect(doc.activeElement).toBe(input);
     dom.window.history.replaceState(null, '', '?q=备份');
     dom.window.dispatchEvent(new dom.window.PopStateEvent('popstate'));
     expect(input.value).toBe('备份');
-    expect(visible(doc).length).toBeLessThan(54);
+    expect(visible(doc).length).toBeLessThan(55);
   });
 });

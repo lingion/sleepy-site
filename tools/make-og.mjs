@@ -4,6 +4,7 @@
 // 无运行期图像依赖(satori/sharp 已否——plan 裁决)。重跑幂等:同文案 = 同图。
 // 文案真源 = src/i18n/{zh,en}.ts 的 meta + 各页 heading/sub(与站点同步改版)。
 import { execFileSync } from 'node:child_process';
+import { releaseDateLabel } from '../src/lib/release-date.mjs';
 import { mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -23,7 +24,7 @@ const release = readJson('src/data/release.json');
 const product = readJson('src/data/product-release.json');
 const catalog = readJson('src/data/schools.snapshot.json');
 if (release.tag !== product.tag || catalog.ref !== product.tag) throw new Error('Release and catalog snapshots must match the product release');
-const version = `${release.tag} · ${product.publishedAt.slice(0, 10)} UTC`;
+const version = lang => `${release.tag} · ${releaseDateLabel(product.publishedAt, lang)}`;
 // Counts come from the website's catalog release snapshot.
 const PAGES = {
   home: {
@@ -36,12 +37,12 @@ const PAGES = {
     en: { eyebrow: 'School lookup', title: 'Coverage & search', sub: `${catalog.rowCount} entries · ${catalog.configuredCount} configured · ${catalog.unverifiedCount} unverified` },
   },
   download: {
-    zh: { eyebrow: '下载中心', title: '下载 Sleepy', sub: `${version} · 通用 APK · 全架构与校验和` },
-    en: { eyebrow: 'Download', title: 'Get Sleepy', sub: `${version} · universal APK · all ABIs and checksums` },
+    zh: { eyebrow: '下载中心', title: '下载 Sleepy', sub: `${version('zh')} · 通用 APK · 全架构与校验和` },
+    en: { eyebrow: 'Download', title: 'Get Sleepy', sub: `${version('en')} · universal APK · all ABIs and checksums` },
   },
   releases: {
-    zh: { eyebrow: '更新说明', title: 'Sleepy 的新变化', sub: `${version} · 完整双语发布说明` },
-    en: { eyebrow: 'Release notes', title: 'What changed in Sleepy', sub: `${version} · complete bilingual notes` },
+    zh: { eyebrow: '更新说明', title: 'Sleepy 的新变化', sub: `${version('zh')} · 完整双语发布说明` },
+    en: { eyebrow: 'Release notes', title: 'What changed in Sleepy', sub: `${version('en')} · complete bilingual notes` },
   },
   faq: {
     zh: { eyebrow: '常见问答', title: '有疑问,先查这里', sub: '功能、导入、组件与隐私边界' },

@@ -10,20 +10,32 @@ const headings = ['Overview', 'Information we do not collect', 'Permissions and 
 const date = new Intl.DateTimeFormat(en ? 'en' : 'zh-CN', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(policy.effectiveDate));
 ---
 <div class="site-col document-page">
-  <PageHeader title={en ? 'Privacy policy' : '隐私政策'} description={en ? 'How Sleepy handles local data, permissions and network access. The published Chinese policy is reproduced in full below.' : '了解课表数据保存在何处、权限用来做什么，以及哪些功能需要联网。以下保留已公布的政策原文。'}>
+  <PageHeader title={en ? 'Privacy policy' : '隐私政策'} description={en ? 'Current data handling, permissions and network access, with the historical Chinese policy preserved below.' : '了解当前数据存储、权限与联网行为，并查阅下方保留的历史政策原文。'}>
     <span slot="meta">{en ? 'Original policy effective ' : '原文生效日期：'}<time datetime={policy.effectiveDate}>{date}</time></span>
     <a slot="actions" class="site-button site-button--outlined" href={policy.source}>{en ? 'View original policy' : '查看政策原始页面'}</a>
   </PageHeader>
-  <aside class="document-callout" data-privacy-update aria-labelledby="privacy-update-heading">
-    <h2 id="privacy-update-heading">{en ? 'Android v1.0.65 network behavior update' : 'Android v1.0.65 联网行为补充'}</h2>
-    <p>{en
-      ? 'Reviewed on November 16, 2026: timetables are stored locally by default. If you choose WebDAV backup, a full backup is uploaded directly to your selected HTTPS server after you confirm. The backup file itself is not encrypted; the server operator may read it. The WebDAV password is encrypted locally with Android Keystore and excluded from the backup. This feature does not use a Sleepy relay server.'
-      : '2026 年 11 月 16 日核验：课表默认保存在本机。选择 WebDAV 备份时，确认后会将完整备份直接上传到你指定的 HTTPS 服务器。备份文件本身未加密，服务器管理者可能读取其内容；WebDAV 密码由 Android Keystore 在本机加密保存，不进入备份包。此功能不经过 Sleepy 中转服务器。'}</p>
-    <p><a href={en ? '/en/guides/backup-restore/' : '/guides/backup-restore/'}>{en ? 'Backup instructions and release-source evidence' : '备份操作说明与发布源码依据'}</a></p>
-    <p>{en ? 'The October 18, 2026 policy below is reproduced as published. Read its local-storage statements together with the optional WebDAV behavior above.' : '下方保留 2026 年 10 月 18 日公布的政策原文；其中的本地存储说明应结合上方可选 WebDAV 行为理解。'}</p>
+  <aside class="document-callout privacy-current" data-privacy-update aria-labelledby="privacy-update-heading">
+    <h2 id="privacy-update-heading">{en ? 'Current Android data handling — v1.0.65' : '当前 Android 数据处理说明 · v1.0.65'}</h2>
+    <p>{en ? 'Reviewed November 16, 2026 against the released source. This description covers optional network features as well as local storage. iOS and the web app have independent implementations.' : '按已发布源码于 2026 年 11 月 16 日核对，覆盖本地存储和可选联网功能。iOS 与网页版分别实现，以对应版本说明为准。'}</p>
+    <dl>
+      <dt>{en ? 'Local use and school sign-in' : '本地使用与学校登录'}</dt>
+      <dd>{en ? 'Ordinary timetable viewing and editing work offline without a Sleepy account. Academic import contacts your chosen school; school login sessions and WebView cookies may remain on the device. Review and redact diagnostic files before sharing them.' : '普通课表查看与编辑可离线完成，无需 Sleepy 账号。教务导入访问所选学校；学校登录会话与 WebView Cookie 可能在本机保留。分享诊断文件前应检查并脱敏。'}</dd>
+      <dt>{en ? 'Network features you use' : '按功能发起的联网'}</dt>
+      <dd>{en ? 'Academic import visits school systems. WakeUp online codes contact the third-party api.wakeup.fun service. Holiday refreshes, version checks and downloads contact their configured data and distribution sources. System sharing, calendar export and external community links follow your selected app and provider.' : '教务导入访问学校系统；WakeUp 在线口令访问第三方 api.wakeup.fun；节假日刷新、版本检查与下载访问各自配置的数据源和分发源。系统分享、日历导出和外部社区链接的数据去向取决于所选应用与服务。'}</dd>
+      <dt>{en ? 'Optional WebDAV backups' : '可选的 WebDAV 备份'}</dt>
+      <dd>{en ? 'After confirmation, a full .sleepybackup is uploaded directly to your chosen HTTPS server, without a Sleepy relay. Uploads and downloads are manual and limited to 100 MiB. Archives are not encrypted; protect server access. The password is encrypted locally with Android Keystore and excluded from exported and Android system backups. This is not automatic synchronization.' : '确认后，完整 .sleepybackup 直接上传到你指定的 HTTPS 服务器，不经过 Sleepy 中转。上传和下载均手动进行，上限 100 MiB；归档未加密，应保护服务器访问。密码由 Android Keystore 在本机加密保存，不进入导出备份和 Android 系统备份。这不是自动同步。'}</dd>
+      <dt>{en ? 'Screenshot conversion with an AI' : '使用 AI 转换截图'}</dt>
+      <dd>{en ? 'The import entry copies a prompt. You choose an AI and send the prompt and screenshot yourself; Sleepy does not upload the screenshot through this entry. Remove names, student numbers and other personal information first. Data sent to the AI is handled under that provider’s policies; review the returned timetable before importing.' : '导入入口只复制提示词，由你选择 AI 并自行发送提示词和截图，Sleepy 不通过此入口上传截图。发送前先遮盖姓名、学号等个人信息；所选 AI 按其自身政策处理收到的数据，导入前应核对返回课表。'}</dd>
+      <dt>{en ? 'Deletion and remote copies' : '删除与远端副本'}</dt>
+      <dd>{en ? 'Deleting a timetable or clearing app data affects local copies. Uninstalling, clearing WebDAV settings or deleting local data does not delete exported files, remote backups, calendar events or content you sent to another service. Manage those copies in the corresponding server, app or provider.' : '删除课表或清除应用数据影响本机副本。卸载应用、清除 WebDAV 配置或删除本机数据，不会同时删除已导出文件、远端备份、系统日历事件或已发送给其他服务的内容，需要在对应服务器、应用或服务中分别管理。'}</dd>
+    </dl>
+    <p><a href={en ? '/en/guides/backup-restore/' : '/guides/backup-restore/'}>{en ? 'Backup instructions and release-source evidence' : '备份操作说明与发布源码依据'}</a> · <a href="https://github.com/lingion/sleepy/tree/3a7cbed352f4f8e1144e2e532840b9bea93b25d3">{en ? 'Reviewed Android release source' : '核验所用 Android 发布源码'}</a></p>
+    <p>{en ? 'The October 18, 2026 policy below is retained as a historical original. Its absolute local-only and network-list statements predate the features described above; use this current description when checking those behaviors.' : '下方保留 2026 年 10 月 18 日的历史政策原文。其中“仅本机存储”“无服务端副本”和联网清单早于上述功能，核对现行行为时请结合本节说明。'}</p>
   </aside>
   <div class="document-grid">
     <DocumentNav label={en ? 'On this page' : '本页内容'} links={policy.sections.map((section, i) => ({ href: `#${section.id}`, label: en ? headings[i] : section.title.replace(/^[一二三四五六七八九]、/, '') }))} />
+    <details class="privacy-archive">
+      <summary class="t-title-large">{en ? 'Historical published policy (Chinese original)' : '查看历史政策原文'}</summary>
     <article class="document-body privacy-policy" lang="zh-CN">
       <p class="document-callout">适用范围：{policy.scope}</p>
       {policy.sections.map(section => <section id={section.id} aria-labelledby={`${section.id}-title`}>
@@ -31,9 +43,15 @@ const date = new Intl.DateTimeFormat(en ? 'en' : 'zh-CN', { dateStyle: 'long', t
         <div set:html={sanitizeHtml(section.html, { allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, '*': ['class'] } })} />
       </section>)}
     </article>
+    </details>
   </div>
 </div>
 <style>
+  .privacy-current { line-height: 1.8; }
+  .privacy-current dt { font-weight: 600; margin-block-start: 20px; }
+  .privacy-current dd { margin-inline-start: 0; }
+  .privacy-archive { min-inline-size: 0; }
+  .privacy-archive > summary { cursor: pointer; margin-block-end: 24px; }
   .privacy-policy > p { margin-block-end: calc(var(--site-unit) * 12); }
   .privacy-policy :global(p) { margin-block: calc(var(--site-unit) * 4); }
   .privacy-policy :global(.perm-list) { list-style: none; padding: 0; }

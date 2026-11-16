@@ -1,0 +1,12 @@
+{
+  "android": {
+    "version": "v1.0.65",
+    "commit": "3a7cbed352f4f8e1144e2e532840b9bea93b25d3",
+    "reviewedAt": "2026-11-16"
+  },
+  "ios": {
+    "version": "v1.0.64",
+    "commit": "aca60039609e992ef1561c17b6a148dc0e4215d6",
+    "reviewedAt": "2026-11-16"
+  }
+}

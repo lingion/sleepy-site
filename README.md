@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square" alt="License">
 </p>
 
-[Sleepy](https://github.com/lingion/sleepy)(开源安卓课表 App)的官方双语网站。静态 Astro 站点,线上地址 [sleepy.is-my.app](https://sleepy.is-my.app)。
+[Sleepy 轻课表](https://github.com/lingion/sleepy)的官方双语网站，介绍独立发布的 Android、iOS 原生应用与网页体验。静态 Astro 站点，线上地址 [sleepy.is-my.app](https://sleepy.is-my.app)。
 
 问题反馈和新建议请直接开 [Issues](https://github.com/lingion/sleepy-site/issues)。
 
@@ -27,13 +27,13 @@ npm run data         # 教务数据管线(release 快照 + schools 分组)
 
 更新说明按页面语言展示：`/releases/` 只显示完整中文正文与目录，`/en/releases/` 只显示完整英文正文与目录。`release.json` 保留原始双语内容。所有非首页的顶栏常驻下载按钮，手机端同样可见；320像素窄屏以品牌图标为首页入口，保留下载、语言、主题和菜单四项操作。布局约束见 [语言与子页导航](docs/localized-notes-navigation.md)。
 
-完整更新说明位于 `/releases/` 和 `/en/releases/`，不放在首页。首页主视觉原样嵌入 sleepy-web 完整原站，保留原 UI 和功能。iframe 与「单独打开完整网页版」均逐字使用 `https://sleepy.is-my.app/preview/`，不带查询参数，不设置 sandbox，也不通过官网主题重写 URL。网页版自行管理主题、导航、数据与设置，本站不提供隔离或精简演示版本，不修改 sleepy-web。首页共八段，Hero 后为七段，既有首图尺寸、位置、页面顺序与 Release 同步机制保持不变。嵌入契约见 `docs/release-sync-and-demo.md`。
+完整更新说明位于 `/releases/` 和 `/en/releases/`，不放在首页。首页主视觉原样嵌入 sleepy-web 完整原站，保留原 UI 和功能。iframe 与「单独打开完整网页版」均逐字使用 `https://sleepy.is-my.app/preview/`，不带查询参数，不设置 sandbox，也不通过官网主题重写 URL。网页版自行管理主题、导航、数据与设置，本站不提供隔离或精简演示版本，不修改 sleepy-web。首页共九段，Hero 后为八段，既有首图尺寸、位置、页面顺序与 Release 同步机制保持不变。嵌入契约见 `docs/release-sync-and-demo.md`。
 
 主仓库工作流 `.github/workflows/sync-sleepy-site.yml` 同时监听正式 Release 工作流成功结束及手动发布、编辑事件。这样由 GITHUB_TOKEN 创建的 Release 也能触发同步。主仓库需要 `SLEEPY_SITE_DISPATCH_TOKEN`（可调用 `lingion/sleepy-site` repository dispatch）；本站需要 `CLOUDFLARE_API_TOKEN` 和 `CLOUDFLARE_ACCOUNT_ID`。部署使用现有 sleepy-site Pages 项目。
 
 ## iOS 安装渠道
 
-中国大陆以外的 [App Store](https://apps.apple.com/app/id6827001840) 均已上线，中国大陆区仍在审核中，可使用 [TestFlight](https://testflight.apple.com/join/SxymmDzf)。首页和下载页分别展示官方 App Store 徽章及 TestFlight 专用图标，使用共享组件和双语文案。正式商店、公测与 Android 独立发布，不能互相推断功能或版本号。布局、来源和渠道约束见 [iOS 安装入口](docs/ios-distribution.md)。
+[App Store](https://apps.apple.com/app/id6827001840) 的可用性以用户所在地区的商店页面为准；无法获取时，可查看 [TestFlight](https://testflight.apple.com/join/SxymmDzf) 是否开放名额。首页和下载页分别展示官方 App Store 徽章及 TestFlight 专用图标，使用共享组件和双语文案。正式商店、公测与 Android 独立发布，版本、系统要求及功能以各渠道说明为准。布局、来源和渠道约束见 [iOS 安装入口](docs/ios-distribution.md)。
 
 ## 目录
 
@@ -45,9 +45,9 @@ npm run data         # 教务数据管线(release 快照 + schools 分组)
 
 ## 产品事实与快照
 
-当前产品基线由 `src/data/product-release.json` 记录 Android 发布 tag、源码 SHA、发布时间和审查日期。`schools.snapshot.json` 记录学校源快照及归组证据，普通页面构建不联网重取学校目录。原始目录分为已配置、未验证和待接入，官网仅展示前两类。总数、已配置和未验证数量均取快照字段，不等于逐校在线验证。
+当前发布快照由 `src/data/product-release.json` 记录 Android 发布 tag、源码 SHA、发布时间和快照刷新日期。自动刷新发布数据不等于重新核验人工正文；首页功能、FAQ 和指南保留各自的核验范围。`schools.snapshot.json` 记录学校源快照及归组证据，普通页面构建不联网重取学校目录。原始目录分为已配置、未验证和待接入，官网仅展示前两类。总数、已配置和未验证数量均取快照字段，不等于逐校在线验证。
 
-中文 FAQ 在 `fixtures/FAQ.md`，英文在 `scripts/faq-en.md`，生成 `src/data/faq.json` 后同时用于页面、机器 JSON 和 FAQPage 结构化数据。中文主稿与 Android 仓库 `FAQ.md` 保持一致；翻译必须逐节逐问对应。
+中文 FAQ 在 `fixtures/FAQ.md`，英文在 `scripts/faq-en.md`，生成 `src/data/faq.json` 后同时用于页面、机器 JSON 和 FAQPage 结构化数据。网站问答按已发布源码人工维护，可从 Android 仓库的明确提交取得底稿；刷新前须复核产品变化和成对译文，翻译必须逐节逐问对应。本次正文核验依据见 [v1.0.65 内容复核](docs/content-review-v1.0.65.md)。
 
 ```sh
 node scripts/sync-data.mjs

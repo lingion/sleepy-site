@@ -8,6 +8,7 @@ import { site } from '../src/i18n/ui';
 import release from '../src/data/release.json';
 import { zh } from '../src/i18n/zh';
 import { en } from '../src/i18n/en';
+import { releaseDateLabel } from '../src/lib/release-date.mjs';
 
 const load = (p: string): JSDOM => {
   try {
@@ -35,8 +36,8 @@ describe('下载资产与外链(spec §2.4)', () => {
     expect(zhHtml).toContain(zh.download.minSdk);
   });
   it('版本行渲染 = tag · minSdk · 日期 发布(tnum 行)', () => {
-    expect(zhHtml).toContain(`${release.tag} · ${zh.download.minSdk} · ${release.date.slice(0, 10)} 发布`);
-    expect(enHtml).toContain(`${release.tag} · ${en.download.minSdk} · released ${release.date.slice(0, 10)}`);
+    expect(zhHtml).toContain(`${release.tag} · ${zh.download.minSdk} · ${releaseDateLabel(release.date, 'zh')} 发布`);
+    expect(enHtml).toContain(`${release.tag} · ${en.download.minSdk} · released ${releaseDateLabel(release.date, 'en')}`);
   });
   it('online trial explains platform capability boundaries', () => {
     expect(zhHtml).toContain(zh.download.trial);
@@ -136,5 +137,15 @@ describe('页面骨架与双语镜像', () => {
     expect(enDoc.querySelector('main h1')?.textContent).toBe(en.downloadPage.heading);
     expect(enDoc.querySelector('fieldset legend')?.textContent).toBe('Download source');
     expect(enDoc.querySelector<HTMLInputElement>('input:checked')?.value).toBe('github');
+  });
+});
+
+// Published timestamps after 16:00 UTC belong to the following date in Beijing.
+describe('localized release dates', () => {
+  it('keeps the release instant while making the displayed time zone explicit', () => {
+    expect(releaseDateLabel('2026-11-15T18:56:37Z', 'zh')).toBe('2026-11-16（北京时间）');
+    expect(releaseDateLabel('2026-11-15T18:56:37Z', 'en')).toBe('2026-11-15 UTC');
+    expect(releaseDateLabel('2026-12-31T16:00:00Z', 'zh')).toBe('2027-01-01（北京时间）');
+    expect(releaseDateLabel('2026-12-31T15:59:59Z', 'zh')).toBe('2026-12-31（北京时间）');
   });
 });

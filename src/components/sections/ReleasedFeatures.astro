@@ -1,16 +1,16 @@
 ---
 import { zh, type SiteCopy } from '../../i18n/zh';
-import product from '../../data/product-release.json';
+import baseline from '../../data/content-baseline.json';
 interface Props { copy?: SiteCopy }
 const t = (Astro.props.copy ?? zh).released;
-const version = t.version.replace('{tag}', product.tag).replace('{date}', product.publishedAt.slice(0, 10));
+const version = `Android ${baseline.android.version} · ${baseline.android.reviewedAt}`;
 ---
 <section class="site-section released" id="released" data-prototype="release-notes" aria-labelledby="released-title">
   <div class="site-col">
     <header class="released__header">
       <p class="t-label-large tnum">{version}</p>
       <h2 class="t-headline-large" id="released-title">{t.heading}</h2>
-      <a href={product.sourceUrl} class="t-body-medium">{t.source}</a>
+      <a href={`https://github.com/lingion/sleepy/tree/${baseline.android.commit}`} class="t-body-medium">{t.source}</a>
     </header>
     <dl class="released__items">
       {Object.entries(t.items).map(([key, item]) => (

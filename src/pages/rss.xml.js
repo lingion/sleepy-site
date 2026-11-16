@@ -5,6 +5,7 @@ import rss from '@astrojs/rss';
 import { site } from '../i18n/ui';
 import release from '../data/release.json';
 import { rowCount } from '../lib/schools-view';
+import { releaseDateLabel } from '../lib/release-date.mjs';
 
 export async function GET(context) {
   const universal = release.assets.find((a) => a.name.includes('universal'));
@@ -20,9 +21,9 @@ export async function GET(context) {
         pubDate: new Date(release.date),
         link: `${site}/releases/`,
         description: [
-          `Sleepy ${release.tag} · ${new Date(release.date).toISOString().slice(0, 10)} 发布。`,
+          `Sleepy ${release.tag} · ${releaseDateLabel(release.date, 'zh')} 发布。`,
           `通用 APK:${universal?.name ?? 'app-universal-release.apk'}。`,
-          `校验和与全部架构见 sha256sums。${rowCount} 条教务直连,课表数据仅存本机。`,
+          `校验和与全部架构见 sha256sums。${rowCount} 条学校目录记录，按状态核对适配；课表默认保存在本机，备份与分享由你主动发起。`,
         ].join(' '),
       },
     ],

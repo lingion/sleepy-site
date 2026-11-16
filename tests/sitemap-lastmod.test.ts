@@ -50,8 +50,13 @@ describe('sitemap reflects release dates and genuine content reviews', () => {
       expect(entry(path)).toBeNull();
     });
   }
-  it('preserves the older feature FAQ review baseline separately', () => {
-    expect(faq.updatedAt).toBe('2026-11-10');
-    expect(faq.reviewedVersion).toBe('v1.0.64');
+  it('preserves the reviewed feature FAQ baseline separately from automated releases', () => {
+    const editorialSource = readFileSync(new URL('../fixtures/FAQ.md', import.meta.url), 'utf8');
+    const reviewedAt = editorialSource.match(/内容核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1];
+    const reviewedVersion = editorialSource.match(/产品基线为 Android (v[\d.]+)/)?.[1];
+    expect(reviewedAt).toBeTruthy();
+    expect(reviewedVersion).toBeTruthy();
+    expect(faq.updatedAt).toBe(reviewedAt);
+    expect(faq.reviewedVersion).toBe(reviewedVersion);
   });
 });

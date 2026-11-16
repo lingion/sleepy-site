@@ -16,10 +16,10 @@ const catalog = read('src/data/schools.snapshot.json');
 if (catalog.ref !== release.tag || catalog.sourceSha !== release.sourceSha) throw new Error('Mixed release/catalog snapshots');
 const product = {
   tag: release.tag, commit: release.sourceSha, publishedAt: release.date,
-  reviewedAt: release.builtAt.slice(0, 10), sourceUrl: `https://github.com/lingion/sleepy/tree/${release.tag}`,
+  snapshotRefreshedAt: release.builtAt.slice(0, 10), sourceUrl: `https://github.com/lingion/sleepy/tree/${release.sourceSha}`,
 };
 writeFileSync(new URL('../src/data/product-release.json', import.meta.url), JSON.stringify(product, null, 2) + '\n');
-// The bilingual editorial FAQ carries its own review date and is not relabelled as a newer edition.
+// Editorial baselines and the bilingual FAQ are not rewritten or relabelled by a release fetch.
 run('build-faq.mjs');
 run('build-release-surfaces.mjs');
 execFileSync(process.execPath, ['tools/make-og.mjs'], { cwd: root, stdio: 'inherit' });

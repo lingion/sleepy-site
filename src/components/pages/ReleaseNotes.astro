@@ -3,6 +3,7 @@ import release from '../../data/release.json';
 import { renderReleaseNotes } from '../../lib/release-notes';
 import PageHeader from '../PageHeader.astro';
 import DocumentNav from '../DocumentNav.astro';
+import { releaseDateLabel } from '../../lib/release-date.mjs';
 interface Props { lang: 'zh' | 'en' }
 const { lang } = Astro.props;
 const t = lang === 'zh'
@@ -12,7 +13,7 @@ const html = renderReleaseNotes(release.body, lang);
 const outline = [...html.matchAll(/<h[23] id="([^"]+)">([\s\S]*?)<\/h[23]>/g)].map(match => ({
   href: `#${match[1]}`, label: match[1] === 'release-english' ? 'English' : match[1] === 'release-chinese' ? '中文' : match[2].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&'),
 }));
-const date = new Intl.DateTimeFormat(lang === 'zh' ? 'zh-CN' : 'en', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(release.date));
+const date = releaseDateLabel(release.date, lang);
 ---
 <section class="document-page release-page" aria-labelledby="release-title" data-release-tag={release.tag}>
   <div class="site-col">

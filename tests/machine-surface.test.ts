@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { site, iosAppStoreUrl, iosTestFlightUrl } from '../src/i18n/ui';
+import { buildReleaseSurfaces } from '../scripts/build-release-surfaces.mjs';
 
 // GEO/分发面批次(2026-10-27):llms.txt 声称的机读源必须真实可达(线上实测
 // /faq.json 曾返回 404 假 200 —— 声称必有实物是信任基石,AI 抓取验证失败
@@ -33,11 +34,69 @@ describe('faq.json 机读路由(llms.txt 引址实物)', () => {
 });
 
 describe('released product machine surface', () => {
-  it('llms declares a released source and a separate documentation review date', () => {
+  it('llms distinguishes automated snapshot refreshes from reviewed content', () => {
     const product = JSON.parse(read('../src/data/product-release.json'));
+    const baseline = JSON.parse(read('../src/data/content-baseline.json'));
+    const faq = JSON.parse(read('../src/data/faq.json'));
     const txt = read('../public/llms.txt');
-    for (const value of [product.tag, product.commit, product.publishedAt, product.reviewedAt, product.sourceUrl]) expect(txt).toContain(value);
+    expect(product.snapshotRefreshedAt).toBeTruthy();
+    expect(product).not.toHaveProperty('reviewedAt');
+    for (const value of [product.tag, product.commit, product.publishedAt, product.snapshotRefreshedAt, product.sourceUrl]) expect(txt).toContain(value);
+    expect(txt).toContain('Snapshot refresh is automated and does not establish a new editorial review');
+    for (const platform of ['android', 'ios']) {
+      const review = baseline[platform];
+      expect(txt).toContain(`${review.version}, source commit ${review.commit}, reviewed ${review.reviewedAt}`);
+    }
+    expect(txt).toContain(`Bilingual FAQ: Android ${faq.reviewedVersion}, reviewed ${faq.updatedAt}`);
     expect(txt).not.toMatch(/SOP|Co-Authored-By|lingion@hrbeu|sleepy\.is-my\.app.*password/i);
+  });
+  it('a later automated release cannot advance editorial feature or FAQ baselines', () => {
+    const release = JSON.parse(read('../src/data/release.json'));
+    const catalog = JSON.parse(read('../src/data/schools.snapshot.json'));
+    const baseline = JSON.parse(read('../src/data/content-baseline.json'));
+    const faq = { ...JSON.parse(read('../src/data/faq.json')), reviewedVersion: 'v1.0.63', updatedAt: '2026-11-01' };
+    const future = { tag: 'v9.9.9', commit: 'a'.repeat(40), date: '2099-01-02T00:00:00Z', refresh: '2099-01-03' };
+    expect(faq.reviewedVersion).not.toBe(baseline.android.version);
+    expect(faq.updatedAt).not.toBe(baseline.android.reviewedAt);
+    const { llms } = buildReleaseSurfaces({
+      release: { ...release, tag: future.tag, sourceSha: future.commit, date: future.date },
+      product: { tag: future.tag, commit: future.commit, snapshotRefreshedAt: future.refresh, sourceUrl: `https://github.com/lingion/sleepy/tree/${future.commit}` },
+      catalog: { ...catalog, ref: future.tag, sourceSha: future.commit },
+      baseline,
+      faq,
+    });
+    expect(llms).toContain(`Release snapshot: Android ${future.tag}`);
+    expect(llms).toContain(`Snapshot refreshed ${future.refresh}`);
+    expect(llms).toContain(`The following notes describe Android ${baseline.android.version}, reviewed ${baseline.android.reviewedAt}`);
+    expect(llms).toContain(`Bilingual FAQ: Android ${faq.reviewedVersion}, reviewed ${faq.updatedAt}`);
+    expect(llms).not.toContain(`feature descriptions: ${future.tag}`);
+    expect(llms).not.toContain(`Bilingual FAQ: Android ${future.tag}`);
+    expect(llms).not.toContain(`Bilingual FAQ: Android ${baseline.android.version}, reviewed ${baseline.android.reviewedAt}`);
+  });
+  it('refuses mixed release sources and missing editorial baselines', () => {
+    const release = JSON.parse(read('../src/data/release.json'));
+    const product = JSON.parse(read('../src/data/product-release.json'));
+    const catalog = JSON.parse(read('../src/data/schools.snapshot.json'));
+    const baseline = JSON.parse(read('../src/data/content-baseline.json'));
+    const faq = JSON.parse(read('../src/data/faq.json'));
+    const input = { release, product: { ...product, snapshotRefreshedAt: '2026-11-16' }, catalog, baseline, faq };
+    expect(() => buildReleaseSurfaces({ ...input, catalog: { ...catalog, sourceSha: 'b'.repeat(40) } })).toThrow('Mixed release surfaces');
+    expect(() => buildReleaseSurfaces({ ...input, baseline: { android: baseline.android } })).toThrow('Missing ios editorial baseline');
+    expect(() => buildReleaseSurfaces({ ...input, faq: { ...faq, reviewedVersion: undefined } })).toThrow('Missing FAQ editorial baseline');
+    expect(() => buildReleaseSurfaces({ ...input, product: { ...input.product, snapshotRefreshedAt: undefined } })).toThrow('Missing release snapshot refresh date');
+  });
+  it('machine content preserves reviewed feature limits and widget migration steps', () => {
+    for (const path of ['../public/llms.txt', '../dist/client/llms.txt']) {
+      const txt = read(path);
+      expect(txt).toContain('does not automatically upload screenshots or call an AI service');
+      expect(txt).toContain('manual backup and restore over HTTPS');
+      expect(txt).toContain('unencrypted ZIP files');
+      expect(txt).toContain('100 MiB');
+      expect(txt).toContain('15 Manifest-registered configuration entries');
+      expect(txt).toContain('old 4×2 receiver was replaced');
+      expect(txt).toContain('Updating or appending an existing timetable does not replace date rules');
+      expect(txt).toContain('restored exported backups do not gain update eligibility');
+    }
   });
   it('machine documents preserve independent iOS channels and scope store availability', () => {
     for (const path of ['../public/llms.txt', '../dist/client/llms.txt']) {
@@ -48,7 +107,13 @@ describe('released product machine surface', () => {
       expect(txt).toContain('check whether TestFlight has open places');
     }
     const faq = JSON.parse(read('../dist/client/faq.json'));
-    expect(faq.updatedAt).toBe('2026-11-10');
+    const editorialSource = read('../fixtures/FAQ.md');
+    const reviewedAt = editorialSource.match(/内容核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1];
+    const reviewedVersion = editorialSource.match(/产品基线为 Android (v[\d.]+)/)?.[1];
+    expect(reviewedAt).toBeTruthy();
+    expect(reviewedVersion).toBeTruthy();
+    expect(faq.updatedAt).toBe(reviewedAt);
+    expect(faq.reviewedVersion).toBe(reviewedVersion);
     const platform = faq.sections.flatMap((section: any) => section.items).find((item: any) => item.id === 'sec-2-q-4');
     expect(JSON.stringify(platform.a)).toContain(iosAppStoreUrl);
     expect(JSON.stringify(platform.a)).toContain(iosTestFlightUrl);

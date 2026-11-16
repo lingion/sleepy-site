@@ -57,6 +57,13 @@ export const guides: Guide[] = [
             '在线口令报错时，先检查网络，再请分享者生成新的有效口令。第三方服务的有效期、登录要求或接口变化可能影响获取；Sleepy 不能保证旧口令永久可用。',
             '有离线 JSON 或完整分享文本时，可以改用文件导入或文本导入。不要反复改扩展名，也不要把截图当成 JSON。仍然失败时，记录来源版本、Sleepy 版本和错误提示；提交反馈前删除姓名、学号、账号等个人信息。',
           ] },
+          { id: 'screenshot-import', title: '只有截图时，先转换再核对', steps: [
+            '在导入页选择“AI 截图转换”，复制提供的提示词。',
+            '自行选择支持识图的 AI，将提示词和课表截图发给它。发送前遮盖姓名、学号等不需要识别的信息，并确认你愿意让该服务处理截图。',
+            '将 AI 生成的 sleepy-v1 文本复制回“粘贴课表文本”，在 Sleepy 中预览。逐项检查课程、日期、周次和节次时间，修正识别错误后再保存。',
+          ], paragraphs: [
+            '这个入口只复制提示词，不会替你上传截图，也不是 Sleepy 内置的图片识别服务。有原始课表文本或文件时，优先使用原始数据。',
+          ] },
           { id: 'platforms', title: 'Android、iOS 与网页版本的区别', paragraphs: [
             '本文步骤以 Android v1.0.65 的已发布源码为依据。iOS 与网页独立发布，入口、导入格式和功能进度可能不同，请以所安装版本实际显示的功能为准。',
             '迁移到另一平台时，优先核对该版本支持的课表交换格式，并用一张课表试导入。不要把 Android 的全量备份文件等同于所有平台通用的课表文件。',
@@ -90,6 +97,13 @@ export const guides: Guide[] = [
           { id: 'troubleshooting', title: 'If the code expires or parsing fails', paragraphs: [
             'For an online code error, check your connection and ask the sender to generate a fresh valid code. Expiry, login requirements or changes to the third-party service can affect retrieval. Sleepy cannot guarantee that an old code remains available.',
             'If you have offline JSON or complete share text, try file or text import instead. Renaming a file does not convert its format, and a screenshot is not JSON. When reporting a failure, include source and Sleepy versions and the error message; remove names, student numbers and account details first.',
+          ] },
+          { id: 'screenshot-import', title: 'Convert and check a screenshot', steps: [
+            'Choose AI screenshot conversion on the import page and copy the provided prompt.',
+            'Choose an AI that accepts images and send it the prompt with your timetable screenshot yourself. Remove names, student numbers and other unnecessary details first, and decide whether you want that service to process the image.',
+            'Copy the generated sleepy-v1 text into the paste timetable text entry in Sleepy. Inspect every course, date, teaching week and period time in the preview, correct recognition errors and then save.',
+          ], paragraphs: [
+            'This entry only copies a prompt. It does not upload your screenshot or provide a built-in Sleepy image-recognition service. Prefer the original timetable text or export file when available.',
           ] },
           { id: 'platforms', title: 'Android, iOS and web releases', paragraphs: [
             'These steps are checked against the released Android v1.0.65 source. iOS and web versions ship independently, so entry points, supported formats and feature availability may differ. Check the version you actually use.',
@@ -134,6 +148,8 @@ export const guides: Guide[] = [
             '恢复后检查课表数量、学期起始日期、作息与当前教学周。',
             '合并到已有课表的设备时，导入课表的默认课表及提醒状态会调整；重新检查默认课表、提醒和小组件显示。',
             '账号密码不应被当作全量备份的一部分；WebDAV 密码不会加入备份包。',
+            '备份可保留已保存的学校身份，但恢复 .sleepybackup 不会授予“从教务更新”资格。不要只凭学校名称仍在，就假定恢复后的课表可以直达原学校更新。',
+            '需要保留按日期切换的完整作息方案时，使用全量 .sleepybackup。普通 sleepy-v1、WakeUp、作息文件和 ICS 不能完整保留这套方案；恢复后仍需核对适用日期与年份。',
           ] },
           { id: 'webdav', title: '使用自己的 WebDAV 服务器', steps: [
             '在备份页面的“WebDAV 备份”中设置 HTTPS WebDAV 地址、备份目录，以及服务器所需的用户名与密码。备份目录相对于所填写的地址。',
@@ -143,6 +159,7 @@ export const guides: Guide[] = [
           ], paragraphs: [
             'HTTPS 保护传输过程，但备份文件本身未加密，服务器管理员可能读取内容。请使用自己信任的服务器与账户。密码在本机使用 Android Keystore 加密保存，不会进入备份包。',
             '此功能不是后台自动同步，也不是多设备同时编辑的冲突合并。移除此设备上的 WebDAV 配置不会删除服务器备份；远端文件需自行管理。',
+            '上传与下载的单个备份文件上限均为 100 MiB。文件超过限制时，请改用本地文件备份和传输；服务器也可能设置更低的请求大小限制。',
           ] },
           { id: 'platforms', title: '跨设备、跨平台恢复前核对版本', paragraphs: [
             '本文核验对象是 Android v1.0.65。iOS、网页和其他版本独立发布，不能仅凭相同扩展名就保证全部偏好、小组件或全量备份跨平台兼容。请核对目标版本说明，并保留原始备份。',
@@ -175,6 +192,8 @@ export const guides: Guide[] = [
             'After restoring, check timetable count, semester start date, period times and the current teaching week.',
             'When merging into a device with existing timetables, incoming default timetable and reminder states are adjusted. Recheck the selected default, reminders and widgets.',
             'Do not assume account credentials are part of a full backup. The WebDAV password is not included in the backup package.',
+            'A backup can retain saved school identity, but restoring a .sleepybackup does not grant eligibility for Update from academic system. A retained school name alone does not mean the restored timetable can reopen that school for an update.',
+            'Use a full .sleepybackup to retain a complete date-based period-time scheme. Ordinary sleepy-v1, WakeUp, period files and ICS do not preserve the complete scheme; check its applicable dates and years after restoring.',
           ] },
           { id: 'webdav', title: 'Use your own WebDAV server', steps: [
             'In WebDAV backup, enter the HTTPS WebDAV address, backup directory and any required username and password. The directory is relative to the address you enter.',
@@ -184,6 +203,7 @@ export const guides: Guide[] = [
           ], paragraphs: [
             'HTTPS protects data in transit, but the backup file itself is not encrypted and the server administrator may read it. Use a server and account you trust. The password is encrypted locally with Android Keystore and is not added to the backup.',
             'This is not automatic background sync or conflict resolution for simultaneous editing on multiple devices. Removing WebDAV configuration from this device does not delete server backups; manage remote files separately.',
+            'Each backup upload and download is limited to 100 MiB. Use local backup files and file transfer for larger archives. Your server may impose a lower request-size limit.',
           ] },
           { id: 'platforms', title: 'Check versions before a device or platform move', paragraphs: [
             'This guide was verified against Android v1.0.65. iOS, web and other versions ship independently. A matching extension alone does not guarantee cross-platform compatibility for every preference, widget or full backup. Check the target release and keep the original file.',
@@ -197,6 +217,8 @@ export const guides: Guide[] = [
       { href: kotlin + 'data/migration/MigrationBackup.kt', label: { zh: '全量备份格式与模块', en: 'Full backup format and modules' } },
       { href: kotlin + 'data/migration/MigrationDatabaseCodec.kt', label: { zh: '课表合并、覆盖与提醒状态', en: 'Timetable merge, overwrite and reminder states' } },
       { href: kotlin + 'data/migration/MigrationPrefsCodec.kt', label: { zh: '偏好设置合并与覆盖行为', en: 'Preference merge and overwrite behavior' } },
+      { href: kotlin + 'data/backup/WebDavClient.kt', label: { zh: 'WebDAV 传输与文件大小限制', en: 'WebDAV transfers and file-size limits' } },
+      { href: kotlin + 'data/entity/TimeTableEntity.kt', label: { zh: '学校来源与教务更新资格', en: 'School identity and academic-update eligibility' } },
       { href: source + 'app/src/main/res/values/strings.xml', label: { zh: 'WebDAV 传输、密码与备份隐私说明', en: 'WebDAV transport, password and backup privacy notices' } },
     ],
   },
