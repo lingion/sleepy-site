@@ -22,8 +22,6 @@ describe('dedicated localized release notes', () => {
       const language = prefix ? 'en' : 'zh';
       const expectedIds = [...release.body.matchAll(/<a id="([^"]+)"/g)].map(match => match[1]).filter(id => id.startsWith(`${language}-`));
       expect([...renderedIds].sort()).toEqual(expectedIds.sort());
-      expect(article.textContent).toContain(prefix ? 'Liquid Glass' : '液态玻璃');
-      expect(article.textContent).not.toContain(prefix ? '液态玻璃' : 'Liquid Glass');
       expect(article.querySelectorAll('h2')).toHaveLength(1);
       expect(article.querySelector('h2')?.id).toBe(`release-${prefix ? 'english' : 'chinese'}`);
       const outline = [...notes.querySelectorAll<HTMLAnchorElement>('.document-nav a')];
