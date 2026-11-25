@@ -203,9 +203,10 @@ export function assertSectionPairing(zhSecs, enSecs) {
 }
 
 // Missing translations fail before merging; never silently substitute Chinese on English pages.
-function mergeDocs(zhSecs, enSecs, updatedAt, reviewedVersion) {
+function mergeDocs(zhSecs, enSecs, updatedAt, distributionUpdatedAt, reviewedVersion) {
   return {
     updatedAt,
+    distributionUpdatedAt,
     reviewedVersion,
     sections: zhSecs.map((zs, i) => ({
       zh: zs.zh,
@@ -233,10 +234,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error(`[build-faq] ${err.message}`);
     process.exit(1);
   }
-  const updatedAt = zhMd.match(/(?:内容核对日期|更新时间)[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1] ?? ''; // 文件内声明优先(终审:写死用文件内声明)
+  const updatedAt = zhMd.match(/(?:Android 功能核对日期|内容核对日期|更新时间)[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1] ?? ''; // 文件内声明优先(终审:写死用文件内声明)
+  const distributionUpdatedAt = zhMd.match(/iOS 分发信息核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1] ?? '';
   const reviewedVersion = zhMd.match(/产品基线为 Android (v[\d.]+)/)?.[1];
   if (!reviewedVersion) throw new Error('FAQ must declare its reviewed Android version');
-  const doc = mergeDocs(zhSecs, enSecs, updatedAt, reviewedVersion);
+  if (!distributionUpdatedAt) throw new Error('FAQ must declare its iOS distribution review date');
+  const doc = mergeDocs(zhSecs, enSecs, updatedAt, distributionUpdatedAt, reviewedVersion);
   writeFileSync(OUT, `${JSON.stringify(doc, null, 2)}\n`);
   console.log(
     `[build-faq] faq.json: ${doc.sections.length} 节 · ${doc.sections.reduce((n, s) => n + s.items.length, 0)} 问 · updatedAt=${doc.updatedAt}`

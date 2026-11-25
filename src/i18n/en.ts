@@ -13,9 +13,7 @@ export const en: SiteCopy = {
   iosDownload: {
     storeAlt: 'Download on the App Store',
     storeAria: 'Download the Sleepy iOS release on the App Store',
-    testFlightLabel: 'Install with TestFlight',
-    testFlightAria: 'Install the Sleepy iOS beta with Apple TestFlight',
-    note: 'App Store availability depends on your region. If it is unavailable, check whether TestFlight has open places.',
+    note: 'Sleepy for iOS is now available on the App Store in mainland China and other storefront regions. Install and update through the App Store.',
   },
   hero: {
     slogan: 'Built open. Feels free.',
@@ -196,7 +194,7 @@ export const en: SiteCopy = {
   },
   downloadPage: {
     heading: 'Download Sleepy',
-    metaDescription: "Sleepy's download center: Android APK files from GitHub or the project mirror, SHA-256 checksums, installation steps, iOS App Store and TestFlight downloads, and the web app.",
+    metaDescription: "Sleepy's download center: Android APK files from GitHub or the project mirror, SHA-256 checksums, installation steps, iOS App Store downloads, and the web app.",
     versionLine: '{tag} · {minSdk} · released {date}',
     recommended: 'Recommended',
     universalNote: 'Choose universal when the device architecture is unknown.',
@@ -214,8 +212,8 @@ export const en: SiteCopy = {
   },
   faqPage: {
     heading: 'FAQ',
-    sub: 'Find installation, import, widget and privacy answers. Feature answers keep their reviewed version; see the release notes for newer changes.',
-    updatedPrefix: 'Content updated on',
+    sub: 'Find installation, import, widget and privacy answers, including the iOS App Store download channel. Feature answers keep their reviewed version; see the release notes for newer changes.',
+    updatedPrefix: 'Android features reviewed on',
     tocLabel: 'Table of contents',
     tailTitle: 'Questions not covered above can be raised on GitHub Issues',
     tailIssues: 'GitHub Issues',

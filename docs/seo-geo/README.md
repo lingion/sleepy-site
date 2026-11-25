@@ -61,6 +61,6 @@ node scripts/audit-seo.mjs --url https://sleepy.is-my.app > seo-live.json
 
 取得站长后台权限后，分别导出 Google Search Console 与 Bing Webmaster 的索引状态、展示、点击和查询词；比较同长度日期窗口，并注明发布时间。按品牌词、开源无广告课表、导入迁移、学校适配、备份恢复分组。缺少后台权限时记录 unavailable，不能用 `site:` 查询数量代替索引覆盖率。
 
-下载转化以网站已有事件或经同意接入的统计为准，分开统计 Android 下载、iOS App Store / TestFlight、GitHub 点击。下载链接点击不等于安装，GitHub Star 也不等于活跃用户。性能在真实设备或标准工具中单独测量，不能从 HTML 检查推算 Core Web Vitals。
+下载转化以网站已有事件或经同意接入的统计为准，分开统计 Android 下载、iOS App Store、GitHub 点击。下载链接点击不等于安装，GitHub Star 也不等于活跃用户。性能在真实设备或标准工具中单独测量，不能从 HTML 检查推算 Core Web Vitals。
 
 外部证据建设应来自真实的项目说明、版本发布、用户体验、适配贡献和独立评测。第三方投稿、联系维护者、购买服务、发布内容均需要对应授权；不制造评论、评分、学校支持证明或平台推荐截图。

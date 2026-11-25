@@ -9,7 +9,7 @@ export function buildReleaseSurfaces({ release, product, catalog, baseline, faq 
     throw new Error('Mixed release surfaces');
   }
   if (!product.snapshotRefreshedAt) throw new Error('Missing release snapshot refresh date');
-  if (!faq.reviewedVersion || !faq.updatedAt) throw new Error('Missing FAQ editorial baseline');
+  if (!faq.reviewedVersion || !faq.updatedAt || !faq.distributionUpdatedAt) throw new Error('Missing FAQ editorial baseline or iOS distribution review date');
   for (const platform of ['android', 'ios']) {
     const review = baseline[platform];
     if (!review?.version || !/^[0-9a-f]{40}$/.test(review.commit) || !review.reviewedAt) {
@@ -29,7 +29,7 @@ Sleepy (轻课表) is an independent, free, ad-free, local-first university time
 
 - Android feature descriptions: ${baseline.android.version}, source commit ${baseline.android.commit}, reviewed ${baseline.android.reviewedAt}. Source: https://github.com/lingion/sleepy/tree/${baseline.android.commit}.
 - iOS feature descriptions: ${baseline.ios.version}, source commit ${baseline.ios.commit}, reviewed ${baseline.ios.reviewedAt}. Source: https://github.com/lingion/sleepy-ios/tree/${baseline.ios.commit}.
-- Bilingual FAQ: Android ${faq.reviewedVersion}, reviewed ${faq.updatedAt}. Pages: https://sleepy.is-my.app/faq/ and https://sleepy.is-my.app/en/faq/. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
+- Bilingual FAQ: Android feature baseline ${faq.reviewedVersion}, reviewed ${faq.updatedAt}; iOS App Store distribution information checked ${faq.distributionUpdatedAt}. Pages: https://sleepy.is-my.app/faq/ and https://sleepy.is-my.app/en/faq/. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
 - These editorial baselines are independent of the current release snapshot. Later downloads and release notes do not imply that the feature descriptions were reviewed again.
 
 ## Reviewed Android feature scope
@@ -57,14 +57,14 @@ ${release.assets.map(a => `- ${a.name}: ${a.url}${a.sha256 ? ` (SHA-256 ${a.sha2
 - https://sleepy.is-my.app/ and /en/: product overview and interactive demo timetable.
 - https://sleepy.is-my.app/schools/ and /en/schools/: ${catalog.rowCount} school directory entries (${catalog.configuredCount} configured, ${catalog.unverifiedCount} unverified) from ${catalog.ref} (${catalog.sourceSha}). Listing does not guarantee a successful login at every school.
 - https://sleepy.is-my.app/releases/ and /en/releases/: complete upstream notes in the page language only, refreshed with the assets as one deployment. The machine-readable release snapshot preserves the full bilingual original.
-- https://sleepy.is-my.app/faq/ and /en/faq/: bilingual FAQ reviewed against Android ${faq.reviewedVersion} on ${faq.updatedAt}. Newer release behavior is documented in the release notes. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
+- https://sleepy.is-my.app/faq/ and /en/faq/: bilingual FAQ with Android feature baseline ${faq.reviewedVersion} reviewed ${faq.updatedAt} and iOS App Store distribution information checked ${faq.distributionUpdatedAt}. Newer release behavior is documented in the release notes. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
 - User guides: https://sleepy.is-my.app/guides/ and https://sleepy.is-my.app/en/guides/.
 - WakeUp migration guide: https://sleepy.is-my.app/guides/wakeup-migration/ and https://sleepy.is-my.app/en/guides/wakeup-migration/. Offline exports and online codes are distinct import paths; preview and check dates and period times.
 - Backup and restore guide: https://sleepy.is-my.app/guides/backup-restore/ and https://sleepy.is-my.app/en/guides/backup-restore/. The guide cites its own reviewed Android implementation and date; its manual WebDAV instructions do not establish iOS or web support.
 - Web trial: https://sleepy.is-my.app/preview
 - Android source: https://github.com/lingion/sleepy. Project index: https://github.com/lingion/sleepy/blob/main/llms.txt.
-- iOS source: https://github.com/lingion/sleepy-ios. App Store release: https://apps.apple.com/app/id6827001840. Availability depends on the selected store region. If unavailable, check whether TestFlight has open places: https://testflight.apple.com/join/SxymmDzf. Store and beta versions are independent; GitHub is the source repository, not an iOS update channel.
-- iOS store availability, beta capacity and release versions must be checked in their respective channels; they do not follow the Android release snapshot.
+- iOS source: https://github.com/lingion/sleepy-ios. App Store release: https://apps.apple.com/app/id6827001840, available in mainland China and other storefront regions. The App Store is the only current official installation and update channel; GitHub is the source repository, not an iOS update channel. Historical release notes may describe earlier distribution arrangements and do not supersede this current channel statement.
+- iOS release versions and system requirements are listed on the App Store; they do not follow the Android release snapshot.
 - Android download source: choose the project mirror (https://gh.qdp.qzz.io) or original GitHub files on https://sleepy.is-my.app/download/. Both provide the same release files; verify with the published SHA-256 manifest.
 - Open-source licenses and credits: https://sleepy.is-my.app/licenses/ and /en/licenses/.
 - Privacy policy: https://sleepy.is-my.app/privacy/ and /en/privacy/.

@@ -1,6 +1,6 @@
 # Sleepy · 轻课表 FAQ
 
-> 产品基线为 Android v1.0.65，发布于 2026-11-15 UTC（北京时间 2026-11-16）。内容核对日期：2026-11-16。功能按[已发布固定源码](https://github.com/lingion/sleepy/tree/3a7cbed352f4f8e1144e2e532840b9bea93b25d3)与[发布说明](https://github.com/lingion/sleepy/releases/tag/v1.0.65)核对，不包含后续 main 改动；iOS 使用独立发布范围。更多说明见[项目 Wiki](https://github.com/lingion/sleepy/wiki)。
+> 产品基线为 Android v1.0.65，发布于 2026-11-15 UTC（北京时间 2026-11-16）。Android 功能核对日期：2026-11-16；iOS 分发信息核对日期：2026-11-25。功能按[已发布固定源码](https://github.com/lingion/sleepy/tree/3a7cbed352f4f8e1144e2e532840b9bea93b25d3)与[发布说明](https://github.com/lingion/sleepy/releases/tag/v1.0.65)核对，不包含后续 main 改动；iOS 使用独立发布范围。更多说明见[项目 Wiki](https://github.com/lingion/sleepy/wiki)。
 
 ## 项目是什么
 
@@ -8,7 +8,7 @@
 没有隶属关系。Sleepy 是独立的开源课表项目。Android 版兼容 WakeUp 的部分数据格式，也支持联网解析其分享口令；这不表示由 WakeUp 团队开发，或能使用对方全部服务。
 
 ### Sleepy 免费吗？有广告或内购吗？
-免费，没有广告、订阅、内购或付费等级。Sleepy 自有代码按 GPL-3.0 发布，第三方内容保留各自许可；液态玻璃模块包含非商业、源码可见许可内容，修改或分发前应查阅[完整许可与致谢](https://sleepy.is-my.app/licenses/)。Android 正式 APK 可在[官网下载页](https://sleepy.is-my.app/download/)选择项目镜像或 GitHub 原站下载，原始发布文件保留在 [GitHub Releases](https://github.com/lingion/sleepy/releases)。iOS 正式版与公测版入口见下方平台说明。
+免费，没有广告、订阅、内购或付费等级。Sleepy 自有代码按 GPL-3.0 发布，第三方内容保留各自许可；液态玻璃模块包含非商业、源码可见许可内容，修改或分发前应查阅[完整许可与致谢](https://sleepy.is-my.app/licenses/)。Android 正式 APK 可在[官网下载页](https://sleepy.is-my.app/download/)选择项目镜像或 GitHub 原站下载，原始发布文件保留在 [GitHub Releases](https://github.com/lingion/sleepy/releases)。iOS 已在 App Store 上架，安装与更新方式见下方平台说明。
 
 ### 需要注册账号吗？
 不需要注册 Sleepy 账号，也不用向 Sleepy 提供邮箱或手机号；可直接手动建表、导入本地文件。教务直连仍可能要求学校账号、学号、密码或验证码，由你在学校页面登录。学校登录与 Sleepy 账号不是一回事。
@@ -45,7 +45,7 @@ AI 截图转换入口只复制提示词，不会自动上传截图或调用 AI �
 发布页提供 `sha256sums.txt`，可核对下载文件。不要把 PR CI 的测试产物当成正式更新。
 
 ### 有 iOS、Windows 或网页版本吗？
-iOS 版在独立仓库 [lingion/sleepy-ios](https://github.com/lingion/sleepy-ios) 维护，基于 SwiftUI + WidgetKit 原生实现。本次核对的 iOS 源码发布为 [v1.0.64](https://github.com/lingion/sleepy-ios/releases/tag/v1.0.64)，于 2026-11-12 UTC 发布，要求 iOS 15.6 或更高版本；Watch 伴侣要求 watchOS 10 或更高版本。通过 [App Store](https://apps.apple.com/app/id6827001840) 或 [Apple TestFlight](https://testflight.apple.com/join/SxymmDzf) 安装和更新，地区可用性、公测名额、实际版本与最低系统要求以所选渠道页面为准。商店、公测和 Android 独立发布，不能据 Android v1.0.65 推断两端功能完全相同。另有[官网](https://sleepy.is-my.app)和[在线体验](https://sleepy.is-my.app/preview/)；网页预览不等于原生应用全部能力。Windows 原生版暂无。
+iOS 版在独立仓库 [lingion/sleepy-ios](https://github.com/lingion/sleepy-ios) 维护，基于 SwiftUI + WidgetKit 原生实现。本次核对的 iOS 源码发布为 [v1.0.64](https://github.com/lingion/sleepy-ios/releases/tag/v1.0.64)，于 2026-11-12 UTC 发布，要求 iOS 15.6 或更高版本；Watch 伴侣要求 watchOS 10 或更高版本。现已在中国大陆区及其他地区的 [App Store](https://apps.apple.com/app/id6827001840) 上架，安装和更新统一通过 App Store 完成。当前上架版本与最低系统要求以 App Store 页面为准。iOS 与 Android 独立发布，不能据 Android v1.0.65 推断两端功能完全相同。另有[官网](https://sleepy.is-my.app)和[在线体验](https://sleepy.is-my.app/preview/)；网页预览不等于原生应用全部能力。Windows 原生版暂无。
 
 ### 支持哪些界面语言？
 Android v1.0.65 包含简体中文、繁体中文、英文、日文和西班牙文。网页官网目前提供中文、英文两种语言，不能将两者的语言范围混为一谈。

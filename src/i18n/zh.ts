@@ -12,9 +12,7 @@ export const zh = {
   iosDownload: {
     storeAlt: '在 App Store 下载',
     storeAria: '在 App Store 下载 Sleepy iOS 正式版',
-    testFlightLabel: '通过 TestFlight 安装',
-    testFlightAria: '通过 Apple TestFlight 安装 Sleepy iOS 公测版',
-    note: 'App Store 可用性以你所在地区的商店页面为准；无法获取时，可查看 TestFlight 是否开放名额。',
+    note: 'Sleepy iOS 已在中国大陆区及其他地区的 App Store 上架，安装与更新均通过 App Store 完成。',
   },
   hero: {
     slogan: '构建无壳,自由自在',
@@ -202,7 +200,7 @@ export const zh = {
   },
   downloadPage: {
     heading: '下载 Sleepy',
-    metaDescription: 'Sleepy 官方下载中心：支持项目镜像与 GitHub 原站下载 Android APK，提供 iOS App Store 正式版与 TestFlight 公测入口、文件校验与安装说明。',
+    metaDescription: 'Sleepy 官方下载中心：支持项目镜像与 GitHub 原站下载 Android APK，提供 iOS App Store 下载入口、文件校验与安装说明。',
     versionLine: '{tag} · {minSdk} · {date} 发布',
     recommended: '推荐',
     universalNote: '不确定手机架构时选择 universal。',
@@ -220,8 +218,8 @@ export const zh = {
   },
   faqPage: {
     heading: '常见问答',
-    sub: '查找安装、课表导入、小组件与隐私说明。功能问答保留各自的核对版本，最新变化见更新说明。',
-    updatedPrefix: '内容更新于',
+    sub: '查找安装、课表导入、小组件与隐私说明，并了解 iOS App Store 下载渠道。功能问答保留各自的核对版本，最新变化见更新说明。',
+    updatedPrefix: 'Android 功能核对于',
     tocLabel: '目录',
     tailTitle: '以上未覆盖的问题可在 GitHub Issues 反馈',
     tailIssues: 'GitHub Issues',

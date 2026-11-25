@@ -1,5 +1,6 @@
 {
   "updatedAt": "2026-11-16",
+  "distributionUpdatedAt": "2026-11-25",
   "reviewedVersion": "v1.0.65",
   "sections": [
     {
@@ -92,7 +93,7 @@
                   },
                   {
                     "t": "text",
-                    "v": "。iOS 正式版与公测版入口见下方平台说明。"
+                    "v": "。iOS 已在 App Store 上架，安装与更新方式见下方平台说明。"
                   }
                 ]
               }
@@ -145,7 +146,7 @@
                   },
                   {
                     "t": "text",
-                    "v": ". See the platform answer below for iOS release and beta channels."
+                    "v": ". See the platform answer below for the iOS App Store installation channel."
                   }
                 ]
               }
@@ -794,7 +795,7 @@
                   },
                   {
                     "t": "text",
-                    "v": "，于 2026-11-12 UTC 发布，要求 iOS 15.6 或更高版本；Watch 伴侣要求 watchOS 10 或更高版本。通过 "
+                    "v": "，于 2026-11-12 UTC 发布，要求 iOS 15.6 或更高版本；Watch 伴侣要求 watchOS 10 或更高版本。现已在中国大陆区及其他地区的 "
                   },
                   {
                     "t": "link",
@@ -808,21 +809,7 @@
                   },
                   {
                     "t": "text",
-                    "v": " 或 "
-                  },
-                  {
-                    "t": "link",
-                    "href": "https://testflight.apple.com/join/SxymmDzf",
-                    "inline": [
-                      {
-                        "t": "text",
-                        "v": "Apple TestFlight"
-                      }
-                    ]
-                  },
-                  {
-                    "t": "text",
-                    "v": " 安装和更新，地区可用性、公测名额、实际版本与最低系统要求以所选渠道页面为准。商店、公测和 Android 独立发布，不能据 Android v1.0.65 推断两端功能完全相同。另有"
+                    "v": " 上架，安装和更新统一通过 App Store 完成。当前上架版本与最低系统要求以 App Store 页面为准。iOS 与 Android 独立发布，不能据 Android v1.0.65 推断两端功能完全相同。另有"
                   },
                   {
                     "t": "link",
@@ -889,7 +876,7 @@
                   },
                   {
                     "t": "text",
-                    "v": ", published on 2026-11-12 UTC, requiring iOS 15.6 or later; the Watch companion requires watchOS 10 or later. Install and update through the "
+                    "v": ", published on 2026-11-12 UTC, requiring iOS 15.6 or later; the Watch companion requires watchOS 10 or later. It is now available on the "
                   },
                   {
                     "t": "link",
@@ -903,21 +890,7 @@
                   },
                   {
                     "t": "text",
-                    "v": " or "
-                  },
-                  {
-                    "t": "link",
-                    "href": "https://testflight.apple.com/join/SxymmDzf",
-                    "inline": [
-                      {
-                        "t": "text",
-                        "v": "Apple TestFlight"
-                      }
-                    ]
-                  },
-                  {
-                    "t": "text",
-                    "v": ". Regional availability, beta capacity, installed versions and system requirements are authoritative on the selected channel page. Store, beta and Android releases are independent; Android v1.0.65 does not establish complete feature parity. There is also an "
+                    "v": " in mainland China and other storefront regions. Install and update through the App Store; current versions and minimum system requirements are listed there. iOS and Android releases are independent; Android v1.0.65 does not establish complete feature parity. There is also an "
                   },
                   {
                     "t": "link",

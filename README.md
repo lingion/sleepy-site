@@ -33,7 +33,7 @@ npm run data         # 教务数据管线(release 快照 + schools 分组)
 
 ## iOS 安装渠道
 
-[App Store](https://apps.apple.com/app/id6827001840) 的可用性以用户所在地区的商店页面为准；无法获取时，可查看 [TestFlight](https://testflight.apple.com/join/SxymmDzf) 是否开放名额。首页和下载页分别展示官方 App Store 徽章及 TestFlight 专用图标，使用共享组件和双语文案。正式商店、公测与 Android 独立发布，版本、系统要求及功能以各渠道说明为准。布局、来源和渠道约束见 [iOS 安装入口](docs/ios-distribution.md)。
+Sleepy iOS 已在中国大陆区及其他地区的 [App Store](https://apps.apple.com/app/id6827001840) 上架，安装与更新统一通过 App Store 完成。首页和下载页使用共享组件展示官方 App Store 徽章，并提供中英文文案。iOS 与 Android 独立发布，版本、系统要求及功能以各自发布说明为准。布局、来源和渠道约束见 [iOS 安装入口](docs/ios-distribution.md)。
 
 ## 目录
 

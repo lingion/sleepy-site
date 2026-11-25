@@ -95,6 +95,8 @@ describe('尾卡与 TOC(spec §2.4)', () => {
   it('尾行「更新于」直读 faq.json(内容管线 R4 腐烂可见化)', () => {
     expect(zhHtml).toContain(`${zh.faqPage.updatedPrefix} ${faq.updatedAt}`);
     expect(enHtml).toContain(`${en.faqPage.updatedPrefix} ${faq.updatedAt}`);
+    expect(zhHtml).toContain(`iOS App Store 分发信息核对日期：${faq.distributionUpdatedAt}`);
+    expect(enHtml).toContain(`iOS App Store distribution information checked on ${faq.distributionUpdatedAt}`);
   });
   it('TOC 首节静态高亮:aria-current 恰一挂首链,余链无(Task 10:JS-off 也有当前节指示)', () => {
     const links = [...zhDoc.querySelectorAll('[data-toc-link]')];
@@ -124,6 +126,8 @@ describe('页面骨架与双语镜像', () => {
     expect(enDoc.querySelector('main h1')?.textContent).toBe(en.faqPage.heading);
     expect(zhHtml).toContain(`href="${site}/faq/"`);
     expect(zhHtml).toContain(`href="${site}/en/faq/"`);
+    expect(zhDoc.querySelector('meta[name="description"]')?.getAttribute('content')).toContain('iOS App Store');
+    expect(enDoc.querySelector('meta[name="description"]')?.getAttribute('content')).toContain('iOS App Store');
   });
   it('en 页节名 = faq.json en 序', () => {
     const secs = [...enDoc.querySelectorAll('[data-faq-section]')];
