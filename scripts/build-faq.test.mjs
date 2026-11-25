@@ -87,6 +87,10 @@ describe('released FAQ coverage', () => {
     }
     expect(zhMd).toContain('中国大陆区及其他地区的');
     expect(enMd).toContain('in mainland China and other storefront regions');
+    expect(zhMd).toContain('iOS 分发信息核对日期：2026-11-25');
+    expect(enMd).toContain('iOS distribution information checked: 2026-11-25');
+    expect(zhMd).not.toContain('公测版入口');
+    expect(enMd).not.toContain('beta channels');
     expect(zhMd).toContain('不能据 Android v1.0.65 推断');
     expect(enMd).toContain('does not establish complete feature parity');
     expect(zhMd).not.toContain('与 Android 版功能对齐');

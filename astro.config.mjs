@@ -9,7 +9,8 @@ import { readFileSync } from 'node:fs';
 // lastmod 数据真源(读 JSON 而非 import:配置文件不产 HMR 依赖)。
 // 页面按各自内容管线取驱动日期 —— 爬虫据此排重访优先级,全站同值 = 无信号。
 const releaseDate = JSON.parse(readFileSync('./src/data/release.json', 'utf8')).date;
-const faqDate = JSON.parse(readFileSync('./src/data/faq.json', 'utf8')).updatedAt;
+const faq = JSON.parse(readFileSync('./src/data/faq.json', 'utf8'));
+const faqDate = [faq.updatedAt, faq.distributionUpdatedAt].filter(Boolean).sort().at(-1);
 const contentReviews = JSON.parse(readFileSync('./src/data/content-reviews.json', 'utf8'));
 const releaseDrivenPaths = new Set(['/', '/download/', '/releases/', '/schools/']);
 

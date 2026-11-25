@@ -1,6 +1,6 @@
 # Sleepy · 轻课表 FAQ
 
-> 产品基线为 Android v1.0.65，发布于 2026-11-15 UTC（北京时间 2026-11-16）。内容核对日期：2026-11-16。功能按[已发布固定源码](https://github.com/lingion/sleepy/tree/3a7cbed352f4f8e1144e2e532840b9bea93b25d3)与[发布说明](https://github.com/lingion/sleepy/releases/tag/v1.0.65)核对，不包含后续 main 改动；iOS 使用独立发布范围。更多说明见[项目 Wiki](https://github.com/lingion/sleepy/wiki)。
+> 产品基线为 Android v1.0.65，发布于 2026-11-15 UTC（北京时间 2026-11-16）。Android 功能核对日期：2026-11-16；iOS 分发信息核对日期：2026-11-25。功能按[已发布固定源码](https://github.com/lingion/sleepy/tree/3a7cbed352f4f8e1144e2e532840b9bea93b25d3)与[发布说明](https://github.com/lingion/sleepy/releases/tag/v1.0.65)核对，不包含后续 main 改动；iOS 使用独立发布范围。更多说明见[项目 Wiki](https://github.com/lingion/sleepy/wiki)。
 
 ## 项目是什么
 
@@ -8,7 +8,7 @@
 没有隶属关系。Sleepy 是独立的开源课表项目。Android 版兼容 WakeUp 的部分数据格式，也支持联网解析其分享口令；这不表示由 WakeUp 团队开发，或能使用对方全部服务。
 
 ### Sleepy 免费吗？有广告或内购吗？
-免费，没有广告、订阅、内购或付费等级。Sleepy 自有代码按 GPL-3.0 发布，第三方内容保留各自许可；液态玻璃模块包含非商业、源码可见许可内容，修改或分发前应查阅[完整许可与致谢](https://sleepy.is-my.app/licenses/)。Android 正式 APK 可在[官网下载页](https://sleepy.is-my.app/download/)选择项目镜像或 GitHub 原站下载，原始发布文件保留在 [GitHub Releases](https://github.com/lingion/sleepy/releases)。iOS 正式版与公测版入口见下方平台说明。
+免费，没有广告、订阅、内购或付费等级。Sleepy 自有代码按 GPL-3.0 发布，第三方内容保留各自许可；液态玻璃模块包含非商业、源码可见许可内容，修改或分发前应查阅[完整许可与致谢](https://sleepy.is-my.app/licenses/)。Android 正式 APK 可在[官网下载页](https://sleepy.is-my.app/download/)选择项目镜像或 GitHub 原站下载，原始发布文件保留在 [GitHub Releases](https://github.com/lingion/sleepy/releases)。iOS 已在 App Store 上架，安装与更新方式见下方平台说明。
 
 ### 需要注册账号吗？
 不需要注册 Sleepy 账号，也不用向 Sleepy 提供邮箱或手机号；可直接手动建表、导入本地文件。教务直连仍可能要求学校账号、学号、密码或验证码，由你在学校页面登录。学校登录与 Sleepy 账号不是一回事。

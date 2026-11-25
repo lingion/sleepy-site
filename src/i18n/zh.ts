@@ -218,8 +218,8 @@ export const zh = {
   },
   faqPage: {
     heading: '常见问答',
-    sub: '查找安装、课表导入、小组件与隐私说明。功能问答保留各自的核对版本，最新变化见更新说明。',
-    updatedPrefix: '内容更新于',
+    sub: '查找安装、课表导入、小组件与隐私说明，并了解 iOS App Store 下载渠道。功能问答保留各自的核对版本，最新变化见更新说明。',
+    updatedPrefix: 'Android 功能核对于',
     tocLabel: '目录',
     tailTitle: '以上未覆盖的问题可在 GitHub Issues 反馈',
     tailIssues: 'GitHub Issues',

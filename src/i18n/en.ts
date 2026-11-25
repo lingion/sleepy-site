@@ -212,8 +212,8 @@ export const en: SiteCopy = {
   },
   faqPage: {
     heading: 'FAQ',
-    sub: 'Find installation, import, widget and privacy answers. Feature answers keep their reviewed version; see the release notes for newer changes.',
-    updatedPrefix: 'Content updated on',
+    sub: 'Find installation, import, widget and privacy answers, including the iOS App Store download channel. Feature answers keep their reviewed version; see the release notes for newer changes.',
+    updatedPrefix: 'Android features reviewed on',
     tocLabel: 'Table of contents',
     tailTitle: 'Questions not covered above can be raised on GitHub Issues',
     tailIssues: 'GitHub Issues',

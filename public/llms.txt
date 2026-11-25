@@ -8,7 +8,7 @@ Sleepy (轻课表) is an independent, free, ad-free, local-first university time
 
 - Android feature descriptions: v1.0.65, source commit 3a7cbed352f4f8e1144e2e532840b9bea93b25d3, reviewed 2026-11-16. Source: https://github.com/lingion/sleepy/tree/3a7cbed352f4f8e1144e2e532840b9bea93b25d3.
 - iOS feature descriptions: v1.0.64, source commit aca60039609e992ef1561c17b6a148dc0e4215d6, reviewed 2026-11-16. Source: https://github.com/lingion/sleepy-ios/tree/aca60039609e992ef1561c17b6a148dc0e4215d6.
-- Bilingual FAQ: Android v1.0.65, reviewed 2026-11-16. Pages: https://sleepy.is-my.app/faq/ and https://sleepy.is-my.app/en/faq/. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
+- Bilingual FAQ: Android feature baseline v1.0.65, reviewed 2026-11-16; iOS App Store distribution information checked 2026-11-25. Pages: https://sleepy.is-my.app/faq/ and https://sleepy.is-my.app/en/faq/. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
 - These editorial baselines are independent of the current release snapshot. Later downloads and release notes do not imply that the feature descriptions were reviewed again.
 
 ## Reviewed Android feature scope
@@ -39,13 +39,13 @@ The following notes describe Android v1.0.65, reviewed 2026-11-16; they do not e
 - https://sleepy.is-my.app/ and /en/: product overview and interactive demo timetable.
 - https://sleepy.is-my.app/schools/ and /en/schools/: 2881 school directory entries (355 configured, 2526 unverified) from v1.0.65 (3a7cbed352f4f8e1144e2e532840b9bea93b25d3). Listing does not guarantee a successful login at every school.
 - https://sleepy.is-my.app/releases/ and /en/releases/: complete upstream notes in the page language only, refreshed with the assets as one deployment. The machine-readable release snapshot preserves the full bilingual original.
-- https://sleepy.is-my.app/faq/ and /en/faq/: bilingual FAQ reviewed against Android v1.0.65 on 2026-11-16. Newer release behavior is documented in the release notes. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
+- https://sleepy.is-my.app/faq/ and /en/faq/: bilingual FAQ with Android feature baseline v1.0.65 reviewed 2026-11-16 and iOS App Store distribution information checked 2026-11-25. Newer release behavior is documented in the release notes. Machine-readable FAQ: https://sleepy.is-my.app/faq.json.
 - User guides: https://sleepy.is-my.app/guides/ and https://sleepy.is-my.app/en/guides/.
 - WakeUp migration guide: https://sleepy.is-my.app/guides/wakeup-migration/ and https://sleepy.is-my.app/en/guides/wakeup-migration/. Offline exports and online codes are distinct import paths; preview and check dates and period times.
 - Backup and restore guide: https://sleepy.is-my.app/guides/backup-restore/ and https://sleepy.is-my.app/en/guides/backup-restore/. The guide cites its own reviewed Android implementation and date; its manual WebDAV instructions do not establish iOS or web support.
 - Web trial: https://sleepy.is-my.app/preview
 - Android source: https://github.com/lingion/sleepy. Project index: https://github.com/lingion/sleepy/blob/main/llms.txt.
-- iOS source: https://github.com/lingion/sleepy-ios. App Store release: https://apps.apple.com/app/id6827001840, available in mainland China and other storefront regions. The App Store is the only official installation and update channel; GitHub is the source repository, not an iOS update channel.
+- iOS source: https://github.com/lingion/sleepy-ios. App Store release: https://apps.apple.com/app/id6827001840, available in mainland China and other storefront regions. The App Store is the only current official installation and update channel; GitHub is the source repository, not an iOS update channel. Historical release notes may describe earlier distribution arrangements and do not supersede this current channel statement.
 - iOS release versions and system requirements are listed on the App Store; they do not follow the Android release snapshot.
 - Android download source: choose the project mirror (https://gh.qdp.qzz.io) or original GitHub files on https://sleepy.is-my.app/download/. Both provide the same release files; verify with the published SHA-256 manifest.
 - Open-source licenses and credits: https://sleepy.is-my.app/licenses/ and /en/licenses/.

@@ -47,7 +47,7 @@ describe('released product machine surface', () => {
       const review = baseline[platform];
       expect(txt).toContain(`${review.version}, source commit ${review.commit}, reviewed ${review.reviewedAt}`);
     }
-    expect(txt).toContain(`Bilingual FAQ: Android ${faq.reviewedVersion}, reviewed ${faq.updatedAt}`);
+    expect(txt).toContain(`Bilingual FAQ: Android feature baseline ${faq.reviewedVersion}, reviewed ${faq.updatedAt}; iOS App Store distribution information checked ${faq.distributionUpdatedAt}`);
     expect(txt).not.toMatch(/SOP|Co-Authored-By|lingion@hrbeu|sleepy\.is-my\.app.*password/i);
   });
   it('a later automated release cannot advance editorial feature or FAQ baselines', () => {
@@ -68,7 +68,7 @@ describe('released product machine surface', () => {
     expect(llms).toContain(`Release snapshot: Android ${future.tag}`);
     expect(llms).toContain(`Snapshot refreshed ${future.refresh}`);
     expect(llms).toContain(`The following notes describe Android ${baseline.android.version}, reviewed ${baseline.android.reviewedAt}`);
-    expect(llms).toContain(`Bilingual FAQ: Android ${faq.reviewedVersion}, reviewed ${faq.updatedAt}`);
+    expect(llms).toContain(`Bilingual FAQ: Android feature baseline ${faq.reviewedVersion}, reviewed ${faq.updatedAt}; iOS App Store distribution information checked ${faq.distributionUpdatedAt}`);
     expect(llms).not.toContain(`feature descriptions: ${future.tag}`);
     expect(llms).not.toContain(`Bilingual FAQ: Android ${future.tag}`);
     expect(llms).not.toContain(`Bilingual FAQ: Android ${baseline.android.version}, reviewed ${baseline.android.reviewedAt}`);
@@ -82,7 +82,8 @@ describe('released product machine surface', () => {
     const input = { release, product: { ...product, snapshotRefreshedAt: '2026-11-16' }, catalog, baseline, faq };
     expect(() => buildReleaseSurfaces({ ...input, catalog: { ...catalog, sourceSha: 'b'.repeat(40) } })).toThrow('Mixed release surfaces');
     expect(() => buildReleaseSurfaces({ ...input, baseline: { android: baseline.android } })).toThrow('Missing ios editorial baseline');
-    expect(() => buildReleaseSurfaces({ ...input, faq: { ...faq, reviewedVersion: undefined } })).toThrow('Missing FAQ editorial baseline');
+    expect(() => buildReleaseSurfaces({ ...input, faq: { ...faq, reviewedVersion: undefined } })).toThrow('Missing FAQ editorial baseline or iOS distribution review date');
+    expect(() => buildReleaseSurfaces({ ...input, faq: { ...faq, distributionUpdatedAt: undefined } })).toThrow('Missing FAQ editorial baseline or iOS distribution review date');
     expect(() => buildReleaseSurfaces({ ...input, product: { ...input.product, snapshotRefreshedAt: undefined } })).toThrow('Missing release snapshot refresh date');
   });
   it('machine content preserves reviewed feature limits and widget migration steps', () => {
@@ -107,11 +108,14 @@ describe('released product machine surface', () => {
     }
     const faq = JSON.parse(read('../dist/client/faq.json'));
     const editorialSource = read('../fixtures/FAQ.md');
-    const reviewedAt = editorialSource.match(/内容核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1];
+    const reviewedAt = editorialSource.match(/Android 功能核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1];
+    const distributionReviewedAt = editorialSource.match(/iOS 分发信息核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1];
     const reviewedVersion = editorialSource.match(/产品基线为 Android (v[\d.]+)/)?.[1];
     expect(reviewedAt).toBeTruthy();
     expect(reviewedVersion).toBeTruthy();
+    expect(distributionReviewedAt).toBeTruthy();
     expect(faq.updatedAt).toBe(reviewedAt);
+    expect(faq.distributionUpdatedAt).toBe(distributionReviewedAt);
     expect(faq.reviewedVersion).toBe(reviewedVersion);
     const platform = faq.sections.flatMap((section: any) => section.items).find((item: any) => item.id === 'sec-2-q-4');
     expect(JSON.stringify(platform.a)).toContain(iosAppStoreUrl);

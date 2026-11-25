@@ -34,7 +34,7 @@ describe('sitemap reflects release dates and genuine content reviews', () => {
   for (const base of ['/', '/download/', '/faq/', '/guides/', '/guides/wakeup-migration/', '/guides/backup-restore/', '/privacy/']) {
     for (const path of [base, '/en' + base]) {
       it(`${path} includes the current editorial review date`, () => {
-        const dates = [reviewed[base], base === '/faq/' ? faq.updatedAt : releaseDriven.has(base) ? release.date : undefined].filter((date): date is string => Boolean(date));
+        const dates = [reviewed[base], base === '/faq/' ? [faq.updatedAt, faq.distributionUpdatedAt].filter(Boolean).sort().at(-1) : releaseDriven.has(base) ? release.date : undefined].filter((date): date is string => Boolean(date));
         const expected = Math.max(...dates.map(date => new Date(date).getTime()));
         expect(entry(path)).toBe(new Date(expected).toISOString());
       });
@@ -52,11 +52,14 @@ describe('sitemap reflects release dates and genuine content reviews', () => {
   }
   it('preserves the reviewed feature FAQ baseline separately from automated releases', () => {
     const editorialSource = readFileSync(new URL('../fixtures/FAQ.md', import.meta.url), 'utf8');
-    const reviewedAt = editorialSource.match(/内容核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1];
+    const reviewedAt = editorialSource.match(/Android 功能核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1];
+    const distributionReviewedAt = editorialSource.match(/iOS 分发信息核对日期[：:]\s*(\d{4}-\d{2}-\d{2})/)?.[1];
     const reviewedVersion = editorialSource.match(/产品基线为 Android (v[\d.]+)/)?.[1];
     expect(reviewedAt).toBeTruthy();
     expect(reviewedVersion).toBeTruthy();
+    expect(distributionReviewedAt).toBeTruthy();
     expect(faq.updatedAt).toBe(reviewedAt);
+    expect(faq.distributionUpdatedAt).toBe(distributionReviewedAt);
     expect(faq.reviewedVersion).toBe(reviewedVersion);
   });
 });

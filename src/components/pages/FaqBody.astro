@@ -66,7 +66,7 @@ const zhUI = lang === 'zh';
       <DocumentNav label={t.tocLabel} links={rendered.map(section => ({href: `#${section.id}`, label: section.name}))} />
       <div class="faq__body" id="faq-results">
         <aside class="faq__review t-body-small" data-faq-scope>
-          <p>{zhUI ? `功能问答核对基线：Android ${faq.reviewedVersion}，核对日期 ${faq.updatedAt}。` : `Feature FAQ reviewed against Android ${faq.reviewedVersion} on ${faq.updatedAt}.`}</p>
+          <p>{zhUI ? `Android 功能核对基线：${faq.reviewedVersion}（${faq.updatedAt}）；iOS App Store 分发信息核对日期：${faq.distributionUpdatedAt}。` : `Android feature FAQ reviewed against ${faq.reviewedVersion} on ${faq.updatedAt}; iOS App Store distribution information checked on ${faq.distributionUpdatedAt}.`}</p>
           <p>{zhUI ? `当前 Android 正式版：${release.tag}。` : `Current Android release: ${release.tag}.`} <a href={zhUI ? '/releases/' : '/en/releases/'}>{zhUI ? '查看最新更新说明' : 'Read the latest release notes'}</a> · <a href={zhUI ? '/guides/' : '/en/guides/'}>{zhUI ? '迁移与备份指南' : 'Migration and backup guides'}</a></p>
         </aside>
         {rendered.map(section => <section class="faq__section" data-faq-section data-section={section.name} id={section.id}>

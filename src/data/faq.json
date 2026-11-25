@@ -1,5 +1,6 @@
 {
   "updatedAt": "2026-11-16",
+  "distributionUpdatedAt": "2026-11-25",
   "reviewedVersion": "v1.0.65",
   "sections": [
     {
@@ -92,7 +93,7 @@
                   },
                   {
                     "t": "text",
-                    "v": "。iOS 正式版与公测版入口见下方平台说明。"
+                    "v": "。iOS 已在 App Store 上架，安装与更新方式见下方平台说明。"
                   }
                 ]
               }
@@ -145,7 +146,7 @@
                   },
                   {
                     "t": "text",
-                    "v": ". See the platform answer below for iOS release and beta channels."
+                    "v": ". See the platform answer below for the iOS App Store installation channel."
                   }
                 ]
               }

@@ -1,6 +1,6 @@
 # Sleepy · Light Course Schedule FAQ (English)
 
-> This page covers Android v1.0.65, released on 2026-11-15 UTC (2026-11-16 Beijing time). Content reviewed on 2026-11-16. Features were checked against the [immutable released source](https://github.com/lingion/sleepy/tree/3a7cbed352f4f8e1144e2e532840b9bea93b25d3) and [release notes](https://github.com/lingion/sleepy/releases/tag/v1.0.65), excluding later changes on main. iOS has its own release scope. See the [project Wiki](https://github.com/lingion/sleepy/wiki) for more information.
+> This page covers Android v1.0.65, released on 2026-11-15 UTC (2026-11-16 Beijing time). Android feature review: 2026-11-16; iOS distribution information checked: 2026-11-25. Features were checked against the [immutable released source](https://github.com/lingion/sleepy/tree/3a7cbed352f4f8e1144e2e532840b9bea93b25d3) and [release notes](https://github.com/lingion/sleepy/releases/tag/v1.0.65), excluding later changes on main. iOS has its own release scope. See the [project Wiki](https://github.com/lingion/sleepy/wiki) for more information.
 
 ## What the project is
 
@@ -8,7 +8,7 @@
 There is no affiliation. Sleepy is an independent open-source schedule project. The Android app supports some WakeUp data formats and can resolve its online share codes. This does not mean it is developed by the WakeUp team or can use all of WakeUp's services.
 
 ### Is Sleepy free? Does it have ads or in-app purchases?
-Yes, with no ads, subscriptions, in-app purchases or paid tiers. Sleepy's own code is released under GPL-3.0; third-party content retains its respective licenses. The liquid-glass module includes source-available, noncommercial content, so check the [complete licenses and credits](https://sleepy.is-my.app/en/licenses/) before modifying or redistributing it. For Android APKs, choose the project mirror or GitHub on the [official download page](https://sleepy.is-my.app/en/download/). Original release files remain on [GitHub Releases](https://github.com/lingion/sleepy/releases). See the platform answer below for iOS release and beta channels.
+Yes, with no ads, subscriptions, in-app purchases or paid tiers. Sleepy's own code is released under GPL-3.0; third-party content retains its respective licenses. The liquid-glass module includes source-available, noncommercial content, so check the [complete licenses and credits](https://sleepy.is-my.app/en/licenses/) before modifying or redistributing it. For Android APKs, choose the project mirror or GitHub on the [official download page](https://sleepy.is-my.app/en/download/). Original release files remain on [GitHub Releases](https://github.com/lingion/sleepy/releases). See the platform answer below for the iOS App Store installation channel.
 
 ### Do I need to register an account?
 You do not need a Sleepy account or need to give Sleepy an email address or phone number. You can create schedules manually or import local files immediately. Direct academic-affairs import may still require a school account, student ID, password or verification code, entered on the school's login page. A school login is separate from a Sleepy account.

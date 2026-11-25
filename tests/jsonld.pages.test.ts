@@ -46,5 +46,8 @@ describe('FAQ 双语页 FAQPage 图', () => {
     const ld = pageLd('faq/index.html').find((x) => x['@type'] === 'FAQPage');
     const all = ld.mainEntity.map((q: any) => q.acceptedAnswer.text).join('\n');
     expect(all).toContain('GitHub Releases'); // link inline 展平后的锚文本
+    expect(all).toContain('App Store');
+    expect(all.toLowerCase()).not.toContain('beta channels');
+    expect(all).not.toContain('公测版入口');
   });
 });
