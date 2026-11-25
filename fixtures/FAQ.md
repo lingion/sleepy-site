@@ -45,7 +45,7 @@ AI 截图转换入口只复制提示词，不会自动上传截图或调用 AI �
 发布页提供 `sha256sums.txt`，可核对下载文件。不要把 PR CI 的测试产物当成正式更新。
 
 ### 有 iOS、Windows 或网页版本吗？
-iOS 版在独立仓库 [lingion/sleepy-ios](https://github.com/lingion/sleepy-ios) 维护，基于 SwiftUI + WidgetKit 原生实现。本次核对的 iOS 源码发布为 [v1.0.64](https://github.com/lingion/sleepy-ios/releases/tag/v1.0.64)，于 2026-11-12 UTC 发布，要求 iOS 15.6 或更高版本；Watch 伴侣要求 watchOS 10 或更高版本。通过 [App Store](https://apps.apple.com/app/id6827001840) 或 [Apple TestFlight](https://testflight.apple.com/join/SxymmDzf) 安装和更新，地区可用性、公测名额、实际版本与最低系统要求以所选渠道页面为准。商店、公测和 Android 独立发布，不能据 Android v1.0.65 推断两端功能完全相同。另有[官网](https://sleepy.is-my.app)和[在线体验](https://sleepy.is-my.app/preview/)；网页预览不等于原生应用全部能力。Windows 原生版暂无。
+iOS 版在独立仓库 [lingion/sleepy-ios](https://github.com/lingion/sleepy-ios) 维护，基于 SwiftUI + WidgetKit 原生实现。本次核对的 iOS 源码发布为 [v1.0.64](https://github.com/lingion/sleepy-ios/releases/tag/v1.0.64)，于 2026-11-12 UTC 发布，要求 iOS 15.6 或更高版本；Watch 伴侣要求 watchOS 10 或更高版本。现已在中国大陆区及其他地区的 [App Store](https://apps.apple.com/app/id6827001840) 上架，安装和更新统一通过 App Store 完成。当前上架版本与最低系统要求以 App Store 页面为准。iOS 与 Android 独立发布，不能据 Android v1.0.65 推断两端功能完全相同。另有[官网](https://sleepy.is-my.app)和[在线体验](https://sleepy.is-my.app/preview/)；网页预览不等于原生应用全部能力。Windows 原生版暂无。
 
 ### 支持哪些界面语言？
 Android v1.0.65 包含简体中文、繁体中文、英文、日文和西班牙文。网页官网目前提供中文、英文两种语言，不能将两者的语言范围混为一谈。

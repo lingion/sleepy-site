@@ -45,8 +45,8 @@ The following notes describe Android v1.0.65, reviewed 2026-11-16; they do not e
 - Backup and restore guide: https://sleepy.is-my.app/guides/backup-restore/ and https://sleepy.is-my.app/en/guides/backup-restore/. The guide cites its own reviewed Android implementation and date; its manual WebDAV instructions do not establish iOS or web support.
 - Web trial: https://sleepy.is-my.app/preview
 - Android source: https://github.com/lingion/sleepy. Project index: https://github.com/lingion/sleepy/blob/main/llms.txt.
-- iOS source: https://github.com/lingion/sleepy-ios. App Store release: https://apps.apple.com/app/id6827001840. Availability depends on the selected store region. If unavailable, check whether TestFlight has open places: https://testflight.apple.com/join/SxymmDzf. Store and beta versions are independent; GitHub is the source repository, not an iOS update channel.
-- iOS store availability, beta capacity and release versions must be checked in their respective channels; they do not follow the Android release snapshot.
+- iOS source: https://github.com/lingion/sleepy-ios. App Store release: https://apps.apple.com/app/id6827001840, available in mainland China and other storefront regions. The App Store is the only official installation and update channel; GitHub is the source repository, not an iOS update channel.
+- iOS release versions and system requirements are listed on the App Store; they do not follow the Android release snapshot.
 - Android download source: choose the project mirror (https://gh.qdp.qzz.io) or original GitHub files on https://sleepy.is-my.app/download/. Both provide the same release files; verify with the published SHA-256 manifest.
 - Open-source licenses and credits: https://sleepy.is-my.app/licenses/ and /en/licenses/.
 - Privacy policy: https://sleepy.is-my.app/privacy/ and /en/privacy/.

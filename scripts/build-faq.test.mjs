@@ -80,15 +80,13 @@ describe('zh/en 配对闸', () => {
 });
 
 describe('released FAQ coverage', () => {
-  it('preserves both iOS channels and regional availability without inferring Android parity', () => {
+  it('preserves the App Store-only iOS channel without inferring Android parity', () => {
     for (const text of [zhMd, enMd]) {
-      expect(text).toContain('https://testflight.apple.com/join/SxymmDzf');
       expect(text).toContain('https://apps.apple.com/app/id6827001840');
+      expect(text.toLowerCase()).not.toContain('testflight');
     }
-    expect(zhMd).toContain('地区可用性、公测名额、实际版本与最低系统要求以所选渠道页面为准');
-    expect(enMd).toContain('Regional availability, beta capacity, installed versions and system requirements are authoritative on the selected channel page');
-    expect(zhMd).not.toContain('中国大陆区仍在审核中');
-    expect(enMd).not.toContain('mainland China release is still under review');
+    expect(zhMd).toContain('中国大陆区及其他地区的');
+    expect(enMd).toContain('in mainland China and other storefront regions');
     expect(zhMd).toContain('不能据 Android v1.0.65 推断');
     expect(enMd).toContain('does not establish complete feature parity');
     expect(zhMd).not.toContain('与 Android 版功能对齐');

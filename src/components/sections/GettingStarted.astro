@@ -7,7 +7,7 @@ const copy = lang === 'zh' ? {
   title: '开始使用 Sleepy',
   intro: '根据你的设备和已有课表，选择合适的安装与导入方式。',
   cards: [
-    { title: '选择 Android 或 iOS 版本', body: 'Android 提供 APK，iOS 提供 App Store 与 TestFlight 入口。两端独立发布，系统要求、功能和地区可用性以所选渠道说明为准。', href: `${home}download/`, label: '查看官方安装渠道' },
+    { title: '选择 Android 或 iOS 版本', body: 'Android 提供 APK，iOS 通过 App Store 安装与更新。两端独立发布，系统要求与功能以各自发布说明为准。', href: `${home}download/`, label: '查看官方安装渠道' },
     { title: '从 WakeUp 迁移课表', body: '可使用兼容的离线 JSON、分享文本或在线口令。导入后先核对开学日期、周次与作息；在线口令依赖第三方服务。', href: `${home}guides/wakeup-migration/`, label: '阅读课表迁移步骤' },
     { title: '备份、换机与 WebDAV', body: 'Android 完整备份与单表 JSON、ICS 的用途不同。v1.0.65 支持由你主动执行 WebDAV 远程备份与恢复，恢复前先保存本机备份。', href: `${home}guides/backup-restore/`, label: '了解备份与恢复' },
     { title: '从课程表截图开始', body: 'Android 可复制截图转换提示词，由你选择 AI 并发送截图，再把返回的 sleepy-v1 文本粘贴回来核对、导入。分享截图前先遮盖个人信息。', href: `${home}guides/wakeup-migration/#screenshot-import`, label: '查看截图转换步骤' },
@@ -16,7 +16,7 @@ const copy = lang === 'zh' ? {
   title: 'Get started with Sleepy',
   intro: 'Choose an installation and import method for your device and existing timetable.',
   cards: [
-    { title: 'Choose Android or iOS', body: 'Android provides APK downloads; iOS provides App Store and TestFlight links. Platforms release independently. Check your chosen channel for system requirements, features and regional availability.', href: `${home}download/`, label: 'Find official installation channels' },
+    { title: 'Choose Android or iOS', body: 'Android provides APK downloads; install and update iOS through the App Store. Platforms release independently. Check each platform release notes for system requirements and features.', href: `${home}download/`, label: 'Find official installation channels' },
     { title: 'Move a timetable from WakeUp', body: 'Use a compatible offline JSON file, share text or online code. Check semester dates, teaching weeks and period times after import. Online codes depend on a third-party service.', href: `${home}guides/wakeup-migration/`, label: 'Read the migration steps' },
     { title: 'Backups, new devices and WebDAV', body: 'Android full backups serve a different purpose from single-table JSON and ICS exports. v1.0.65 supports WebDAV backups and restoration that you start yourself. Save a local backup before restoring.', href: `${home}guides/backup-restore/`, label: 'Understand backup and restore' },
     { title: 'Start from a timetable screenshot', body: 'On Android, copy the conversion prompt, choose an AI and send the screenshot yourself, then paste its sleepy-v1 reply into Sleepy to review and import. Cover personal information before sharing.', href: `${home}guides/wakeup-migration/#screenshot-import`, label: 'Read screenshot conversion steps' },

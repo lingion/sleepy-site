@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { site, iosAppStoreUrl, iosTestFlightUrl } from '../src/i18n/ui';
+import { site, iosAppStoreUrl } from '../src/i18n/ui';
 import { buildReleaseSurfaces } from '../scripts/build-release-surfaces.mjs';
 
 // GEO/分发面批次(2026-10-27):llms.txt 声称的机读源必须真实可达(线上实测
@@ -98,13 +98,12 @@ describe('released product machine surface', () => {
       expect(txt).toContain('restored exported backups do not gain update eligibility');
     }
   });
-  it('machine documents preserve independent iOS channels and scope store availability', () => {
+  it('machine documents preserve the App Store-only iOS channel', () => {
     for (const path of ['../public/llms.txt', '../dist/client/llms.txt']) {
       const txt = read(path);
       expect(txt).toContain(iosAppStoreUrl);
-      expect(txt).toContain(iosTestFlightUrl);
-      expect(txt).toContain('Availability depends on the selected store region');
-      expect(txt).toContain('check whether TestFlight has open places');
+      expect(txt).toContain('available in mainland China and other storefront regions');
+      expect(txt.toLowerCase()).not.toContain('testflight');
     }
     const faq = JSON.parse(read('../dist/client/faq.json'));
     const editorialSource = read('../fixtures/FAQ.md');
@@ -116,7 +115,7 @@ describe('released product machine surface', () => {
     expect(faq.reviewedVersion).toBe(reviewedVersion);
     const platform = faq.sections.flatMap((section: any) => section.items).find((item: any) => item.id === 'sec-2-q-4');
     expect(JSON.stringify(platform.a)).toContain(iosAppStoreUrl);
-    expect(JSON.stringify(platform.a)).toContain(iosTestFlightUrl);
+    expect(JSON.stringify(platform.a).toLowerCase()).not.toContain('testflight');
   });
   it('OG generator derives release and status counts rather than old constants', () => {
     const generator = read('../tools/make-og.mjs');
